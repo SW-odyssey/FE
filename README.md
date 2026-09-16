@@ -4,7 +4,7 @@
 
 ## 기술 스택
 
-- Next.js 14 (App Router)
+- Next.js 16.3.4 (App Router)
 - TypeScript
 - Tailwind CSS + shadcn/ui (Base UI, Nova preset)
 
