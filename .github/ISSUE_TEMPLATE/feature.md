@@ -1,8 +1,8 @@
 ---
-name: 작업
-about: 화면/기능 단위 작업 이슈
+name: "\U0001F195 Feature"
+about: 기능/화면 추가
 title: ""
-labels: ""
+labels: "feat"
 ---
 
 ## 작업 내용
