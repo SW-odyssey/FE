@@ -1,0 +1,628 @@
+{
+  "typography": {
+    "Mobile/Heading/24 ExtraBold / 32": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 24,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.33
+      }
+    },
+    "Mobile/Heading/28 ExtraBold / 36": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 28,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.29
+      }
+    },
+    "Mobile/Heading/21 Bold / 29": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 700,
+        "fontSize": {
+          "value": 21,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.38
+      }
+    },
+    "Mobile/Heading/20 Bold / 28": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 700,
+        "fontSize": {
+          "value": 20,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.4
+      }
+    },
+    "Mobile/Heading/24 Bold / 32": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 700,
+        "fontSize": {
+          "value": 24,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.33
+      }
+    },
+    "Mobile/Heading/21 SemiBold / 29": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 21,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.38
+      }
+    },
+    "Mobile/Heading/26 ExtraBold / 34": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 26,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.31
+      }
+    },
+    "Mobile/Heading/22 Bold / 30": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 700,
+        "fontSize": {
+          "value": 22,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.36
+      }
+    },
+    "Mobile/Label/13 Medium / 20": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 500,
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.54
+      }
+    },
+    "Mobile/Label/13 Medium / 18": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 500,
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.38
+      }
+    },
+    "Mobile/Label/13 Medium / 22": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 500,
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.69
+      }
+    },
+    "Mobile/Label/14 Regular / 21": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.5
+      }
+    },
+    "Mobile/Label/14 Regular / 20": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.43
+      }
+    },
+    "Mobile/Label/14 Regular / 22": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.57
+      }
+    },
+    "Mobile/Label/13 Regular / 20": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.54
+      }
+    },
+    "Mobile/Label/13 Regular / 22": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.69
+      }
+    },
+    "Mobile/Label/11 SemiBold / 15": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 11,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.36
+      }
+    },
+    "Mobile/Label/11 Regular / 15": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 11,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.36
+      }
+    },
+    "Mobile/Label/11 Regular / 16": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 11,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.45
+      }
+    },
+    "Mobile/Label/13 SemiBold / 18": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.38
+      }
+    },
+    "Mobile/Label/13 SemiBold / 20": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.54
+      }
+    },
+    "Mobile/Label/13 SemiBold / 24": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.85
+      }
+    },
+    "Mobile/Label/13 SemiBold / 22": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 13,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.69
+      }
+    },
+    "Mobile/Label/12 Medium / 18": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 500,
+        "fontSize": {
+          "value": 12,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.5
+      }
+    },
+    "Mobile/Label/14 SemiBold / 20": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.43
+      }
+    },
+    "Mobile/Label/14 SemiBold / 22": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.57
+      }
+    },
+    "Mobile/Label/14 Medium / 22": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 500,
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.57
+      }
+    },
+    "Mobile/Label/14 Medium / 20": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 500,
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.43
+      }
+    },
+    "Mobile/Label/14 Medium / 21": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 500,
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.5
+      }
+    },
+    "Mobile/Label/14 Bold / 20": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 700,
+        "fontSize": {
+          "value": 14,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.43
+      }
+    },
+    "Mobile/Label/12 SemiBold / 18": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 12,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.5
+      }
+    },
+    "Mobile/Body/15 SemiBold / 22": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 15,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.47
+      }
+    },
+    "Mobile/Body/17 SemiBold / 25": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 17,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.47
+      }
+    },
+    "Mobile/Body/17 SemiBold / 24": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 17,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.41
+      }
+    },
+    "Mobile/Body/16 Medium / 24": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 500,
+        "fontSize": {
+          "value": 16,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.5
+      }
+    },
+    "Mobile/Body/18 Bold / 25": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 700,
+        "fontSize": {
+          "value": 18,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.39
+      }
+    },
+    "Mobile/Body/18 Bold / 26": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 700,
+        "fontSize": {
+          "value": 18,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.44
+      }
+    },
+    "Mobile/Body/15 Medium / 22": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 500,
+        "fontSize": {
+          "value": 15,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.47
+      }
+    },
+    "Mobile/Body/16 SemiBold / 24": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Pretendard",
+        "fontWeight": 400,
+        "fontSize": {
+          "value": 16,
+          "unit": "px"
+        },
+        "letterSpacing": {
+          "value": 0,
+          "unit": "px"
+        },
+        "lineHeight": 1.5
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "ODYSSEY · Color": {
+    "$description": "Collection: ODYSSEY · Color",
+    "color/surface/default": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/white}" },
+    "color/brand/primary": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/navy}" },
+    "color/text/primary": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/ink}" },
+    "color/text/secondary": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/muted}" },
+    "color/border/default": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/border}" },
+    "color/surface/subtle": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/surface}" },
+    "color/surface/selected": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/selection}" },
+    "color/text/placeholder": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/placeholder}" },
+    "color/text/disabled": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/disabled}" },
+    "color/surface/tint": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/tint}" },
+    "color/border/accent": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/accentBorder}" },
+    "color/border/strong": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/divider}" },
+    "color/text/map-attribution": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/mapMeta}" },
+    "color/surface/handle": { "$type": "color", "$value": "{ODYSSEY · Primitives.palette/handle}" }
+  }
+}
