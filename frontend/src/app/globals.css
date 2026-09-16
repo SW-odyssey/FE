@@ -1,14 +1,21 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * 토큰 원본: design/odyssey-*.json
+ * (Figma "ODYSSEY · Mobile App · Design System" 변수 export)
+ * 값이 바뀌면 피그마에서 다시 export 해서 아래 :root 를 갱신할 것.
+ */
 @theme inline {
   --color-background: var(--background);
+  --color-shell: var(--shell);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -39,50 +46,156 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* shadcn 시맨틱에 대응물이 없는 ODYSSEY 색 */
+  --color-selected: var(--selected); /* surface/selected - 선택된 칩 */
+  --color-tint: var(--tint); /* surface/tint - 옅은 브랜드 배경 */
+  --color-handle: var(--handle); /* surface/handle - 바텀시트 핸들 */
+  --color-border-strong: var(--border-strong); /* border/strong - 구분선 */
+  --color-border-accent: var(--border-accent); /* border/accent - 강조 테두리 */
+  --color-placeholder: var(--placeholder); /* text/placeholder */
+  --color-disabled: var(--disabled); /* text/disabled */
+  --color-map-meta: var(--map-meta); /* text/map-attribution */
+
+  /* radius - ODYSSEY · Dimensions */
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px; /* 버튼 · 카드 기본 */
+  --radius-xl: 16px;
+  --radius-2xl: 18px;
+  --radius-3xl: 24px;
+  --radius-4xl: 32px;
+
+  /* 컨트롤 높이 / 화면 여백 - h-control, h-field, min-h-touch, px-inset */
+  --spacing-touch: 44px; /* touch/min */
+  --spacing-control: 50px; /* control/button */
+  --spacing-field: 52px; /* control/input */
+  --spacing-inset: 20px; /* inset/default */
+  --spacing-inset-compact: 16px; /* inset/compact */
+
+  /*
+   * 타이포 - 피그마 스타일명과 1:1로 매칭
+   * "Mobile/Body/15 SemiBold / 22" -> text-15 font-semibold
+   * line-height 가 다른 변형은 leading-[22px] 처럼 덮어쓸 것
+   */
+  --text-11: 11px;
+  --text-11--line-height: 15px;
+  --text-12: 12px;
+  --text-12--line-height: 18px;
+  --text-13: 13px;
+  --text-13--line-height: 20px;
+  --text-14: 14px;
+  --text-14--line-height: 20px;
+  --text-15: 15px;
+  --text-15--line-height: 22px;
+  --text-16: 16px;
+  --text-16--line-height: 24px;
+  --text-17: 17px;
+  --text-17--line-height: 24px;
+  --text-18: 18px;
+  --text-18--line-height: 26px;
+  --text-20: 20px;
+  --text-20--line-height: 28px;
+  --text-21: 21px;
+  --text-21--line-height: 29px;
+  --text-22: 22px;
+  --text-22--line-height: 30px;
+  --text-24: 24px;
+  --text-24--line-height: 32px;
+  --text-26: 26px;
+  --text-26--line-height: 34px;
+  --text-28: 28px;
+  --text-28--line-height: 36px;
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* ODYSSEY · Primitives */
+  --palette-white: #ffffff;
+  --palette-navy: #103454;
+  --palette-ink: #202124;
+  --palette-muted: #74787d;
+  --palette-border: #e8ebee;
+  --palette-surface: #f5f6f7;
+  --palette-selection: #f3f4f5;
+  --palette-placeholder: #b3bac2;
+  --palette-disabled: #929ba5;
+  --palette-tint: #f0f4f7;
+  --palette-accent-border: #b9c8d5;
+  --palette-divider: #e4e7eb;
+  --palette-map-meta: #69717b;
+  --palette-handle: #d7dbdf;
+
+  /* ODYSSEY · Color (시맨틱) */
+  --surface-default: var(--palette-white);
+  --surface-subtle: var(--palette-surface);
+  --surface-selected: var(--palette-selection);
+  --surface-tint: var(--palette-tint);
+  --surface-handle: var(--palette-handle);
+  --brand-primary: var(--palette-navy);
+  --text-primary: var(--palette-ink);
+  --text-secondary: var(--palette-muted);
+  --text-placeholder: var(--palette-placeholder);
+  --text-disabled: var(--palette-disabled);
+  --text-map-attribution: var(--palette-map-meta);
+  --border-default: var(--palette-border);
+  --border-accent-color: var(--palette-accent-border);
+  --border-strong-color: var(--palette-divider);
+
+  /* shadcn 매핑 */
+  --background: var(--surface-default);
+  --foreground: var(--text-primary);
+  --card: var(--surface-default);
+  --card-foreground: var(--text-primary);
+  --popover: var(--surface-default);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--palette-white);
+  --secondary: var(--surface-subtle);
+  --secondary-foreground: var(--brand-primary);
+  --muted: var(--surface-subtle);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--surface-tint);
+  --accent-foreground: var(--brand-primary);
+  --destructive: oklch(0.577 0.245 27.325); /* 디자인 시스템에 아직 없음 */
+  --border: var(--border-default);
+  --input: var(--border-default);
+  --ring: var(--brand-primary);
+
+  /* shadcn 매핑에 들어가지 않는 나머지 */
+  --selected: var(--surface-selected);
+  --tint: var(--surface-tint);
+  --handle: var(--surface-handle);
+  --border-strong: var(--border-strong-color);
+  --border-accent: var(--border-accent-color);
+  --placeholder: var(--text-placeholder);
+  --disabled: var(--text-disabled);
+  --map-meta: var(--text-map-attribution);
+  /* 앱 셸 바깥 여백 (데스크톱에서 보이는 배경) */
+  --shell: var(--surface-subtle);
+
+  --radius: 12px;
+
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --chart-1: var(--palette-navy);
+  --chart-2: #2e5c8a;
+  --chart-3: var(--palette-muted);
+  --chart-4: var(--palette-accent-border);
+  --chart-5: var(--palette-divider);
+
+  --sidebar: var(--surface-subtle);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--brand-primary);
+  --sidebar-primary-foreground: var(--palette-white);
+  --sidebar-accent: var(--surface-tint);
+  --sidebar-accent-foreground: var(--brand-primary);
+  --sidebar-border: var(--border-default);
+  --sidebar-ring: var(--brand-primary);
 }
 
+/* 디자인 시스템에 다크 모드가 아직 없어서 shadcn 기본값을 그대로 둔다 (토글하는 곳도 없음) */
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -102,11 +215,7 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --shell: oklch(0.205 0 0);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
