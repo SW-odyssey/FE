@@ -1,0 +1,213 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: "ko-KR"
+
+early_access: false
+
+tone_instructions: >-
+  간결하고 기술적으로 리뷰한다.
+  사소한 스타일 지적보다 실제 버그, 회귀 가능성, 타입 안정성,
+  보안, 사용자 경험 문제를 우선한다.
+  수정이 필요한 문제와 단순 개선 제안을 명확하게 구분한다.
+
+reviews:
+  # AI가 작성한 코드도 많이 들어올 예정이므로 조금 꼼꼼하게 리뷰
+  profile: "assertive"
+
+  # 당장은 CodeRabbit이 PR을 자동 차단하지 않게 함
+  request_changes_workflow: false
+
+  high_level_summary: true
+
+  high_level_summary_instructions: >-
+    변경 목적과 핵심 변경사항을 짧게 요약하고,
+    사용자 동작에 영향을 주는 변경,
+    잠재적인 위험 요소,
+    테스트가 필요한 부분이 있다면 함께 설명한다.
+
+  review_status: true
+  review_details: false
+  commit_status: true
+  fail_commit_status: false
+
+  collapse_walkthrough: true
+  changed_files_summary: true
+
+  # FE 프로젝트에서는 대부분 과한 정보가 될 가능성이 높음
+  sequence_diagrams: false
+
+  estimate_code_review_effort: true
+
+  # Issue와 연결한 PR이라면 구현 여부 확인
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+
+  # 팀이 이미 PR/Issue 관리 방식을 만들었으므로 자동 조작은 최소화
+  suggested_labels: false
+  auto_apply_labels: false
+  suggested_reviewers: false
+  auto_assign_reviewers: false
+
+  in_progress_fortune: false
+  poem: false
+
+  # Codex / Claude Code와 같이 쓰기 좋음
+  enable_prompt_for_ai_agents: true
+
+  abort_on_close: true
+
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: true
+
+    # 한 PR에서 계속 push할 때 리뷰가 지나치게 반복되는 것 방지
+    auto_pause_after_reviewed_commits: 3
+
+    ignore_title_keywords:
+      - "WIP"
+      - "DO NOT MERGE"
+      - "DO NOT REVIEW"
+
+  # 바이너리 자산은 코드 리뷰 가치가 낮음
+  path_filters:
+    - "!public/**/*.png"
+    - "!public/**/*.jpg"
+    - "!public/**/*.jpeg"
+    - "!public/**/*.webp"
+    - "!public/**/*.ico"
+
+  path_instructions:
+    - path: "src/**/*.{ts,tsx}"
+      instructions: |
+        TypeScript 타입 안정성, 런타임 오류 가능성, null/undefined 처리,
+        비동기 처리와 에러 처리를 우선 검토한다.
+        any 사용, 불필요한 타입 단언, 중복 상태를 주의 깊게 본다.
+        ESLint나 formatter가 처리할 단순 스타일 문제는 지적하지 않는다.
+
+    - path: "src/app/**/*.{ts,tsx}"
+      instructions: |
+        Next.js App Router 관점에서 검토한다.
+        Server Component와 Client Component 경계가 적절한지 확인한다.
+        불필요한 use client 사용, 서버 전용 정보의 클라이언트 노출,
+        잘못된 데이터 fetching 위치와 hydration 문제를 확인한다.
+
+    - path: "{src/lib/kakao/**,src/components/map/**}"
+      instructions: |
+        Kakao 지도 및 장소 API 관련 코드로 취급한다.
+        API 키와 환경변수 노출 여부를 특히 확인한다.
+        지도 SDK 초기화와 해제, 이벤트 리스너 중복,
+        브라우저 환경 의존성, GPS 권한 실패 처리를 검토한다.
+
+    - path: "src/lib/geo/**"
+      instructions: |
+        위치 및 50m x 50m 블록 계산 코드로 취급한다.
+        좌표계, 단위, 경계값과 부동소수점 처리 오류를 중점 검토한다.
+        같은 좌표가 항상 같은 블록으로 결정되는지 확인한다.
+
+    - path: "src/features/movement/**"
+      instructions: |
+        ODI 유동인구 이동 기능의 핵심 로직으로 취급한다.
+        사용자 필터와 탐색 반경을 먼저 적용한 뒤 이동인구 수 기준으로
+        목적지 블록 상위 3개를 계산하는지 확인한다.
+        거리 가중치나 임의의 추천 점수가 추가되지 않았는지 확인한다.
+        다음 장소 탐색 시 기존 시간, 연령, 성별, 탐색 범위가 유지되는지 확인한다.
+
+    - path: ".github/workflows/**"
+      instructions: |
+        GitHub Actions 보안을 중점 검토한다.
+        과도한 permissions, 비밀정보 노출, 안전하지 않은 shell 입력,
+        신뢰하기 어려운 외부 Action 사용을 확인한다.
+
+  finishing_touches:
+    # TS/React 코드에 무의미한 docstring이 늘어나는 것을 방지
+    docstrings:
+      enabled: false
+
+    unit_tests:
+      enabled: true
+
+    simplify:
+      enabled: true
+
+  # 처음에는 차단 대신 경고만 사용
+  pre_merge_checks:
+    title:
+      mode: "warning"
+      requirements: >-
+        PR 제목은 Conventional Commit 형식을 권장한다.
+        예: feat: 장소 검색 기능 추가, fix: 지도 블록 선택 오류 수정
+
+    description:
+      mode: "warning"
+
+    issue_assessment:
+      mode: "warning"
+
+    custom_checks:
+      - name: "Client secret exposure"
+        mode: "warning"
+        instructions: |
+          API나 환경변수 관련 변경이 있다면 서버 전용 secret이
+          NEXT_PUBLIC_ 환경변수 또는 브라우저 번들에 노출되지 않는지 확인한다.
+          비밀키나 토큰이 소스코드에 하드코딩되어 있으면 실패로 판단한다.
+
+      - name: "ODI data semantics"
+        mode: "warning"
+        instructions: |
+          LG U+ 블록 이동 데이터가 특정 매장 방문 데이터처럼 표현되지 않는지 확인한다.
+          과거 이동 데이터를 미래 예측 결과처럼 표현하지 않는지 확인한다.
+
+  tools:
+    eslint:
+      enabled: true
+
+    github-checks:
+      enabled: true
+
+    # GitHub Actions 검사
+    actionlint:
+      enabled: true
+
+    # secret 유출 검사
+    trufflehog:
+      enabled: true
+
+    # 일반적인 보안/코드 취약점
+    semgrep:
+      enabled: true
+
+    # dependency 취약점
+    osvScanner:
+      enabled: true
+
+chat:
+  auto_reply: true
+
+  # Public repo이므로 외부 사용자가 봇을 마음대로 호출하지 못하게
+  allow_non_org_members: false
+
+knowledge_base:
+  opt_out: false
+
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "AGENTS.md"
+      - "docs/PROJECT_CONTEXT.md"
+      - "docs/DECISIONS.md"
+
+  learnings:
+    scope: "local"
+
+  issues:
+    scope: "local"
+
+  pull_requests:
+    scope: "local"
+
+# Issue에까지 CodeRabbit이 자동으로 코멘트하는 것은 일단 끔
+issue_enrichment:
+  auto_enrich:
+    enabled: false
