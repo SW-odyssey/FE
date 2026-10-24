@@ -1,0 +1,20 @@
+[
+  {
+    "subject": "osulloc",
+    "image_url": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=73399&fileTy=MEDIA&fileNo=1&thumbTy=L",
+    "credit": "Visit Seoul",
+    "downloaded_at": "2026-10-14"
+  },
+  {
+    "subject": "imun",
+    "image_url": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=6240&fileTy=MEDIA&fileNo=2&thumbTy=L",
+    "credit": "Visit Seoul",
+    "downloaded_at": "2026-10-14"
+  },
+  {
+    "subject": "layered",
+    "image_url": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=43075&fileTy=MEDIA&fileNo=1&thumbTy=L",
+    "credit": "Visit Seoul",
+    "downloaded_at": "2026-10-14"
+  }
+]

@@ -1,0 +1,406 @@
+{
+  "cheongsudang": [
+    {
+      "src": "/assets/local/cheongsudang.jpg",
+      "kind": "exterior",
+      "credit": "Glow Seoul",
+      "sourceUrl": "https://glowseoul.co.kr/en/portfolio/cheongsudang-iksun",
+      "imageUrl": "https://glowseoul.co.kr/images/gallery/cheongsudang-iksun/cheongsudang-iksun-01.webp"
+    },
+    {
+      "src": "/assets/local/gallery/cheongsudang-interior.webp",
+      "kind": "interior",
+      "credit": "Glow Seoul",
+      "sourceUrl": "https://glowseoul.co.kr/en/portfolio/cheongsudang-iksun",
+      "imageUrl": "https://glowseoul.co.kr/images/gallery/cheongsudang-iksun/cheongsudang-iksun-04.webp"
+    },
+    {
+      "src": "/assets/local/gallery/cheongsudang-menu.webp",
+      "kind": "menu",
+      "credit": "Glow Seoul",
+      "sourceUrl": "https://glowseoul.co.kr/en/portfolio/cheongsudang-iksun",
+      "imageUrl": "https://glowseoul.co.kr/images/gallery/cheongsudang-iksun/cheongsudang-iksun-05.webp"
+    }
+  ],
+  "seoulcoffee": [
+    {
+      "src": "/assets/local/seoulcoffee.jpg",
+      "kind": "exterior",
+      "credit": "LABOTORY · Choi Yong Joon",
+      "sourceUrl": "https://www.labotory.com/project/seoul-coffee/",
+      "imageUrl": "https://www.labotory.com/wp-content/uploads/2017/08/3-2.jpg"
+    },
+    {
+      "src": "/assets/local/gallery/seoulcoffee-interior.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Seoul-Coffee-Ikseon-Branch/ENP039310",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=47019&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/seoulcoffee-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Seoul-Coffee-Ikseon-Branch/ENP039310",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=47021&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "oncheonjip": [
+    {
+      "src": "/assets/local/oncheonjip.jpg",
+      "kind": "exterior",
+      "credit": "Glow Seoul",
+      "sourceUrl": "https://glowseoul.co.kr/portfolio/oncheonjip-iksun",
+      "imageUrl": "https://glowseoul.co.kr/images/gallery/oncheonjip-iksun/oncheonjip-iksun-01.webp"
+    },
+    {
+      "src": "/assets/local/gallery/oncheonjip-interior.webp",
+      "kind": "interior",
+      "credit": "Glow Seoul",
+      "sourceUrl": "https://glowseoul.co.kr/portfolio/oncheonjip-iksun",
+      "imageUrl": "https://glowseoul.co.kr/images/gallery/oncheonjip-iksun/oncheonjip-iksun-03.webp"
+    },
+    {
+      "src": "/assets/local/gallery/oncheonjip-menu.jpg",
+      "kind": "menu",
+      "credit": "VISITKOREA · Korea Tourism Organization",
+      "sourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=175219",
+      "imageUrl": "https://tong.visitkorea.or.kr/cms/resource/69/2997169_image2_1.jpg"
+    }
+  ],
+  "hanyakbang": [
+    {
+      "src": "/assets/local/gallery/hanyakbang-interior.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/area/coffeehanyakbang/ENPyiaqhs",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=75108&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/hanyakbang.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/area/coffeehanyakbang/ENPyiaqhs",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=75107&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "osulloc": [
+    {
+      "src": "/assets/local/osulloc.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/area/osulloc-teahouse-bukchon/ENPvzz06x",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=73399&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/osulloc-interior.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/area/osulloc-teahouse-bukchon/ENPvzz06x",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=73400&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/osulloc-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/area/osulloc-teahouse-bukchon/ENPvzz06x",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=73401&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "imun": [
+    {
+      "src": "/assets/local/imun.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/eat/imun-seollongtang/ENP012846",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=6240&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/imun-interior.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/eat/imun-seollongtang/ENP012846",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=6241&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/imun-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/eat/imun-seollongtang/ENP012846",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=6244&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    }
+  ],
+  "layered": [
+    {
+      "src": "/assets/local/layered.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://korean.visitseoul.net/restaurants/%EC%B9%B4%ED%8E%98-%EB%A0%88%EC%9D%B4%EC%96%B4%EB%93%9C-%EC%95%88%EA%B5%AD%EC%A0%90/KOP038318",
+      "imageUrl": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=43075&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/layered-interior.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://korean.visitseoul.net/restaurants/%EC%B9%B4%ED%8E%98-%EB%A0%88%EC%9D%B4%EC%96%B4%EB%93%9C-%EC%95%88%EA%B5%AD%EC%A0%90/KOP038318",
+      "imageUrl": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=43077&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/layered-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://korean.visitseoul.net/restaurants/%EC%B9%B4%ED%8E%98-%EB%A0%88%EC%9D%B4%EC%96%B4%EB%93%9C-%EC%95%88%EA%B5%AD%EC%A0%90/KOP038318",
+      "imageUrl": "https://korean.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=43078&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "songam": [
+    {
+      "src": "/assets/local/songam.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/SongamOnban/ENPhrnovc",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=81291&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/songam-interior.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/SongamOnban/ENPhrnovc",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=81292&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/songam-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/SongamOnban/ENPhrnovc",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=81293&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    }
+  ],
+  "gowundon": [
+    {
+      "src": "/assets/local/gowundon.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/gowoondon/ENPj6enzc",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=81833&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/gowundon-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/gowoondon/ENPj6enzc",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=81834&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    }
+  ],
+  "highwaist": [
+    {
+      "src": "/assets/local/highwaist.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/CafeHighwaistIkseon/ENP038783",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=45294&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/highwaist-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/CafeHighwaistIkseon/ENP038783",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=45295&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "chatteul": [
+    {
+      "src": "/assets/local/chatteul.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Cha-teul/ENP139gfg",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=78471&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/chatteul-interior.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Cha-teul/ENP139gfg",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=78472&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/chatteul-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Cha-teul/ENP139gfg",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=78474&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "beautifultea": [
+    {
+      "src": "/assets/local/beautifultea.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/attractions/Beautiful-Tea-Museum/ENP004467",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=12515&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/beautifultea-interior.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/attractions/Beautiful-Tea-Museum/ENP004467",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=12516&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    }
+  ],
+  "sujebi": [
+    {
+      "src": "/assets/local/sujebi.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/PalaceArea/Samcheong-dongSujebi/ENPqgbap0",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=67778&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/sujebi-interior.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/PalaceArea/Samcheong-dongSujebi/ENPqgbap0",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=67780&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/sujebi-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/PalaceArea/Samcheong-dongSujebi/ENPqgbap0",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=67779&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "joseonok": [
+    {
+      "src": "/assets/local/joseonok.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Joseonok-EN/ENP006970",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=3797&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/joseonok-interior.png",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Joseonok-EN/ENP006970",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=78029&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/joseonok-menu.png",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Joseonok-EN/ENP006970",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=78030&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "dalmaji": [
+    {
+      "src": "/assets/local/dalmaji.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/dalmazibbq/ENPjdhubv",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=80528&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/dalmaji-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/dalmazibbq/ENPjdhubv",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=80590&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "sammijung": [
+    {
+      "src": "/assets/local/sammijung.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/other/Sammijung/ENPhzb6qe",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=73631&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/sammijung-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/other/Sammijung/ENPhzb6qe",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=73633&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "banjjak": [
+    {
+      "src": "/assets/local/banjjak.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Banjjakbanjjak-Binnaneun1/ENP014145",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=6762&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/banjjak-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Banjjakbanjjak-Binnaneun1/ENP014145",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=6763&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "soseonjae": [
+    {
+      "src": "/assets/local/soseonjae.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/area/Soseonjae-E/ENP012460",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=76451&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/soseonjae-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/area/Soseonjae-E/ENP012460",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=76452&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ],
+  "hanaro": [
+    {
+      "src": "/assets/local/hanaro.jpg",
+      "kind": "exterior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Hanaro%20Hwaegwan/ENP007430",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=3904&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/hanaro-interior.jpg",
+      "kind": "interior",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Hanaro%20Hwaegwan/ENP007430",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=3906&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    },
+    {
+      "src": "/assets/local/gallery/hanaro-menu.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/Hanaro%20Hwaegwan/ENP007430",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=3905&fileTy=MEDIA&fileNo=2&thumbTy=L"
+    }
+  ],
+  "rainreport": [
+    {
+      "src": "/assets/local/gallery/rainreport-exterior.webp",
+      "kind": "exterior",
+      "credit": "Glow Seoul",
+      "sourceUrl": "https://glowseoul.co.kr/portfolio/rain-report-rainbow",
+      "imageUrl": "https://glowseoul.co.kr/images/gallery/rain-report-rainbow/rain-report-rainbow-01.webp"
+    },
+    {
+      "src": "/assets/local/gallery/rainreport-interior.webp",
+      "kind": "interior",
+      "credit": "Glow Seoul",
+      "sourceUrl": "https://glowseoul.co.kr/portfolio/rain-report-rainbow",
+      "imageUrl": "https://glowseoul.co.kr/images/gallery/rain-report-rainbow/rain-report-rainbow-04.webp"
+    },
+    {
+      "src": "/assets/local/rainreport.jpg",
+      "kind": "menu",
+      "credit": "Visit Seoul",
+      "sourceUrl": "https://english.visitseoul.net/restaurants/rain-report-rainbow/ENP933ykf",
+      "imageUrl": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=75283&fileTy=MEDIA&fileNo=1&thumbTy=L"
+    }
+  ]
+}

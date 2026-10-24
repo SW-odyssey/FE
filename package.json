@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "dev:network": "next dev --hostname 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "format": "prettier --write src tests docs README.md AGENTS.md CLAUDE.md",
+    "check:format": "prettier --check \"src/**/*.{ts,tsx,json}\" tests docs README.md AGENTS.md CLAUDE.md"
   },
   "dependencies": {
     "next": "16.3.6",
@@ -21,6 +26,12 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "kakao.maps.d.ts": "0.1.40",
+    "prettier": "^3.9.9"
+  },
+  "type": "module",
+  "engines": {
+    "node": "24.19.0"
   }
 }
