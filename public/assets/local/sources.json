@@ -1,0 +1,106 @@
+[
+  {
+    "id": "cheongsudang",
+    "file": "/assets/local/cheongsudang.jpg",
+    "source": "https://glowseoul.co.kr/en/portfolio/cheongsudang-iksun",
+    "image_url": "https://glowseoul.co.kr/images/gallery/cheongsudang-iksun/cheongsudang-iksun-01.webp",
+    "credit": "Glow Seoul",
+    "subject": "Cheongsudang Ikseon",
+    "dimensions": [
+      1800,
+      1200
+    ],
+    "retrieved": "2026-10-05"
+  },
+  {
+    "id": "cheongsudang-interior",
+    "file": "/assets/local/cheongsudang-interior.jpg",
+    "source": "https://glowseoul.co.kr/en/portfolio/cheongsudang-iksun",
+    "image_url": "https://glowseoul.co.kr/images/gallery/cheongsudang-iksun/cheongsudang-iksun-04.webp",
+    "credit": "Glow Seoul",
+    "subject": "Cheongsudang Ikseon interior",
+    "dimensions": [
+      1800,
+      1200
+    ],
+    "retrieved": "2026-10-05"
+  },
+  {
+    "id": "oncheonjip",
+    "file": "/assets/local/oncheonjip.jpg",
+    "source": "https://glowseoul.co.kr/portfolio/oncheonjip-iksun",
+    "image_url": "https://glowseoul.co.kr/images/gallery/oncheonjip-iksun/oncheonjip-iksun-01.webp",
+    "credit": "Glow Seoul",
+    "subject": "Oncheonjip Ikseon",
+    "dimensions": [
+      1800,
+      1200
+    ],
+    "retrieved": "2026-10-05"
+  },
+  {
+    "id": "seoulcoffee",
+    "file": "/assets/local/seoulcoffee.jpg",
+    "source": "https://www.labotory.com/project/seoul-coffee/",
+    "image_url": "https://www.labotory.com/wp-content/uploads/2017/08/3-2.jpg",
+    "credit": "LABOTORY / Choi Yong Joon",
+    "subject": "Seoul Coffee Ikseon",
+    "dimensions": [
+      1500,
+      1000
+    ],
+    "retrieved": "2026-10-05"
+  },
+  {
+    "id": "nogari",
+    "file": "/assets/local/nogari.jpg",
+    "source": "https://english.visitseoul.net/area/Euljiro-Nogari-Alley/ENPf8bj59",
+    "image_url": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=75111&fileTy=MEDIA&fileNo=2&thumbTy=L",
+    "credit": "Visit Seoul / Seoul Tourism Organization",
+    "subject": "Euljiro Nogari Alley",
+    "dimensions": [
+      800,
+      571
+    ],
+    "retrieved": "2026-10-05"
+  },
+  {
+    "id": "hanyakbang",
+    "file": "/assets/local/hanyakbang.jpg",
+    "source": "https://english.visitseoul.net/area/coffeehanyakbang/ENPyiaqhs",
+    "image_url": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=75107&fileTy=MEDIA&fileNo=1&thumbTy=L",
+    "credit": "Visit Seoul / Seoul Tourism Organization",
+    "subject": "Coffee Hanyakbang",
+    "dimensions": [
+      800,
+      571
+    ],
+    "retrieved": "2026-10-05"
+  },
+  {
+    "id": "ssamziegil",
+    "file": "/assets/local/ssamziegil.jpg",
+    "source": "https://english.visitseoul.net/area/Ssamzi-gil/ENP037934",
+    "image_url": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=72696&fileTy=MEDIA&fileNo=2&thumbTy=L",
+    "credit": "Visit Seoul / Seoul Tourism Organization",
+    "subject": "Ssamzi-gil",
+    "dimensions": [
+      800,
+      556
+    ],
+    "retrieved": "2026-10-05"
+  },
+  {
+    "id": "ikseon",
+    "file": "/assets/local/ikseon.jpg",
+    "source": "https://english.visitseoul.net/attractions/ikseongdongHanokVillage/ENP037008",
+    "image_url": "https://english.visitseoul.net/comm/getImage?srvcId=MEDIA&parentSn=67734&fileTy=MEDIA&fileNo=2&thumbTy=L",
+    "credit": "Visit Seoul / Seoul Tourism Organization",
+    "subject": "Ikseon-dong Hanok Street",
+    "dimensions": [
+      800,
+      571
+    ],
+    "retrieved": "2026-10-05"
+  }
+]
