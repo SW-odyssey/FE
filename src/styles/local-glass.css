@@ -188,7 +188,7 @@ body {
   position: relative;
   z-index: 1;
   border-radius: var(--local-segment-lens-radius);
-  gap: 3px;
+  gap: 2px;
   font-size: 11px;
   line-height: 14px;
   color: #596981;

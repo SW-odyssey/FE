@@ -21,7 +21,7 @@ export function DiscoveryNavigation(props: Props) {
         value,
         label: (
           <>
-            <LocalIcon name={icon} size={22} />
+            <LocalIcon name={icon} size={20} />
             <span>{title}</span>
           </>
         ),
