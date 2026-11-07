@@ -1,0 +1,114 @@
+.local-web.is-map-mode::before {
+  height: calc(76px + var(--local-safe-top));
+}
+
+.local-web .local-map-canvas {
+  width: auto;
+  height: auto;
+  transform: none;
+}
+
+.local-web .local-map-page {
+  --local-map-sheet-bottom: calc(
+    var(--local-nav-bottom) + var(--local-nav-height) + 16px
+  );
+}
+
+.local-web .local-map-context,
+.local-web .local-place-sheet {
+  left: calc(16px + var(--local-safe-left));
+  right: calc(16px + var(--local-safe-right));
+}
+
+.local-web .local-map-context {
+  top: calc(68px + var(--local-safe-top));
+}
+
+.local-web .local-place-sheet {
+  width: auto;
+  bottom: var(--local-map-sheet-bottom);
+}
+
+.local-web .local-map-canvas div:has(> div > a[href="http://map.kakao.com/"]) {
+  translate: 0
+    calc(
+      -1 *
+        (
+          var(--local-map-sheet-inset, 320px) + var(--local-map-sheet-bottom) +
+            8px
+        )
+    );
+}
+
+.local-web .local-map-page .local-map-tools {
+  top: calc(188px + var(--local-safe-top));
+  right: calc(16px + var(--local-safe-right));
+}
+
+.local-web .local-explore-map.is-map-fallback {
+  background:
+    linear-gradient(145deg, transparent 53%, #f6f9fd 53% 55%, transparent 55%),
+    linear-gradient(
+      76deg,
+      #dce9eb 24%,
+      #f8fafc 24% 26%,
+      #edf2f4 26% 69%,
+      #f8fafc 69% 71%,
+      #e2eaf1 71%
+    );
+}
+
+.local-web .local-refined-map-status {
+  top: calc(184px + var(--local-safe-top));
+  left: calc(16px + var(--local-safe-left));
+  right: calc(72px + var(--local-safe-right));
+}
+
+@media (max-height: 560px) {
+  .local-web .local-map-page:has(.is-expanded) .local-map-tools {
+    visibility: hidden;
+  }
+
+  .local-web .local-refined-map-status {
+    padding-block: 10px;
+  }
+}
+
+@media (max-height: 480px) {
+  .local-web.is-map-mode > .local-search-header {
+    height: 52px;
+    padding-block: 2px;
+  }
+
+  .local-web .local-map-context {
+    top: calc(56px + var(--local-safe-top));
+  }
+
+  .local-web .local-map-context .local-context {
+    height: 48px;
+  }
+
+  .local-web .local-map-page {
+    --local-map-sheet-bottom: calc(
+      var(--local-nav-bottom) + var(--local-nav-height) + 8px
+    );
+  }
+
+  .local-web .local-map-page .local-map-tools,
+  .local-web .local-refined-map-status {
+    top: calc(156px + var(--local-safe-top));
+  }
+
+  .local-web .local-refined-map-status {
+    padding: 2px 8px;
+    line-height: 16px;
+  }
+
+  .local-web .local-refined-map-status strong {
+    font-size: 12px;
+  }
+
+  .local-web .local-refined-map-status span {
+    display: none;
+  }
+}

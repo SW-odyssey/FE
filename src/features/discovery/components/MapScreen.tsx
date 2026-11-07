@@ -1,9 +1,11 @@
 "use client";
 import type * as React from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
+import type { MapViewportInsets } from "../../map/controller";
 import ExploreMap from "../../map/ExploreMap";
 import PlaceSheet from "../../map/PlaceSheet";
-import { sheetHeights } from "../../map/sheet-motion";
+import { sheetHeights, sheetHeightsForSpace } from "../../map/sheet-motion";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { placeCount } from "../localization";
 import { DiscoveryControls } from "./DiscoveryControls";
@@ -21,7 +23,6 @@ type Props = Pick<
   | "openFilters"
   | "openPlace"
   | "origin"
-  | "phoneScale"
   | "selectMapGroup"
   | "selectMapPlace"
   | "clearMapScope"
@@ -35,7 +36,7 @@ type Props = Pick<
   | "status"
   | "retry"
 > &
-  React.ComponentProps<typeof DiscoveryControls>;
+  React.ComponentProps<typeof DiscoveryControls> & { viewportScale: number };
 export function MapScreen(props: Props) {
   const {
     language,
@@ -47,7 +48,7 @@ export function MapScreen(props: Props) {
     openFilters,
     openPlace,
     origin,
-    phoneScale,
+    viewportScale,
     selectMapGroup,
     selectMapPlace,
     clearMapScope,
@@ -58,8 +59,49 @@ export function MapScreen(props: Props) {
     status,
     retry,
   } = props;
+  const page = useRef<HTMLDivElement>(null);
+  const context = useRef<HTMLDivElement>(null);
+  const [layout, setLayout] = useState<{
+    insets: MapViewportInsets;
+    maxSheetHeight: number;
+  } | null>(null);
+  useLayoutEffect(() => {
+    const root = page.current;
+    const controls = context.current;
+    const panel = root?.querySelector<HTMLElement>(".local-place-sheet");
+    if (!root?.closest(".local-web") || !controls || !panel) return;
+
+    const measure = () => {
+      const top = controls.offsetTop + controls.offsetHeight + 8;
+      const bottom = Number.parseFloat(getComputedStyle(panel).bottom) || 0;
+      const remaining = root.clientHeight - bottom;
+      // Short landscape viewports can use part of the controls' area, while
+      // keeping the search header and the sheet handle separately reachable.
+      const maxSheetHeight = Math.min(
+        sheetHeights.expanded,
+        Math.max(120, remaining - top),
+        remaining - controls.offsetTop - 4,
+      );
+      setLayout((previous) =>
+        previous?.maxSheetHeight === maxSheetHeight &&
+        previous.insets.top === top &&
+        previous.insets.bottom === bottom
+          ? previous
+          : { insets: { top, bottom }, maxSheetHeight },
+      );
+    };
+
+    measure();
+    const resize = new ResizeObserver(measure);
+    resize.observe(root);
+    resize.observe(controls);
+    return () => resize.disconnect();
+  }, []);
+
+  const maximumHeight = layout?.maxSheetHeight ?? sheetHeights.expanded;
+  const heights = sheetHeightsForSpace(maximumHeight);
   return (
-    <div key="map" className="local-content local-map-page">
+    <div key="map" ref={page} className="local-content local-map-page">
       <ExploreMap
         memory={mapCamera}
         scope={mapScope}
@@ -68,18 +110,20 @@ export function MapScreen(props: Props) {
         selected={mapSelected}
         language={language}
         origin={origin}
-        sheetInset={sheetHeights[sheet]}
-        viewportScale={phoneScale}
+        sheetInset={heights[sheet]}
+        viewportScale={viewportScale}
+        viewportInsets={layout?.insets}
         focusSelected={Boolean(mapId)}
         onSelect={selectMapPlace}
       />
-      <div className="local-map-context">
+      <div className="local-map-context" ref={context}>
         <DiscoveryControls {...props} />
       </div>
       <PlaceSheet
         state={sheet}
         onStateChange={setSheet}
-        scale={phoneScale}
+        scale={viewportScale}
+        maximumHeight={maximumHeight}
         language={language}
         summary={
           <button

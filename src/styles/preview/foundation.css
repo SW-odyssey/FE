@@ -144,15 +144,11 @@ svg.local-icon {
 }
 .local-system-bar {
   height: 61px;
+  background: url("/assets/ios-status-bar.svg") center / 100% 100% no-repeat;
   flex: none;
   position: relative;
   z-index: 40;
   pointer-events: none;
-}
-.local-system-bar > img {
-  display: block;
-  width: 393px;
-  height: 61px;
 }
 .local-device-home {
   position: absolute;

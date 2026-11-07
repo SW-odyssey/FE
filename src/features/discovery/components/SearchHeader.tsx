@@ -34,6 +34,8 @@ export function SearchHeader(props: Props) {
         <LocalIcon name="search" size={19} />
         <input
           value={query}
+          inputMode="search"
+          enterKeyHint="search"
           onChange={(e) => {
             setQuery(e.target.value);
           }}

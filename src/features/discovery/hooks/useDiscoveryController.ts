@@ -29,8 +29,7 @@ import { seoulHour, visitDate } from "../visit-date";
 import { slotAt } from "../visit-time";
 import { useDialogLifecycle } from "./useDialogLifecycle";
 import { useDiscoveryData } from "./useDiscoveryData";
-import { usePreviewViewport } from "./usePreviewViewport";
-/** Owns applied/draft state, navigation and restoration for the preview. */
+/** Owns applied/draft state, navigation and restoration for discovery. */
 export function useDiscoveryController(
   source: DiscoveryDataSource = previewDataSource,
 ) {
@@ -68,7 +67,6 @@ export function useDiscoveryController(
   const [timeReturn, setTimeReturn] = useState<"filters" | null>(null);
   const [toast, setToast] = useState("");
 
-  const { stage, phoneScale, viewportReady } = usePreviewViewport();
   const scroll = useRef<HTMLDivElement>(null),
     dialog = useRef<HTMLElement>(null);
   const { closingModal, dismissSheet } = useDialogLifecycle({
@@ -130,7 +128,12 @@ export function useDiscoveryController(
       setDraftTime(state.draftTime);
       setActivity(state.activity);
       setDraftActivity(state.activity);
-      setSpaces(state.spaces);
+      setSpaces((current) =>
+        current.length === state.spaces.length &&
+        current.every((space, index) => space === state.spaces[index])
+          ? current
+          : state.spaces,
+      );
       setDraftSpaces(state.spaces);
       setCategory(state.category);
       setLanguage(state.language);
@@ -164,7 +167,7 @@ export function useDiscoveryController(
       sheet,
     });
     window.history.replaceState(
-      {},
+      window.history.state,
       "",
       `${window.location.pathname}?${params}`,
     );
@@ -290,33 +293,58 @@ export function useDiscoveryController(
     nextPlace = selectedId,
     nextArea = area,
     nextLang = language,
+    mode: "push" | "replace" = "replace",
   ) {
-    const p = new URLSearchParams();
-    p.set("view", nextView);
-    p.set("area", nextArea);
-    if (nextPlace) p.set("place", nextPlace);
-    if (nextLang !== "en") p.set("lang", nextLang);
-    if (query) p.set("q", query);
-    if (category !== "all") p.set("category", category);
-    window.history.pushState({}, "", `${window.location.pathname}?${p}`);
+    const p = serializePreviewUrl({
+      view: nextView,
+      area: nextArea,
+      place: nextPlace,
+      language: nextLang,
+      query,
+      category,
+      autoTime,
+      slot,
+      day,
+      activity,
+      spaces,
+      modal: null,
+      sheet,
+    });
+    const state = {
+      ...window.history.state,
+      localDiscoveryReturn:
+        mode === "push" && nextPlace
+          ? `${window.location.pathname}${window.location.search}`
+          : null,
+    };
+    window.history[mode === "push" ? "pushState" : "replaceState"](
+      state,
+      "",
+      `${window.location.pathname}?${p}`,
+    );
   }
   function navigate(next: "discover" | "map") {
+    if (next === view && !selectedId) return;
     rememberList();
     if (next === "map" && view !== "map") setSheet("half");
     setView(next);
     setSelectedId(null);
     setModal(null);
-    url(next, null);
+    url(next, null, area, language, selectedId ? "push" : "replace");
   }
   function openPlace(p: LocalPlace) {
     rememberList();
     setSelectedId(p.id);
     setModal(null);
-    url(view, p.id);
+    url(view, p.id, area, language, "push");
   }
   function closePlace() {
+    if (window.history.state?.localDiscoveryReturn) {
+      window.history.back();
+      return;
+    }
     setSelectedId(null);
-    url(view, null);
+    url(view, null, area, language, "replace");
   }
   function rememberList() {
     if (selectedId) return;
@@ -538,7 +566,6 @@ export function useDiscoveryController(
     openPlace,
     openTime,
     origin,
-    phoneScale,
     photosFor,
     query,
     scroll,
@@ -554,14 +581,12 @@ export function useDiscoveryController(
     sheet,
     shell,
     spaces,
-    stage,
     summary,
     t,
     timeLabel,
     timeReturn,
     toast,
     view,
-    viewportReady,
     visible,
   };
 }
