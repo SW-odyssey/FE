@@ -10,6 +10,9 @@ export type MapCamera = Coordinate & {
   collection: string;
   selectedId: string | null;
 };
+export type MapViewportInsets = { top: number; bottom: number };
+export const previewMapInsets: MapViewportInsets = { top: 240, bottom: 86 };
+
 export type ExploreMapProps = {
   places: LocalPlace[];
   selected: LocalPlace | null;
@@ -19,6 +22,7 @@ export type ExploreMapProps = {
   focusSelected?: boolean;
   sheetInset?: number;
   viewportScale?: number;
+  viewportInsets?: MapViewportInsets;
   memory?: { current: MapCamera | null };
   scope?: string | null;
   onGroupSelect?: (group: MapPlaceGroup) => void;

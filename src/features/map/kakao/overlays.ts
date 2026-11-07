@@ -4,7 +4,7 @@ import {
   layoutClusterNodes,
   layoutMapCaptions,
 } from "../clusters.ts";
-import type { ExploreMapOptions } from "../controller.ts";
+import { previewMapInsets, type ExploreMapOptions } from "../controller.ts";
 import { groupMapPlaces, inMapScope, type MapPlaceGroup } from "../geometry.ts";
 
 type MapLabel = {
@@ -33,7 +33,7 @@ function paintMapCaptions(
   labels: readonly MapLabel[],
   points: readonly { id: string; x: number; y: number }[],
   offsets: Map<string, { x: number; y: number }>,
-  bounds: { width: number; height: number },
+  bounds: { width: number; height: number; top: number },
   selectedId: string | null,
 ) {
   const drawn = points.flatMap((point) => {
@@ -65,7 +65,7 @@ function paintMapCaptions(
   });
   const placements = layoutMapCaptions(candidates, {
     left: 12,
-    top: 240,
+    top: bounds.top,
     right: bounds.width - 64,
     bottom: bounds.height - 8,
     selectedId,
@@ -110,6 +110,7 @@ export function createMapOverlays(
       scope,
       sheetInset,
       viewportScale,
+      viewportInsets = previewMapInsets,
       onSelect,
       onGroupSelect,
     } = options;
@@ -274,11 +275,16 @@ export function createMapOverlays(
             bounds.extend(new kakao.maps.LatLng(member.lat, member.lng)),
           );
           const previous = current.getLevel();
+          const top = viewportInsets.top + 12;
+          const bottom = Math.min(
+            sheetInset + viewportInsets.bottom + 24,
+            Math.max(0, element.clientHeight / viewportScale - top - 64),
+          );
           current.setBounds(
             bounds,
-            252 * viewportScale,
+            top * viewportScale,
             72 * viewportScale,
-            (sheetInset + 110) * viewportScale,
+            bottom * viewportScale,
             40 * viewportScale,
           );
           if (current.getLevel() >= previous)
@@ -294,7 +300,9 @@ export function createMapOverlays(
     });
 
     const width = element.clientWidth / viewportScale;
-    const height = element.clientHeight / viewportScale - sheetInset - 86;
+    const { top } = viewportInsets;
+    const height =
+      element.clientHeight / viewportScale - sheetInset - viewportInsets.bottom;
     const points = nodes
       .map((node) => {
         const point = projection.containerPointFromCoords(node.position);
@@ -310,7 +318,7 @@ export function createMapOverlays(
         (point) =>
           point.x >= 0 &&
           point.x <= width &&
-          point.y >= 230 &&
+          point.y >= top - 10 &&
           point.y <= height,
       );
     const pinned = groups.find((group) =>
@@ -318,7 +326,7 @@ export function createMapOverlays(
     )?.id;
     const offsets = layoutClusterNodes(points, {
       left: 12,
-      top: 240,
+      top,
       right: width - 64,
       bottom: height - 8,
       pinnedId: pinned,
@@ -329,7 +337,7 @@ export function createMapOverlays(
       selectedPoint &&
       (selectedPoint.x < 34 ||
         selectedPoint.x > width - 86 ||
-        selectedPoint.y < 262 ||
+        selectedPoint.y < top + 22 ||
         selectedPoint.y > height - 30)
     )
       offsets.delete(selectedPoint.id);
@@ -350,7 +358,7 @@ export function createMapOverlays(
       nodes.filter((node) => Boolean(node.caption?.textContent)),
       points,
       offsets,
-      { width, height },
+      { width, height, top },
       pinned ?? null,
     );
     for (const node of nodes)

@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -15,6 +16,7 @@ import type { DiscoveryLanguage } from "../discovery/model";
 import {
   resistSheetHeight,
   sheetHeights,
+  sheetHeightsForSpace,
   sheetSnapTarget,
   stepSheetSpring,
   type SheetState,
@@ -34,6 +36,7 @@ export default function PlaceSheet({
   state,
   onStateChange,
   scale,
+  maximumHeight = sheetHeights.expanded,
   language,
   summary,
   children,
@@ -41,14 +44,19 @@ export default function PlaceSheet({
   state: SheetState;
   onStateChange: (state: SheetState) => void;
   scale: number;
+  maximumHeight?: number;
   language: DiscoveryLanguage;
   summary: ReactNode;
   children: ReactNode;
 }) {
+  const heights = useMemo(
+    () => sheetHeightsForSpace(maximumHeight),
+    [maximumHeight],
+  );
   const root = useRef<HTMLElement>(null);
-  const [height, setHeight] = useState(sheetHeights[state]);
+  const [height, setHeight] = useState(heights[state]);
   const [dragging, setDragging] = useState(false);
-  const motion = useRef({ height: sheetHeights[state], velocity: 0, frame: 0 });
+  const motion = useRef({ height: heights[state], velocity: 0, frame: 0 });
   const drag = useRef<Drag | null>(null);
   const targetState = useRef(state);
   const suppressClick = useRef(false);
@@ -105,7 +113,7 @@ export default function PlaceSheet({
       if (media.matches && motion.current.frame) {
         stop();
         motion.current.velocity = 0;
-        paint(sheetHeights[targetState.current]);
+        paint(heights[targetState.current]);
       }
     };
     change();
@@ -114,21 +122,24 @@ export default function PlaceSheet({
       stop();
       media.removeEventListener("change", change);
     };
-  }, [paint, stop]);
+  }, [heights, paint, stop]);
   useEffect(() => {
     if (targetState.current === state) return;
     targetState.current = state;
     drag.current = null;
     setDragging(false);
-    settle(sheetHeights[state]);
-  }, [state, settle]);
-  useEffect(() => {
-    if (!drag.current) return;
-    drag.current = null;
-    suppressClick.current = true;
-    setDragging(false);
-    settle(sheetHeights[targetState.current], 0);
-  }, [scale, settle]);
+    settle(heights[state]);
+  }, [state, heights, settle]);
+  useLayoutEffect(() => {
+    if (drag.current) {
+      drag.current = null;
+      suppressClick.current = true;
+      setDragging(false);
+    }
+    stop();
+    motion.current.velocity = 0;
+    paint(heights[targetState.current]);
+  }, [heights, scale, paint, stop]);
   useLayoutEffect(() => {
     // The SDK attribution follows the same frame as the sheet; the map camera stays still.
     root.current?.parentElement?.style.setProperty(
@@ -143,7 +154,7 @@ export default function PlaceSheet({
     drag.current = null;
     setDragging(false);
     if (!current.moved) {
-      if (cancelled) settle(sheetHeights[current.state], 0);
+      if (cancelled) settle(heights[current.state], 0);
       return;
     }
     suppressClick.current = true;
@@ -154,19 +165,18 @@ export default function PlaceSheet({
       !cancelled && event.timeStamp - last.time < 90 && elapsed > 0
         ? (first.y - last.y) / current.scale / elapsed
         : 0;
-    const maximum = sheetHeights.expanded;
     const snap = cancelled
-      ? sheetHeights[current.state]
+      ? heights[current.state]
       : sheetSnapTarget(
           motion.current.height,
           velocity,
           current.height,
-          maximum,
+          heights.expanded,
         );
     const next =
-      snap === sheetHeights.collapsed
+      snap === heights.collapsed
         ? "collapsed"
-        : snap === sheetHeights.half
+        : snap === heights.half
           ? "half"
           : "expanded";
     targetState.current = next;
@@ -174,8 +184,23 @@ export default function PlaceSheet({
     settle(snap, velocity * 1000);
   }
 
-  const listReveal = Math.max(0, Math.min(1, (height - 136) / 72));
-  const summaryReveal = 1 - Math.max(0, Math.min(1, (height - 100) / 32));
+  const listEnd = Math.min(208, heights.half);
+  const listStart = Math.min(136, (heights.collapsed + listEnd) / 2);
+  const listReveal = Math.max(
+    0,
+    Math.min(1, (height - listStart) / Math.max(1, listEnd - listStart)),
+  );
+  const summaryStart = Math.min(100, listStart);
+  const summaryReveal =
+    1 -
+    Math.max(
+      0,
+      Math.min(
+        1,
+        (height - summaryStart) /
+          Math.max(1, Math.min(32, listEnd - summaryStart)),
+      ),
+    );
   const listActive = listReveal > 0.5;
   return (
     <section
@@ -261,9 +286,7 @@ export default function PlaceSheet({
           current.samples = current.samples.filter(
             (sample) => event.timeStamp - sample.time <= 100,
           );
-          paint(
-            resistSheetHeight(current.height + delta, sheetHeights.expanded),
-          );
+          paint(resistSheetHeight(current.height + delta, heights.expanded));
         }}
         onPointerUp={(event) => endDrag(event)}
         onPointerCancel={(event) => endDrag(event, true)}

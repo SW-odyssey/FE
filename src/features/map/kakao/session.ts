@@ -1,6 +1,7 @@
 import type { Coordinate, LocalPlace } from "../../discovery/model.ts";
 import { mapFocusCentrePoint } from "../clusters.ts";
 import {
+  previewMapInsets,
   restorableMapCamera,
   type ExploreMapOptions,
   type ExploreMapSession,
@@ -86,22 +87,37 @@ export function createExploreMapSession(
       restoreFit = false;
       return;
     }
-    const { places, viewportScale, sheetInset } = readOptions();
+    const {
+      places,
+      viewportScale,
+      sheetInset,
+      viewportInsets = previewMapInsets,
+    } = readOptions();
     if (!places.length) return;
     const bounds = new kakao.maps.LatLngBounds();
     for (const place of places)
       bounds.extend(new kakao.maps.LatLng(place.lat, place.lng));
+    const top = viewportInsets.top + 12;
+    const bottom = Math.min(
+      Math.min(sheetInset, 292) + viewportInsets.bottom + 76,
+      Math.max(0, element.clientHeight / viewportScale - top - 64),
+    );
     map.setBounds(
       bounds,
-      252 * viewportScale,
+      top * viewportScale,
       92 * viewportScale,
-      (Math.min(sheetInset, 292) + 98 + 64) * viewportScale,
+      bottom * viewportScale,
       52 * viewportScale,
     );
   }
   function focusSelected() {
-    const { selected, focusSelected, viewportScale, sheetInset } =
-      readOptions();
+    const {
+      selected,
+      focusSelected,
+      viewportScale,
+      sheetInset,
+      viewportInsets,
+    } = readOptions();
     if (!selected || !focusSelected) return;
     if (restoreFocus === selected.id) {
       restoreFocus = undefined;
@@ -115,6 +131,8 @@ export function createExploreMapSession(
       canvasHeight: element.clientHeight,
       viewportScale,
       sheetInset,
+      top: viewportInsets?.top,
+      bottom: viewportInsets?.bottom,
     });
     const point = projection.coordsFromContainerPoint(
       new kakao.maps.Point(centre.x, centre.y),

@@ -32,10 +32,13 @@ export function mapFocusCentrePoint(
     viewportScale: number;
     sheetInset: number;
     top?: number;
+    bottom?: number;
   },
 ): { x: number; y: number } {
   const visibleBottom =
-    options.canvasHeight / options.viewportScale - options.sheetInset - 86;
+    options.canvasHeight / options.viewportScale -
+    options.sheetInset -
+    (options.bottom ?? 86);
   const visibleCentreY = ((options.top ?? 240) + visibleBottom - 8) / 2;
   return {
     x: target.x,

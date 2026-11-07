@@ -6,6 +6,25 @@ export const sheetHeights: Record<SheetState, number> = {
   expanded: 500,
 };
 
+/** Fit the map sheet's three stops within the room below the map controls.
+ * @param availableHeight Space in CSS pixels above the bottom navigation
+ * @returns Heights for the collapsed, half and expanded sheet states
+ */
+export function sheetHeightsForSpace(availableHeight: number) {
+  const collapsed = sheetHeights.collapsed;
+  const expanded = Math.min(
+    sheetHeights.expanded,
+    Math.max(collapsed, availableHeight),
+  );
+  const middle =
+    (sheetHeights.half - collapsed) / (sheetHeights.expanded - collapsed);
+  return {
+    collapsed,
+    half: Math.round(collapsed + (expanded - collapsed) * middle),
+    expanded,
+  };
+}
+
 /** Small, bounded resistance beyond either end; no hard stop under a finger. */
 export function resistSheetHeight(height: number, maximum = 500) {
   const edge = Math.max(sheetHeights.collapsed, Math.min(maximum, height));
@@ -20,7 +39,8 @@ export function sheetSnapTarget(
   start: number,
   maximum = 500,
 ) {
-  const stops = [sheetHeights.collapsed, sheetHeights.half, maximum];
+  const { collapsed, half, expanded } = sheetHeightsForSpace(maximum);
+  const stops = [collapsed, half, expanded];
   // Tiny movements remain a tap; a paused drag has no residual flick velocity.
   const projected =
     Math.abs(height - start) < 8

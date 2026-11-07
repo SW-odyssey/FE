@@ -61,6 +61,7 @@ export function useExploreMap(props: ExploreMapProps) {
     props.scope,
     props.sheetInset,
     props.viewportScale,
+    props.viewportInsets,
     ready,
     zoom,
   ]);
