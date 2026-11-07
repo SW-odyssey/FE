@@ -719,14 +719,6 @@
 .local-refined .local-modal-sheet .local-sheet-footer {
   padding-top: 20px;
 }
-.local-refined .local-time-actions .local-use-now {
-  font-size: 13px;
-  background: #ffffff40;
-  border-color: #ffffff80;
-  box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
 .local-refined .local-wheel button {
   color: #72819a;
   font-size: 15px;
