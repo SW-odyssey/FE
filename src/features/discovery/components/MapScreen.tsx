@@ -74,13 +74,9 @@ export function MapScreen(props: Props) {
     const measure = () => {
       const top = controls.offsetTop + controls.offsetHeight + 8;
       const bottom = Number.parseFloat(getComputedStyle(panel).bottom) || 0;
-      const remaining = root.clientHeight - bottom;
-      // Short landscape viewports can use part of the controls' area, while
-      // keeping the search header and the sheet handle separately reachable.
       const maxSheetHeight = Math.min(
         sheetHeights.expanded,
-        Math.max(120, remaining - top),
-        remaining - controls.offsetTop - 4,
+        root.clientHeight - bottom - top,
       );
       setLayout((previous) =>
         previous?.maxSheetHeight === maxSheetHeight &&

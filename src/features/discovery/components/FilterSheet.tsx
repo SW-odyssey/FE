@@ -3,6 +3,7 @@ import { LocalIcon } from "../../../components/ui/LocalIcon";
 import { spacePreferences } from "../filters";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { placeCount, spaceLabels } from "../localization";
+import { SegmentedChoice } from "./SegmentedChoice";
 import { SheetHeader } from "./SheetHeader";
 type Props = Pick<
   DiscoveryController,
@@ -50,28 +51,17 @@ export function FilterSheet(props: Props) {
       }
       <div className="local-filter-options">
         <div className="local-filter-group">
-          <div
+          <SegmentedChoice
             className="local-filter-choice-set is-ambience"
-            role="group"
-            aria-label={t("Area activity", "인구 밀도")}
-          >
-            {(["quiet", "any", "lively"] as const).map((id) => (
-              <button
-                key={id}
-                className={draftActivity === id ? "is-active" : ""}
-                aria-pressed={draftActivity === id}
-                onClick={() => setDraftActivity(id)}
-              >
-                <span>
-                  {id === "any"
-                    ? t("Any", "상관없음")
-                    : id === "quiet"
-                      ? t("Less busy", "한적함")
-                      : t("Lively", "활기참")}
-                </span>
-              </button>
-            ))}
-          </div>
+            label={t("Area activity", "인구 밀도")}
+            value={draftActivity}
+            onChange={setDraftActivity}
+            options={[
+              { value: "quiet", label: t("Less busy", "한적함") },
+              { value: "any", label: t("Any", "상관없음") },
+              { value: "lively", label: t("Lively", "활기참") },
+            ]}
+          />
         </div>
         <div className="local-filter-group is-space">
           <div

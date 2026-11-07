@@ -4,6 +4,7 @@ import { slotLabels } from "../presentation";
 import { slotAt, slotHours, visitSlots } from "../visit-time";
 import { seoulHour } from "../visit-date";
 import { discoveryCopy } from "../recommendation-analysis";
+import { SegmentedChoice } from "./SegmentedChoice";
 import { SheetHeader } from "./SheetHeader";
 import { VisitCalendar } from "./VisitCalendar";
 type Props = Pick<
@@ -50,21 +51,16 @@ export function VisitTimeSheet(props: Props) {
           language={language}
           onChange={setDraftDay}
         />
-        <div
+        <SegmentedChoice
           className="local-visit-slots"
-          role="group"
-          aria-label={t("Time", "시간대")}
-        >
-          {visitSlots.map((slot) => (
-            <button
-              key={slot}
-              aria-pressed={draftSlot === slot}
-              onClick={() => setDraftSlot(slot)}
-            >
-              <strong>{slotLabels[language][slot]}</strong>
-            </button>
-          ))}
-        </div>
+          label={t("Time", "시간대")}
+          value={draftSlot}
+          onChange={setDraftSlot}
+          options={visitSlots.map((slot) => ({
+            value: slot,
+            label: slotLabels[language][slot],
+          }))}
+        />
         <p className="local-selected-time-range" aria-live="polite">
           {slotHours[draftSlot]}
         </p>

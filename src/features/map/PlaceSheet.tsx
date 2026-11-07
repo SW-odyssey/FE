@@ -186,21 +186,18 @@ export default function PlaceSheet({
 
   const listEnd = Math.min(208, heights.half);
   const listStart = Math.min(136, (heights.collapsed + listEnd) / 2);
-  const listReveal = Math.max(
-    0,
-    Math.min(1, (height - listStart) / Math.max(1, listEnd - listStart)),
-  );
+  const listSpan = listEnd - listStart;
+  const listReveal =
+    listSpan > 0
+      ? Math.max(0, Math.min(1, (height - listStart) / listSpan))
+      : Number(state !== "collapsed");
   const summaryStart = Math.min(100, listStart);
+  const summarySpan = Math.min(32, listEnd - summaryStart);
   const summaryReveal =
     1 -
-    Math.max(
-      0,
-      Math.min(
-        1,
-        (height - summaryStart) /
-          Math.max(1, Math.min(32, listEnd - summaryStart)),
-      ),
-    );
+    (summarySpan > 0
+      ? Math.max(0, Math.min(1, (height - summaryStart) / summarySpan))
+      : listReveal);
   const listActive = listReveal > 0.5;
   return (
     <section

@@ -1,5 +1,6 @@
 "use client";
 import type * as React from "react";
+import { useLayoutEffect, useRef } from "react";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { AreaSheet } from "./AreaSheet";
 import { FilterSheet } from "./FilterSheet";
@@ -14,7 +15,25 @@ type Props = React.ComponentProps<typeof AreaSheet> &
     "closeModal" | "closingModal" | "dialog" | "modal" | "t"
   >;
 export function DiscoveryOverlay(props: Props) {
-  const { closeModal, closingModal, dialog, modal, t } = props;
+  const { closeModal, closingModal, dialog, modal, t, timeReturn } = props;
+  const body = useRef<HTMLDivElement>(null);
+  const previousPanel = useRef({ modal, timeReturn });
+  useLayoutEffect(() => {
+    const previous = previousPanel.current;
+    previousPanel.current = { modal, timeReturn };
+    const panel = body.current;
+    if (!panel) return;
+
+    if (previous.modal === "filters" && modal === "time" && timeReturn)
+      panel.dataset.panelDirection = "forward";
+    else if (
+      previous.modal === "time" &&
+      previous.timeReturn &&
+      modal === "filters"
+    )
+      panel.dataset.panelDirection = "back";
+  }, [modal, timeReturn]);
+
   return (
     <div className={`local-modal-layer ${closingModal ? "is-closing" : ""}`}>
       <button
@@ -42,7 +61,7 @@ export function DiscoveryOverlay(props: Props) {
           modal === "menu" ? "local-drawer" : `local-modal-sheet is-${modal}`
         }
       >
-        <div key={modal} className="local-modal-body">
+        <div key={modal} ref={body} className="local-modal-body">
           {modal === "area" ? (
             <AreaSheet {...props} />
           ) : modal === "filters" ? (

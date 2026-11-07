@@ -6,6 +6,7 @@
   --local-search-row-height: 64px;
   --local-search-block-padding: 8px;
   --local-places-top: 4px;
+  --local-content-gutter: 24px;
   --local-nav-bottom: max(12px, var(--local-safe-bottom));
   --local-nav-height: 64px;
 
@@ -63,7 +64,7 @@
 .local-web .local-search button {
   width: 44px;
   height: 44px;
-  margin-inline-end: -12px;
+  margin-inline-end: 4px;
   border-radius: 50%;
 }
 
@@ -71,18 +72,37 @@
   position: relative;
   inset: auto;
   padding-top: var(--local-places-top);
-  padding-right: calc(24px + var(--local-safe-right));
+  padding-right: calc(var(--local-content-gutter) + var(--local-safe-right));
   padding-bottom: calc(
     var(--local-nav-height) + var(--local-nav-bottom) + 24px
   );
-  padding-left: calc(24px + var(--local-safe-left));
+  padding-left: calc(var(--local-content-gutter) + var(--local-safe-left));
   scroll-padding: var(--local-places-top) 0
     calc(var(--local-nav-height) + var(--local-nav-bottom) + 8px);
 }
 
 .local-web .local-context {
-  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr) 44px;
-  padding-right: 8px;
+  grid-template-columns: minmax(112px, 2fr) minmax(0, 3fr) 44px;
+  padding-inline: 12px 6px;
+}
+
+.local-web .local-context .local-area-select {
+  gap: 6px;
+  padding-right: 6px;
+}
+
+.local-web .local-context .local-time-select {
+  gap: 6px;
+  padding-inline: 8px 4px;
+}
+
+.local-web .local-time-select > span:not(.local-icon) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 16px;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .local-web .local-context > .local-filter-button {
@@ -91,6 +111,8 @@
 }
 
 .local-web > .local-bottom-nav {
+  --refined-clear: var(--refined-reading);
+
   left: calc(16px + var(--local-safe-left));
   right: calc(16px + var(--local-safe-right));
   bottom: var(--local-nav-bottom);

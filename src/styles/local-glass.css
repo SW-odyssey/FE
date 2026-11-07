@@ -369,11 +369,11 @@ body {
 .local-ai-summary {
   background: linear-gradient(145deg, #e6ecfbc7, #dfe5f7a3);
   border: 1px solid #ffffffb0;
-  border-radius: 20px;
   box-shadow: none;
 }
+.local-ai-summary,
 .local-map-preview {
-  border-radius: 22px;
+  border-radius: 20px;
 }
 .local-round {
   color: #354562;
