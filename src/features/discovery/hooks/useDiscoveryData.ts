@@ -218,6 +218,7 @@ export function useDiscoveryData({
   );
   return {
     visible: result.value.items,
+    analyses: result.status === "success" ? (result.value.analyses ?? {}) : {},
     total: result.value.total,
     draftCount: activeDraft.value.total,
     selected: detail.value?.place,

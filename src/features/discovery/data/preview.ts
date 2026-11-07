@@ -5,6 +5,7 @@ import photoManifest from "./preview/guide-photos.json" with { type: "json" };
 import { localPlaces } from "./preview/places.ts";
 import {
   filterLocalPlaces,
+  placeSpaces,
   recommendPlaces,
 } from "./preview/recommendations.ts";
 import type {
@@ -67,7 +68,24 @@ export function previewQuery(input: DiscoveryQuery): DiscoveryQueryResult {
     input.origin,
     input.spaces,
   );
-  return { items, total: items.length };
+  return {
+    items,
+    total: items.length,
+    analyses: Object.fromEntries(
+      items.map((place) => [
+        place.id,
+        {
+          provenance: "preview" as const,
+          spaces: placeSpaces[place.id] ?? [],
+          matchedSpaces: input.spaces.filter((space) =>
+            placeSpaces[place.id]?.includes(space),
+          ),
+          slot: input.slot,
+          activity: input.activity,
+        },
+      ]),
+    ),
+  };
 }
 function checkAbort(options?: DiscoveryRequestOptions) {
   if (options?.signal?.aborted)
