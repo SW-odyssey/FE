@@ -51,6 +51,13 @@ npm start
 
 `http://localhost:3000`에서 빌드 결과를 확인한다. 이 설정은 Next.js 서버 실행 방식이며 별도 백엔드 API는 연결할 작업이다.
 
+Cloudflare Pages 배포에는 정적 빌드를 사용한다. `/guide/`와 기존 시안 경로도 `out/`에 함께 생성된다.
+
+```sh
+LOCAL_PAGES_BUILD=1 npm run build
+wrangler pages deploy out --project-name local-odyssey --branch feat/mobile-first-ui
+```
+
 `check:format`은 코드와 문서의 서식만 검사한다. 기존 스타일시트는 이 명령의 검사 대상에서 제외된다.
 
 ## 스타일 편집 위치

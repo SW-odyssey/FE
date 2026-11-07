@@ -49,7 +49,9 @@ export default function DiscoveryApp({
             }
       }
     >
-      {previewScale !== undefined && (
+      {previewScale === undefined ? (
+        <div className="local-status-bar-surface" aria-hidden="true" />
+      ) : (
         <div className="local-system-bar" aria-hidden="true" />
       )}
       {isDetail ? (

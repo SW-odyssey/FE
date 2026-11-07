@@ -1,5 +1,11 @@
 "use client";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  type TouchEvent,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import type { LocalPlace } from "../model";
 import { areaLabels } from "../presentation";
@@ -17,6 +23,35 @@ type Props = Pick<
   | "modal"
 > & { places: LocalPlace[] };
 
+function slideOffset(node: HTMLDivElement, index: number) {
+  return (
+    (node.children.item(index) as HTMLElement).offsetLeft -
+    (node.firstElementChild as HTMLElement).offsetLeft
+  );
+}
+
+function scrollToSlide(
+  node: HTMLDivElement,
+  index: number,
+  behavior: ScrollBehavior,
+) {
+  node.scrollTo({ left: slideOffset(node, index), behavior });
+}
+
+function slideAtScroll(node: HTMLDivElement) {
+  if (node.children.length < 2) return 0;
+  const stride = slideOffset(node, 1);
+  return stride > 0
+    ? Math.max(
+        0,
+        Math.min(
+          node.children.length - 1,
+          Math.round(node.scrollLeft / stride),
+        ),
+      )
+    : 0;
+}
+
 export function FeaturedCarousel({
   places,
   language,
@@ -28,6 +63,9 @@ export function FeaturedCarousel({
   modal,
 }: Props) {
   const track = useRef<HTMLDivElement>(null);
+  const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const count = places.length;
+  const loopOffset = count > 1 ? 1 : 0;
   const [initialIndex] = useState(() =>
     Math.max(
       0,
@@ -35,18 +73,32 @@ export function FeaturedCarousel({
     ),
   );
   const [index, setIndex] = useState(initialIndex);
-  const [interactionRevision, setInteractionRevision] = useState(0);
+  const position = useRef({ width: 0, index: initialIndex });
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [touching, setTouching] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const copy = discoveryCopy[language];
   useLayoutEffect(() => {
-    track.current?.scrollTo({
-      left: initialIndex * track.current.clientWidth,
-      behavior: "instant",
-    });
-  }, [initialIndex]);
+    const node = track.current;
+    if (!node) return;
+    node.dataset.loopReady = "";
+    position.current = { width: 0, index: Math.min(initialIndex, count - 1) };
+    const align = () => {
+      const width = node.clientWidth;
+      if (!width || width === position.current.width) return;
+      position.current.width = width;
+      scrollToSlide(node, position.current.index + loopOffset, "instant");
+    };
+    align();
+    const observer = new ResizeObserver(align);
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+      if (settleTimer.current) clearTimeout(settleTimer.current);
+    };
+  }, [count, initialIndex, loopOffset]);
   useEffect(() => {
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     const changed = () => setReduceMotion(media.matches);
@@ -60,40 +112,83 @@ export function FeaturedCarousel({
       document.removeEventListener("visibilitychange", visibility);
     };
   }, []);
-  function go(next: number) {
-    setInteractionRevision((value) => value + 1);
-    track.current?.scrollTo({
-      left: next * track.current.clientWidth,
-      behavior: reduceMotion ? "instant" : "smooth",
-    });
+  function settleLoop(node: HTMLDivElement) {
+    if (!loopOffset) return;
+    // At either end the copy and the real card fill the same viewport.
+    if (node.scrollLeft <= 1) scrollToSlide(node, count, "instant");
+    if (node.scrollLeft >= node.scrollWidth - node.clientWidth - 1)
+      scrollToSlide(node, 1, "instant");
+  }
+  function scheduleLoopReset(node: HTMLDivElement) {
+    if (!loopOffset || "onscrollend" in node) return;
+    if (settleTimer.current) clearTimeout(settleTimer.current);
+    settleTimer.current = setTimeout(() => settleLoop(node), 140);
+  }
+  function endTouch(event: TouchEvent<HTMLDivElement>) {
+    const active = event.touches.length > 0;
+    setTouching(active);
+    if (!active) scheduleLoopReset(event.currentTarget);
+  }
+  function go(next: number, from = index, direction?: -1 | 1) {
+    const node = track.current;
+    if (!node || !loopOffset || next === from) return;
+    if (reduceMotion) {
+      scrollToSlide(node, next + loopOffset, "instant");
+      return;
+    }
+    const current = slideAtScroll(node);
+    // Rapid key presses may target the focused card before its animation ends.
+    if (current !== from + loopOffset)
+      scrollToSlide(node, from + loopOffset, "instant");
+    let destination = next + loopOffset;
+    if (from === count - 1 && next === 0 && direction !== -1)
+      destination = count + 1;
+    if (from === 0 && next === count - 1 && direction !== 1) destination = 0;
+    scrollToSlide(node, destination, "smooth");
   }
   useEffect(() => {
     if (
-      places.length < 2 ||
+      !loopOffset ||
       hovered ||
       focused ||
+      touching ||
       hidden ||
       reduceMotion ||
       modal
     )
       return;
-    const timer = setInterval(() => {
+    const timer = setTimeout(() => {
       const node = track.current;
       if (!node?.clientWidth) return;
-      const next =
-        (Math.round(node.scrollLeft / node.clientWidth) + 1) % places.length;
-      node.scrollTo({ left: next * node.clientWidth, behavior: "smooth" });
+      scrollToSlide(node, index + loopOffset + 1, "smooth");
     }, 6000);
-    return () => clearInterval(timer);
+    return () => clearTimeout(timer);
   }, [
-    places.length,
-    interactionRevision,
+    index,
+    loopOffset,
     hovered,
     focused,
+    touching,
     hidden,
     reduceMotion,
     modal,
   ]);
+
+  if (!count) return null;
+
+  function cardContent(place: LocalPlace, eager: boolean) {
+    return (
+      <>
+        <Photo place={place} eager={eager} />
+        <span className="local-featured-copy">
+          <span>
+            {areaLabels[language][place.area]} · {kind(place)}
+          </span>
+          <strong>{name(place)}</strong>
+        </span>
+      </>
+    );
+  }
   return (
     <section
       className="local-featured-carousel"
@@ -110,21 +205,31 @@ export function FeaturedCarousel({
       <div
         className="local-featured-track"
         ref={track}
-        onPointerDown={() => setInteractionRevision((value) => value + 1)}
+        onTouchStart={() => {
+          if (settleTimer.current) clearTimeout(settleTimer.current);
+          setTouching(true);
+        }}
+        onTouchEnd={endTouch}
+        onTouchCancel={endTouch}
+        onScrollEnd={(event) => settleLoop(event.currentTarget)}
         onScroll={(event) => {
           const node = event.currentTarget;
-          if (!node.clientWidth) return;
-          const next = Math.max(
-            0,
-            Math.min(
-              places.length - 1,
-              Math.round(node.scrollLeft / node.clientWidth),
-            ),
-          );
-          setIndex(next);
-          setFeaturedId(places[next].id);
+          if (!node.clientWidth || node.clientWidth !== position.current.width)
+            return;
+          const next = (slideAtScroll(node) + count - loopOffset) % count;
+          if (next !== position.current.index) {
+            position.current.index = next;
+            setIndex(next);
+            setFeaturedId(places[next].id);
+          }
+          if (!touching) scheduleLoopReset(node);
         }}
       >
+        {loopOffset > 0 && (
+          <div className="local-featured is-loop-copy" aria-hidden="true">
+            {cardContent(places[count - 1], true)}
+          </div>
+        )}
         {places.map((place, i) => (
           <button
             key={place.id}
@@ -136,23 +241,22 @@ export function FeaturedCarousel({
               if (event.key !== "ArrowRight" && event.key !== "ArrowLeft")
                 return;
               event.preventDefault();
-              const offset = event.key === "ArrowRight" ? 1 : places.length - 1;
-              const next = (i + offset) % places.length;
-              go(next);
-              const slide = track.current?.children.item(next);
+              const direction = event.key === "ArrowRight" ? 1 : -1;
+              const next = (i + direction + count) % count;
+              go(next, i, direction);
+              const slide = track.current?.children.item(next + loopOffset);
               if (slide instanceof HTMLElement)
                 slide.focus({ preventScroll: true });
             }}
           >
-            <Photo place={place} eager={i === 0} />
-            <span className="local-featured-copy">
-              <span>
-                {areaLabels[language][place.area]} · {kind(place)}
-              </span>
-              <strong>{name(place)}</strong>
-            </span>
+            {cardContent(place, i === initialIndex)}
           </button>
         ))}
+        {loopOffset > 0 && (
+          <div className="local-featured is-loop-copy" aria-hidden="true">
+            {cardContent(places[0], true)}
+          </div>
+        )}
       </div>
       {places.length > 1 && (
         <div className="local-carousel-pagination">

@@ -1,6 +1,8 @@
 /* Recommendation context uses the existing cool glass surfaces and accent. */
 .local-featured-track {
+  position: relative;
   display: flex;
+  gap: 12px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -14,6 +16,9 @@
   flex: 0 0 100%;
   scroll-snap-align: start;
   scroll-snap-stop: always;
+}
+.local-featured-track:not([data-loop-ready]) > .is-loop-copy {
+  display: none;
 }
 .local-featured-carousel {
   position: relative;
