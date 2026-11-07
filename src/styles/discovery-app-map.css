@@ -1,5 +1,12 @@
 .local-web.is-map-mode::before {
   height: calc(76px + var(--local-safe-top));
+  background: linear-gradient(
+    to bottom,
+    var(--local-top-surface) var(--local-safe-top),
+    #edf5ff9c calc(var(--local-safe-top) + 16px),
+    #ecf4ff38 calc(var(--local-safe-top) + 55px),
+    transparent
+  );
 }
 
 .local-web .local-map-canvas {

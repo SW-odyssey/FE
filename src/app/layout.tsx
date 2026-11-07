@@ -11,13 +11,23 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   interactiveWidget: "resizes-content",
 };
+
+const detectIosHomeScreen = `
+  if (navigator.standalone === true) {
+    document.documentElement.setAttribute("data-local-ios-home-screen", "");
+  }
+`;
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: detectIosHomeScreen }} />
+      </head>
       <body>{children}</body>
     </html>
   );

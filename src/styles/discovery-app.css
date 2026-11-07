@@ -5,6 +5,7 @@
   --local-safe-left: env(safe-area-inset-left, 0px);
   --local-search-row-height: 64px;
   --local-search-block-padding: 8px;
+  --local-places-top: 4px;
   --local-nav-bottom: max(12px, var(--local-safe-bottom));
   --local-nav-height: 64px;
 
@@ -27,30 +28,30 @@
   padding-right: calc(16px + var(--local-safe-right));
 }
 
-@supports (-webkit-touch-callout: none) {
-  @media (display-mode: standalone) and (max-width: 520px) {
-    .local-shell.local-web:has(> .local-search-header) {
-      --local-fixed-header-height: calc(
-        var(--local-safe-top) + var(--local-search-row-height)
-      );
-      /* Reserve the original space after fixing the header to the viewport. */
-      padding-top: var(--local-fixed-header-height);
-    }
+@media (max-width: 520px) {
+  html[data-local-ios-home-screen],
+  html[data-local-ios-home-screen] body {
+    background-color: var(--local-top-surface);
+  }
 
-    .local-shell.local-web > .local-search-header {
-      position: fixed;
-      inset: 0 0 auto;
-      height: var(--local-fixed-header-height);
-      padding-block: calc(
-          var(--local-safe-top) + var(--local-search-block-padding)
-        )
-        var(--local-search-block-padding);
-      /* WebKit samples this solid color while the visible header uses the shell gradient. */
-      background-color: #e4eef9;
-      background-image: inherit;
-      background-size: 100% 100dvh;
-      background-repeat: no-repeat;
-    }
+  [data-local-ios-home-screen] .local-web:has(> .local-search-header) {
+    /* The initial content stays below the search, then scrolls behind it. */
+    --local-places-top: calc(var(--local-search-row-height) + 4px);
+  }
+
+  [data-local-ios-home-screen] .local-web > .local-search-header {
+    position: fixed;
+    inset: 0 0 auto;
+    height: calc(var(--local-safe-top) + var(--local-search-row-height));
+    padding-block: calc(
+        var(--local-safe-top) + var(--local-search-block-padding)
+      )
+      var(--local-search-block-padding);
+    /* Let WebKit sample the color without painting a bar behind the controls. */
+    background-color: var(--local-top-surface);
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-clip: border-area;
   }
 }
 
@@ -69,13 +70,13 @@
 .local-web .local-places {
   position: relative;
   inset: auto;
-  padding-top: 4px;
+  padding-top: var(--local-places-top);
   padding-right: calc(24px + var(--local-safe-right));
   padding-bottom: calc(
     var(--local-nav-height) + var(--local-nav-bottom) + 24px
   );
   padding-left: calc(24px + var(--local-safe-left));
-  scroll-padding: 4px 0
+  scroll-padding: var(--local-places-top) 0
     calc(var(--local-nav-height) + var(--local-nav-bottom) + 8px);
 }
 
