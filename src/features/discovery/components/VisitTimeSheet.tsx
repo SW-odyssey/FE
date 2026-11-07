@@ -2,14 +2,15 @@
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { slotLabels } from "../presentation";
 import { slotAt, slotHours, visitSlots } from "../visit-time";
+import { seoulHour } from "../visit-date";
+import { discoveryCopy } from "../recommendation-analysis";
 import { SheetHeader } from "./SheetHeader";
-import { Wheel } from "./WheelPicker";
+import { VisitCalendar } from "./VisitCalendar";
 type Props = Pick<
   DiscoveryController,
   | "clock"
   | "closeModal"
   | "confirmTime"
-  | "days"
   | "draftDay"
   | "draftSlot"
   | "language"
@@ -23,7 +24,6 @@ export function VisitTimeSheet(props: Props) {
     clock,
     closeModal,
     confirmTime,
-    days,
     draftDay,
     draftSlot,
     language,
@@ -43,22 +43,32 @@ export function VisitTimeSheet(props: Props) {
           closeModal={closeModal}
         />
       }
-      <div className="local-wheel-picker">
-        <div className="local-wheel-band" />
-        <Wheel
-          label={t("Day", "날짜")}
-          items={days}
-          value={draftDay}
+      <div className="local-visit-options">
+        <VisitCalendar
+          clock={clock}
+          day={draftDay}
+          language={language}
           onChange={setDraftDay}
         />
-        <Wheel
-          label={t("Time", "시간대")}
-          items={visitSlots.map((x) => slotLabels[language][x])}
-          value={visitSlots.indexOf(draftSlot)}
-          onChange={(i) => setDraftSlot(visitSlots[i])}
-        />
+        <div
+          className="local-visit-slots"
+          role="group"
+          aria-label={t("Time", "시간대")}
+        >
+          {visitSlots.map((slot) => (
+            <button
+              key={slot}
+              aria-pressed={draftSlot === slot}
+              onClick={() => setDraftSlot(slot)}
+            >
+              <strong>{slotLabels[language][slot]}</strong>
+            </button>
+          ))}
+        </div>
+        <p className="local-selected-time-range" aria-live="polite">
+          {slotHours[draftSlot]}
+        </p>
       </div>
-      <p className="local-time-range">{slotHours[draftSlot]}</p>
       <div className="local-sheet-footer local-time-actions">
         <button
           className="local-secondary local-use-now"
@@ -66,11 +76,11 @@ export function VisitTimeSheet(props: Props) {
             confirmTime({
               autoTime: true,
               day: 0,
-              slot: slotAt(clock.getHours()),
+              slot: slotAt(seoulHour(clock)),
             });
           }}
         >
-          {t("Use current time", "현재 시간으로")}
+          {discoveryCopy[language].currentTime}
         </button>
         <button
           className="local-primary"
@@ -82,7 +92,7 @@ export function VisitTimeSheet(props: Props) {
             });
           }}
         >
-          {t("Apply", "적용")}
+          {discoveryCopy[language].apply}
         </button>
       </div>
     </>

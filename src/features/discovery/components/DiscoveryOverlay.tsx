@@ -19,13 +19,16 @@ export function DiscoveryOverlay(props: Props) {
     <div className={`local-modal-layer ${closingModal ? "is-closing" : ""}`}>
       <button
         className="local-scrim"
-        aria-label={t("Close dialog", "창 닫기")}
+        aria-hidden="true"
+        tabIndex={-1}
+        onMouseDown={(event) => event.preventDefault()}
         onClick={closeModal}
       />
       <section
         ref={dialog}
         role="dialog"
         aria-modal="true"
+        tabIndex={-1}
         aria-label={
           modal === "area"
             ? t("Area", "지역")

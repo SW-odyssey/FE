@@ -30,6 +30,7 @@ export function useDialogLifecycle({
 }: Options) {
   const [closingModal, setClosingModal] = useState(false);
   const latestDismiss = useRef(onDismiss);
+  const returnFocus = useRef<HTMLElement | null>(null);
 
   useLayoutEffect(() => {
     latestDismiss.current = onDismiss;
@@ -50,34 +51,51 @@ export function useDialogLifecycle({
   }, [closingModal, setModal]);
 
   useEffect(() => {
-    if (!modal) return;
-    const previous = document.activeElement as HTMLElement | null;
+    if (!modal) {
+      if (returnFocus.current?.isConnected) {
+        returnFocus.current.focus({ preventScroll: true });
+      }
+      returnFocus.current = null;
+      return;
+    }
+
+    const surface = dialog.current;
+    if (!surface) return;
+
+    const active = document.activeElement;
+    if (!returnFocus.current && active instanceof HTMLElement) {
+      returnFocus.current = active;
+    }
+
     const elements = () =>
       Array.from(
-        dialog.current?.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), a[href], input, select, summary, [tabindex="0"]',
-        ) ?? [],
+        surface.querySelectorAll<HTMLElement>(
+          'button, a[href], input, select, textarea, summary, [tabindex="0"]',
+        ),
+      ).filter(
+        (element) => element.tabIndex >= 0 && !element.matches(":disabled"),
       );
-    elements()[0]?.focus({ preventScroll: true });
+    (elements()[0] ?? surface).focus({ preventScroll: true });
+
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") latestDismiss.current();
-      if (e.key === "Tab") {
-        const list = elements(),
-          first = list[0],
-          last = list.at(-1);
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last?.focus({ preventScroll: true });
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first?.focus({ preventScroll: true });
-        }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        latestDismiss.current();
+      }
+      if (e.key !== "Tab") return;
+
+      const list = elements();
+      const focused = document.activeElement as HTMLElement | null;
+      const edge = e.shiftKey ? list[0] : list.at(-1);
+      if (!focused || !list.includes(focused) || focused === edge) {
+        e.preventDefault();
+        const next = e.shiftKey ? list.at(-1) : list[0];
+        (next ?? surface).focus();
       }
     };
     window.addEventListener("keydown", handler);
     return () => {
       window.removeEventListener("keydown", handler);
-      previous?.focus({ preventScroll: true });
     };
   }, [modal, timeReturn, dialog]);
 
