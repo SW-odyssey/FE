@@ -1,83 +1,58 @@
-# AGENTS.md
+# LOCAL 개발 작업 기준
 
-## Project context
+## 먼저 확인할 자료
 
-This repository is for **ODI (오디)**, team **오디세이**, an industry-linked capstone project using LG U+ floating-population movement data.
+| 내용               | 경로                                                                |
+| ------------------ | ------------------------------------------------------------------- |
+| 제품과 화면 범위   | `docs/PROJECT_CONTEXT.md`                                           |
+| 결정과 연결할 작업 | `docs/DECISIONS.md`                                                 |
+| 실행 버전과 명령   | `package.json`, `.nvmrc`                                            |
+| 진입 화면          | `src/app/page.tsx`                                                  |
+| 화면 조합          | `src/features/discovery/DiscoveryPreview.tsx`                       |
+| 상태와 이동        | `src/features/discovery/hooks/useDiscoveryController.ts`            |
+| URL 복원           | `src/features/discovery/state/preview-url.ts`                       |
+| 데이터 경계        | `src/features/discovery/data/types.ts`                              |
+| 샘플 공급부        | `src/features/discovery/data/preview.ts`                            |
+| API 변환           | `src/features/discovery/data/api-mapping.ts`                        |
+| 서울 날짜와 슬롯   | `src/features/discovery/visit-date.ts`                              |
+| 지도와 예시 셀     | `src/features/map/geometry.ts`, `src/features/map/kakao/session.ts` |
 
-Before planning or implementing product behavior, read:
+현재 화면 동작은 코드와 테스트로 확인하고, API 요청 값은 [BE #28](https://github.com/SW-odyssey/BE/issues/28)과 [#29](https://github.com/SW-odyssey/BE/issues/29), [#30](https://github.com/SW-odyssey/BE/issues/30), [#31](https://github.com/SW-odyssey/BE/issues/31)을 대조한다.
 
-- `docs/PROJECT_CONTEXT.md`
-- `docs/DECISIONS.md`
+## 구현 기준
 
-Treat those files as the source of truth for product requirements.
+| 영역        | 유지할 기준                                                         |
+| ----------- | ------------------------------------------------------------------- |
+| UI          | 추천 목록, 필터와 일시, 지역, 상세, 지도와 셀 목록의 연결           |
+| 데이터      | 기본 공급부는 previewDataSource, 실제 HTTP 공급부는 연결 작업       |
+| API 경계    | query와 응답 변환은 데이터 공급부에 배치, 컴포넌트는 화면 모델 사용 |
+| 적용 상태   | 필터 임시값과 확정값 분리, 최종 적용 때 목록과 지도 함께 갱신       |
+| 복귀        | URL, 읽던 위치, 선택 셀과 지도 카메라 상태 대조                     |
+| 언어와 시간 | UI 사전 4언어, 서버 한국어 응답, Asia/Seoul 날짜와 자동 슬롯        |
+| 지도 숫자   | 추천 장소 수, 50m 예시 셀과 실제 제공 격자의 출처 구분              |
+| 자료 해석   | LG U+ 지역 단위 지표, 장소별 정보는 해당 출처로 연결                |
+| 공용 함수   | 목적, 인자와 반환을 JSDoc `/** */`로 기록                           |
+| 변경 범위   | 화면, 데이터, 지도와 스타일의 기존 모듈 경계 사용                   |
 
-## Current frontend direction
+북촌과 명동, 컨셉과 음식점 전용 조건, slug와 숫자 ID의 차이는 `docs/DECISIONS.md`의 연결 작업에 반영한다. 샘플 추천 조건은 샘플 공급부 안에서 관리하고 실제 추천 기준은 BE 계약과 데이터 근거에 연결한다.
 
-The client is a **Next.js + TypeScript mobile-first web app**.
+## 설정과 출처
 
-Do not reintroduce React Native unless the user explicitly changes the decision.
+1. 기존 로컬 키와 환경 설정 보존.
+2. 브라우저 공개 지도 키는 허용 도메인으로 제한.
+3. DB 접속정보, 서버 인증값과 REST 비밀 키는 서버 환경변수로 관리.
+4. 공유 파일에는 변수명과 빈 예시값, 출처를 확인한 공개 자료만 기록.
+5. 사진, 지도와 소개의 원문 및 저작자 출처 유지.
+6. 실제 데이터 전환 시 필드, 단위, 원해상도, 결측과 데이터 버전 확인.
 
-The initial UI should be designed primarily for smartphone-width screens, while remaining usable in desktop browsers.
+## 검수
 
-## Working rules
+`package.json`의 test, typecheck, lint와 build 명령을 변경 범위에 맞춰 실행한다. URL, 서울 날짜, 필터와 지도 상태는 `tests/`의 관련 테스트로 확인하고 화면 변경은 브라우저에서도 검수한다.
 
-- Do not invent product requirements when a detail is marked unresolved. Ask the user instead.
-- Preserve the distinction between **block-level movement** and **store-level visits**.
-  - LG U+ movement data supports movement between blocks.
-  - It does not prove that a person visited a specific store inside a block.
-- Do not describe the service as predicting the future.
-  - It uses historical movement data matched to the user's current conditions.
-- Keep existing filter values when chaining from one selected place/block to the next unless the user explicitly changes them.
-- Rank destination blocks by movement population count after applying the active filters and user-selected search radius.
-- Do not add distance weights, recommendation scores, or extra ranking heuristics unless explicitly requested.
-- Prefer TypeScript for all new application code.
-- When a product decision conflicts with existing code or older documentation, surface the conflict instead of silently choosing one.
-- Never commit API keys, private credentials, or secrets.
+Next.js 동작은 설치된 버전의 안내를 먼저 확인한다.
 
-## Data responsibility boundaries
-
-Keep these concerns separate:
-
-### LG U+ data
-Responsible for:
-- origin block
-- destination block
-- movement population/count
-- age
-- gender
-- date/time attributes available in the supplied data
-
-### Kakao place data
-Responsible for:
-- place search
-- place name/details
-- place coordinates
-- Kakao place categories
-- places located inside a selected block
-
-Never use Kakao place data to imply that LG U+ users visited a specific store.
-
-## Development approach
-
-Build the smallest testable vertical slice first:
-
-1. Render Kakao Map in Next.js.
-2. Acquire browser geolocation with permission handling.
-3. Search/select a place through Kakao.
-4. Convert selected place coordinates to the 50m × 50m origin block.
-5. Render/select block overlays on the map.
-6. Use sample movement data to calculate and display the top 3 destination blocks.
-7. Tap a destination block and show places inside it.
-8. Select a place and repeat the analysis from its block.
-9. Replace sample movement data with the real LG U+ dataset.
-
-Validate map behavior on actual mobile browsers early.
-
-## Architecture guidance
-
-- Keep movement-analysis/query logic independent from UI components.
-- Keep Kakao map rendering independent from LG U+ data transformation.
-- Keep the frontend from depending directly on raw large LG U+ files.
-- Backend/database architecture is not yet finalized; do not assume one without a decision.
-- Prefer server-side/API boundaries for secrets and large-data queries.
-- Kakao JavaScript SDK browser keys and Kakao REST API usage must follow the correct client/server exposure rules when implementation begins.
+| 내용                    | 로컬 안내                                                                                  |
+| ----------------------- | ------------------------------------------------------------------------------------------ |
+| 클라이언트 경계         | `node_modules/next/dist/docs/01-app/01-getting-started/05-server-and-client-components.md` |
+| URL과 브라우저 기록     | `node_modules/next/dist/docs/01-app/01-getting-started/04-linking-and-navigating.md`       |
+| 공개 키와 서버 환경변수 | `node_modules/next/dist/docs/01-app/02-guides/environment-variables.md`                    |
