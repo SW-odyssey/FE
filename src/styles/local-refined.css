@@ -655,7 +655,6 @@
 }
 .local-refined .local-filter-choice-set > button[aria-pressed="true"] {
   color: #45498b;
-  font-weight: 600;
   background: #e0e4fa;
   border-color: #a7b1d5;
 }

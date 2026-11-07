@@ -322,8 +322,7 @@
 .local-refined .local-filter-choice-set.is-space > button > span {
   transition:
     background-color 0.16s ease-out,
-    border-color 0.16s ease-out,
-    scale 0.16s ease-out;
+    border-color 0.16s ease-out;
 }
 .local-refined .local-filter-choice-set.is-space > button:active > span {
   background-color: #d6dff7;
@@ -331,9 +330,6 @@
 @media (prefers-reduced-motion: no-preference) {
   .local-featured:active > .local-photo {
     scale: 1.02;
-  }
-  .local-refined .local-filter-choice-set.is-space > button:active > span {
-    scale: 0.96;
   }
 }
 @media (prefers-reduced-motion: reduce) {
