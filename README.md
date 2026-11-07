@@ -1,6 +1,6 @@
-# LOCAL UI 프리뷰
+# LOCAL 프론트엔드
 
-추천 목록, 조건 선택, 장소 상세와 지도 탐색을 확인하는 개발용 UI 프리뷰. 로컬 장소와 사진, 편집 설명 및 조건별 샘플로 실행한다.
+추천 목록, 조건 선택, 장소 상세와 지도 탐색을 제공하는 모바일 퍼스트 웹 UI. 로컬 장소와 사진, 편집 설명 및 조건별 샘플로 실행한다.
 
 개발 기준은 [화면과 데이터 범위](docs/PROJECT_CONTEXT.md), [결정과 연결 작업](docs/DECISIONS.md), [API 연결 명세](docs/API_INTEGRATION.md) 순서로 확인한다.
 
@@ -18,7 +18,7 @@ npm run dev
 
 Windows에서는 Node.js 24.19.0을 설치한 뒤 PowerShell에서 `Copy-Item .env.example .env.local`로 빈 환경 파일을 만든다.
 
-개발 주소는 `http://localhost:3000`이다. `/`, `/guide/`, `/design/tools/place-recommendation/`은 같은 최신 시안을 연다.
+개발 주소는 `http://localhost:3000`이다. `/`는 화면 너비와 안전 영역에 맞춰 표시되는 웹 앱이다. `/guide/`와 `/design/tools/place-recommendation/`은 같은 화면을 기기 프레임에 넣어 보여준다.
 
 ## 지도 키
 
@@ -55,7 +55,7 @@ npm start
 
 ## 스타일 편집 위치
 
-스타일 적용 순서는 기본 레이아웃, 유리 표면, 최신 시안 보정이다. `src/app/globals.css`가 `local-discovery.css`와 `local-glass.css`를 순서대로 읽고, 페이지에서 `local-refined.css`를 추가한다.
+`src/app/globals.css`가 공통 레이아웃과 유리 표면, 최신 시안 보정 스타일을 적용한다. `discovery-app*.css`는 웹 앱의 화면 크기와 안전 영역에 맞춰 배치를 조정한다.
 
 | 파일                                 | 편집할 내용                                 |
 | ------------------------------------ | ------------------------------------------- |
@@ -68,6 +68,7 @@ npm start
 | `src/styles/preview/interaction.css` | 원본 후반의 입력 보강, 컨트롤 보정과 모션   |
 | `src/styles/local-glass.css`         | 유리 표면, 투명도와 색감                    |
 | `src/styles/local-refined.css`       | 현재 시안의 최종 배치와 상태 표현           |
+| `src/styles/discovery-app*.css`      | `/`의 반응형 배치와 안전 영역               |
 
 기본 조각은 원래 연속 구간과 선언 순서를 보존한다. 같은 선택자의 실제 표시를 바꿀 때는 뒤에 적용되는 glass와 refined의 선언도 함께 확인한다.
 
@@ -80,7 +81,11 @@ npm start
 5. 지도 상단 카테고리와 목록의 조건 공유, 탐색 시트 조절.
 6. 언어 버튼에서 한국어, 영어, 일본어와 중국어 UI 전환.
 
-지도 시트의 기준 높이는 접힘 88px, 중간 320px, 전체 500px다. 핀 이름은 위아래 중앙에 최대 세 개를 표시하며 선택 장소를 우선한다. 필터 경유 시간 선택의 뒤로가기는 기존 필터 선택을 보존한다.
+지도 시트의 기준 높이는 접힘 88px, 중간 320px, 전체 500px다. 웹 앱에서는 화면이 짧을 때 시트 높이를 조정한다. 핀 이름은 위아래 중앙에 최대 세 개를 표시하며 선택 장소를 우선한다. 필터 경유 시간 선택의 뒤로가기는 기존 필터 선택을 보존한다.
+
+대표 추천은 최대 5곳의 캐러셀이다. 장소 카드와 목록에는 한옥 같은 조건 태그를 덧붙이지 않는다. 사진 전체로 상세에 진입하며 사진 안의 점과 스와이프로 전환한다. 적용한 필터는 기존 2줄 상단의 필터 버튼의 작은 점으로 표시한다. 방문 날짜는 월간 달력, 시간대는 한 줄 4구간 세그먼트에서 고른다.
+
+상세의 AI 추천 분석은 선택한 공간 조건과 시간대, 동네 분위기를 비교한 근거를 보조 안내 문구 없이 짧은 문장으로 표시한다. 현재는 예시 데이터이며 실제 인구 밀도나 영업 여부를 분석한 결과가 아니다. 실제 공급부의 근거가 없으면 임의의 이유를 생성하지 않는다. 원래 매장 소개와 출처는 장소 정보에 보존한다.
 
 ```text
 /?view=discover&area=jongno&lang=ko
@@ -90,11 +95,12 @@ npm start
 
 ## 코드 편집 위치
 
-`src/app/`의 세 진입 페이지는 같은 `DiscoveryPreview`를 사용한다. 화면 컴포넌트는 렌더링을, controller는 조건과 화면 전환을, data source는 조회를 담당한다.
+`/`는 `DiscoveryApp`을 직접 렌더링한다. 시안 경로는 `DiscoveryPreview`로 같은 앱을 감싼다. 화면 컴포넌트는 렌더링을, controller는 조건과 화면 전환을, data source는 조회를 담당한다.
 
 | 파일 또는 폴더                                                        | 편집할 내용                                         |
 | --------------------------------------------------------------------- | --------------------------------------------------- |
-| `src/features/discovery/DiscoveryPreview.tsx`                         | 폰 프레임, 목록과 지도 및 상세의 화면 조합          |
+| `src/features/discovery/DiscoveryApp.tsx`                             | 목록, 지도, 상세와 오버레이의 화면 조합             |
+| `src/features/discovery/DiscoveryPreview.tsx`                         | 시안 경로의 기기 프레임                             |
 | `src/features/discovery/components/`                                  | 검색 헤더, 목록, 상세, 필터와 시간 선택의 화면 요소 |
 | `src/features/discovery/hooks/useDiscoveryController.ts`              | 적용값과 임시값, 화면 이동, 상세 복귀와 읽던 위치   |
 | `src/features/discovery/hooks/useDiscoveryData.ts`                    | 적용된 결과, 필터 임시 개수와 상세의 조회 상태      |
@@ -125,7 +131,7 @@ npm start
 | `src/features/discovery/data/latest-request.ts`    | 이전 요청 취소와 늦은 응답 차단                                       |
 | `src/features/discovery/hooks/useDiscoveryData.ts` | 확정 결과, 임시 개수와 상세의 요청 상태 및 재시도                     |
 
-HTTP 연결은 `DiscoveryDataSource`를 구현한 source를 만들고 `DiscoveryPreview`의 `source` prop으로 주입하는 지점에서 진행한다. controller가 이 source를 데이터 hook에 전달한다. 서버 응답은 이 인터페이스의 화면 모델로 변환한다. 목록과 지도는 같은 추천 결과를 사용하고 조건 변경 및 상세 복귀 상태를 함께 검증한다.
+HTTP 연결은 `DiscoveryDataSource`를 구현한 source를 만들고 `DiscoveryApp`의 클라이언트 경계에서 `source` prop으로 주입하는 지점에서 진행한다. controller가 이 source를 데이터 hook에 전달한다. 서버 응답은 이 인터페이스의 화면 모델로 변환한다. 목록과 지도는 같은 추천 결과를 사용하고 조건 변경 및 상세 복귀 상태를 함께 검증한다.
 
 `api-mapping.ts`는 요청 변환과 직렬화까지 제공한다. 네트워크 호출과 meta 선택지 초기화는 연결할 작업이다. 북촌, 컨셉 등 합의가 필요한 선택은 반환된 `issues`로 확인하며, UI 슬러그와 서버 숫자 ID는 변환 함수를 통해 연결한다. 지원 값과 필드는 최신 서버 명세로 대조한다.
 
