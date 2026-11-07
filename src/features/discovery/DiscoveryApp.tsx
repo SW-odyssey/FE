@@ -49,10 +49,11 @@ export default function DiscoveryApp({
             }
       }
     >
-      {previewScale === undefined ? (
-        <div className="local-status-bar-surface" aria-hidden="true" />
-      ) : (
+      {previewScale !== undefined && (
         <div className="local-system-bar" aria-hidden="true" />
+      )}
+      {previewScale === undefined && !isDetail && (
+        <div className="local-status-bar-surface" aria-hidden="true" />
       )}
       {isDetail ? (
         <button
