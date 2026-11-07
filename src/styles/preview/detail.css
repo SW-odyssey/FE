@@ -1,0 +1,129 @@
+.local-detail-hero {
+  position: relative;
+  height: 235px;
+}
+.local-detail-hero > .local-photo {
+  width: 393px;
+  height: 235px;
+}
+.local-round {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 10px #1e15231a;
+}
+.local-detail-back {
+  position: absolute;
+  left: 16px;
+  top: 77px;
+  z-index: 20;
+}
+.local-detail-body {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.local-detail-body > h1 {
+  font-size: 28px;
+}
+.local-detail-meta {
+  font-size: 13px;
+  line-height: 19px;
+  color: #52495a;
+}
+.local-ai-summary {
+  background: var(--local-pale);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: none;
+}
+.local-ai-summary > span {
+  font-size: 12px;
+  color: var(--local-plum);
+  font-weight: 600;
+  line-height: 18px;
+}
+.local-ai-summary p {
+  font-size: 14px;
+  line-height: 21px;
+}
+.local-address {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  line-height: 21px;
+  font-size: 13px;
+  text-align: left;
+  padding: 0;
+  min-height: 36px;
+}
+.local-address > .local-icon {
+  color: var(--local-plum);
+}
+.local-map-preview {
+  display: block;
+  overflow: hidden;
+  border-radius: 12px;
+  background: white;
+  width: 100%;
+  text-align: left;
+  padding: 0;
+}
+.local-map-preview > span {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  padding: 0 12px;
+  font-size: 14px;
+}
+.local-thumbnail-map {
+  height: 104px;
+  position: relative;
+  background: #eeefed url("/assets/local/map/3-2003-894.png") center
+    center/256px 256px;
+}
+.local-thumbnail-map > span {
+  display: none;
+}
+.local-preview-pin {
+  position: absolute;
+  top: 36px;
+  left: 62%;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--local-plum);
+  color: white;
+  display: grid;
+  place-items: center;
+}
+.local-place-source {
+  font-size: 12px;
+  line-height: 18px;
+  color: #6a606f;
+}
+.local-place-source summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.local-place-source p {
+  padding: 8px 0;
+}
+.local-place-source a {
+  color: var(--local-plum);
+  text-decoration: underline;
+}
+.local-detail-safe-area {
+  height: 26px;
+  background: var(--local-bg);
+  flex: none;
+}
