@@ -75,9 +75,9 @@
 }
 
 @media (max-height: 480px) {
-  .local-web.is-map-mode > .local-search-header {
-    height: 52px;
-    padding-block: 2px;
+  .local-shell.local-web.is-map-mode {
+    --local-search-row-height: 52px;
+    --local-search-block-padding: 2px;
   }
 
   .local-web .local-map-context {

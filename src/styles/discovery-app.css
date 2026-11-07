@@ -3,6 +3,8 @@
   --local-safe-right: env(safe-area-inset-right, 0px);
   --local-safe-bottom: env(safe-area-inset-bottom, 0px);
   --local-safe-left: env(safe-area-inset-left, 0px);
+  --local-search-row-height: 64px;
+  --local-search-block-padding: 8px;
   --local-nav-bottom: max(12px, var(--local-safe-bottom));
   --local-nav-height: 64px;
 
@@ -19,8 +21,37 @@
 }
 
 .local-web > .local-search-header {
+  height: var(--local-search-row-height);
+  padding-block: var(--local-search-block-padding);
   padding-left: calc(16px + var(--local-safe-left));
   padding-right: calc(16px + var(--local-safe-right));
+}
+
+@supports (-webkit-touch-callout: none) {
+  @media (display-mode: standalone) and (max-width: 520px) {
+    .local-shell.local-web:has(> .local-search-header) {
+      --local-fixed-header-height: calc(
+        var(--local-safe-top) + var(--local-search-row-height)
+      );
+      /* Reserve the original space after fixing the header to the viewport. */
+      padding-top: var(--local-fixed-header-height);
+    }
+
+    .local-shell.local-web > .local-search-header {
+      position: fixed;
+      inset: 0 0 auto;
+      height: var(--local-fixed-header-height);
+      padding-block: calc(
+          var(--local-safe-top) + var(--local-search-block-padding)
+        )
+        var(--local-search-block-padding);
+      /* WebKit samples this solid color while the visible header uses the shell gradient. */
+      background-color: #e4eef9;
+      background-image: inherit;
+      background-size: 100% 100dvh;
+      background-repeat: no-repeat;
+    }
+  }
 }
 
 .local-web .local-search:focus-within {
