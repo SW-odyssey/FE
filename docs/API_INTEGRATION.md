@@ -2,15 +2,18 @@
 
 ## 연결 상태
 
-| 대상            | 현재 상태                                                                                                                                    |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| 화면 데이터     | `previewDataSource`의 동기 샘플 사용                                                                                                         |
-| FE HTTP adapter | 미구현. `DiscoveryDataSource` 교체 경계 준비                                                                                                 |
-| BE 초기 옵션    | `GET /api/v1/meta` main 반영, [PR #35](https://github.com/SW-odyssey/BE/pull/35) 병합                                                        |
-| BE 추천과 상세  | main 미반영. [추천 #30](https://github.com/SW-odyssey/BE/issues/30), [상세 #31](https://github.com/SW-odyssey/BE/issues/31)의 연결 명세 사용 |
-| 지도            | 카카오 기반 프리뷰. 서비스 연결은 Google Maps로 전환                                                                                         |
+| 대상            | 현재 상태                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------------ |
+| 화면 데이터     | `previewDataSource`의 동기 샘플 사용                                                             |
+| FE HTTP adapter | 미구현. `DiscoveryDataSource` 교체 경계 준비                                                     |
+| BE 초기 옵션    | `GET /api/v1/meta` main 반영, [PR #35](https://github.com/SW-odyssey/BE/pull/35) 병합            |
+| BE 추천         | `GET /api/v1/recommendations` main 반영, [PR #36](https://github.com/SW-odyssey/BE/pull/36) 병합 |
+| BE 상세         | [상세 #31](https://github.com/SW-odyssey/BE/issues/31) 연결 명세, BE main 미반영                 |
+| 지도            | 카카오 기반 프리뷰. 서비스 연결은 Google Maps로 전환                                             |
 
 규격: [공통 응답 #28](https://github.com/SW-odyssey/BE/issues/28), [선택 옵션 #29](https://github.com/SW-odyssey/BE/issues/29), [추천 #30](https://github.com/SW-odyssey/BE/issues/30), [장소 상세 #31](https://github.com/SW-odyssey/BE/issues/31).
+
+BE 구현 상태는 2026년 11월 7일 main 기준이다. 같은 날 [BE 배포 OpenAPI](https://odyssey-be-346395334988.asia-northeast3.run.app/v3/api-docs)에서 meta와 추천 경로를 확인했다. 배포된 meta는 로컬 개발 출처 `http://localhost:3000`을 허용했고, 운영 FE 출처 `https://local.hrxlou.com`에서는 CORS 403을 반환했다.
 
 ## 화면과 요청
 
@@ -48,7 +51,7 @@
 | UI 값             | HTTP 값                | 연결 작업                                           |
 | ----------------- | ---------------------- | --------------------------------------------------- |
 | `insa`, `eulji`   | `insadong`, `euljiro`  | 응답 지역의 역변환도 추가                           |
-| `evening`, `late` | `dinner`, `late_night` | URL과 시간 휠은 UI 값 유지                          |
+| `evening`, `late` | `dinner`, `late_night` | URL과 시간대 선택은 UI 값 유지                      |
 | `activity=quiet`  | `density=less_busy`    | `any`, `lively`도 대응                              |
 | 문자열 장소 ID    | 숫자 `id`              | `mapApiIdToDiscovery`, `mapDiscoveryIdToApi`로 왕복 |
 | 상대 날짜 `day`   | 절대 날짜 `visitDate`  | `visitDate(clock, day)` 사용, 자동 시간은 `day=0`   |
@@ -82,7 +85,7 @@
 
 상세의 HTTP `data` 자체가 장소 객체다. 포트 반환값의 `place`는 FE 내부 모델이며 adapter에서 만든다. 카드와 상세의 필수 필드를 나누고, 주소는 상세 응답에서 채운다. 서버 이름과 주소는 한국어 원문으로 표시한다.
 
-현재 `DiscoveryQueryResult`는 `items`, `total`만 담는다. HTTP adapter 연결 시 `applied`와 `cells`를 함께 보존할 타입과 상태가 필요하다. `LocalPlace`의 샘플 사진, 소개와 요약은 실제 응답과 외부 콘텐츠에 맞춰 공급한다.
+현재 `DiscoveryQueryResult`는 `items`, `total`, 선택적인 추천 근거 `analyses`를 담는다. HTTP adapter에서는 `applied`와 `cells`를 함께 보존할 타입과 상태가 필요하다. 추천 카드와 상세의 필수 필드를 나누고, 추천 응답에 없는 주소와 소개는 상세에서 채운다. 카드 사진이 미제공일 때는 대체 표시를 사용한다.
 
 ## 사진과 지도
 
@@ -105,13 +108,16 @@
 
 ## adapter 연결 순서
 
-1. 서버 주소와 CORS를 확인하고 `meta` loader를 선택지 및 날짜 범위에 연결.
-2. `DiscoveryDataSource.query/getPlace`의 HTTP 구현 추가. `AbortSignal` 전달, 공통 응답 해제, 숫자 ID와 UI 모델 변환.
-3. 클라이언트 경계에서 `DiscoveryApp`의 `source`에 HTTP 공급자 주입. 동기 `snapshot`은 preview 전용으로 유지.
-4. 추천 결과의 `applied`, 실제 셀과 Google ID를 보존하고 지도 및 사진 공급 연결.
-5. 정상, 0건, 오류와 외부 정보 누락을 같은 입력으로 검증.
+1. API 기준 주소와 CORS를 먼저 확인한다. `LOCAL_PAGES_BUILD=1` 배포는 정적 export다. 브라우저에서 HTTPS API를 직접 호출하려면 실제 FE 출처를 BE 허용 목록에 추가한다. 같은 출처의 프록시가 필요하면 별도 런타임에서 제공한다. 브라우저 빌드에는 공개 설정만 전달한다.
+2. `meta` 응답을 선택지와 날짜 범위에 연결한다. 북촌과 컨셉처럼 변환할 수 없는 옵션을 어떻게 표시할지, 명동과 음식점 조건을 어디에 노출할지 정한다.
+3. `data/`에 `DiscoveryDataSource.query/getPlace`의 HTTP 구현을 둔다. `AbortSignal`을 전달하고 공통 응답과 오류 코드를 화면 모델로 변환한다.
+4. `src/app/page.tsx` 아래의 `"use client"` 진입 컴포넌트에서 HTTP 공급부를 가져와 `DiscoveryApp`의 `source`에 전달한다. 함수가 포함된 공급부 객체는 클라이언트에서 구성하고 요청이 진행되는 동안 참조를 유지한다. 동기 `snapshot`은 프리뷰에 사용한다.
+5. HTTP 첫 요청은 URL과 서울 시각 복원 및 `meta` 초기화가 끝난 뒤 시작한다. 현재 controller의 첫 렌더는 샘플 날짜를 사용한다. 필터 임시 요청은 필터 화면과 그 안에서 연 방문 시간 선택에만 활성화하고, 닫으면 취소한다.
+6. meta와 추천 목록을 먼저 검증하고, 상세는 BE 경로가 배포된 뒤 연결한다. 추천 결과의 `applied`, 실제 셀과 Google ID를 보존해 지도와 사진 연결에 사용한다. 첫 진입과 직접 링크, 빠른 조건 변경, 0건과 오류, 외부 정보 누락을 확인한다.
 
-`useDiscoveryData`는 applied, draft와 상세의 상태를 분리한다. 조건 변경과 화면 이탈 때 요청 취소, 늦은 응답 무시, `retry()`를 통한 활성 요청 재실행을 처리한다. 같은 applied와 draft 조건은 응답을 공유한다. `snapshot` 공급자는 첫 렌더부터 값을 주고 재시도에서도 비동기 호출을 생략한다.
+`useDiscoveryData`는 applied, draft와 상세의 조회 상태를 분리한다. 현재는 요청 키 변경이나 hook 해제 시 이전 요청을 취소하고, 늦은 응답을 무시한다. 같은 applied와 draft 조건은 응답을 공유한다. `snapshot` 공급자는 첫 렌더부터 값을 주고 재시도에서도 비동기 호출을 생략한다.
+
+2026년 11월 7일 BE 배포에서 추천 옵션을 생략하거나 현재 FE 기본 지역인 `areaId=jongno`만 보냈을 때 `QUERY_SCOPE_TOO_WIDE`가 반환됐다. `areaId=ikseon&category=cafe`로 좁힌 요청은 성공했다. 첫 화면에서 사용할 기본 범위를 합의하고, 이 오류에서는 지역이나 조건을 좁힐 수 있게 안내한다.
 
 | HTTP 또는 상태                         | 연결할 처리                            |
 | -------------------------------------- | -------------------------------------- |
