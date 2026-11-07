@@ -84,3 +84,10 @@
     box-shadow: 0 0 48px #253b5a14;
   }
 }
+
+@media (min-width: 560px) and (hover: hover) and (pointer: fine) {
+  .local-shell.local-web {
+    max-width: clamp(360px, 56.25vh, 430px);
+    max-width: clamp(360px, 56.25dvh, 430px);
+  }
+}
