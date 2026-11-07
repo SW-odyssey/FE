@@ -16,7 +16,7 @@ type Props = Pick<
   | "scroll"
   | "selected"
   | "showPlaceOnMap"
-  | "summary"
+  | "analysisFor"
   | "t"
 > & { selected: NonNullable<DiscoveryController["selected"]> };
 export function PlaceDetail(props: Props) {
@@ -30,7 +30,7 @@ export function PlaceDetail(props: Props) {
     scroll,
     selected,
     showPlaceOnMap,
-    summary,
+    analysisFor,
     t,
   } = props;
   return (
@@ -50,13 +50,19 @@ export function PlaceDetail(props: Props) {
       <div className="local-detail-body">
         <h1>{name(selected)}</h1>
 
-        {<PlaceSummary place={selected} t={t} summary={summary} />}
+        {
+          <PlaceSummary
+            place={selected}
+            analysisFor={analysisFor}
+            language={language}
+          />
+        }
         <p className="local-detail-meta local-info-kind">
           <LocalIcon
             name={selected.category === "cafe" ? "coffee" : "utensils"}
             size={18}
           />
-          {kind(selected)} {areaLabels[language][selected.area]}
+          {kind(selected)}, {areaLabels[language][selected.area]}
         </p>
         <button className="local-address" onClick={() => copyAddress(selected)}>
           <LocalIcon name="map-pin" size={18} />
