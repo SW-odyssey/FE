@@ -249,7 +249,6 @@
 .local-icon-button,
 .local-area-select,
 .local-time-select,
-.local-bottom-nav button,
 .local-segment button {
   transition:
     background 0.16s ease,
@@ -272,7 +271,6 @@
     .local-area-select,
     .local-time-select,
     .local-category-tabs > button,
-    .local-bottom-nav > button,
     .local-search > button,
     .local-carousel-pagination button,
     .local-place-row,

@@ -360,9 +360,6 @@
   font-size: 12px;
   line-height: 16px;
 }
-.local-bottom-nav button.is-active {
-  color: var(--local-plum);
-}
 .local-primary,
 .local-secondary {
   display: flex;

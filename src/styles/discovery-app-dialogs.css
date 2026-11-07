@@ -29,6 +29,36 @@
   outline-offset: -2px;
 }
 
+@property --local-segment-light-x {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 30%;
+}
+
+@property --local-segment-light-y {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: -3%;
+}
+
+.local-segment-control {
+  --local-segment-track-padding: 0px;
+  --local-segment-item-inset: 4px;
+  --local-segment-inset: calc(
+    var(--local-segment-track-padding) + var(--local-segment-item-inset)
+  );
+  --local-segment-item-gap: calc(2 * var(--local-segment-item-inset));
+  --local-segment-slide: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  --local-segment-fade: 260ms ease-in-out;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+}
+
+.local-segment-control[data-dragging] {
+  --local-segment-slide: transform 0ms;
+  --local-segment-fade: 220ms ease-in-out;
+}
+
 .local-refined .local-segment-control:is(.is-ambience, .local-visit-slots) {
   position: relative;
   isolation: isolate;
@@ -37,33 +67,70 @@
   padding: 0;
   border-radius: 22px;
   background: #e0e8f4b3;
-  touch-action: pan-y pinch-zoom;
-  user-select: none;
 }
 
+.local-segment-control::before,
 .local-segment-control::after {
   content: "";
   box-sizing: border-box;
   position: absolute;
-  inset: 4px auto 4px 4px;
-  width: calc(100% / var(--local-segment-count) - 8px);
-  border: 1px solid #ffffffd9;
-  border-radius: 18px;
-  background-color: #ffffffdb;
+  inset: var(--local-segment-inset) auto var(--local-segment-inset)
+    var(--local-segment-inset);
+  width: calc(
+    (100% - 2 * var(--local-segment-track-padding)) / var(--local-segment-count) -
+      var(--local-segment-item-gap)
+  );
+  border-radius: var(--local-segment-lens-radius, 18px);
   pointer-events: none;
-  transform: translateX(calc(var(--local-segment-position) * (100% + 8px)));
+  transform: translateX(
+    calc(var(--local-segment-position) * (100% + var(--local-segment-item-gap)))
+  );
+}
+
+.local-segment-control::before {
+  /* The mask keeps the moving reflection on the rim. */
+  z-index: 1;
+  opacity: 0;
+  padding: 1px;
+  background: radial-gradient(
+    ellipse 70% 95% at var(--local-segment-light-x, 30%)
+      var(--local-segment-light-y, -3%),
+    #fff,
+    #ffffffc4 40%,
+    transparent 80%
+  );
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
   transition:
-    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 160ms ease,
-    box-shadow 160ms ease;
+    var(--local-segment-slide),
+    opacity var(--local-segment-fade),
+    --local-segment-light-x 240ms ease-out,
+    --local-segment-light-y 240ms ease-out;
+}
+
+.local-segment-control::after {
+  border: 1px solid var(--local-segment-lens-border, #ffffffd9);
+  background-color: var(--local-segment-lens-fill, #ffffffdb);
+  box-shadow: var(--local-segment-lens-shadow, none);
+  transition:
+    var(--local-segment-slide),
+    background-color var(--local-segment-fade),
+    border-color var(--local-segment-fade),
+    backdrop-filter var(--local-segment-fade),
+    box-shadow var(--local-segment-fade);
+}
+
+.local-segment-control[data-dragging]::before {
+  opacity: 1;
+  transition: opacity var(--local-segment-fade);
 }
 
 .local-segment-control[data-dragging]::after {
-  background-color: #ffffff94;
-  box-shadow: 0 2px 6px #33415a22, inset 0 1px 1px #ffffffcc;
-  -webkit-backdrop-filter: blur(6px) saturate(120%);
-  backdrop-filter: blur(6px) saturate(120%);
-  transition-property: background-color, box-shadow;
+  border-color: #ffffff70;
+  background-color: #ffffff0e;
+  box-shadow: inset 0 -1px 2px #8197bb55, 0 2px 6px #334d7736;
+  -webkit-backdrop-filter: blur(3px) saturate(125%) brightness(1.05);
+  backdrop-filter: blur(3px) saturate(125%) brightness(1.05);
 }
 
 .local-refined .local-segment-control:is(.is-ambience, .local-visit-slots) > button {
@@ -85,13 +152,29 @@
 }
 
 .local-refined .local-segment-control > button[data-highlighted] {
-  color: #45498b;
-  font-weight: 600;
+  color: var(--local-segment-highlight-color, #45498b);
+  font-weight: var(--local-segment-highlight-weight, 600);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .local-segment-control::before {
+    --local-segment-light-x: 30%;
+    --local-segment-light-y: -3%;
+  }
 }
 
 @media (prefers-reduced-transparency: reduce) {
+  .local-refined .local-segment-control:is(.is-ambience, .local-visit-slots) {
+    background: #e0e8f4;
+  }
+
+  .local-segment-control::before {
+    content: none;
+  }
+
+  .local-segment-control::after,
   .local-segment-control[data-dragging]::after {
-    background-color: #f8faff;
+    background: var(--local-segment-reduced-fill, #f8faff);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
