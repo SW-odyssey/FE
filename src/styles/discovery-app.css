@@ -23,25 +23,6 @@
   padding-right: calc(16px + var(--local-safe-right));
 }
 
-.local-status-bar-surface {
-  display: none;
-}
-
-@supports (-webkit-touch-callout: none) {
-  @media (display-mode: standalone) and (max-width: 559px) {
-    .local-status-bar-surface {
-      /* WebKit samples fixed edge backgrounds thicker than 10px for the status bar. */
-      display: block;
-      position: fixed;
-      inset: 0 0 auto;
-      height: max(12px, var(--local-safe-top));
-      z-index: 13;
-      pointer-events: none;
-      background-color: var(--local-bg);
-    }
-  }
-}
-
 .local-web .local-search:focus-within {
   border-color: #8a91c9;
   box-shadow: 0 0 0 2px #767acb30;
