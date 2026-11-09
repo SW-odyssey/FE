@@ -1,6 +1,5 @@
-import DiscoveryPreview from "../features/discovery/DiscoveryPreview";
-import "../styles/local-refined.css";
+import DiscoveryApp from "../features/discovery/DiscoveryApp";
 
 export default function Page() {
-  return <DiscoveryPreview />;
+  return <DiscoveryApp />;
 }
