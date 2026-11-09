@@ -22,7 +22,7 @@
 | 항목      | 준비된 코드 또는 계약                                              | 남은 연결                                              |
 | --------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
 | 초기 옵션 | [BE #29](https://github.com/SW-odyssey/BE/issues/29), BE main 반영 | meta 응답의 지역, 카테고리, 밀도와 날짜 범위 반영      |
-| 추천      | [BE #30](https://github.com/SW-odyssey/BE/issues/30), OPEN         | HTTP 공급부, 목록과 cells 및 total 연결                |
+| 추천      | [BE #30](https://github.com/SW-odyssey/BE/issues/30), BE main 반영 | HTTP 공급부, 목록과 cells 및 total 연결                |
 | 상세      | [BE #31](https://github.com/SW-odyssey/BE/issues/31), OPEN         | 숫자 ID 조회, 서버 기본 정보와 googlePlaceId 연결      |
 | 공통 응답 | [BE #28](https://github.com/SW-odyssey/BE/issues/28)               | success/data/error 처리와 오류별 복구 검증             |
 | 요청 변환 | `mapDiscoveryQueryToApi()`                                         | 변환 결과와 미해결 선택을 HTTP 공급부에 연결           |

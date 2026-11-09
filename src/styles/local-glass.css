@@ -4,6 +4,7 @@
   --local-ink: #202b40;
   --local-muted: #65738b;
   --local-bg: #eef3fa;
+  --local-top-surface: #e4eef9;
   --local-pale: #e5e9fa;
   --local-border: #d6dfed;
   --glass-fill: linear-gradient(145deg, #ffffff52, #e8f3ff29);
@@ -16,6 +17,11 @@ body {
 }
 .local-shell {
   background:
+    linear-gradient(
+      to bottom,
+      var(--local-top-surface) var(--local-safe-top, 0px),
+      transparent calc(var(--local-safe-top, 0px) + 112px)
+    ),
     radial-gradient(ellipse at -5% 8%, #cce4f7 0, transparent 55%),
     radial-gradient(ellipse at 110% 48%, #d1d8f0 0, transparent 54%),
     linear-gradient(160deg, #f4f8fd, #e9f0f9 65%, #edf0fa);

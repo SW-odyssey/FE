@@ -1,5 +1,12 @@
 .local-web.is-map-mode::before {
   height: calc(76px + var(--local-safe-top));
+  background: linear-gradient(
+    to bottom,
+    var(--local-top-surface) var(--local-safe-top),
+    #edf5ff9c calc(var(--local-safe-top) + 16px),
+    #ecf4ff38 calc(var(--local-safe-top) + 55px),
+    transparent
+  );
 }
 
 .local-web .local-map-canvas {
@@ -75,9 +82,9 @@
 }
 
 @media (max-height: 480px) {
-  .local-web.is-map-mode > .local-search-header {
-    height: 52px;
-    padding-block: 2px;
+  .local-shell.local-web.is-map-mode {
+    --local-search-row-height: 52px;
+    --local-search-block-padding: 2px;
   }
 
   .local-web .local-map-context {

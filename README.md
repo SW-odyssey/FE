@@ -51,6 +51,13 @@ npm start
 
 `http://localhost:3000`에서 빌드 결과를 확인한다. 이 설정은 Next.js 서버 실행 방식이며 별도 백엔드 API는 연결할 작업이다.
 
+Cloudflare Pages 배포에는 정적 빌드를 사용한다. `/guide/`와 기존 시안 경로도 `out/`에 함께 생성된다.
+
+```sh
+LOCAL_PAGES_BUILD=1 npm run build
+wrangler pages deploy out --project-name local-odyssey --branch feat/mobile-first-ui
+```
+
 `check:format`은 코드와 문서의 서식만 검사한다. 기존 스타일시트는 이 명령의 검사 대상에서 제외된다.
 
 ## 스타일 편집 위치
@@ -131,7 +138,7 @@ npm start
 | `src/features/discovery/data/latest-request.ts`    | 이전 요청 취소와 늦은 응답 차단                                       |
 | `src/features/discovery/hooks/useDiscoveryData.ts` | 확정 결과, 임시 개수와 상세의 요청 상태 및 재시도                     |
 
-HTTP 연결은 `DiscoveryDataSource`를 구현한 source를 만들고 `DiscoveryApp`의 클라이언트 경계에서 `source` prop으로 주입하는 지점에서 진행한다. controller가 이 source를 데이터 hook에 전달한다. 서버 응답은 이 인터페이스의 화면 모델로 변환한다. 목록과 지도는 같은 추천 결과를 사용하고 조건 변경 및 상세 복귀 상태를 함께 검증한다.
+HTTP 연결은 `data/`에서 `DiscoveryDataSource`를 구현하고, `src/app/page.tsx` 아래의 작은 `"use client"` 진입 컴포넌트에서 같은 공급부 인스턴스를 `DiscoveryApp`의 `source` prop으로 넘기는 방식으로 진행한다. controller가 이 공급부를 데이터 hook에 전달한다. 서버 응답은 공급부에서 화면 모델로 변환한다. 첫 요청과 필터 요청을 보내는 조건, 운영 환경의 API 주소와 CORS는 [API 연결 순서](docs/API_INTEGRATION.md#adapter-연결-순서)를 확인한다.
 
 `api-mapping.ts`는 요청 변환과 직렬화까지 제공한다. 네트워크 호출과 meta 선택지 초기화는 연결할 작업이다. 북촌, 컨셉 등 합의가 필요한 선택은 반환된 `issues`로 확인하며, UI 슬러그와 서버 숫자 ID는 변환 함수를 통해 연결한다. 지원 값과 필드는 최신 서버 명세로 대조한다.
 

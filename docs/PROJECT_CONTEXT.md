@@ -71,7 +71,7 @@
 | ---------------------------------------------------- | ----------------------------- | ------------------------------- |
 | [BE #28](https://github.com/SW-odyssey/BE/issues/28) | 공통 응답과 요청 값 규약      | 계약 참조                       |
 | [BE #29](https://github.com/SW-odyssey/BE/issues/29) | `GET /api/v1/meta`            | BE main 반영, FE HTTP 연결 작업 |
-| [BE #30](https://github.com/SW-odyssey/BE/issues/30) | `GET /api/v1/recommendations` | OPEN, HTTP 연결 작업            |
+| [BE #30](https://github.com/SW-odyssey/BE/issues/30) | `GET /api/v1/recommendations` | BE main 반영, FE HTTP 연결 작업 |
 | [BE #31](https://github.com/SW-odyssey/BE/issues/31) | `GET /api/v1/places/{id}`     | OPEN, HTTP 연결 작업            |
 
 `data/api-mapping.ts`에는 query와 ID 변환 함수가 있다. 실제 HTTP 호출과 응답 모델 연결은 공급부에서 구현할 작업이다.
