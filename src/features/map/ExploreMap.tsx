@@ -1,12 +1,20 @@
 "use client";
 import type { CSSProperties } from "react";
+import { LocalIcon } from "../../components/ui/LocalIcon";
 import { localText } from "../discovery/localization";
 import type { ExploreMapProps } from "./controller";
+import { useDeviceLocation } from "./useDeviceLocation";
 import { useExploreMap } from "./useExploreMap";
 export type { MapCamera } from "./controller";
 
 export default function ExploreMap(props: ExploreMapProps) {
-  const { places, language, origin, viewportScale = 1 } = props;
+  const {
+    places,
+    language,
+    currentLocation,
+    onLocate,
+    viewportScale = 1,
+  } = props;
   const {
     element,
     ready,
@@ -15,10 +23,26 @@ export default function ExploreMap(props: ExploreMapProps) {
     retry,
     zoomBy,
     fitRecommendations,
-    centerOnOrigin,
+    centerOn,
   } = useExploreMap(props);
+  const { locate, status } = useDeviceLocation((point) => {
+    onLocate(point);
+    centerOn(point);
+  });
   const grid = zoom <= 4;
   const t = (en: string, kr: string) => localText(language, en, kr);
+  const locationMessage = {
+    idle: "",
+    locating: t("Finding you…", "내 위치를 확인하는 중…"),
+    denied: t(
+      "Allow location in your browser to use this button.",
+      "이 버튼을 쓰려면 브라우저에서 위치를 허용해 주세요.",
+    ),
+    unavailable: t(
+      "Could not find your location. Try again.",
+      "위치를 확인하지 못했어요. 다시 시도해 주세요.",
+    ),
+  }[status];
   return (
     <div
       className={`local-explore-map ${grid ? "is-cell-preview" : ""} ${!ready ? "is-map-fallback" : ""}`}
@@ -52,7 +76,28 @@ export default function ExploreMap(props: ExploreMapProps) {
             </span>
           </div>
         )}
+        {ready && (
+          <div className="local-map-location-status" role="status">
+            {locationMessage && (
+              <div className="local-refined-map-status">
+                <strong>{locationMessage}</strong>
+              </div>
+            )}
+          </div>
+        )}
         <div className="local-map-tools">
+          {ready && (
+            <button
+              className={`local-map-locate ${currentLocation ? "is-active" : ""}`}
+              aria-label={t("My location", "내 위치")}
+              title={t("My location", "내 위치")}
+              aria-busy={status === "locating"}
+              disabled={status === "locating"}
+              onClick={locate}
+            >
+              <LocalIcon name="locate-fixed" size={21} />
+            </button>
+          )}
           <div className="local-map-zoom">
             <button
               aria-label={t("Zoom in", "확대")}
@@ -79,6 +124,7 @@ export default function ExploreMap(props: ExploreMapProps) {
           )}
           {ready && (
             <button
+              className="local-map-fit"
               aria-label={t(
                 "Show all recommended locations",
                 "추천 위치 전체 보기",
@@ -98,28 +144,6 @@ export default function ExploreMap(props: ExploreMapProps) {
                 strokeLinejoin="round"
               >
                 <path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5" />
-              </svg>
-            </button>
-          )}
-          {origin && (
-            <button
-              aria-label={t("My location", "내 위치")}
-              title={t("My location", "내 위치")}
-              onClick={centerOnOrigin}
-            >
-              <svg
-                width="21"
-                height="21"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M20 10c0 6-8 11-8 11S4 16 4 10a8 8 0 1 1 16 0Z" />
-                <circle cx="12" cy="10" r="2.5" />
               </svg>
             </button>
           )}

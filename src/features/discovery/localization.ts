@@ -144,6 +144,14 @@ const copy: Record<string, readonly [string, string]> = {
     "在地图上查看全部推荐店铺",
   ],
   "My location": ["現在地", "我的位置"],
+  "Allow location in your browser to use this button.": [
+    "このボタンを使うには、ブラウザで位置情報を許可してください。",
+    "请在浏览器中允许使用位置信息。",
+  ],
+  "Could not find your location. Try again.": [
+    "現在地を取得できませんでした。もう一度お試しください。",
+    "无法获取您的位置，请重试。",
+  ],
   "Previous photo": ["前の写真", "上一张照片"],
   "Next photo": ["次の写真", "下一张照片"],
   "Place photos": ["お店の写真", "店铺照片"],

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { LocalIcon } from "../../components/ui/LocalIcon";
 import { DiscoverScreen } from "./components/DiscoverScreen";
 import { DiscoveryNavigation } from "./components/DiscoveryNavigation";
@@ -10,6 +11,7 @@ import { ResourceNotice } from "./components/ResourceNotice";
 import { SearchHeader } from "./components/SearchHeader";
 import type { DiscoveryDataSource } from "./data";
 import { useDiscoveryController } from "./hooks/useDiscoveryController";
+import type { Coordinate } from "./model";
 
 export default function DiscoveryApp({
   source,
@@ -19,6 +21,9 @@ export default function DiscoveryApp({
   previewScale?: number;
 }) {
   const controller = useDiscoveryController(source);
+  const [currentLocation, setCurrentLocation] = useState<Coordinate | null>(
+    null,
+  );
   const {
     shell,
     scroll,
@@ -70,7 +75,12 @@ export default function DiscoveryApp({
           <ResourceNotice status={detailStatus} retry={retry} t={t} missing />
         </div>
       ) : isMap ? (
-        <MapScreen {...controller} viewportScale={previewScale ?? 1} />
+        <MapScreen
+          {...controller}
+          currentLocation={currentLocation}
+          onLocate={setCurrentLocation}
+          viewportScale={previewScale ?? 1}
+        />
       ) : (
         <DiscoverScreen {...controller} />
       )}

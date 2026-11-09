@@ -570,7 +570,6 @@ export function useDiscoveryController(
     openFilters,
     openPlace,
     openTime,
-    origin,
     photosFor,
     query,
     scroll,

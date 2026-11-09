@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { Coordinate } from "../discovery/model.ts";
 import {
   attachMapSession,
   type ExploreMapOptions,
@@ -71,6 +72,11 @@ export function useExploreMap(props: ExploreMapProps) {
   useEffect(() => {
     if (ready) session.current?.focusSelected();
   }, [props.selected, ready, props.focusSelected]);
+  useEffect(() => {
+    if (ready && props.currentLocation) {
+      session.current?.setCurrentLocation(props.currentLocation);
+    }
+  }, [ready, props.currentLocation]);
   return {
     element,
     ready,
@@ -82,8 +88,6 @@ export function useExploreMap(props: ExploreMapProps) {
     },
     zoomBy: (delta: number) => session.current?.zoomBy(delta),
     fitRecommendations: () => session.current?.fitRecommendations(),
-    centerOnOrigin: () => {
-      if (props.origin) session.current?.centerOn(props.origin);
-    },
+    centerOn: (point: Coordinate) => session.current?.centerOn(point),
   };
 }

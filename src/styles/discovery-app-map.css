@@ -62,6 +62,17 @@
   pointer-events: auto;
 }
 
+.local-map-location-dot {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: #2971df;
+  box-shadow: 0 0 0 4px #2971df38, 0 1px 4px #173c6b55;
+  pointer-events: none;
+}
+
 .local-web .local-explore-map.is-map-fallback {
   background:
     linear-gradient(145deg, transparent 53%, #f6f9fd 53% 55%, transparent 55%),
@@ -82,13 +93,14 @@
 }
 
 @container local-map-chrome (height < 206px) {
-  .local-map-tools > button:nth-child(3) {
+  .local-map-tools > .local-map-fit {
     display: none;
   }
 }
 
 @container local-map-chrome (94px <= height < 150px) {
-  .local-map-tools > button {
+  .local-map-tools:has(.local-map-locate) > .local-map-zoom,
+  .local-map-tools > button:not(.local-map-locate) {
     display: none;
   }
 }
@@ -110,7 +122,7 @@
     padding: 6px 8px;
   }
 
-  .local-web .local-map-chrome .local-refined-map-status strong {
+  .local-web .local-map-chrome > .local-refined-map-status strong {
     overflow: hidden;
     font-size: 12px;
     line-height: 16px;
