@@ -101,7 +101,12 @@ export function FeaturedCarousel({
   }, [count, initialIndex, loopOffset]);
   useEffect(() => {
     const media = matchMedia("(prefers-reduced-motion: reduce)");
-    const changed = () => setReduceMotion(media.matches);
+    const changed = () => {
+      const node = track.current;
+      if (media.matches && loopOffset && node?.clientWidth)
+        scrollToSlide(node, position.current.index + loopOffset, "instant");
+      setReduceMotion(media.matches);
+    };
     const visibility = () => setHidden(document.hidden);
     changed();
     visibility();
@@ -111,7 +116,7 @@ export function FeaturedCarousel({
       media.removeEventListener("change", changed);
       document.removeEventListener("visibilitychange", visibility);
     };
-  }, []);
+  }, [loopOffset]);
   function settleLoop(node: HTMLDivElement) {
     if (!loopOffset) return;
     // At either end the copy and the real card fill the same viewport.
@@ -131,19 +136,24 @@ export function FeaturedCarousel({
   }
   function go(next: number, from = index, direction?: -1 | 1) {
     const node = track.current;
-    if (!node || !loopOffset || next === from) return;
+    if (!node || !loopOffset) return;
     if (reduceMotion) {
       scrollToSlide(node, next + loopOffset, "instant");
       return;
     }
     const current = slideAtScroll(node);
-    // Rapid key presses may target the focused card before its animation ends.
-    if (current !== from + loopOffset)
-      scrollToSlide(node, from + loopOffset, "instant");
+    // Retarget from the live scroll offset. A wrap copy can still be on screen
+    // when the user immediately changes direction.
     let destination = next + loopOffset;
-    if (from === count - 1 && next === 0 && direction !== -1)
+    if (from === count - 1 && next === 0 && direction !== -1 && current !== 0)
       destination = count + 1;
-    if (from === 0 && next === count - 1 && direction !== 1) destination = 0;
+    if (
+      from === 0 &&
+      next === count - 1 &&
+      direction !== 1 &&
+      current !== count + 1
+    )
+      destination = 0;
     scrollToSlide(node, destination, "smooth");
   }
   useEffect(() => {

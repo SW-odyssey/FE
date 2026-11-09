@@ -28,7 +28,8 @@ export function useDialogLifecycle({
   setModal,
   onDismiss,
 }: Options) {
-  const [closingModal, setClosingModal] = useState(false);
+  const [closingPanel, setClosingPanel] = useState<Modal>(null);
+  const closingModal = modal !== null && closingPanel === modal;
   const latestDismiss = useRef(onDismiss);
   const returnFocus = useRef<HTMLElement | null>(null);
 
@@ -38,17 +39,34 @@ export function useDialogLifecycle({
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- 새 시트의 닫힘 상태를 외부 modal 변경과 맞춥니다.
-    setClosingModal(false);
-  }, [modal]);
+    if (closingPanel && !closingModal) setClosingPanel(null);
+  }, [closingModal, closingPanel]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!closingModal) return;
-    const timer = setTimeout(() => {
-      setModal(null);
-      setClosingModal(false);
-    }, 240);
-    return () => clearTimeout(timer);
-  }, [closingModal, setModal]);
+    const surface = dialog.current;
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const finish = () => {
+      setModal((current) => (current === modal ? null : current));
+      setClosingPanel(null);
+    };
+    const onTransitionEnd = (event: TransitionEvent) => {
+      if (event.target === surface && event.propertyName === "transform")
+        finish();
+    };
+    const onMotionChange = () => {
+      if (media.matches) finish();
+    };
+    surface?.addEventListener("transitionend", onTransitionEnd);
+    media.addEventListener("change", onMotionChange);
+    // A missing or cancelled transition must still release the dialog.
+    const timer = setTimeout(finish, 320);
+    return () => {
+      clearTimeout(timer);
+      surface?.removeEventListener("transitionend", onTransitionEnd);
+      media.removeEventListener("change", onMotionChange);
+    };
+  }, [closingModal, dialog, modal, setModal]);
 
   useEffect(() => {
     if (!modal) {
@@ -100,10 +118,11 @@ export function useDialogLifecycle({
   }, [modal, timeReturn, dialog]);
 
   const dismissSheet = useCallback(() => {
+    if (!modal) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
       setModal(null);
-    else setClosingModal(true);
-  }, [setModal]);
+    else setClosingPanel(modal);
+  }, [modal, setModal]);
 
   return { closingModal, dismissSheet };
 }

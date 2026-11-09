@@ -29,8 +29,112 @@
   outline-offset: -2px;
 }
 
-.local-web .local-calendar-grid > button > span {
-  max-width: 100%;
+.local-refined .local-segment-control:is(.is-ambience, .local-visit-slots) {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(var(--local-segment-count), minmax(0, 1fr));
+  padding: 0;
+  border-radius: 22px;
+  background: #e0e8f4b3;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+}
+
+.local-segment-control::after {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: 4px auto 4px 4px;
+  width: calc(100% / var(--local-segment-count) - 8px);
+  border: 1px solid #ffffffd9;
+  border-radius: 18px;
+  background-color: #ffffffdb;
+  pointer-events: none;
+  transform: translateX(calc(var(--local-segment-position) * (100% + 8px)));
+  transition:
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.local-segment-control[data-dragging]::after {
+  background-color: #ffffff94;
+  box-shadow: 0 2px 6px #33415a22, inset 0 1px 1px #ffffffcc;
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  backdrop-filter: blur(6px) saturate(120%);
+  transition-property: background-color, box-shadow;
+}
+
+.local-refined .local-segment-control:is(.is-ambience, .local-visit-slots) > button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  min-width: 0;
+  padding: 4px;
+  border: 0;
+  border-radius: 22px;
+  background: transparent;
+  color: #52617a;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+  white-space: normal;
+}
+
+.local-refined .local-segment-control > button[data-highlighted] {
+  color: #45498b;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .local-segment-control[data-dragging]::after {
+    background-color: #f8faff;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+.local-refined .local-filter-choice-set.is-space {
+  row-gap: 0;
+}
+
+.local-refined .local-filter-choice-set.is-space > button > span {
+  min-height: 36px;
+  border-radius: 18px;
+}
+
+.local-refined .local-calendar-grid > button > span {
+  width: min(36px, 100%);
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.local-calendar-grid {
+  animation: local-calendar-month-in 160ms ease-out both;
+}
+
+.local-calendar-grid > button > span {
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.local-calendar-grid > button[aria-pressed="true"] > span {
+  animation: local-calendar-day-in 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes local-calendar-month-in {
+  from {
+    opacity: 0.6;
+    transform: translateY(3px);
+  }
+}
+
+@keyframes local-calendar-day-in {
+  from {
+    transform: scale(0.9);
+  }
 }
 
 .local-web .local-drawer {

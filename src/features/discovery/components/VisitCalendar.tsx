@@ -65,7 +65,7 @@ export function VisitCalendar({
           </span>
         ))}
       </div>
-      <div className="local-calendar-grid">
+      <div className="local-calendar-grid" key={shown}>
         {visitCalendar(clock, shown).map((cell, i) =>
           cell ? (
             <button

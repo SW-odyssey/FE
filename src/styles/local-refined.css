@@ -2,7 +2,7 @@
 .local-refined {
   --refined-clear: linear-gradient(145deg, #ffffff66, #e8f3ff38);
   --refined-reading: linear-gradient(145deg, #fafdffad, #eaf2ff85);
-  --refined-dialog: linear-gradient(145deg, #fafdffdb, #edf3ffbf);
+  --refined-dialog: linear-gradient(145deg, #fafdfff2, #edf3ffeb);
   --refined-rim: #ffffffa6;
   --local-muted: #5d6c84;
 }
@@ -29,7 +29,7 @@
   appearance: none;
   transform: translateY(1px);
 }
-.local-refined .local-search > .local-icon {
+.local-refined .local-search-field > .local-icon {
   transform: translateY(-0.5px);
 }
 .local-refined .local-language-mark {
@@ -47,7 +47,7 @@
   font-weight: 400;
 }
 .local-refined .local-search input,
-.local-refined .local-search > .local-icon {
+.local-refined .local-search-field > .local-icon {
   color: #202b40;
 }
 .local-refined .local-context {
@@ -659,49 +659,6 @@
   background: #e0e4fa;
   border-color: #a7b1d5;
 }
-.local-refined .local-filter-choice-set.is-ambience {
-  position: relative;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  padding: 0 3px;
-}
-.local-refined .local-filter-choice-set.is-ambience::before {
-  content: "";
-  position: absolute;
-  inset: 4px 0;
-  border-radius: 18px;
-  background: #e0e8f4b3;
-}
-.local-refined .local-filter-choice-set.is-ambience > button {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 0 3px;
-  border: 0;
-  font-size: 13px;
-}
-.local-refined
-  .local-filter-choice-set.is-ambience
-  > button[aria-pressed="true"] {
-  background: transparent;
-  border-color: transparent;
-  box-shadow: none;
-}
-.local-refined .local-filter-choice-set.is-ambience > button > span {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 30px;
-  border: 1px solid transparent;
-  border-radius: 15px;
-}
-.local-refined
-  .local-filter-choice-set.is-ambience
-  > button[aria-pressed="true"]
-  > span {
-  background: #ffffffd9;
-  border-color: #ffffff;
-  box-shadow: none;
-}
 .local-refined .local-filter-choice-set.is-space {
   display: flex;
   flex-wrap: wrap;
@@ -837,12 +794,13 @@
 .local-refined .local-about p {
   color: #56657e;
 }
-.local-refined .local-content,
-.local-refined .local-modal-body {
-  animation: none;
+.local-refined > .local-bottom-nav {
+  transition: opacity 0.18s ease-out;
+}
+.local-refined:has(.local-modal-layer:not(.is-closing)) > .local-bottom-nav {
+  opacity: 0;
 }
 .local-refined:has(.local-modal-layer) > .local-bottom-nav {
-  opacity: 0;
   pointer-events: none;
 }
 @media (prefers-reduced-transparency: reduce) {
