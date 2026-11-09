@@ -23,6 +23,15 @@ export type DiscoveryQuery = {
 export type DiscoveryQueryResult = {
   items: LocalPlace[];
   total: number;
+  analyses?: Record<string, RecommendationAnalysis>;
+};
+/** Recommendation evidence belongs to the response that selected the place. */
+export type RecommendationAnalysis = {
+  provenance: "preview" | "model";
+  spaces: readonly SpacePreference[];
+  matchedSpaces: readonly SpacePreference[];
+  slot: VisitSlot;
+  activity: AreaActivity;
 };
 export type DiscoveryPlaceDetail = {
   place: LocalPlace;
