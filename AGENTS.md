@@ -8,7 +8,7 @@
 | 결정과 연결할 작업 | `docs/DECISIONS.md`                                                 |
 | 실행 버전과 명령   | `package.json`, `.nvmrc`                                            |
 | 진입 화면          | `src/app/page.tsx`                                                  |
-| 화면 조합          | `src/features/discovery/DiscoveryPreview.tsx`                       |
+| 화면 조합          | `src/features/discovery/DiscoveryApp.tsx`                           |
 | 상태와 이동        | `src/features/discovery/hooks/useDiscoveryController.ts`            |
 | URL 복원           | `src/features/discovery/state/preview-url.ts`                       |
 | 데이터 경계        | `src/features/discovery/data/types.ts`                              |

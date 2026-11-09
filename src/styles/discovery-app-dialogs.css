@@ -1,0 +1,76 @@
+.local-web .local-modal-layer {
+  inset: 0;
+}
+
+.local-web .local-modal-sheet:is(.is-area, .is-filters, .is-time) {
+  width: 100%;
+  max-height: calc(100% - var(--local-safe-top) - 12px);
+  padding-left: max(clamp(16px, 6vw, 24px), var(--local-safe-left));
+  padding-right: max(clamp(16px, 6vw, 24px), var(--local-safe-right));
+  padding-bottom: max(20px, calc(var(--local-safe-bottom) + 12px));
+}
+
+.local-web .local-modal-body > .local-sheet-title {
+  flex: none;
+}
+
+.local-web .local-modal-body > .local-secondary {
+  flex: none;
+}
+
+.local-web .local-area-list,
+.local-web .local-drawer-content {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.local-web .local-modal-body button:focus-visible {
+  outline-offset: -2px;
+}
+
+.local-web .local-calendar-grid > button > span {
+  max-width: 100%;
+}
+
+.local-web .local-drawer {
+  width: min(calc(288px + var(--local-safe-left)), calc(100% - 24px));
+  padding-top: max(24px, calc(var(--local-safe-top) + 12px));
+  padding-bottom: max(20px, calc(var(--local-safe-bottom) + 12px));
+  padding-left: calc(24px + var(--local-safe-left));
+}
+
+.local-web .local-drawer .local-modal-body {
+  overflow: hidden;
+}
+
+@media (max-height: 480px) {
+  .local-web
+    .local-modal-sheet:is(.is-area, .is-filters, .is-time)
+    .local-sheet-title,
+  .local-web .local-drawer .local-modal-body > .local-sheet-title {
+    margin-bottom: 8px;
+  }
+
+  .local-web .local-modal-sheet .local-sheet-footer {
+    padding-top: 8px;
+  }
+
+  .local-web .local-modal-sheet .local-drag-indicator {
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-height: 280px) {
+  .local-web .local-modal-sheet .local-modal-body {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .local-web
+    .local-modal-sheet
+    :is(.local-area-list, .local-filter-options, .local-visit-options) {
+    flex: none;
+    overflow: visible;
+  }
+}

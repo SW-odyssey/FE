@@ -107,7 +107,7 @@
 
 1. 서버 주소와 CORS를 확인하고 `meta` loader를 선택지 및 날짜 범위에 연결.
 2. `DiscoveryDataSource.query/getPlace`의 HTTP 구현 추가. `AbortSignal` 전달, 공통 응답 해제, 숫자 ID와 UI 모델 변환.
-3. 클라이언트 경계에서 `DiscoveryPreview`의 `source`에 HTTP 공급자 주입. 동기 `snapshot`은 preview 전용으로 유지.
+3. 클라이언트 경계에서 `DiscoveryApp`의 `source`에 HTTP 공급자 주입. 동기 `snapshot`은 preview 전용으로 유지.
 4. 추천 결과의 `applied`, 실제 셀과 Google ID를 보존하고 지도 및 사진 공급 연결.
 5. 정상, 0건, 오류와 외부 정보 누락을 같은 입력으로 검증.
 
