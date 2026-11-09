@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { slotLabels } from "../presentation";
 import { slotAt, slotHours, visitSlots } from "../visit-time";
@@ -33,6 +34,10 @@ export function VisitTimeSheet(props: Props) {
     t,
     timeReturn,
   } = props;
+  const [automaticTime, setAutomaticTime] = useState(false);
+  const [calendarRevision, setCalendarRevision] = useState(0);
+  const selectedSlot = automaticTime ? slotAt(seoulHour(clock)) : draftSlot;
+
   return (
     <>
       <div className="local-drag-indicator" />
@@ -46,34 +51,42 @@ export function VisitTimeSheet(props: Props) {
       }
       <div className="local-visit-options">
         <VisitCalendar
+          key={calendarRevision}
           clock={clock}
           day={draftDay}
           language={language}
-          onChange={setDraftDay}
+          onChange={(nextDay) => {
+            if (nextDay === draftDay) return;
+            setDraftDay(nextDay);
+            setDraftSlot(selectedSlot);
+            setAutomaticTime(false);
+          }}
         />
         <SegmentedChoice
           className="local-visit-slots"
           label={t("Time", "시간대")}
-          value={draftSlot}
-          onChange={setDraftSlot}
+          value={selectedSlot}
+          onChange={(nextSlot) => {
+            if (nextSlot === selectedSlot) return;
+            setDraftSlot(nextSlot);
+            setAutomaticTime(false);
+          }}
           options={visitSlots.map((slot) => ({
             value: slot,
             label: slotLabels[language][slot],
           }))}
         />
         <p className="local-selected-time-range" aria-live="polite">
-          {slotHours[draftSlot]}
+          {slotHours[selectedSlot]}
         </p>
       </div>
       <div className="local-sheet-footer local-time-actions">
         <button
-          className="local-secondary local-use-now"
+          className="local-filter-reset local-use-now"
           onClick={() => {
-            confirmTime({
-              autoTime: true,
-              day: 0,
-              slot: slotAt(seoulHour(clock)),
-            });
+            setDraftDay(0);
+            setAutomaticTime(true);
+            setCalendarRevision((revision) => revision + 1);
           }}
         >
           {discoveryCopy[language].currentTime}
@@ -82,9 +95,9 @@ export function VisitTimeSheet(props: Props) {
           className="local-primary"
           onClick={() => {
             confirmTime({
-              autoTime: false,
+              autoTime: automaticTime,
               day: draftDay,
-              slot: draftSlot,
+              slot: selectedSlot,
             });
           }}
         >
