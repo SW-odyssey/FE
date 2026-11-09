@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   resistSheetHeight,
+  sheetHeights,
+  sheetHeightsForSpace,
   sheetSnapTarget,
   stepSheetSpring,
 } from "../src/features/map/sheet-motion.ts";
@@ -29,6 +31,17 @@ test("resistance is continuous and bounded at both ends", () => {
   assert.ok(resistSheetHeight(700) > 500 && resistSheetHeight(700) < 520);
   assert.ok(resistSheetHeight(700, 432) < 452);
   assert.equal(sheetSnapTarget(410, 1, 432, 432), 432);
+});
+
+test("compact layouts retain a reachable middle stop inside the available height", () => {
+  assert.deepEqual(sheetHeightsForSpace(640), sheetHeights);
+  const compact = sheetHeightsForSpace(248);
+  assert.equal(compact.expanded, 248);
+  assert.ok(
+    compact.half > compact.collapsed && compact.half < compact.expanded,
+  );
+  assert.equal(sheetSnapTarget(180, 0, compact.collapsed, 248), compact.half);
+  assert.equal(sheetSnapTarget(235, 0, compact.half, 248), compact.expanded);
 });
 
 test("the spring is frame-rate independent, converges, and can reverse mid-flight", () => {

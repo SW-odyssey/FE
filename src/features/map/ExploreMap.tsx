@@ -21,17 +21,18 @@ export default function ExploreMap(props: ExploreMapProps) {
   const t = (en: string, kr: string) => localText(language, en, kr);
   return (
     <div
-      className={`local-explore-map ${grid ? "is-cell-preview" : ""}`}
-      style={{ "--local-map-viewport-scale": viewportScale } as CSSProperties}
+      className={`local-explore-map ${grid ? "is-cell-preview" : ""} ${!ready ? "is-map-fallback" : ""}`}
+      style={
+        {
+          "--local-map-viewport-scale": viewportScale,
+          "--local-map-preview-width": `${393 * viewportScale}px`,
+          "--local-map-preview-height": `${852 * viewportScale}px`,
+          "--local-map-preview-zoom": 1 / viewportScale,
+        } as CSSProperties
+      }
     >
       <div
         ref={element}
-        style={{
-          width: 393 * viewportScale,
-          height: 852 * viewportScale,
-          transform: `scale(${1 / viewportScale})`,
-          transformOrigin: "top left",
-        }}
         className="local-map-canvas"
         aria-label={t("Map of nearby places", "주변 장소 지도")}
       />
@@ -67,7 +68,7 @@ export default function ExploreMap(props: ExploreMapProps) {
             −
           </button>
         </div>
-        {error && (
+        {error && process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY && (
           <button
             aria-label={t("Retry live map", "지도 다시 연결")}
             onClick={retry}

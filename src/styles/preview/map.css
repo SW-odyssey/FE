@@ -48,6 +48,10 @@
 .local-map-canvas {
   position: absolute;
   inset: 0;
+  width: var(--local-map-preview-width);
+  height: var(--local-map-preview-height);
+  transform: scale(var(--local-map-preview-zoom, 1));
+  transform-origin: top left;
   /* SDK tiles exceed the viewport; focusing a marker must not scroll that canvas. */
   overflow: clip !important;
   touch-action: none;
