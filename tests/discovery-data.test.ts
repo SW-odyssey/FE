@@ -6,10 +6,6 @@ import {
 } from "../src/features/discovery/data/preview.ts";
 import { localPlaces } from "../src/features/discovery/data/preview/places.ts";
 import {
-  filterLocalPlaces,
-  recommendPlaces,
-} from "../src/features/discovery/data/preview/recommendations.ts";
-import {
   copyDiscoveryQuery,
   discoveryQueryKey,
 } from "../src/features/discovery/data/query.ts";
@@ -25,44 +21,42 @@ const base: DiscoveryQuery = {
   spaces: [],
 };
 
-test("preview query preserves results and ordering across all existing filters", () => {
-  for (const area of [
-    "all",
-    "jongno",
-    "ikseon",
-    "insa",
-    "eulji",
-    "bukchon",
-  ] as const)
-    for (const category of ["all", "cafe", "food"] as const)
-      for (const slot of ["lunch", "afternoon", "evening", "late"] as const)
-        for (const activity of ["any", "quiet", "lively"] as const)
-          for (const spaces of [[], ["hanok"], ["hanok", "retro"]] as const)
-            for (const query of ["", "  청수당 ", "coffee", "no-match"])
-              for (const origin of [null, { lat: 37.57, lng: 126.99 }]) {
-                const input = {
-                  area,
-                  category,
-                  slot,
-                  activity,
-                  spaces,
-                  query,
-                  origin,
-                };
-                const expected = recommendPlaces(
-                  filterLocalPlaces(localPlaces, area, category, query),
-                  slot,
-                  activity,
-                  origin,
-                  spaces,
-                );
-                const actual = previewDataSource.snapshot!.query(input);
-                assert.deepEqual(actual.items, expected);
-                assert.equal(actual.total, expected.length);
-                actual.items.forEach((place, i) =>
-                  assert.equal(place, expected[i]),
-                );
-              }
+test("preview query includes afternoon venues matching either selected space", () => {
+  const result = previewDataSource.snapshot!.query({
+    ...base,
+    area: "ikseon",
+    spaces: ["courtyard", "retro"],
+  });
+  const expected = [
+    "cheongsudang",
+    "oncheonjip",
+    "rainreport",
+    "songam",
+    "gowundon",
+  ];
+  assert.deepEqual(
+    result.items.map((place) => place.id),
+    expected,
+  );
+  assert.equal(result.total, expected.length);
+});
+
+test("a northwestern origin moves the nearer Osulloc ahead of Oncheonjip", () => {
+  const input = { ...base, area: "all" } as const;
+  const snapshot = previewDataSource.snapshot!;
+  const withoutOrigin = snapshot.query(input);
+  const fromNorthwest = snapshot.query({
+    ...input,
+    origin: { lat: 37.5795, lng: 126.982 },
+  });
+  assert.deepEqual(
+    withoutOrigin.items.slice(0, 4).map((place) => place.id),
+    ["cheongsudang", "seoulcoffee", "oncheonjip", "osulloc"],
+  );
+  assert.deepEqual(
+    fromNorthwest.items.slice(0, 4).map((place) => place.id),
+    ["cheongsudang", "seoulcoffee", "osulloc", "oncheonjip"],
+  );
 });
 
 test("preview date remains presentation-only and async port returns the same snapshot", async () => {

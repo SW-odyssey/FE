@@ -51,6 +51,12 @@ export type PreviewUrlSelection = Pick<
   spaces: readonly SpacePreference[];
 };
 
+function isPreviewFilterCategory(
+  category: string | null,
+): category is "cafe" | "food" {
+  return category === "cafe" || category === "food";
+}
+
 /** 프리뷰 URL과 저장 언어에서 복원할 상태를 읽습니다.
  * @param search 현재 URL의 검색 문자열
  * @param now 서울 기준 자동 시간 슬롯을 계산할 시각
@@ -96,10 +102,7 @@ export function readPreviewUrl(
         ? linkedActivity
         : "any",
     spaces: readSpacePreferences(params.get("space")),
-    category:
-      linkedCategory === "cafe" || linkedCategory === "food"
-        ? linkedCategory
-        : "all",
+    category: isPreviewFilterCategory(linkedCategory) ? linkedCategory : "all",
     language: params.has("lang")
       ? state.language
       : languages.includes(storedLanguage as DiscoveryLanguage)
@@ -110,7 +113,7 @@ export function readPreviewUrl(
 
 /** 적용된 프리뷰 상태를 기존 replaceState의 키 순서로 직렬화합니다.
  * @param state 현재 화면, 선택 장소와 적용 조건
- * @returns 기본값과 자동 일시를 생략한 URL 검색 매개변수
+ * @returns 선택 언어를 보존하고 기본 필터와 자동 일시는 생략한 URL 검색 매개변수
  */
 export function serializePreviewUrl(
   state: PreviewUrlSelection,
@@ -119,9 +122,10 @@ export function serializePreviewUrl(
   params.set("view", state.view);
   params.set("area", state.area);
   if (state.place) params.set("place", state.place);
-  if (state.language !== "en") params.set("lang", state.language);
+  params.set("lang", state.language);
   if (state.query) params.set("q", state.query);
-  if (state.category !== "all") params.set("category", state.category);
+  if (isPreviewFilterCategory(state.category))
+    params.set("category", state.category);
   if (!state.autoTime) {
     params.set("slot", state.slot);
     params.set("day", String(state.day));

@@ -34,7 +34,7 @@ test("an empty URL restores Jongno, automatic time and the default language", ()
   });
   assert.equal(
     serializePreviewUrl(defaults).toString(),
-    "view=discover&area=jongno",
+    "view=discover&area=jongno&lang=en",
   );
 });
 
@@ -74,6 +74,29 @@ test("URL language takes precedence, including an explicitly invalid language", 
   for (const language of ["", "fr", "KO"]) {
     assert.equal(readPreviewUrl(`?lang=${language}`, now, "ja").language, "en");
     assert.equal(readPreviewUrl("", now, language).language, "en");
+  }
+});
+
+test("shared URLs preserve every selected language over the recipient's stored language", () => {
+  for (const language of ["en", "ko", "ja", "zh"] as const) {
+    const params = serializePreviewUrl({ ...defaults, language });
+    assert.equal(params.get("lang"), language);
+    assert.equal(
+      readPreviewUrl(params.toString(), now, "ko").language,
+      language,
+    );
+  }
+});
+
+test("only active preview filter categories are written to shared URLs", () => {
+  for (const category of ["all", "cafe", "food", "culture"] as const) {
+    const params = serializePreviewUrl({ ...defaults, category });
+    const supported = category === "cafe" || category === "food";
+    assert.equal(params.get("category"), supported ? category : null);
+    assert.equal(
+      readPreviewUrl(params.toString(), now, null).category,
+      supported ? category : "all",
+    );
   }
 });
 
@@ -215,7 +238,7 @@ test("automatic time omits both date keys and discover view omits the sheet", ()
     day: 6,
     sheet: "expanded",
   });
-  assert.equal(params.toString(), "view=discover&area=jongno");
+  assert.equal(params.toString(), "view=discover&area=jongno&lang=en");
   const state = readPreviewUrl(params.toString(), now, null);
   assert.equal(state.autoTime, true);
   assert.equal(state.day, 0);
