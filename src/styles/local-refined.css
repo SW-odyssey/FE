@@ -126,16 +126,19 @@
 .local-refined .local-place-row > .local-icon {
   color: #71829d;
 }
-.local-refined .local-bottom-nav:before {
-  background: #8e99cf40;
-  box-shadow: inset 0 0 0 1px #ffffff66;
+.local-refined .local-bottom-nav {
+  --local-segment-lens-border: transparent;
+  --local-segment-lens-fill: #dbe0f1;
+  --local-segment-lens-shadow: inset 0 0 0 1px #ffffff66;
+  --local-segment-highlight-color: #484a95;
+  --local-segment-highlight-weight: 500;
+  --local-segment-reduced-fill: var(--local-segment-lens-fill);
 }
 .local-refined .local-bottom-nav button {
   color: #53627b;
   font-size: 12px;
-}
-.local-refined .local-bottom-nav button.is-active {
-  color: #484a95;
+  font-weight: var(--local-segment-highlight-weight);
+  transition: color 280ms ease-in-out;
 }
 .local-refined .local-place-sheet {
   background: var(--refined-reading);

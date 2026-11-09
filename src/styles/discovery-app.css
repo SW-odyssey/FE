@@ -120,6 +120,19 @@
   height: var(--local-nav-height);
 }
 
+@media (max-height: 480px) {
+  .local-shell.local-web {
+    --local-nav-height: 52px;
+  }
+
+  .local-web > .local-bottom-nav {
+    --local-segment-track-padding: 3px;
+    --local-segment-lens-radius: 22px;
+
+    border-radius: 26px;
+  }
+}
+
 .local-web > .local-detail-back {
   top: calc(16px + var(--local-safe-top));
   left: calc(16px + var(--local-safe-left));

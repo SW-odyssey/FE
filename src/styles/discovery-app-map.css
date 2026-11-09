@@ -133,23 +133,6 @@
   .local-shell.local-web.is-map-mode {
     --local-search-row-height: 48px;
     --local-search-block-padding: 0px;
-    --local-nav-height: 52px;
-  }
-
-  .local-web.is-map-mode > .local-bottom-nav {
-    padding: 3px;
-    border-radius: 26px;
-  }
-
-  .local-web.is-map-mode > .local-bottom-nav::before {
-    inset-block: 3px;
-    left: 3px;
-    width: calc((100% - 6px) / 2);
-  }
-
-  .local-web.is-map-mode > .local-bottom-nav::before,
-  .local-web.is-map-mode > .local-bottom-nav button {
-    border-radius: 22px;
   }
 
   .local-web .local-map-context .local-context {

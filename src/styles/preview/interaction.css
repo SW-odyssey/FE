@@ -172,9 +172,22 @@
     opacity: 1;
   }
 }
-.local-content {
+.local-content:not(:is(.local-places, .local-map-page)) {
   animation: local-screen-enter 0.16s ease-out;
 }
+
+/* Fade results independently so the search and filter controls stay visible. */
+.local-places > :is(.local-featured-carousel, .local-place-list, .local-empty),
+.local-map-page > :is(.local-explore-map, .local-place-sheet) {
+  animation: local-tab-screen-enter 280ms cubic-bezier(0.24, 0.1, 0.25, 1);
+}
+
+@keyframes local-tab-screen-enter {
+  from {
+    opacity: 0.2;
+  }
+}
+
 .local-modal-body {
   display: flex;
   flex-direction: column;
@@ -249,7 +262,6 @@
 .local-icon-button,
 .local-area-select,
 .local-time-select,
-.local-bottom-nav button,
 .local-segment button {
   transition:
     background 0.16s ease,
@@ -272,7 +284,6 @@
     .local-area-select,
     .local-time-select,
     .local-category-tabs > button,
-    .local-bottom-nav > button,
     .local-search > button,
     .local-carousel-pagination button,
     .local-place-row,

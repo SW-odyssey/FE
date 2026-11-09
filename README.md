@@ -58,6 +58,8 @@ LOCAL_PAGES_BUILD=1 npm run build
 wrangler pages deploy out --project-name local-odyssey --branch feat/mobile-first-ui
 ```
 
+여기서 `--branch feat/mobile-first-ui`는 Cloudflare Pages의 운영 배포 이름이다. GitHub에서 리뷰에 사용하는 브랜치와는 별개다.
+
 `check:format`은 코드와 문서의 서식만 검사한다. 기존 스타일시트는 이 명령의 검사 대상에서 제외된다.
 
 ## 스타일 편집 위치
