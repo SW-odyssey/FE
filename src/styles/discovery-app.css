@@ -112,11 +112,10 @@
 
 .local-web > .local-bottom-nav {
   --refined-clear: var(--refined-reading);
+  --local-nav-inset-left: calc(16px + var(--local-safe-left));
+  --local-nav-inset-right: calc(16px + var(--local-safe-right));
 
-  left: calc(16px + var(--local-safe-left));
-  right: calc(16px + var(--local-safe-right));
   bottom: var(--local-nav-bottom);
-  width: auto;
   height: var(--local-nav-height);
 }
 

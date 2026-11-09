@@ -10,6 +10,7 @@ import { PlaceDetail } from "./components/PlaceDetail";
 import { ResourceNotice } from "./components/ResourceNotice";
 import { SearchHeader } from "./components/SearchHeader";
 import type { DiscoveryDataSource } from "./data";
+import { useCompactNavigation } from "./hooks/useCompactNavigation";
 import { useDiscoveryController } from "./hooks/useDiscoveryController";
 import type { Coordinate } from "./model";
 
@@ -39,10 +40,12 @@ export default function DiscoveryApp({
   } = controller;
   const isDetail = Boolean(selectedId);
   const isMap = view === "map" && !isDetail;
+  const navigation = useCompactNavigation(view);
 
   return (
     <main
       ref={shell}
+      onScrollCapture={navigation.onScroll}
       className={`local-shell local-refined ${previewScale === undefined ? "local-web" : ""} ${isMap ? "is-map-mode" : ""}`}
       style={
         previewScale === undefined
@@ -87,7 +90,7 @@ export default function DiscoveryApp({
       {isDetail ? (
         <div className="local-detail-safe-area" aria-hidden="true" />
       ) : (
-        <DiscoveryNavigation {...controller} />
+        <DiscoveryNavigation {...controller} compact={navigation.compact} />
       )}
       {modal && <DiscoveryOverlay {...controller} />}
       {toast && (
