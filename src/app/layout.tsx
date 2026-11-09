@@ -1,9 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+
+const appName = "Local";
+
 export const metadata: Metadata = {
-  title: "LOCAL — Find your Seoul",
+  title: appName,
   description:
     "Explore the everyday side of Seoul. Discover places in Ikseon-dong, Insadong, and Euljiro.",
+  appleWebApp: {
+    capable: true,
+    title: appName,
+  },
 };
 export const viewport: Viewport = {
   width: "device-width",
