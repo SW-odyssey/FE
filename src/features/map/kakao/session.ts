@@ -59,6 +59,7 @@ export function createExploreMapSession(
   map.setMaxLevel(10);
   const overlays = createMapOverlays(map, element);
   const cells = createMapCells(map);
+  let locationOverlay: kakao.maps.CustomOverlay | undefined;
   function remember() {
     const options = readOptions();
     if (!options.memory) return;
@@ -111,21 +112,19 @@ export function createExploreMapSession(
     );
   }
   function focusSelected() {
-    const {
-      selected,
-      focusSelected,
-      viewportScale,
-      sheetInset,
-      viewportInsets,
-    } = readOptions();
+    const { selected, focusSelected } = readOptions();
     if (!selected || !focusSelected) return;
     if (restoreFocus === selected.id) {
       restoreFocus = undefined;
       return;
     }
+    centerOn(selected);
+  }
+  function centerOn({ lat, lng }: Coordinate) {
+    const { viewportScale, sheetInset, viewportInsets } = readOptions();
     const projection = map.getProjection();
     const target = projection.containerPointFromCoords(
-      new kakao.maps.LatLng(selected.lat, selected.lng),
+      new kakao.maps.LatLng(lat, lng),
     );
     const centre = mapFocusCentrePoint(target, {
       canvasHeight: element.clientHeight,
@@ -154,8 +153,24 @@ export function createExploreMapSession(
         animate: reduceMotion() ? false : { duration: 180 },
       });
     },
-    centerOn(point: Coordinate) {
-      map.panTo(new kakao.maps.LatLng(point.lat, point.lng));
+    centerOn,
+    setCurrentLocation({ lat, lng }) {
+      const position = new kakao.maps.LatLng(lat, lng);
+      if (locationOverlay) {
+        locationOverlay.setPosition(position);
+        return;
+      }
+      const dot = element.ownerDocument.createElement("span");
+      dot.className = "local-map-location-dot";
+      dot.setAttribute("aria-hidden", "true");
+      locationOverlay = new kakao.maps.CustomOverlay({
+        map,
+        position,
+        content: dot,
+        xAnchor: 0.5,
+        yAnchor: 0.5,
+        zIndex: 20,
+      });
     },
     dispose() {
       if (disposed) return;
@@ -165,6 +180,7 @@ export function createExploreMapSession(
       observer.disconnect();
       kakao.maps.event.removeListener(map, "zoom_changed", zoomChanged);
       kakao.maps.event.removeListener(map, "idle", idle);
+      locationOverlay?.setMap(null);
       overlays.dispose();
       cells.dispose();
     },

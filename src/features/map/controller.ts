@@ -17,7 +17,8 @@ export type ExploreMapProps = {
   places: LocalPlace[];
   selected: LocalPlace | null;
   language: DiscoveryLanguage;
-  origin: Coordinate | null;
+  currentLocation: Coordinate | null;
+  onLocate: (point: Coordinate) => void;
   onSelect: (place: LocalPlace) => void;
   focusSelected?: boolean;
   sheetInset?: number;
@@ -37,6 +38,7 @@ export type ExploreMapSession = DisposableMapSession & {
   fitRecommendations: (restore?: boolean) => void;
   focusSelected: () => void;
   zoomBy: (delta: number) => void;
+  setCurrentLocation: (point: Coordinate) => void;
   centerOn: (point: Coordinate) => void;
 };
 

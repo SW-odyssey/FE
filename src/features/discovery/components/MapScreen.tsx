@@ -8,6 +8,7 @@ import PlaceSheet from "../../map/PlaceSheet";
 import { sheetHeights, sheetHeightsForSpace } from "../../map/sheet-motion";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { placeCount } from "../localization";
+import type { Coordinate } from "../model";
 import { DiscoveryControls } from "./DiscoveryControls";
 import { Photo } from "./PlacePhoto";
 import { renderPlaceRow } from "./PlaceRow";
@@ -22,7 +23,6 @@ type Props = Pick<
   | "mapSelected"
   | "openFilters"
   | "openPlace"
-  | "origin"
   | "selectMapGroup"
   | "selectMapPlace"
   | "clearMapScope"
@@ -36,7 +36,11 @@ type Props = Pick<
   | "status"
   | "retry"
 > &
-  React.ComponentProps<typeof DiscoveryControls> & { viewportScale: number };
+  React.ComponentProps<typeof DiscoveryControls> & {
+    currentLocation: Coordinate | null;
+    onLocate: (point: Coordinate) => void;
+    viewportScale: number;
+  };
 export function MapScreen(props: Props) {
   const {
     language,
@@ -47,7 +51,8 @@ export function MapScreen(props: Props) {
     mapSelected,
     openFilters,
     openPlace,
-    origin,
+    currentLocation,
+    onLocate,
     viewportScale,
     selectMapGroup,
     selectMapPlace,
@@ -105,7 +110,8 @@ export function MapScreen(props: Props) {
         places={visible}
         selected={mapSelected}
         language={language}
-        origin={origin}
+        currentLocation={currentLocation}
+        onLocate={onLocate}
         sheetInset={heights[sheet]}
         viewportScale={viewportScale}
         viewportInsets={layout?.insets}

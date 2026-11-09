@@ -128,6 +128,7 @@ function fakeSdk() {
   );
   const listeners = new Set<() => void>();
   const maps: FakeMap[] = [];
+  const overlays: FakeOverlay[] = [];
   let disconnected = 0;
   class LatLng {
     lat: number;
@@ -185,10 +186,26 @@ function fakeSdk() {
       this.level = level;
     }
   }
+  class FakeOverlay {
+    map: FakeMap | null;
+    position: LatLng;
+    constructor({ map, position }: { map: FakeMap; position: LatLng }) {
+      this.map = map;
+      this.position = position;
+      overlays.push(this);
+    }
+    setMap(map: FakeMap | null) {
+      this.map = map;
+    }
+    setPosition(position: LatLng) {
+      this.position = position;
+    }
+  }
   const replacements = {
     kakao: {
       maps: {
         Map: FakeMap,
+        CustomOverlay: FakeOverlay,
         LatLng,
         Point: class {
           x: number;
@@ -231,6 +248,7 @@ function fakeSdk() {
     });
   return {
     maps,
+    overlays,
     listeners,
     disconnected: () => disconnected,
     restore() {
@@ -240,6 +258,13 @@ function fakeSdk() {
       }
     },
   };
+}
+
+function canvas(clientHeight: number) {
+  return {
+    clientHeight,
+    ownerDocument: { createElement: () => ({ setAttribute() {} }) },
+  } as unknown as HTMLDivElement;
 }
 
 test("returning restores camera and selection once; explicit fit still uses current sheet padding", () => {
@@ -260,7 +285,8 @@ test("returning restores camera and selection once; explicit fit still uses curr
       places: [a, b],
       selected: a,
       language: "en",
-      origin: null,
+      currentLocation: null,
+      onLocate() {},
       onSelect() {},
       focusSelected: true,
       viewportScale: 0.75,
@@ -268,7 +294,7 @@ test("returning restores camera and selection once; explicit fit still uses curr
       memory,
     };
     const session = createExploreMapSession(
-      { clientHeight: 639 } as HTMLDivElement,
+      canvas(639),
       () => options,
       () => {},
     );
@@ -294,11 +320,13 @@ test("returning restores camera and selection once; explicit fit still uses curr
     assert.equal(map.center.lng, b.lng);
     assert.notEqual(map.center.lat, b.lat); // Focus uses the uncovered map, not the full canvas.
     session.centerOn({ lat: 37.59, lng: 127 });
+    const locatedCentre = map.center.lat;
+    assert.notEqual(locatedCentre, 37.59);
     options = { ...options, places: [b, a] };
     session.dispose();
     session.dispose();
     assert.deepEqual(memory.current, {
-      lat: 37.59,
+      lat: locatedCentre,
       lng: 127,
       level: 2,
       collection: "b,a",
@@ -319,7 +347,8 @@ test("a changed recommendation collection ignores the old camera and performs it
       places: [a],
       selected: null,
       language: "en",
-      origin: null,
+      currentLocation: null,
+      onLocate() {},
       onSelect() {},
       viewportScale: 1,
       sheetInset: 320,
@@ -334,7 +363,7 @@ test("a changed recommendation collection ignores the old camera and performs it
       },
     };
     const session = createExploreMapSession(
-      { clientHeight: 852 } as HTMLDivElement,
+      canvas(852),
       () => options,
       () => {},
     );
@@ -342,6 +371,37 @@ test("a changed recommendation collection ignores the old camera and performs it
     session.fitRecommendations(true);
     assert.equal(sdk.maps[0].fits.length, 1);
     session.dispose();
+  } finally {
+    sdk.restore();
+  }
+});
+
+test("device location repositions one independent marker and detaches on disposal", () => {
+  const sdk = fakeSdk();
+  try {
+    const session = createExploreMapSession(
+      canvas(852),
+      () => ({
+        places: [],
+        selected: null,
+        language: "en",
+        currentLocation: null,
+        onLocate() {},
+        onSelect() {},
+        viewportScale: 1,
+        sheetInset: 320,
+      }),
+      () => {},
+    );
+    session.setCurrentLocation({ lat: 37.57, lng: 126.98 });
+    assert.equal(sdk.overlays[0].map, sdk.maps[0]);
+    session.setCurrentLocation({ lat: 37.58, lng: 126.99 });
+    assert.equal(sdk.overlays.length, 1);
+    assert.equal(sdk.overlays[0].position?.getLat(), 37.58);
+    assert.equal(sdk.overlays[0].position?.getLng(), 126.99);
+    assert.equal(sdk.maps[0].fits.length, 0);
+    session.dispose();
+    assert.equal(sdk.overlays[0].map, null);
   } finally {
     sdk.restore();
   }
