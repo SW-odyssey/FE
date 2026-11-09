@@ -51,7 +51,11 @@ npm start
 
 `http://localhost:3000`에서 빌드 결과를 확인한다. 이 설정은 Next.js 서버 실행 방식이며 별도 백엔드 API는 연결할 작업이다.
 
-Cloudflare Pages 배포에는 정적 빌드를 사용한다. `/guide/`와 기존 시안 경로도 `out/`에 함께 생성된다.
+GitHub Actions는 PR에서 린트, 테스트, 타입 검사와 Pages 정적 빌드를 실행한다. `main`에 변경이 들어오면 검사를 통과한 `out/`을 Cloudflare Pages의 `local-odyssey` 프로젝트에 올린다. 운영 주소는 [local.hrxlou.com](https://local.hrxlou.com)이다. `/guide/`와 기존 시안 경로도 함께 배포된다.
+
+배포에는 GitHub Actions의 `local-production` 환경을 사용한다. 이 환경은 `main`만 허용하며, `CLOUDFLARE_ACCOUNT_ID` 변수와 Pages 편집 권한을 가진 `CLOUDFLARE_API_TOKEN` 시크릿을 사용한다. 지도 키를 포함할 경우 저장소 변수 `NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY`에 브라우저 공개 키를 등록한다.
+
+같은 `main` 커밋을 다시 배포하려면 Actions에서 **FE CI/CD** 워크플로를 `main`으로 실행한다. GitHub Actions를 사용할 수 없을 때의 수동 배포 명령은 다음과 같다.
 
 ```sh
 LOCAL_PAGES_BUILD=1 npm run build
