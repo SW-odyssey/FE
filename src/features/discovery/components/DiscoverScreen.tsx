@@ -2,9 +2,8 @@
 import type * as React from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
-import { areaLabels } from "../presentation";
 import { DiscoveryControls } from "./DiscoveryControls";
-import { Photo } from "./PlacePhoto";
+import { FeaturedCarousel } from "./FeaturedCarousel";
 import { renderPlaceRow } from "./PlaceRow";
 import { ResourceNotice } from "./ResourceNotice";
 type Props = Pick<
@@ -22,22 +21,13 @@ type Props = Pick<
   | "mapId"
   | "status"
   | "retry"
+  | "featuredId"
+  | "setFeaturedId"
+  | "modal"
 > &
   React.ComponentProps<typeof DiscoveryControls>;
 export function DiscoverScreen(props: Props) {
-  const {
-    kind,
-    language,
-    name,
-    openPlace,
-    query,
-    scroll,
-    resetFilters,
-    t,
-    visible,
-    status,
-    retry,
-  } = props;
+  const { query, scroll, resetFilters, t, visible, status, retry } = props;
   return (
     <div key="places" className="local-content local-places" ref={scroll}>
       <DiscoveryControls {...props} />
@@ -53,22 +43,14 @@ export function DiscoverScreen(props: Props) {
           </div>
         ) : (
           <>
-            <button
-              key={visible[0].id}
-              className="local-featured"
-              onClick={() => openPlace(visible[0])}
-            >
-              <Photo place={visible[0]} eager={true} />
-              <span className="local-featured-copy">
-                <span>
-                  {areaLabels[language][visible[0].area]} {kind(visible[0])}
-                </span>
-                <strong>{name(visible[0])}</strong>
-              </span>
-              <i>
-                <LocalIcon name="arrow-right" size={18} />
-              </i>
-            </button>
+            <FeaturedCarousel
+              key={visible
+                .slice(0, 5)
+                .map((p) => p.id)
+                .join(",")}
+              {...props}
+              places={visible.slice(0, 5)}
+            />
             <div className="local-place-list">
               {visible.slice(1).map((p) => renderPlaceRow(props, p))}
             </div>

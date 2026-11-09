@@ -1,20 +1,30 @@
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import type { LocalPlace } from "../model";
+import {
+  discoveryCopy,
+  recommendationExplanation,
+} from "../recommendation-analysis";
 export function PlaceSummary({
   place,
-  t,
-  summary,
-}: Pick<DiscoveryController, "t" | "summary"> & {
+  analysisFor,
+  language,
+}: Pick<DiscoveryController, "analysisFor" | "language"> & {
   place: LocalPlace;
 }) {
+  const analysis = analysisFor(place);
+  const copy = discoveryCopy[language];
   return (
     <div className="local-ai-summary">
       <span>
         <LocalIcon name="sparkles" size={18} />
-        {t("AI summary", "AI 요약")}
+        {copy.analysis}
       </span>
-      <p>{summary(place)}</p>
+      <p>
+        {analysis
+          ? recommendationExplanation(analysis, language)
+          : copy.unavailable}
+      </p>
     </div>
   );
 }

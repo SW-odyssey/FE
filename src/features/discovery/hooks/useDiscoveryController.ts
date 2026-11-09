@@ -42,6 +42,7 @@ export function useDiscoveryController(
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mapId, setMapId] = useState<string | null>(null);
+  const [featuredId, setFeaturedId] = useState<string | null>(null);
   const [mapScope, setMapScope] = useState<string | null>(null);
   const readingPositions = useRef({ discover: 0, map: 0 });
   const mapCamera = useRef<MapCamera | null>(null);
@@ -255,6 +256,7 @@ export function useDiscoveryController(
     retry,
   } = data;
   const summary = (place: LocalPlace) => data.summaryFor(place, language);
+  const analysisFor = (place: LocalPlace) => data.analyses[place.id];
   const description = (place: LocalPlace) =>
     data.descriptionFor(place, language);
   const mapSelected = visible.find((p) => p.id === mapId) ?? null;
@@ -517,6 +519,9 @@ export function useDiscoveryController(
   }
   return {
     activity,
+    analysisFor,
+    featuredId,
+    setFeaturedId,
     area,
     category,
     applyFilters,
