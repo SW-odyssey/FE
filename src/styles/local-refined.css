@@ -789,7 +789,55 @@
   color: #56657e;
 }
 .local-refined > .local-bottom-nav {
-  transition: opacity 0.18s ease-out;
+  --local-nav-inset-left: 16px;
+  --local-nav-inset-right: 16px;
+  --local-nav-resize: 280ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  left: var(--local-nav-inset-left);
+  right: var(--local-nav-inset-right);
+  width: auto;
+  transition:
+    opacity 180ms ease-out,
+    height var(--local-nav-resize),
+    left var(--local-nav-resize),
+    right var(--local-nav-resize),
+    padding var(--local-nav-resize),
+    border-radius var(--local-nav-resize);
+}
+.local-refined > .local-bottom-nav.is-compact {
+  --local-segment-track-padding: 3px;
+  --local-segment-lens-radius: 22px;
+
+  left: max(var(--local-nav-inset-left), calc((100% - 224px) / 2));
+  right: max(var(--local-nav-inset-right), calc((100% - 224px) / 2));
+  height: 52px;
+  border-radius: 26px;
+}
+.local-refined > .local-bottom-nav > button {
+  min-height: 44px;
+  transition: gap var(--local-nav-resize);
+}
+.local-refined > .local-bottom-nav > button > span:not(.local-icon) {
+  max-height: 16px;
+  overflow: hidden;
+  opacity: 1;
+  transition:
+    opacity 170ms ease,
+    max-height var(--local-nav-resize);
+}
+.local-refined > .local-bottom-nav.is-compact > button {
+  gap: 0;
+}
+.local-refined > .local-bottom-nav.is-compact > button > span:not(.local-icon) {
+  max-height: 0;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .local-refined > .local-bottom-nav,
+  .local-refined > .local-bottom-nav > button,
+  .local-refined > .local-bottom-nav > button > span:not(.local-icon) {
+    transition: none;
+  }
 }
 .local-refined:has(.local-modal-layer:not(.is-closing)) > .local-bottom-nav {
   opacity: 0;
