@@ -1,0 +1,160 @@
+.local-shell.local-web {
+  --local-safe-top: env(safe-area-inset-top, 0px);
+  --local-safe-right: env(safe-area-inset-right, 0px);
+  --local-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --local-safe-left: env(safe-area-inset-left, 0px);
+  --local-search-row-height: 64px;
+  --local-search-block-padding: 8px;
+  --local-places-top: 4px;
+  --local-content-gutter: 24px;
+  --local-nav-bottom: max(12px, var(--local-safe-bottom));
+  --local-nav-height: 64px;
+
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  height: 100vh;
+  height: 100dvh;
+  margin-inline: auto;
+  padding-top: var(--local-safe-top);
+  border-radius: 0;
+  box-shadow: none;
+  isolation: isolate;
+}
+
+.local-web > .local-search-header {
+  height: var(--local-search-row-height);
+  padding-block: var(--local-search-block-padding);
+  padding-left: calc(16px + var(--local-safe-left));
+  padding-right: calc(16px + var(--local-safe-right));
+}
+
+@media (max-width: 520px) {
+  html[data-local-ios-home-screen],
+  html[data-local-ios-home-screen] body {
+    background-color: var(--local-top-surface);
+  }
+
+  [data-local-ios-home-screen] .local-web:has(> .local-search-header) {
+    /* The initial content stays below the search, then scrolls behind it. */
+    --local-places-top: calc(var(--local-search-row-height) + 4px);
+  }
+
+  [data-local-ios-home-screen] .local-web > .local-search-header {
+    position: fixed;
+    inset: 0 0 auto;
+    height: calc(var(--local-safe-top) + var(--local-search-row-height));
+    padding-block: calc(
+        var(--local-safe-top) + var(--local-search-block-padding)
+      )
+      var(--local-search-block-padding);
+    /* Let WebKit sample the color without painting a bar behind the controls. */
+    background-color: var(--local-top-surface);
+    -webkit-background-clip: text;
+    background-clip: text;
+    background-clip: border-area;
+  }
+}
+
+.local-web .local-search:focus-within {
+  border-color: #8a91c9;
+  box-shadow: 0 0 0 2px #767acb30;
+}
+
+.local-web .local-search button {
+  width: 44px;
+  height: 44px;
+  margin-inline-end: 4px;
+  border-radius: 50%;
+}
+
+.local-web .local-places {
+  position: relative;
+  inset: auto;
+  padding-top: var(--local-places-top);
+  padding-right: calc(var(--local-content-gutter) + var(--local-safe-right));
+  padding-bottom: calc(
+    var(--local-nav-height) + var(--local-nav-bottom) + 24px
+  );
+  padding-left: calc(var(--local-content-gutter) + var(--local-safe-left));
+  scroll-padding: var(--local-places-top) 0
+    calc(var(--local-nav-height) + var(--local-nav-bottom) + 8px);
+}
+
+.local-web .local-context {
+  grid-template-columns: minmax(112px, 2fr) minmax(0, 3fr) 44px;
+  padding-inline: 12px 6px;
+}
+
+.local-web .local-context .local-area-select {
+  gap: 6px;
+  padding-right: 6px;
+}
+
+.local-web .local-context .local-time-select {
+  gap: 6px;
+  padding-inline: 8px 4px;
+}
+
+.local-web .local-time-select > span:not(.local-icon) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 16px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.local-web .local-context > .local-filter-button {
+  width: 44px;
+  height: 44px;
+}
+
+.local-web > .local-bottom-nav {
+  --refined-clear: var(--refined-reading);
+
+  left: calc(16px + var(--local-safe-left));
+  right: calc(16px + var(--local-safe-right));
+  bottom: var(--local-nav-bottom);
+  width: auto;
+  height: var(--local-nav-height);
+}
+
+@media (max-height: 480px) {
+  .local-shell.local-web {
+    --local-nav-height: 52px;
+  }
+
+  .local-web > .local-bottom-nav {
+    --local-segment-track-padding: 3px;
+    --local-segment-lens-radius: 22px;
+
+    border-radius: 26px;
+  }
+}
+
+.local-web > .local-detail-back {
+  top: calc(16px + var(--local-safe-top));
+  left: calc(16px + var(--local-safe-left));
+}
+
+.local-web > .local-detail-safe-area {
+  height: var(--local-safe-bottom);
+}
+
+.local-web > .local-toast {
+  bottom: calc(24px + var(--local-safe-bottom));
+}
+
+@media (min-width: 560px) {
+  .local-shell.local-web {
+    box-shadow: 0 0 48px #253b5a14;
+  }
+}
+
+@media (min-width: 560px) and (hover: hover) and (pointer: fine) {
+  .local-shell.local-web {
+    max-width: clamp(360px, 56.25vh, 430px);
+    max-width: clamp(360px, 56.25dvh, 430px);
+  }
+}

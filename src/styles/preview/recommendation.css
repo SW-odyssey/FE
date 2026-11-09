@@ -1,0 +1,167 @@
+/* Recommendation context uses the existing cool glass surfaces and accent. */
+.local-featured-track {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  border-radius: 24px;
+}
+.local-featured-track::-webkit-scrollbar {
+  display: none;
+}
+.local-featured-track > .local-featured {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+.local-featured-track:not([data-loop-ready]) > .is-loop-copy {
+  display: none;
+}
+.local-featured-carousel {
+  position: relative;
+}
+.local-refined .local-featured-copy {
+  bottom: 38px;
+  right: 18px;
+}
+.local-carousel-pagination {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+}
+.local-carousel-pagination > div {
+  display: flex;
+}
+.local-carousel-pagination > div > button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 44px;
+  padding: 0;
+}
+.local-carousel-pagination > div > button > span {
+  width: 5px;
+  height: 5px;
+  border-radius: 4px;
+  background: #ffffff70;
+  box-shadow: 0 1px 3px #00000060;
+}
+.local-carousel-pagination button[aria-current="true"] > span {
+  width: 16px;
+  background: #fff;
+}
+.local-featured-carousel + .local-place-list {
+  margin-top: 16px;
+}
+.local-refined .local-ai-summary > p {
+  font-size: 14px;
+  line-height: 24px;
+}
+.local-refined .local-modal-sheet.is-time {
+  height: auto;
+  max-height: calc(100% - 40px);
+  padding-bottom: 28px;
+}
+.local-visit-options {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+}
+.local-calendar-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+}
+.local-calendar-heading > strong {
+  font-size: 17px;
+  font-weight: 600;
+}
+.local-calendar-heading > div {
+  display: flex;
+}
+.local-calendar-heading button {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.local-calendar-heading button:disabled {
+  opacity: 0.24;
+}
+.local-calendar-weekdays,
+.local-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.local-calendar-weekdays > span {
+  display: grid;
+  place-items: center;
+  min-height: 28px;
+  color: #65738b;
+  font-size: 11px;
+}
+.local-calendar-grid > button {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  height: 44px;
+  padding: 0;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.local-calendar-grid > button > span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+.local-calendar-grid > button:disabled {
+  opacity: 0.28;
+}
+.local-calendar-grid > button[aria-current="date"] > span {
+  box-shadow: inset 0 0 0 1px #a7b1d5;
+}
+.local-calendar-grid > button[aria-pressed="true"] > span {
+  background: #6264b4;
+  color: white;
+  box-shadow: none;
+  font-weight: 600;
+}
+.local-visit-slots {
+  margin-top: 16px;
+}
+.local-selected-time-range {
+  margin-top: 12px;
+  text-align: center;
+  color: #56657e;
+  font-size: 13px;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+  .local-featured-track {
+    scroll-behavior: auto;
+  }
+}
+
+.local-refined .local-filter-button.has-filter:after {
+  width: 6px;
+  height: 6px;
+  top: 5px;
+  right: 5px;
+  background: #6862b7;
+  box-shadow: 0 0 0 2px #e8effa;
+}

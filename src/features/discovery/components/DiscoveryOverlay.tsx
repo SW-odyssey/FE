@@ -1,0 +1,78 @@
+"use client";
+import type * as React from "react";
+import { useLayoutEffect, useRef } from "react";
+import type { DiscoveryController } from "../hooks/useDiscoveryController";
+import { AreaSheet } from "./AreaSheet";
+import { FilterSheet } from "./FilterSheet";
+import { LanguageSheet } from "./LanguageSheet";
+import { VisitTimeSheet } from "./VisitTimeSheet";
+type Props = React.ComponentProps<typeof AreaSheet> &
+  React.ComponentProps<typeof FilterSheet> &
+  React.ComponentProps<typeof VisitTimeSheet> &
+  React.ComponentProps<typeof LanguageSheet> &
+  Pick<
+    DiscoveryController,
+    "closeModal" | "closingModal" | "dialog" | "modal" | "t"
+  >;
+export function DiscoveryOverlay(props: Props) {
+  const { closeModal, closingModal, dialog, modal, t, timeReturn } = props;
+  const body = useRef<HTMLDivElement>(null);
+  const previousPanel = useRef({ modal, timeReturn });
+  useLayoutEffect(() => {
+    const previous = previousPanel.current;
+    previousPanel.current = { modal, timeReturn };
+    const panel = body.current;
+    if (!panel) return;
+
+    if (previous.modal === "filters" && modal === "time" && timeReturn)
+      panel.dataset.panelDirection = "forward";
+    else if (
+      previous.modal === "time" &&
+      previous.timeReturn &&
+      modal === "filters"
+    )
+      panel.dataset.panelDirection = "back";
+  }, [modal, timeReturn]);
+
+  return (
+    <div className={`local-modal-layer ${closingModal ? "is-closing" : ""}`}>
+      <button
+        className="local-scrim"
+        aria-hidden="true"
+        tabIndex={-1}
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={closeModal}
+      />
+      <section
+        ref={dialog}
+        role="dialog"
+        aria-modal="true"
+        tabIndex={-1}
+        aria-label={
+          modal === "area"
+            ? t("Area", "지역")
+            : modal === "filters"
+              ? t("Filters", "필터")
+              : modal === "time"
+                ? t("Visit time", "방문 시간")
+                : t("Language", "언어")
+        }
+        className={
+          modal === "menu" ? "local-drawer" : `local-modal-sheet is-${modal}`
+        }
+      >
+        <div key={modal} ref={body} className="local-modal-body">
+          {modal === "area" ? (
+            <AreaSheet {...props} />
+          ) : modal === "filters" ? (
+            <FilterSheet {...props} />
+          ) : modal === "time" ? (
+            <VisitTimeSheet {...props} />
+          ) : (
+            <LanguageSheet {...props} />
+          )}
+        </div>
+      </section>
+    </div>
+  );
+}
