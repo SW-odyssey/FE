@@ -70,6 +70,12 @@ export function DiscoveryControls(props: Props) {
           aria-pressed={category === id}
           onClick={() => chooseCategory(id)}
         >
+          <LocalIcon
+            name={
+              id === "all" ? "places" : id === "cafe" ? "coffee" : "utensils"
+            }
+            size={16}
+          />
           {id === "all"
             ? t("All", "전체")
             : id === "cafe"

@@ -1,0 +1,76 @@
+/*
+ * Liquid glass: only surfaces that float over moving content (search, bars,
+ * map tools, sheets) are glass. In-flow cards stay flat.
+ */
+:root {
+  /* Specular rim: bright top edge, faint sides and bottom, soft inner glow. */
+  --liquid-rim:
+    inset 0 1px 0 #ffffffe0, inset 0 -1px 0 #ffffff47, inset 1px 0 0 #ffffff5c,
+    inset -1px 0 0 #ffffff5c, inset 0 0 14px #ffffff33;
+}
+
+.local-refined .local-search,
+.local-refined .local-search-header > .local-icon-button,
+.local-refined .local-bottom-nav,
+.local-refined .local-map-tools > button,
+.local-refined .local-map-zoom {
+  box-shadow:
+    var(--liquid-rim),
+    0 6px 22px #314f8014,
+    0 1px 3px #30466d0b;
+}
+
+.local-refined .local-place-sheet,
+.local-refined .local-modal-sheet,
+.local-refined .local-drawer {
+  box-shadow:
+    var(--liquid-rim),
+    0 8px 26px #1d41641a;
+}
+
+/* Chromium only: the rim refracts what passes behind (see LiquidGlassFilter). */
+:root[data-liquid="refract"]
+  .local-refined
+  :is(
+    .local-search,
+    .local-search-header > .local-icon-button,
+    .local-bottom-nav,
+    .local-map-tools > button,
+    .local-map-zoom
+  ) {
+  backdrop-filter: url(#local-liquid) blur(6px) saturate(150%);
+}
+
+:root[data-liquid="refract"]
+  .local-refined
+  :is(.local-place-sheet, .local-modal-sheet, .local-drawer) {
+  backdrop-filter: url(#local-liquid) blur(16px) saturate(125%);
+}
+
+/* In-flow surfaces: flat fill, hairline border, no blur or lift. */
+.local-refined .local-secondary,
+.local-refined .local-map-preview,
+.local-refined .local-ai-summary {
+  background: #f9fbfee6;
+  border: 1px solid #d9e2ef;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-liquid="refract"]
+    .local-refined
+    :is(
+      .local-search,
+      .local-search-header > .local-icon-button,
+      .local-bottom-nav,
+      .local-map-tools > button,
+      .local-map-zoom,
+      .local-place-sheet,
+      .local-modal-sheet,
+      .local-drawer
+    ) {
+    backdrop-filter: none;
+  }
+}

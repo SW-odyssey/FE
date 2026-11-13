@@ -179,7 +179,7 @@
 /* Fade results independently so the search and filter controls stay visible. */
 .local-places > :is(.local-featured-carousel, .local-place-list, .local-empty),
 .local-map-page > :is(.local-explore-map, .local-place-sheet) {
-  animation: local-tab-screen-enter 280ms cubic-bezier(0.24, 0.1, 0.25, 1);
+  animation: local-tab-screen-enter 180ms cubic-bezier(0.24, 0.1, 0.25, 1);
 }
 
 @keyframes local-tab-screen-enter {
@@ -300,14 +300,14 @@
     .local-map-tools > button,
     .local-map-zoom > button
   ) {
-  -webkit-tap-highlight-color: #6b78b326;
+  -webkit-tap-highlight-color: #202b4014;
   transition:
     scale 0.16s ease-out,
     background-color 0.16s ease-out,
     color 0.16s ease-out;
 
   &:active:not(:disabled) {
-    background-color: #6b78b31f;
+    background-color: #202b4010;
     transition-duration: 0.08s;
   }
 
@@ -320,7 +320,7 @@
 .local-category-tabs > button,
 .local-address,
 .local-sheet-summary {
-  border-radius: 12px;
+  border-radius: var(--r-sm);
 }
 .local-featured > .local-photo {
   transition:
@@ -336,7 +336,7 @@
     border-color 0.16s ease-out;
 }
 .local-refined .local-filter-choice-set.is-space > button:active > span {
-  background-color: #d6dff7;
+  background-color: #e3e8ef;
 }
 @media (prefers-reduced-motion: no-preference) {
   .local-featured:active > .local-photo {

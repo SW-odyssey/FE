@@ -66,12 +66,10 @@
   top: 15px;
   background: #7f91b13d;
 }
+/* The area picker carries the full-colour logo symbol (selected and current location). */
 .local-refined .local-area-select:before {
-  background: #65738b;
-}
-.local-refined .local-area-select[data-location="current"]:before {
-  background: var(--local-plum);
-  mask-image: url("/assets/icons/local/map-pin-current.svg");
+  background: url("/assets/icons/local/odi-symbol.png") center/contain no-repeat;
+  mask: none;
 }
 .local-refined .local-context .local-time-select {
   padding-left: 12px;
@@ -95,7 +93,7 @@
   color: #5b6981;
 }
 .local-refined .local-category-tabs button.is-active {
-  color: #5054a2;
+  color: var(--local-plum);
 }
 .local-refined .local-map-page .local-map-tools {
   top: 249px;
@@ -128,9 +126,9 @@
 }
 .local-refined .local-bottom-nav {
   --local-segment-lens-border: transparent;
-  --local-segment-lens-fill: #dbe0f1;
-  --local-segment-lens-shadow: inset 0 0 0 1px #ffffff66;
-  --local-segment-highlight-color: #484a95;
+  --local-segment-lens-fill: #ffffffe6;
+  --local-segment-lens-shadow: 0 1px 4px #1d416414;
+  --local-segment-highlight-color: var(--local-plum);
   --local-segment-highlight-weight: 500;
   --local-segment-reduced-fill: var(--local-segment-lens-fill);
 }
@@ -138,7 +136,7 @@
   color: #53627b;
   font-size: 12px;
   font-weight: var(--local-segment-highlight-weight);
-  transition: color 280ms ease-in-out;
+  transition: color 180ms ease-in-out;
 }
 .local-refined .local-place-sheet {
   background: var(--refined-reading);
@@ -163,11 +161,11 @@
   top: 40px;
 }
 .local-refined .local-sheet-list-layer .local-place-row {
-  border-radius: 16px;
+  border-radius: var(--r-md);
   transition: background 0.18s ease;
 }
 .local-refined .local-sheet-list-layer .local-place-row.is-selected {
-  background: #8e9bda24;
+  background: #202b400d;
 }
 .local-refined
   .local-sheet-list-layer
@@ -178,7 +176,7 @@
   .local-sheet-list-layer
   .local-place-row.is-selected
   > .local-icon {
-  color: #5054a2;
+  color: var(--local-plum);
 }
 .local-refined .local-scope-row {
   display: flex;
@@ -194,19 +192,19 @@
 }
 .local-refined .local-scope-row > button {
   padding: 7px 0 7px 12px;
-  color: #5054a2;
+  color: var(--local-plum);
 }
 .local-refined .local-map-pin {
   display: grid;
   place-items: center;
-  color: #6264b4;
+  color: var(--local-plum);
   background: #f7fbffed;
-  border-color: #6264b470;
+  border-color: var(--local-plum);
   border-width: 1.5px;
 }
 .local-refined .local-map-pin.is-selected {
   color: #fff;
-  background: #6264b4;
+  background: var(--local-plum);
   border-color: #fff;
 }
 .local-refined .local-map-pin:before {
@@ -230,7 +228,7 @@
   height: 36px;
   border: 1.5px solid #fff;
   border-radius: 50%;
-  background: #6264b4;
+  background: var(--local-plum);
   color: #fff;
   font-size: 14px;
   font-weight: 700;
@@ -238,8 +236,8 @@
   box-shadow: 0 1px 5px #263c5b26;
 }
 .local-refined .is-cluster.is-selected .local-cluster-count {
-  background: #42458e;
-  box-shadow: 0 0 0 3px #6264b433;
+  background: var(--local-plum-strong);
+  box-shadow: 0 2px 8px #1d41644d;
 }
 /* All hit targets stay centered on the SDK's geographic coordinate. */
 .local-refined .local-map-pin.is-anchored-place {
@@ -257,10 +255,10 @@
   height: 24px;
   border-radius: 50% 50% 50% 0;
   border: 2px solid #fff;
-  background: #6264b4;
+  background: var(--local-plum);
   mask: none;
   transform: translateY(-4px) rotate(-45deg);
-  box-shadow: 0 0 0 1px #6264b480;
+  box-shadow: 0 0 0 1px var(--local-plum);
   transition:
     background-color 140ms ease,
     box-shadow 140ms ease;
@@ -277,8 +275,8 @@
   transform: translate(-50%, -50%);
 }
 .local-refined .is-anchored-place.is-selected > .local-location-dot {
-  background: #42458e;
-  box-shadow: 0 0 0 3px #6264b433;
+  background: var(--local-plum-strong);
+  box-shadow: 0 2px 8px #1d41644d;
 }
 .local-refined .local-map-caption {
   position: absolute;
@@ -289,7 +287,7 @@
   width: max-content;
   max-width: 132px;
   padding: 4px 7px;
-  border-radius: 6px;
+  border-radius: var(--r-sm);
   background: #fafdfff0;
   color: #34415a;
   box-shadow: 0 1px 4px #263c5b1a;
@@ -353,7 +351,7 @@
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  color: #4f5198;
+  color: var(--local-plum);
 }
 .local-refined .local-cell-count {
   display: grid;
@@ -363,15 +361,15 @@
   padding-inline: 3px;
   border: 1.5px solid #fff;
   border-radius: 50%;
-  background: #6264b4;
+  background: var(--local-plum);
   color: #fff;
-  box-shadow: 0 0 0 1px #6264b44d;
+  box-shadow: 0 0 0 1px var(--local-plum);
   font-size: 11px;
   font-weight: 700;
   line-height: 16px;
 }
 .local-refined .is-selected > .local-cell-count {
-  background: #42458e;
+  background: var(--local-plum-strong);
 }
 .local-refined .local-cell-mark {
   width: 4px;
@@ -390,7 +388,7 @@
   mask-image: url("/assets/icons/local/utensils.svg");
 }
 .local-refined .local-pin-line {
-  background: #6264b480;
+  background: var(--local-plum);
 }
 .local-refined .local-map-tools > button,
 .local-refined .local-map-zoom {
@@ -408,7 +406,7 @@
   flex-direction: column;
   gap: 5px;
   padding: 16px;
-  border-radius: 16px;
+  border-radius: var(--r-md);
   border: 1px solid var(--refined-rim);
   background: var(--refined-reading);
   color: #52617c;
@@ -496,7 +494,7 @@
   bottom: 14px;
   right: 16px;
   padding: 6px 10px;
-  border-radius: 14px;
+  border-radius: var(--r-sm);
   background: #1e2b3d80;
   color: #fff;
   font-size: 11px;
@@ -644,7 +642,7 @@
   min-height: 44px;
   padding: 10px 12px;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: var(--r-sm);
   color: #52617a;
   background: transparent;
   font-size: 14px;
@@ -657,9 +655,9 @@
     border-color 0.16s ease;
 }
 .local-refined .local-filter-choice-set > button[aria-pressed="true"] {
-  color: #45498b;
-  background: #e0e4fa;
-  border-color: #a7b1d5;
+  color: #fff;
+  background: var(--local-plum);
+  border-color: var(--local-plum);
 }
 .local-refined .local-filter-choice-set.is-space {
   display: flex;
@@ -682,15 +680,16 @@
   min-height: 32px;
   padding: 4px 12px;
   border: 1px solid #aabbd142;
-  border-radius: 16px;
+  border-radius: var(--r-sm);
   background: #f7f9fed9;
 }
 .local-refined
   .local-filter-choice-set.is-space
   > button[aria-pressed="true"]
   > span {
-  background: #e0e4fa;
-  border-color: #a7b1d5;
+  background: var(--local-plum);
+  border-color: var(--local-plum);
+  color: #fff;
 }
 .local-refined .local-filter-actions {
   display: grid;
@@ -737,9 +736,9 @@
   background: #d7e2f580;
 }
 .local-refined .local-segment > button.is-active {
-  border-color: #9faed1;
+  border-color: #c3cedd;
   box-shadow: 0 1px 4px #3b557414;
-  color: #5054a2;
+  color: var(--local-plum);
 }
 .local-refined .local-primary,
 .local-refined .local-secondary,
@@ -758,7 +757,7 @@
   max-height: 100%;
   width: 288px;
   padding: 28px 24px 40px;
-  border-radius: 0 24px 24px 0;
+  border-radius: 0 var(--r-lg) var(--r-lg) 0;
 }
 .local-refined .local-drawer .local-modal-body {
   overflow: auto;
@@ -806,12 +805,12 @@
 }
 .local-refined > .local-bottom-nav.is-compact {
   --local-segment-track-padding: 3px;
-  --local-segment-lens-radius: 22px;
+  --local-segment-lens-radius: var(--r-pill);
 
   left: max(var(--local-nav-inset-left), calc((100% - 224px) / 2));
   right: max(var(--local-nav-inset-right), calc((100% - 224px) / 2));
   height: 52px;
-  border-radius: 26px;
+  border-radius: var(--r-pill);
 }
 .local-refined > .local-bottom-nav > button {
   min-height: 44px;

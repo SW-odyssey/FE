@@ -6,6 +6,7 @@
   --local-search-row-height: 64px;
   --local-search-block-padding: 8px;
   --local-places-top: 4px;
+  /* One side margin for every screen (search, lists, map controls, sheet, tab bar). */
   --local-content-gutter: 24px;
   --local-nav-bottom: max(12px, var(--local-safe-bottom));
   --local-nav-height: 64px;
@@ -25,8 +26,8 @@
 .local-web > .local-search-header {
   height: var(--local-search-row-height);
   padding-block: var(--local-search-block-padding);
-  padding-left: calc(16px + var(--local-safe-left));
-  padding-right: calc(16px + var(--local-safe-right));
+  padding-left: calc(var(--local-content-gutter) + var(--local-safe-left));
+  padding-right: calc(var(--local-content-gutter) + var(--local-safe-right));
 }
 
 @media (max-width: 520px) {
@@ -57,8 +58,8 @@
 }
 
 .local-web .local-search:focus-within {
-  border-color: #8a91c9;
-  box-shadow: 0 0 0 2px #767acb30;
+  border-color: var(--local-plum);
+  box-shadow: 0 0 0 1px var(--local-plum);
 }
 
 .local-web .local-search button {
@@ -112,8 +113,8 @@
 
 .local-web > .local-bottom-nav {
   --refined-clear: var(--refined-reading);
-  --local-nav-inset-left: calc(16px + var(--local-safe-left));
-  --local-nav-inset-right: calc(16px + var(--local-safe-right));
+  --local-nav-inset-left: calc(var(--local-content-gutter) + var(--local-safe-left));
+  --local-nav-inset-right: calc(var(--local-content-gutter) + var(--local-safe-right));
 
   bottom: var(--local-nav-bottom);
   height: var(--local-nav-height);
@@ -126,15 +127,15 @@
 
   .local-web > .local-bottom-nav {
     --local-segment-track-padding: 3px;
-    --local-segment-lens-radius: 22px;
+    --local-segment-lens-radius: var(--r-pill);
 
-    border-radius: 26px;
+    border-radius: var(--r-pill);
   }
 }
 
 .local-web > .local-detail-back {
   top: calc(16px + var(--local-safe-top));
-  left: calc(16px + var(--local-safe-left));
+  left: calc(var(--local-content-gutter) + var(--local-safe-left));
 }
 
 .local-web > .local-detail-safe-area {
@@ -156,4 +157,26 @@
     max-width: clamp(360px, 56.25vh, 430px);
     max-width: clamp(360px, 56.25dvh, 430px);
   }
+}
+
+/* Device frame (/guide): the real web layout inside a 393x852 phone. */
+.local-phone-frame > .local-shell.local-web {
+  --local-safe-top: 61px;
+  --local-safe-bottom: 21px;
+
+  position: absolute;
+  width: 393px;
+  max-width: none;
+  height: 852px;
+  margin: 0;
+  border-radius: 45px;
+  box-shadow:
+    0 0 0 8px #202024,
+    0 0 0 10px #b4afb8,
+    0 22px 60px #1b1b1f27;
+}
+
+.local-phone-frame > .local-web > .local-system-bar {
+  position: absolute;
+  inset: 0 0 auto;
 }

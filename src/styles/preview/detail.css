@@ -27,7 +27,7 @@
   flex-direction: column;
   gap: 12px;
 }
-.local-detail-body > h1 {
+.local-detail-heading > h1 {
   font-size: 28px;
 }
 .local-detail-meta {
@@ -37,7 +37,7 @@
 }
 .local-ai-summary {
   background: var(--local-pale);
-  border-radius: 12px;
+  border-radius: var(--r-md);
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -71,19 +71,11 @@
 .local-map-preview {
   display: block;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--r-md);
   background: white;
   width: 100%;
   text-align: left;
   padding: 0;
-}
-.local-map-preview > span {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  padding: 0 12px;
-  font-size: 14px;
 }
 .local-thumbnail-map {
   height: 104px;
@@ -110,10 +102,6 @@
   font-size: 12px;
   line-height: 18px;
   color: #6a606f;
-}
-.local-place-source summary {
-  cursor: pointer;
-  width: fit-content;
 }
 .local-place-source p {
   padding: 8px 0;

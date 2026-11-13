@@ -1,15 +1,23 @@
 /* Cool glass material: shared by navigation, controls, and sheet surfaces. */
 :root {
-  --local-plum: #6264b4;
+  /* Corner scale: chips and small controls, cards and fields, sheets and bars. */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  /* Floating controls on their own (search, language, tab bar) are capsules. */
+  --r-pill: 999px;
+  /* Logo deep purple: the only accent; no pale purple tints. */
+  --local-plum: #4a1db0;
+  --local-plum-strong: #3a1590;
   --local-ink: #202b40;
   --local-muted: #65738b;
   --local-bg: #eef3fa;
   --local-top-surface: #e4eef9;
-  --local-pale: #e5e9fa;
+  --local-pale: #eef2f7;
   --local-border: #d6dfed;
   --glass-fill: linear-gradient(145deg, #ffffff52, #e8f3ff29);
   --glass-rim: #ffffff85;
-  --glass-control-radius: 24px;
+  --glass-control-radius: var(--r-md);
   --glass-shadow: 0 7px 24px #314f8014, 0 1px 3px #30466d0b;
 }
 body {
@@ -23,8 +31,8 @@ body {
       transparent calc(var(--local-safe-top, 0px) + 112px)
     ),
     radial-gradient(ellipse at -5% 8%, #cce4f7 0, transparent 55%),
-    radial-gradient(ellipse at 110% 48%, #d1d8f0 0, transparent 54%),
-    linear-gradient(160deg, #f4f8fd, #e9f0f9 65%, #edf0fa);
+    radial-gradient(ellipse at 110% 48%, #d3e1ee 0, transparent 54%),
+    linear-gradient(160deg, #f4f8fd, #e9f0f9 65%, #edf2f8);
   color: var(--local-ink);
 }
 .local-search-header {
@@ -51,16 +59,16 @@ body {
 }
 .local-search,
 .local-search-header > .local-icon-button {
-  border-radius: var(--glass-control-radius);
+  border-radius: var(--r-pill);
 }
 .local-search input::placeholder {
   color: #647188;
 }
 .local-search:focus-within {
-  border-color: #9faedb;
+  border-color: var(--local-plum);
   box-shadow:
     var(--glass-shadow),
-    0 0 0 3px #777acb19;
+    0 0 0 1px var(--local-plum);
 }
 .local-discovery-controls {
   width: 100%;
@@ -108,7 +116,7 @@ body {
 .local-context > .local-filter-button {
   width: 40px;
   height: 40px;
-  border-radius: 20px;
+  border-radius: var(--r-sm);
 }
 .local-discovery-controls > .local-context {
   background: transparent;
@@ -129,7 +137,7 @@ body {
 }
 .local-category-tabs button.is-active,
 .local-discovery-controls .local-category-tabs button.is-active {
-  color: #5558a4;
+  color: var(--local-plum);
 }
 .local-map-context .local-icon-button,
 .local-context > .local-filter-button {
@@ -145,7 +153,7 @@ body {
   scroll-padding-top: 129px;
 }
 .local-featured {
-  border-radius: 24px;
+  border-radius: var(--r-md);
   box-shadow:
     0 7px 22px #243e6314,
     0 0 0 1px #ffffffa3;
@@ -169,14 +177,14 @@ body {
   width: 361px;
   height: 64px;
   padding: var(--local-segment-track-padding);
-  border-radius: 32px;
+  border-radius: var(--r-pill);
   z-index: 20;
 }
 .local-bottom-nav.local-segment-control {
   --local-segment-track-padding: 8px;
   --local-segment-item-inset: 0px;
-  --local-segment-lens-radius: 23px;
-  --local-segment-slide: transform 360ms cubic-bezier(0.38, 0, 0.25, 1);
+  --local-segment-lens-radius: var(--r-pill);
+  --local-segment-slide: transform 240ms cubic-bezier(0.32, 0, 0.2, 1);
 }
 .local-bottom-nav {
   background: linear-gradient(145deg, #ffffff45, #e8f3ff24);
@@ -213,7 +221,7 @@ body {
   left: 16px;
   width: 361px;
   bottom: 98px;
-  border-radius: 28px;
+  border-radius: var(--r-lg);
   background: linear-gradient(155deg, #f9fcff70, #eaf4ff45);
   box-shadow: 0 8px 24px #1d41641a;
 }
@@ -265,7 +273,7 @@ body {
 .local-sheet-thumbnails > .local-photo {
   width: 32px;
   height: 32px;
-  border-radius: 10px;
+  border-radius: var(--r-sm);
   border: 2px solid #eaf1fb;
 }
 .local-sheet-thumbnails > .local-photo + .local-photo {
@@ -291,7 +299,7 @@ body {
 .local-sheet-list-layer .local-place-row > .local-photo {
   width: 64px;
   height: 64px;
-  border-radius: 14px;
+  border-radius: var(--r-sm);
 }
 .local-sheet-list-layer .local-place-info strong {
   font-size: 18px;
@@ -313,23 +321,23 @@ body {
 }
 .local-map-tools > button,
 .local-map-zoom {
-  border-radius: 17px;
+  border-radius: var(--r-md);
 }
 .local-map-zoom > button + button {
   border-color: #c5d3e75c;
 }
 .local-map-tools > button.is-active {
-  background: #dce3f5bf;
-  border-color: #a5aed2;
+  background: #ffffffeb;
+  border-color: var(--local-plum);
 }
 .local-map-pin {
   background: #f7fbffed;
   box-shadow: 0 3px 12px #293f6b29;
 }
 .local-map-pin.is-selected {
-  background: #6264b4;
+  background: var(--local-plum);
   box-shadow:
-    0 0 0 1px #6264b45c,
+    0 0 0 1px #ffffff,
     0 4px 12px #2e40703d;
 }
 .is-cell-preview .local-map-pin:before {
@@ -340,7 +348,7 @@ body {
 }
 .local-primary,
 .local-secondary {
-  border-radius: 16px;
+  border-radius: var(--r-md);
 }
 .local-primary {
   background: var(--local-plum);
@@ -348,23 +356,23 @@ body {
   box-shadow: none;
 }
 .local-primary:hover {
-  background: #5558a4;
+  background: var(--local-plum-strong);
 }
 .local-ai-summary {
-  background: linear-gradient(145deg, #e6ecfbc7, #dfe5f7a3);
+  background: #f9fbfee6;
   border: 1px solid #ffffffb0;
   box-shadow: none;
 }
 .local-ai-summary,
 .local-map-preview {
-  border-radius: 20px;
+  border-radius: var(--r-md);
 }
 .local-round {
   color: #354562;
 }
 .local-modal-sheet {
   background: linear-gradient(150deg, #fafdffcf, #edf3ffb8);
-  border-radius: 32px 32px 0 0;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
   border-bottom: 0;
   padding-bottom: 40px;
 }
@@ -382,7 +390,7 @@ body {
 .local-modal-sheet .local-secondary {
   height: 48px;
   min-height: 48px;
-  border-radius: 16px;
+  border-radius: var(--r-md);
 }
 .local-time-actions {
   display: grid;
@@ -426,10 +434,10 @@ body {
 .local-segment {
   background: #d9e3f18c;
   border: 1px solid #ffffffa8;
-  border-radius: 17px;
+  border-radius: var(--r-md);
 }
 .local-segment > button {
-  border-radius: 13px;
+  border-radius: var(--r-sm);
 }
 .local-segment > button.is-active {
   background: linear-gradient(150deg, #ffffffed, #eff4ffbf);
@@ -441,7 +449,7 @@ body {
 .local-wheel-band {
   background: #e2eaf6a3;
   border: 1px solid #ffffffa8;
-  border-radius: 16px;
+  border-radius: var(--r-md);
 }
 .local-wheel button {
   color: #8190a7;

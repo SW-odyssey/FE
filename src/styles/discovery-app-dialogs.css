@@ -65,7 +65,7 @@
   display: grid;
   grid-template-columns: repeat(var(--local-segment-count), minmax(0, 1fr));
   padding: 0;
-  border-radius: 22px;
+  border-radius: var(--r-md);
   background: #e0e8f4b3;
 }
 
@@ -80,7 +80,7 @@
     (100% - 2 * var(--local-segment-track-padding)) / var(--local-segment-count) -
       var(--local-segment-item-gap)
   );
-  border-radius: var(--local-segment-lens-radius, 18px);
+  border-radius: var(--local-segment-lens-radius, var(--r-sm));
   pointer-events: none;
   transform: translateX(
     calc(var(--local-segment-position) * (100% + var(--local-segment-item-gap)))
@@ -142,7 +142,7 @@
   min-width: 0;
   padding: 4px;
   border: 0;
-  border-radius: 22px;
+  border-radius: var(--r-sm);
   background: transparent;
   color: #52617a;
   font-size: 13px;
@@ -152,7 +152,7 @@
 }
 
 .local-refined .local-segment-control > button[data-highlighted] {
-  color: var(--local-segment-highlight-color, #45498b);
+  color: var(--local-segment-highlight-color, var(--local-plum));
   font-weight: var(--local-segment-highlight-weight, 600);
 }
 
@@ -186,7 +186,7 @@
 
 .local-refined .local-filter-choice-set.is-space > button > span {
   min-height: 36px;
-  border-radius: 18px;
+  border-radius: var(--r-sm);
 }
 
 .local-refined .local-calendar-grid > button > span {

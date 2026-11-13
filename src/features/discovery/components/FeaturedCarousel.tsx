@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import type { LocalPlace } from "../model";
 import { areaLabels } from "../presentation";
@@ -191,10 +192,11 @@ export function FeaturedCarousel({
       <>
         <Photo place={place} eager={eager} />
         <span className="local-featured-copy">
+          <strong>{name(place)}</strong>
           <span>
+            <LocalIcon name="map-pin" size={13} />
             {areaLabels[language][place.area]} · {kind(place)}
           </span>
-          <strong>{name(place)}</strong>
         </span>
       </>
     );
