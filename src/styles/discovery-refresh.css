@@ -167,8 +167,9 @@ body {
 .local-shell.local-refined .local-detail-hero {
   aspect-ratio: 393 / 300;
 }
-/* Back: a white circular button. */
+/* Back: a white circular button. No padding, so the 36px chevron centres in the 44px circle. */
 .local-shell.local-refined .local-detail-back {
+  padding: 0;
   background: #fffffff2;
   border: 0;
   color: var(--refresh-ink);
