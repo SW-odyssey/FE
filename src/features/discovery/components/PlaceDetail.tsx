@@ -17,7 +17,6 @@ type Props = Pick<
   | "selected"
   | "showPlaceOnMap"
   | "analysisFor"
-  | "timeLabel"
   | "t"
 > & { selected: NonNullable<DiscoveryController["selected"]> };
 export function PlaceDetail(props: Props) {
@@ -32,20 +31,9 @@ export function PlaceDetail(props: Props) {
     selected,
     showPlaceOnMap,
     analysisFor,
-    timeLabel,
     t,
   } = props;
   const area = areaLabels[language][selected.area];
-  // Only facts the data source already carries: no ratings, hours or distance.
-  const facts = [
-    {
-      icon: selected.category === "cafe" ? "coffee" : "utensils",
-      value: kind(selected),
-      label: t("Type", "유형"),
-    },
-    { icon: "map-pin", value: area, label: t("Area", "지역") },
-    { icon: "clock", value: timeLabel, label: t("Visit time", "방문 시간") },
-  ];
   return (
     <div
       key={`place-${selected.id}`}
@@ -66,15 +54,6 @@ export function PlaceDetail(props: Props) {
             {area} · {kind(selected)}
           </p>
         </header>
-        <dl className="local-detail-facts">
-          {facts.map((fact) => (
-            <div key={fact.label}>
-              <LocalIcon name={fact.icon} size={18} />
-              <dd>{fact.value}</dd>
-              <dt>{fact.label}</dt>
-            </div>
-          ))}
-        </dl>
         <PlaceSummary
           place={selected}
           analysisFor={analysisFor}
