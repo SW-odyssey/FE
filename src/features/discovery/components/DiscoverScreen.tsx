@@ -2,6 +2,7 @@
 import type * as React from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
+import { discoveryCopy } from "../recommendation-analysis";
 import { DiscoveryControls } from "./DiscoveryControls";
 import { FeaturedCarousel } from "./FeaturedCarousel";
 import { renderPlaceRow } from "./PlaceRow";
@@ -27,7 +28,8 @@ type Props = Pick<
 > &
   React.ComponentProps<typeof DiscoveryControls>;
 export function DiscoverScreen(props: Props) {
-  const { query, scroll, resetFilters, t, visible, status, retry } = props;
+  const { query, scroll, resetFilters, t, visible, status, retry, language } =
+    props;
   return (
     <div key="places" className="local-content local-places" ref={scroll}>
       <DiscoveryControls {...props} />
@@ -43,6 +45,9 @@ export function DiscoverScreen(props: Props) {
           </div>
         ) : (
           <>
+            <h2 className="local-section-title">
+              {discoveryCopy[language].featured}
+            </h2>
             <FeaturedCarousel
               key={visible
                 .slice(0, 5)
@@ -51,6 +56,11 @@ export function DiscoverScreen(props: Props) {
               {...props}
               places={visible.slice(0, 5)}
             />
+            {visible.length > 1 && (
+              <h2 className="local-section-title">
+                {t("More places", "더 둘러보기")}
+              </h2>
+            )}
             <div className="local-place-list">
               {visible.slice(1).map((p) => renderPlaceRow(props, p))}
             </div>

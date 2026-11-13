@@ -27,8 +27,8 @@
 
 .local-web .local-map-context,
 .local-web .local-place-sheet {
-  left: calc(16px + var(--local-safe-left));
-  right: calc(16px + var(--local-safe-right));
+  left: calc(var(--local-content-gutter) + var(--local-safe-left));
+  right: calc(var(--local-content-gutter) + var(--local-safe-right));
 }
 
 .local-web .local-map-context {
@@ -55,7 +55,7 @@
 
 .local-web .local-map-page .local-map-tools {
   top: 4px;
-  right: calc(16px + var(--local-safe-right));
+  right: calc(var(--local-content-gutter) + var(--local-safe-right));
 }
 
 .local-web .local-map-tools > * {
@@ -88,7 +88,7 @@
 
 .local-web .local-map-chrome .local-refined-map-status {
   top: 0;
-  left: calc(16px + var(--local-safe-left));
+  left: calc(var(--local-content-gutter) + var(--local-safe-left));
   right: calc(72px + var(--local-safe-right));
 }
 

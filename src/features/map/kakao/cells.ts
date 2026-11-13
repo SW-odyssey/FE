@@ -29,9 +29,10 @@ export function createMapCells(map: kakao.maps.Map) {
       const polygon = new kakao.maps.Polygon({
         map,
         path: cell.polygon.map(([lng, lat]) => new kakao.maps.LatLng(lat, lng)),
-        fillColor: "#6264b4",
-        fillOpacity: selected ? 0.24 : close ? 0.05 : 0.12,
-        strokeColor: "#6264b4",
+        // Neutral fill so cells never read as pale purple; the brand stays on the outline.
+        fillColor: "#202b40",
+        fillOpacity: selected ? 0.14 : close ? 0.03 : 0.07,
+        strokeColor: "#4a1db0",
         strokeOpacity: selected ? 0.85 : close ? 0.18 : 0.4,
         strokeWeight: selected ? 1.5 : 0.8,
         zIndex: 2,

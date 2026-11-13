@@ -1,0 +1,508 @@
+/*
+ * Places and place detail refresh: warm neutral ground, white cards, pill
+ * chips and a detail sheet over the photo. The logo purple stays the accent.
+ * `.local-shell.local-refined` outranks the earlier glass and refined rules.
+ */
+:root {
+  --refresh-ground: #f6f5f3;
+  --refresh-card: #fff;
+  --refresh-line: #ebe9e5;
+  --refresh-ink: #1b1b1f;
+  --refresh-muted: #6e6e76;
+  --refresh-shadow: 0 2px 12px #1b1b1f0d;
+}
+body {
+  background: #efeeeb;
+}
+.local-shell.local-refined {
+  --local-ink: var(--refresh-ink);
+  --local-muted: var(--refresh-muted);
+  --refined-clear: linear-gradient(145deg, #ffffffeb, #ffffffd1);
+  background: var(--refresh-ground);
+  color: var(--refresh-ink);
+}
+
+/* Search and language: white capsules. */
+.local-shell.local-refined .local-search,
+.local-shell.local-refined .local-search-header > .local-icon-button {
+  border-color: #ffffffcc;
+  box-shadow: var(--liquid-rim), var(--refresh-shadow);
+}
+.local-shell.local-refined .local-search input::placeholder {
+  color: #8a8a92;
+}
+.local-shell.local-refined .local-search-field > .local-icon,
+.local-shell.local-refined .local-search input {
+  color: var(--refresh-ink);
+}
+
+/* Area, time and filter sit in one white capsule; types become chips. */
+.local-shell.local-refined .local-discovery-controls {
+  width: 100%;
+  margin: 0 0 4px;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.local-shell.local-refined .local-discovery-controls > .local-context {
+  height: 52px;
+  background: var(--refresh-card);
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-pill);
+  box-shadow: var(--refresh-shadow);
+}
+.local-shell.local-refined .local-context .local-time-select,
+.local-shell.local-refined .local-context > .local-filter-button {
+  color: var(--refresh-ink);
+}
+.local-shell.local-refined .local-area-select:after {
+  background: var(--refresh-line);
+}
+.local-shell.local-refined .local-discovery-controls > .local-category-tabs {
+  justify-content: flex-start;
+  gap: 8px;
+  height: auto;
+  margin: 12px 0 0;
+  padding: 0;
+  border: 0;
+}
+.local-shell.local-refined
+  .local-discovery-controls
+  .local-category-tabs
+  button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-pill);
+  background: var(--refresh-card);
+  color: var(--refresh-ink);
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: var(--refresh-shadow);
+}
+.local-shell.local-refined
+  .local-discovery-controls
+  .local-category-tabs
+  button.is-active {
+  background: var(--local-plum);
+  border-color: var(--local-plum);
+  color: #fff;
+}
+.local-shell.local-refined .local-category-tabs button::after {
+  display: none;
+}
+
+/* Section headings and cards on the places list. */
+.local-shell.local-refined .local-section-title {
+  margin: 20px 0 12px;
+  color: var(--refresh-ink);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+}
+.local-shell.local-refined .local-featured,
+.local-shell.local-refined .local-featured-track {
+  border-radius: var(--r-lg);
+}
+.local-shell.local-refined .local-featured {
+  box-shadow: 0 6px 20px #1b1b1f1f;
+}
+.local-shell.local-refined .local-featured-copy {
+  gap: 4px;
+}
+.local-shell.local-refined .local-featured-copy > strong {
+  font-size: 22px;
+  line-height: 28px;
+}
+.local-shell.local-refined .local-featured-copy > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.92;
+}
+.local-shell.local-refined .local-places .local-place-list {
+  gap: 10px;
+  margin-top: 0;
+}
+.local-shell.local-refined .local-places .local-place-row {
+  min-height: 0;
+  gap: 14px;
+  padding: 10px;
+  background: var(--refresh-card);
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--refresh-shadow);
+}
+.local-shell.local-refined .local-places .local-place-row > .local-photo {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-md);
+}
+.local-shell.local-refined .local-places .local-place-info strong {
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 700;
+}
+.local-shell.local-refined .local-place-info > span,
+.local-shell.local-refined .local-detail-meta {
+  color: var(--refresh-muted);
+}
+.local-shell.local-refined .local-place-row > .local-icon {
+  color: #b4b4bb;
+}
+
+/* Detail: photo, then a white sheet that overlaps it. */
+.local-shell.local-refined .local-detail {
+  background: var(--refresh-card);
+}
+.local-shell.local-refined .local-detail-hero {
+  aspect-ratio: 393 / 300;
+}
+/* Back: a white circular button. No padding, so the 36px chevron centres in the 44px circle. */
+.local-shell.local-refined .local-detail-back {
+  padding: 0;
+  background: #fffffff2;
+  border: 0;
+  color: var(--refresh-ink);
+  box-shadow: 0 2px 10px #1b1b1f26;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.local-shell.local-refined .local-detail-back:active {
+  background: #f0efec;
+}
+/* Photo paging: a bare chevron on the photo, unlike the back button. */
+.local-shell.local-refined .local-gallery-arrow {
+  top: calc(50% - 22px);
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  box-shadow: none;
+  filter: drop-shadow(0 1px 3px #000000a6);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.local-shell.local-refined .local-gallery-arrow > .local-icon {
+  width: 34px;
+  height: 34px;
+}
+.local-shell.local-refined .local-gallery-arrow:active {
+  background: none;
+  opacity: 0.7;
+}
+.local-shell.local-refined .local-gallery-arrow.is-previous {
+  left: calc(4px + var(--local-safe-left, 0px));
+}
+.local-shell.local-refined .local-gallery-arrow.is-next {
+  right: calc(4px + var(--local-safe-right, 0px));
+}
+.local-shell.local-refined .local-gallery-arrow:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+.local-shell.local-refined .local-gallery-count {
+  bottom: 36px;
+}
+.local-shell.local-refined .local-detail-body {
+  position: relative;
+  z-index: 1;
+  gap: 24px;
+  margin-top: -24px;
+  padding-top: 24px;
+  padding-bottom: 16px;
+  background: var(--refresh-card);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+}
+.local-detail-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.local-shell.local-refined .local-detail-heading > h1 {
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 800;
+}
+.local-shell.local-refined .local-detail-heading .local-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+.local-shell.local-refined .local-ai-summary {
+  padding: 16px;
+  background: var(--refresh-ground);
+  border: 0;
+  border-radius: var(--r-md);
+}
+.local-detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.local-detail-section > h2 {
+  color: var(--refresh-ink);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 24px;
+}
+.local-detail-section > p:not(.local-place-source) {
+  color: #45454c;
+  font-size: 14px;
+  line-height: 22px;
+}
+.local-shell.local-refined .local-place-source {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--refresh-muted);
+  font-size: 12px;
+  line-height: 18px;
+}
+.local-shell.local-refined .local-address {
+  color: #45454c;
+}
+.local-shell.local-refined .local-map-preview {
+  background: var(--refresh-card);
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-md);
+  box-shadow: none;
+}
+.local-detail-action {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding: 12px
+    calc(var(--local-content-gutter, 24px) + var(--local-safe-right, 0px))
+    calc(12px + var(--local-safe-bottom, 0px))
+    calc(var(--local-content-gutter, 24px) + var(--local-safe-left, 0px));
+  background: linear-gradient(#ffffff00, #fff 32%);
+}
+.local-detail-action > .local-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 52px;
+  border-radius: var(--r-md);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+}
+.local-shell.local-refined .local-detail-safe-area {
+  background: var(--refresh-card);
+}
+
+/* Map tab: the same white cards and neutral text over the map. */
+.local-shell.local-refined.is-map-mode::before {
+  background: linear-gradient(
+    to bottom,
+    var(--refresh-ground) var(--local-safe-top, 0px),
+    #f6f5f3b3 calc(var(--local-safe-top, 0px) + 24px),
+    #f6f5f300
+  );
+}
+.local-shell.local-refined .local-map-tools > button,
+.local-shell.local-refined .local-map-zoom,
+.local-shell.local-refined .local-refined-map-status {
+  background: #fffffff2;
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-md);
+  box-shadow: var(--liquid-rim), var(--refresh-shadow);
+  color: var(--refresh-ink);
+}
+.local-shell.local-refined .local-map-zoom > button + button {
+  border-color: var(--refresh-line);
+}
+.local-shell.local-refined .local-map-tools > button.is-active {
+  border-color: var(--local-plum);
+  color: var(--local-plum);
+}
+.local-shell.local-refined .local-refined-map-status {
+  color: var(--refresh-muted);
+}
+.local-shell.local-refined .local-refined-map-status strong {
+  color: var(--refresh-ink);
+}
+.local-shell.local-refined .local-place-sheet {
+  background: #ffffffeb;
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-lg);
+  box-shadow:
+    var(--liquid-rim),
+    0 8px 28px #1b1b1f1f;
+}
+.local-shell.local-refined .local-sheet-handle span {
+  background: #d4d2cd;
+}
+.local-shell.local-refined .local-sheet-summary strong {
+  color: var(--refresh-ink);
+}
+.local-shell.local-refined .local-sheet-thumbnails > .local-photo {
+  border-color: #fff;
+}
+.local-shell.local-refined .local-scope-row {
+  color: var(--refresh-muted);
+}
+.local-shell.local-refined .local-sheet-list-layer .local-place-row {
+  min-height: 84px;
+  padding: 10px 8px;
+  border-radius: 0;
+}
+.local-shell.local-refined
+  .local-sheet-list-layer
+  .local-place-row
+  + .local-place-row {
+  border-top: 1px solid var(--refresh-line);
+}
+.local-shell.local-refined
+  .local-sheet-list-layer
+  .local-place-row.is-selected {
+  background: var(--refresh-ground);
+  border-radius: var(--r-md);
+  box-shadow: none;
+}
+.local-shell.local-refined
+  .local-sheet-list-layer
+  .local-place-row
+  > .local-photo {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-md);
+}
+.local-shell.local-refined .local-sheet-list-layer .local-place-info strong {
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 700;
+}
+.local-shell.local-refined .local-sheet-list-layer .local-place-info > span {
+  font-size: 13px;
+  line-height: 19px;
+}
+.local-shell.local-refined .local-map-caption {
+  background: #fff;
+  color: var(--refresh-ink);
+  box-shadow: var(--refresh-shadow);
+}
+.local-shell.local-refined .local-map-pin {
+  background: #fff;
+  box-shadow: 0 2px 8px #1b1b1f2e;
+}
+.local-shell.local-refined .local-map-pin.is-selected {
+  background: var(--local-plum);
+}
+
+/* Map sheet list: tighter sides so rows use the card width. */
+.local-shell.local-refined .local-sheet-list-layer {
+  left: 12px;
+  right: 12px;
+}
+
+/* Tab bar: white capsule, warm lens. */
+.local-shell.local-refined > .local-bottom-nav {
+  --local-segment-lens-fill: var(--refresh-ground);
+  --local-segment-lens-shadow: none;
+  background: #ffffffe6;
+  border-color: var(--refresh-line);
+  box-shadow:
+    var(--liquid-rim),
+    0 6px 22px #1b1b1f14;
+}
+.local-shell.local-refined > .local-bottom-nav button:not([data-highlighted]) {
+  color: var(--refresh-muted);
+}
+
+/* Dialogs (filters, visit time, area, language) on the same warm white. */
+.local-shell.local-refined .local-scrim {
+  background: #1b1b1f33;
+}
+.local-shell.local-refined .local-modal-sheet,
+.local-shell.local-refined .local-modal-sheet.is-filters,
+.local-shell.local-refined .local-drawer {
+  background: #fffffff7;
+  border-color: var(--refresh-line);
+}
+.local-shell.local-refined .local-sheet-title h2 {
+  color: var(--refresh-ink);
+}
+.local-shell.local-refined .local-close {
+  border: 0;
+  background: var(--refresh-ground);
+  color: var(--refresh-ink);
+}
+.local-shell.local-refined .local-close:hover {
+  background: var(--refresh-line);
+}
+.local-shell.local-refined .local-drag-indicator {
+  background: #d4d2cd;
+}
+.local-shell.local-refined .local-filter-group h3 {
+  margin-bottom: 8px;
+  color: var(--refresh-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+.local-shell.local-refined .local-filter-group {
+  margin-bottom: 20px;
+}
+.local-shell.local-refined
+  .local-segment-control:is(.is-ambience, .local-visit-slots) {
+  background: var(--refresh-ground);
+}
+.local-shell.local-refined
+  .local-segment-control:is(.is-ambience, .local-visit-slots)
+  > button {
+  color: var(--refresh-muted);
+}
+.local-shell.local-refined .local-filter-choice-set.is-space > button > span {
+  min-height: 36px;
+  padding: 6px 14px;
+  background: var(--refresh-card);
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-pill);
+  color: var(--refresh-ink);
+}
+.local-shell.local-refined
+  .local-filter-choice-set.is-space
+  > button[aria-pressed="true"]
+  > span {
+  background: var(--local-plum);
+  border-color: var(--local-plum);
+  color: #fff;
+}
+.local-shell.local-refined .local-filter-visit-time,
+.local-shell.local-refined .local-filter-visit-time > span:first-child {
+  color: var(--refresh-ink);
+}
+.local-shell.local-refined .local-filter-visit-time > span:last-child,
+.local-shell.local-refined .local-filter-reset,
+.local-shell.local-refined .local-selected-time-range,
+.local-shell.local-refined .local-calendar-weekdays > span {
+  color: var(--refresh-muted);
+}
+.local-shell.local-refined .local-secondary {
+  background: var(--refresh-card);
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-md);
+  box-shadow: var(--refresh-shadow);
+}
+.local-shell.local-refined .local-language-options button {
+  border-bottom-color: var(--refresh-line);
+}
+.local-shell.local-refined .local-toast {
+  background: #1b1b1fe6;
+}

@@ -158,6 +158,9 @@ const copy: Record<string, readonly [string, string]> = {
   Exterior: ["外観", "外观"],
   Interior: ["店内", "室内"],
   "Food and drinks": ["料理・ドリンク", "餐饮"],
+  "More places": ["ほかのお店", "更多店铺"],
+  "About this place": ["お店について", "关于这家店"],
+  "Getting there": ["アクセス", "交通位置"],
 };
 export function localText(
   language: DiscoveryLanguage,

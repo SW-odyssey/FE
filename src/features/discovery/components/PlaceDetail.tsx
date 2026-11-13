@@ -33,64 +33,73 @@ export function PlaceDetail(props: Props) {
     analysisFor,
     t,
   } = props;
+  const area = areaLabels[language][selected.area];
   return (
     <div
       key={`place-${selected.id}`}
       className="local-content local-detail"
       ref={scroll}
     >
-      {
-        <PhotoGallery
-          key={selected.id}
-          place={selected}
-          language={language}
-          photos={photosFor(selected)}
-        />
-      }
+      <PhotoGallery
+        key={selected.id}
+        place={selected}
+        language={language}
+        photos={photosFor(selected)}
+      />
       <div className="local-detail-body">
-        <h1>{name(selected)}</h1>
-
-        {
-          <PlaceSummary
-            place={selected}
-            analysisFor={analysisFor}
-            language={language}
-          />
-        }
-        <p className="local-detail-meta local-info-kind">
-          <LocalIcon
-            name={selected.category === "cafe" ? "coffee" : "utensils"}
-            size={18}
-          />
-          {kind(selected)}, {areaLabels[language][selected.area]}
-        </p>
-        <button className="local-address" onClick={() => copyAddress(selected)}>
-          <LocalIcon name="map-pin" size={18} />
-          <span>{selected.address}</span>
-          <LocalIcon name="copy" size={17} />
-        </button>
-        <details className="local-place-source">
-          <summary>{t("Place information", "장소 정보")}</summary>
-          <p>{description(selected)}</p>
-          <a href={selected.sourceUrl} target="_blank" rel="noreferrer">
-            {t("Original source", "원문 보기")} ↗
-          </a>
-          <p>
-            {t("Photo", "사진")}{" "}
-            {[
-              ...new Set(photosFor(selected).map((photo) => photo.credit)),
-            ].join(" / ")}
+        <header className="local-detail-heading">
+          <h1>{name(selected)}</h1>
+          <p className="local-detail-meta">
+            <LocalIcon name="map-pin" size={15} />
+            {area} · {kind(selected)}
           </p>
-        </details>
+        </header>
+        <PlaceSummary
+          place={selected}
+          analysisFor={analysisFor}
+          language={language}
+        />
+        <section className="local-detail-section">
+          <h2>{t("About this place", "장소 소개")}</h2>
+          <p>{description(selected)}</p>
+          <p className="local-place-source">
+            <a href={selected.sourceUrl} target="_blank" rel="noreferrer">
+              {t("Original source", "원문 보기")} ↗
+            </a>
+            <span>
+              {t("Photo", "사진")}{" "}
+              {[
+                ...new Set(photosFor(selected).map((photo) => photo.credit)),
+              ].join(" / ")}
+            </span>
+          </p>
+        </section>
+        <section className="local-detail-section">
+          <h2>{t("Getting there", "위치")}</h2>
+          <button
+            className="local-address"
+            onClick={() => copyAddress(selected)}
+          >
+            <LocalIcon name="map-pin" size={18} />
+            <span>{selected.address}</span>
+            <LocalIcon name="copy" size={17} />
+          </button>
+          <button
+            className="local-map-preview"
+            onClick={() => showPlaceOnMap(selected)}
+            aria-label={t("View on map", "지도에서 보기")}
+          >
+            <MiniMap place={selected} />
+          </button>
+        </section>
+      </div>
+      <div className="local-detail-action">
         <button
-          className="local-map-preview"
+          className="local-primary"
           onClick={() => showPlaceOnMap(selected)}
         >
-          <MiniMap place={selected} />
-          <span>
-            {t("View on map", "지도에서 보기")}
-            <LocalIcon name="chevron-right" size={16} />
-          </span>
+          {t("View on map", "지도에서 보기")}
+          <LocalIcon name="arrow-right" size={18} />
         </button>
       </div>
     </div>

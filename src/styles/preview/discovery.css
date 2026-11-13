@@ -16,7 +16,7 @@
   justify-content: center;
   flex: none;
   border: 1px solid var(--local-border);
-  border-radius: 8px;
+  border-radius: var(--r-sm);
   background: #fff;
 }
 .local-icon-button.is-active {
@@ -27,7 +27,7 @@
 .local-search-header > .local-icon-button {
   width: 48px;
   height: 48px;
-  border-radius: 14px;
+  border-radius: var(--r-md);
   border-color: #e5dfe8;
   box-shadow: 0 3px 14px #30203712;
 }
@@ -36,7 +36,7 @@
   display: flex;
   align-items: center;
   border: 1px solid #e5dfe8;
-  border-radius: 14px;
+  border-radius: var(--r-md);
   background: #fff;
   box-shadow: 0 3px 14px #30203712;
   flex: 1;
@@ -192,7 +192,7 @@
 .local-discovery-controls {
   margin: 0 -8px 16px;
   background: #fff;
-  border-radius: 14px;
+  border-radius: var(--r-md);
   box-shadow:
     0 3px 16px #30203714,
     inset 0 0 0 1px #eae5ed;
@@ -236,7 +236,7 @@
   height: 246px;
   width: 100%;
   position: relative;
-  border-radius: 20px;
+  border-radius: var(--r-md);
   overflow: hidden;
   padding: 0;
   text-align: left;
@@ -299,12 +299,12 @@
   width: 100%;
   text-align: left;
   padding: 4px 0;
-  border-radius: 14px;
+  border-radius: var(--r-md);
 }
 .local-place-row > .local-photo {
   width: 80px;
   height: 80px;
-  border-radius: 14px;
+  border-radius: var(--r-sm);
 }
 .local-place-info {
   flex: 1;
@@ -333,7 +333,7 @@
 .local-place-row.is-small > .local-photo {
   width: 56px;
   height: 56px;
-  border-radius: 12px;
+  border-radius: var(--r-sm);
 }
 .local-place-row.is-small strong {
   font-size: 19px;
@@ -369,7 +369,7 @@
   min-height: 44px;
   width: 100%;
   padding: 10px 16px;
-  border-radius: 8px;
+  border-radius: var(--r-md);
   line-height: 20px;
   font-size: 14px;
   font-weight: 600;

@@ -51,6 +51,7 @@ export function FilterSheet(props: Props) {
       }
       <div className="local-filter-options">
         <div className="local-filter-group">
+          <h3>{t("Area activity", "인구 밀도")}</h3>
           <SegmentedChoice
             className="local-filter-choice-set is-ambience"
             label={t("Area activity", "인구 밀도")}
@@ -64,6 +65,7 @@ export function FilterSheet(props: Props) {
           />
         </div>
         <div className="local-filter-group is-space">
+          <h3>{t("Space", "공간")}</h3>
           <div
             className="local-filter-choice-set is-space"
             role="group"

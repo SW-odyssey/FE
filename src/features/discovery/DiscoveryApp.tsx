@@ -5,6 +5,7 @@ import { LocalIcon } from "../../components/ui/LocalIcon";
 import { DiscoverScreen } from "./components/DiscoverScreen";
 import { DiscoveryNavigation } from "./components/DiscoveryNavigation";
 import { DiscoveryOverlay } from "./components/DiscoveryOverlay";
+import { LiquidGlassFilter } from "./components/LiquidGlassFilter";
 import { MapScreen } from "./components/MapScreen";
 import { PlaceDetail } from "./components/PlaceDetail";
 import { ResourceNotice } from "./components/ResourceNotice";
@@ -46,7 +47,8 @@ export default function DiscoveryApp({
     <main
       ref={shell}
       onScrollCapture={navigation.onScroll}
-      className={`local-shell local-refined ${previewScale === undefined ? "local-web" : ""} ${isMap ? "is-map-mode" : ""}`}
+      // The device frame (/guide) uses the same web layout as the real app.
+      className={`local-shell local-refined local-web ${isMap ? "is-map-mode" : ""}`}
       style={
         previewScale === undefined
           ? undefined
@@ -57,6 +59,7 @@ export default function DiscoveryApp({
             }
       }
     >
+      <LiquidGlassFilter />
       {previewScale !== undefined && (
         <div className="local-system-bar" aria-hidden="true" />
       )}
@@ -66,7 +69,7 @@ export default function DiscoveryApp({
           onClick={closePlace}
           aria-label={t("Back to places", "목록으로 돌아가기")}
         >
-          <LocalIcon name="chevron-left" />
+          <LocalIcon name="chevron-left" size={36} />
         </button>
       ) : (
         <SearchHeader {...controller} />
