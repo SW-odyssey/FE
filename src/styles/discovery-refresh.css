@@ -167,8 +167,8 @@ body {
 .local-shell.local-refined .local-detail-hero {
   aspect-ratio: 393 / 300;
 }
-.local-shell.local-refined .local-detail-back,
-.local-shell.local-refined .local-gallery-arrow {
+/* Back: a white circular button. */
+.local-shell.local-refined .local-detail-back {
   background: #fffffff2;
   border: 0;
   color: var(--refresh-ink);
@@ -176,9 +176,41 @@ body {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
-.local-shell.local-refined .local-detail-back:active,
-.local-shell.local-refined .local-gallery-arrow:active {
+.local-shell.local-refined .local-detail-back:active {
   background: #f0efec;
+}
+/* Photo paging: a bare chevron on the photo, unlike the back button. */
+.local-shell.local-refined .local-gallery-arrow {
+  top: calc(50% - 22px);
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  color: #fff;
+  box-shadow: none;
+  filter: drop-shadow(0 1px 3px #000000a6);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.local-shell.local-refined .local-gallery-arrow > .local-icon {
+  width: 34px;
+  height: 34px;
+}
+.local-shell.local-refined .local-gallery-arrow:active {
+  background: none;
+  opacity: 0.7;
+}
+.local-shell.local-refined .local-gallery-arrow.is-previous {
+  left: calc(4px + var(--local-safe-left, 0px));
+}
+.local-shell.local-refined .local-gallery-arrow.is-next {
+  right: calc(4px + var(--local-safe-right, 0px));
+}
+.local-shell.local-refined .local-gallery-arrow:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+  box-shadow: none;
 }
 .local-shell.local-refined .local-gallery-count {
   bottom: 36px;

@@ -69,7 +69,7 @@ export default function DiscoveryApp({
           onClick={closePlace}
           aria-label={t("Back to places", "목록으로 돌아가기")}
         >
-          <LocalIcon name="chevron-left" />
+          <LocalIcon name="chevron-left" size={36} />
         </button>
       ) : (
         <SearchHeader {...controller} />
