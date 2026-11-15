@@ -6,6 +6,8 @@ import {
   publicLink,
   restaurant,
   weekdayGroup,
+  peerComparison,
+  historicalPatterns,
 } from "../src/features/recommendation-review/contract.ts";
 import type { ReviewCondition } from "../src/features/recommendation-review/types.ts";
 
@@ -117,4 +119,93 @@ test("weekday groups and area are verified independently of a matching date and 
   assert.equal(weekdayGroup("2026-11-21"), "SAT");
   assert.equal(weekdayGroup("2026-11-22"), "SUN");
   assert.throws(() => weekdayGroup("2026-02-30"), /CALENDAR/);
+});
+
+test("same-area time comparisons cannot be presented as an advantage over other candidates", () => {
+  const peer = {
+    status: "distinct",
+    methodVersion: "same_condition_peers_v1",
+    unit: "other_candidate_grids",
+    expectedPeerAreas: 20,
+    observedPeerAreas: 20,
+    feature: "visitor",
+    texts: { ko: "비교", en: "comparison", ja: "比較" },
+    decisionTexts: { ko: "검토", en: "consider", ja: "確認" },
+  };
+  assert.throws(
+    () => peerComparison(peer, true, true, { kind: "own_time_comparison" }),
+    /ADVANTAGE_NOT_SUPPORTED/,
+  );
+  assert.throws(
+    () =>
+      peerComparison(peer, false, true, {
+        kind: "same_condition_peer_comparison",
+      }),
+    /ADVANTAGE_NOT_SUPPORTED/,
+  );
+  assert.equal(
+    peerComparison(peer, true, true, { kind: "same_condition_peer_comparison" })
+      .status,
+    "distinct",
+  );
+});
+
+test("a missing peer observation does not become a completed comparison or a global exclusion", () => {
+  const peer = {
+    status: "distinct",
+    methodVersion: "same_condition_peers_v1",
+    unit: "other_candidate_grids",
+    expectedPeerAreas: 20,
+    observedPeerAreas: 10,
+    feature: "visitor",
+    texts: { ko: "비교", en: "comparison", ja: "比較" },
+    decisionTexts: { ko: "검토", en: "consider", ja: "確認" },
+  };
+  assert.throws(
+    () =>
+      peerComparison(peer, true, true, {
+        kind: "same_condition_peer_comparison",
+      }),
+    /ADVANTAGE_NOT_SUPPORTED/,
+  );
+  assert.throws(
+    () =>
+      peerComparison(
+        { ...peer, status: "not_recommended", feature: null },
+        false,
+        false,
+        null,
+      ),
+    /EXCLUSION_NOT_VERIFIED/,
+  );
+});
+
+test("the historical plot accepts four coarse windows and rejects invented hours or zero-filled missing data", () => {
+  const data = {
+    sourceYear: 2025,
+    measure: "surrounding_domestic_20s_30s_visitor_indicator",
+    normalization: "per_day_maximum_not_comparable_between_places",
+    slots: ["LUNCH", "AFTERNOON", "DINNER", "LATE_NIGHT"],
+    sourceArtifact: "derived.pkl",
+    months: [
+      {
+        month: 11,
+        days: ["MON_THU", "FRI", "SAT", "SUN"].map((dayGroup) => ({
+          dayGroup,
+          status: "available",
+          bars: [100, 50, 30, 20],
+          peakSlots: ["LUNCH"],
+        })),
+      },
+    ],
+  };
+  assert.equal(historicalPatterns(data, 2025).months.length, 1);
+  assert.throws(
+    () =>
+      historicalPatterns({ ...data, slots: ["10", "11", "12", "13"] }, 2025),
+    /HISTORICAL_PATTERN/,
+  );
+  const missing = structuredClone(data);
+  missing.months[0].days[0].status = "incomplete";
+  assert.throws(() => historicalPatterns(missing, 2025), /MUST_NOT_BE_ZERO/);
 });

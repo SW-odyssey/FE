@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { object, reviewDataset } from "./contract.ts";
+import { object, reviewDataset, weekdayGroup } from "./contract.ts";
 import { copy } from "./copy.ts";
 import { GoogleDetails } from "./GoogleDetails";
+import { HistoricalPatternCard } from "./HistoricalPatternCard";
 import type {
   GooglePlaceDisplay,
   LiveCheck,
   ReviewDataset,
   ReviewLanguage,
+  PatternDay,
 } from "./types";
 import "./review.css";
 
@@ -322,16 +324,70 @@ export default function ReviewApp() {
               </span>
             </div>
             <section className="review-selection">
-              <h3>{t.evidence}</h3>
+              <h3>
+                {language === "ko"
+                  ? "같은 식사 조건에서 비교"
+                  : language === "en"
+                    ? "Compared with the alternatives"
+                    : "同じ食事条件で比較"}
+              </h3>
               <p>
-                {condition.density === "less_busy" ? t.quietReason : t.reason}
+                {current.peerComparison?.decisionTexts[language] ??
+                  (language === "ko"
+                    ? "후보 간 비교 자료를 갱신하는 중이에요."
+                    : language === "en"
+                      ? "The candidate comparison is being updated."
+                      : "候補間の比較資料を更新中です。")}
               </p>
             </section>
             <section className="review-context">
-              <h3>{t.around}</h3>
-              <p className="review-context-text">
-                {current.context?.texts[language] ?? t.missing}
-              </p>
+              <h3>
+                {language === "ko"
+                  ? "다른 후보 지역과의 비교 근거"
+                  : language === "en"
+                    ? "Evidence from other candidate areas"
+                    : "他の候補エリアとの比較根拠"}
+              </h3>
+              {current.peerComparison?.status === "distinct" && (
+                <p className="review-context-text">
+                  {current.peerComparison.texts[language]}
+                </p>
+              )}
+              {current.peerComparison && (
+                <p className="review-note">
+                  {condition.label[language]} ·{" "}
+                  {language === "ko"
+                    ? `다른 후보 지역 ${current.peerComparison.expectedPeerAreas}곳`
+                    : language === "en"
+                      ? `${current.peerComparison.expectedPeerAreas} other candidate areas`
+                      : `他の候補エリア ${current.peerComparison.expectedPeerAreas}区画`}{" "}
+                  ·{" "}
+                  {current.peerComparison.status === "distinct"
+                    ? language === "ko"
+                      ? "상대 특징 확인"
+                      : language === "en"
+                        ? "Relative feature supported"
+                        : "相対的な特徴を確認"
+                    : current.peerComparison.status === "no_supported_advantage"
+                      ? language === "ko"
+                        ? "앞세울 근거 없음"
+                        : language === "en"
+                          ? "No supported advantage"
+                          : "優先する根拠なし"
+                      : current.peerComparison.status ===
+                          "insufficient_evidence"
+                        ? language === "ko"
+                          ? "자료 부족"
+                          : language === "en"
+                            ? "Insufficient evidence"
+                            : "資料不足"
+                        : language === "ko"
+                          ? "기록된 추천 목록에 없음"
+                          : language === "en"
+                            ? "Not in recorded results"
+                            : "記録された候補に該当なし"}
+                </p>
+              )}
               <small>
                 {data.sourceYear} · {t.collected} ·{" "}
                 {language === "ko"
@@ -342,6 +398,15 @@ export default function ReviewApp() {
               </small>
               <p className="review-note">{t.contextNote}</p>
             </section>
+            {store.historicalPatterns && (
+              <HistoricalPatternCard
+                key={`${store.id}:${condition.id}`}
+                patterns={store.historicalPatterns}
+                language={language}
+                month={Number(condition.date.slice(5, 7))}
+                day={weekdayGroup(condition.date) as PatternDay["dayGroup"]}
+              />
+            )}
             <details className="review-provenance">
               <summary>{t.source}</summary>
               <dl className="review-details">
@@ -513,7 +578,9 @@ export default function ReviewApp() {
                         #{item.snapshot.rank ?? "—"}
                         <small>/ {item.snapshot.checkedCount}</small>
                       </td>
-                      <td>{item.context?.texts[language] ?? t.missing}</td>
+                      <td>
+                        {item.peerComparison?.texts[language] ?? t.missing}
+                      </td>
                     </tr>
                   );
                 })}

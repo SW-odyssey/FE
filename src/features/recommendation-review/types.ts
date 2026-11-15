@@ -34,6 +34,44 @@ export type PopulationContext = {
   sourceArtifacts: string[];
 };
 
+export type PeerComparison = {
+  status:
+    | "distinct"
+    | "no_supported_advantage"
+    | "insufficient_evidence"
+    | "not_recommended";
+  methodVersion: "same_condition_peers_v1";
+  unit: "other_candidate_grids";
+  expectedPeerAreas: number;
+  observedPeerAreas: number;
+  feature: "visitor" | "worker_share" | "resident_share" | null;
+  texts: ReviewTexts;
+  decisionTexts: ReviewTexts;
+};
+
+export type PatternSlot = "LUNCH" | "AFTERNOON" | "DINNER" | "LATE_NIGHT";
+export type PatternDay = {
+  dayGroup: "MON_THU" | "FRI" | "SAT" | "SUN";
+  status: "available" | "incomplete" | "insufficient_indicator";
+  bars: number[] | null;
+  peakSlots: PatternSlot[];
+};
+export type HistoricalPatterns = {
+  sourceYear: number;
+  measure: "surrounding_domestic_20s_30s_visitor_indicator";
+  normalization: "per_day_maximum_not_comparable_between_places";
+  slots: PatternSlot[];
+  months: {
+    month: number;
+    days: PatternDay[];
+    representativePeak?: {
+      dayGroup: PatternDay["dayGroup"];
+      slot: PatternSlot;
+    } | null;
+  }[];
+  sourceArtifact: string;
+};
+
 export type ReviewSnapshot = {
   matched: boolean;
   rank: number | null;
@@ -47,16 +85,19 @@ export type ReviewSnapshot = {
 };
 
 export type RestaurantReview = ApiRestaurant & {
+  historicalPatterns?: HistoricalPatterns;
   cases: {
     conditionId: string;
     snapshot: ReviewSnapshot;
     context: PopulationContext | null;
+    peerComparison?: PeerComparison;
     engineExactOrderMatch: boolean;
   }[];
 };
 
 export type ReviewDataset = {
   schemaVersion: 1;
+  comparisonVersion?: "same_condition_peers_v1";
   version: string;
   generatedAt: string;
   sourceYear: number;
