@@ -1,0 +1,684 @@
+{
+  "mappings": [
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-12-b7786edeeae8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-12-b7786edeeae8", "referenceMonth": "2025-12", "cellId": "81607938", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 25}, {"slot": "afternoon", "relativeHeight": 40}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 75}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-12-b7786edeeae8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-12-b7786edeeae8", "referenceMonth": "2025-12", "cellId": "81591938", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591940/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-12-b7786edeeae8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-12-b7786edeeae8", "referenceMonth": "2025-12", "cellId": "81591940", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-12-b7786edeeae8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-12-b7786edeeae8", "referenceMonth": "2025-12", "cellId": "81623937", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 20}, {"slot": "afternoon", "relativeHeight": 50}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 60}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81607938", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81591938", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 70}, {"slot": "afternoon", "relativeHeight": 75}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 70}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591940/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81591940", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607939/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81607939", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81623937", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 10}, {"slot": "afternoon", "relativeHeight": 35}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 55}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-10-82979aa73b37"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-10-82979aa73b37", "referenceMonth": "2025-10", "cellId": "81591938", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591940/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-10-82979aa73b37"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-10-82979aa73b37", "referenceMonth": "2025-10", "cellId": "81591940", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 60}, {"slot": "afternoon", "relativeHeight": 75}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 45}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607939/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-10-82979aa73b37"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-10-82979aa73b37", "referenceMonth": "2025-10", "cellId": "81607939", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-10-82979aa73b37"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-10-82979aa73b37", "referenceMonth": "2025-10", "cellId": "81623937", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 10}, {"slot": "afternoon", "relativeHeight": 30}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 65}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-09-b09ff896cc5b"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-09-b09ff896cc5b", "referenceMonth": "2025-09", "cellId": "81591938", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 65}, {"slot": "afternoon", "relativeHeight": 70}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 45}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591940/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-09-b09ff896cc5b"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-09-b09ff896cc5b", "referenceMonth": "2025-09", "cellId": "81591940", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607939/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-09-b09ff896cc5b"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-09-b09ff896cc5b", "referenceMonth": "2025-09", "cellId": "81607939", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-09-b09ff896cc5b"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-09-b09ff896cc5b", "referenceMonth": "2025-09", "cellId": "81623937", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 25}, {"slot": "afternoon", "relativeHeight": 35}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 40}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591940/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-08-6ea1c855b746"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-08-6ea1c855b746", "referenceMonth": "2025-08", "cellId": "81591940", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 30}, {"slot": "afternoon", "relativeHeight": 40}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 80}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-08-6ea1c855b746"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-08-6ea1c855b746", "referenceMonth": "2025-08", "cellId": "81623937", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 10}, {"slot": "afternoon", "relativeHeight": 25}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 45}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-07-77f309edb00c"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-07-77f309edb00c", "referenceMonth": "2025-07", "cellId": "81591938", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81575938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-07-77f309edb00c"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-07-77f309edb00c", "referenceMonth": "2025-07", "cellId": "81575938", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591941/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-07-77f309edb00c"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-07-77f309edb00c", "referenceMonth": "2025-07", "cellId": "81591941", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 40}, {"slot": "afternoon", "relativeHeight": 65}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 55}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81655935/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-07-77f309edb00c"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-07-77f309edb00c", "referenceMonth": "2025-07", "cellId": "81655935", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81639936/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-06-e3e6310a1ca6"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-06-e3e6310a1ca6", "referenceMonth": "2025-06", "cellId": "81639936", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 20}, {"slot": "afternoon", "relativeHeight": 50}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 40}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81575938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-06-e3e6310a1ca6"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-06-e3e6310a1ca6", "referenceMonth": "2025-06", "cellId": "81575938", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "lunch", "bars": [{"slot": "lunch", "relativeHeight": 100}, {"slot": "afternoon", "relativeHeight": 80}, {"slot": "dinner", "relativeHeight": 80}, {"slot": "late_night", "relativeHeight": 70}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591941/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-06-e3e6310a1ca6"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-06-e3e6310a1ca6", "referenceMonth": "2025-06", "cellId": "81591941", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 45}, {"slot": "afternoon", "relativeHeight": 75}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 65}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81655935/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-06-e3e6310a1ca6"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-06-e3e6310a1ca6", "referenceMonth": "2025-06", "cellId": "81655935", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81655936/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-06-e3e6310a1ca6"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-06-e3e6310a1ca6", "referenceMonth": "2025-06", "cellId": "81655936", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 15}, {"slot": "afternoon", "relativeHeight": 40}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 40}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-05-ab54fcc45249"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-05-ab54fcc45249", "referenceMonth": "2025-05", "cellId": "81623937", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 20}, {"slot": "afternoon", "relativeHeight": 45}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 40}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623936/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-05-ab54fcc45249"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-05-ab54fcc45249", "referenceMonth": "2025-05", "cellId": "81623936", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 10}, {"slot": "afternoon", "relativeHeight": 40}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 30}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-05-ab54fcc45249"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-05-ab54fcc45249", "referenceMonth": "2025-05", "cellId": "81591937", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607936/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-05-ab54fcc45249"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-05-ab54fcc45249", "referenceMonth": "2025-05", "cellId": "81607936", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 40}, {"slot": "afternoon", "relativeHeight": 40}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 40}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-04-696f6e13e45b"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-04-696f6e13e45b", "referenceMonth": "2025-04", "cellId": "81623937", "weekday": "sun"}, "status": "INCOMPLETE_TIME_SLOTS", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-04-696f6e13e45b"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-04-696f6e13e45b", "referenceMonth": "2025-04", "cellId": "81591937", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607936/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-04-696f6e13e45b"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-04-696f6e13e45b", "referenceMonth": "2025-04", "cellId": "81607936", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 40}, {"slot": "afternoon", "relativeHeight": 50}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 60}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81575938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-04-696f6e13e45b"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-04-696f6e13e45b", "referenceMonth": "2025-04", "cellId": "81575938", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 65}, {"slot": "afternoon", "relativeHeight": 75}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 75}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-03-ba4390a4c8ff"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-03-ba4390a4c8ff", "referenceMonth": "2025-03", "cellId": "81607938", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 30}, {"slot": "afternoon", "relativeHeight": 40}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 75}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591939/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-03-ba4390a4c8ff"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-03-ba4390a4c8ff", "referenceMonth": "2025-03", "cellId": "81591939", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 25}, {"slot": "afternoon", "relativeHeight": 50}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 60}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-03-ba4390a4c8ff"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-03-ba4390a4c8ff", "referenceMonth": "2025-03", "cellId": "81607937", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 25}, {"slot": "afternoon", "relativeHeight": 55}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 75}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591940/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-03-ba4390a4c8ff"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-03-ba4390a4c8ff", "referenceMonth": "2025-03", "cellId": "81591940", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 40}, {"slot": "afternoon", "relativeHeight": 60}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 50}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607939/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-03-ba4390a4c8ff"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-03-ba4390a4c8ff", "referenceMonth": "2025-03", "cellId": "81607939", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 40}, {"slot": "afternoon", "relativeHeight": 80}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 50}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-02-6e3d1c78d42e"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-02-6e3d1c78d42e", "referenceMonth": "2025-02", "cellId": "81607938", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 25}, {"slot": "afternoon", "relativeHeight": 35}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 70}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-02-6e3d1c78d42e"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-02-6e3d1c78d42e", "referenceMonth": "2025-02", "cellId": "81591938", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 20}, {"slot": "afternoon", "relativeHeight": 50}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 55}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-02-6e3d1c78d42e"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-02-6e3d1c78d42e", "referenceMonth": "2025-02", "cellId": "81607937", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591940/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-02-6e3d1c78d42e"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-02-6e3d1c78d42e", "referenceMonth": "2025-02", "cellId": "81591940", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 40}, {"slot": "afternoon", "relativeHeight": 65}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 55}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607939/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-02-6e3d1c78d42e"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-02-6e3d1c78d42e", "referenceMonth": "2025-02", "cellId": "81607939", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 40}, {"slot": "afternoon", "relativeHeight": 70}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 45}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-01-d7890779cf8d"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-01-d7890779cf8d", "referenceMonth": "2025-01", "cellId": "81607938", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 20}, {"slot": "afternoon", "relativeHeight": 25}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 75}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591939/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-01-d7890779cf8d"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-01-d7890779cf8d", "referenceMonth": "2025-01", "cellId": "81591939", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 30}, {"slot": "afternoon", "relativeHeight": 55}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 60}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-01-d7890779cf8d"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-01-d7890779cf8d", "referenceMonth": "2025-01", "cellId": "81607937", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 25}, {"slot": "afternoon", "relativeHeight": 50}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 70}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81591940/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-01-d7890779cf8d"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-01-d7890779cf8d", "referenceMonth": "2025-01", "cellId": "81591940", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 40}, {"slot": "afternoon", "relativeHeight": 65}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 45}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607939/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-01-d7890779cf8d"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-01-d7890779cf8d", "referenceMonth": "2025-01", "cellId": "81607939", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 40}, {"slot": "afternoon", "relativeHeight": 65}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 40}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81399949/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81399949", "weekday": "tue"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 80}, {"slot": "afternoon", "relativeHeight": 75}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 15}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81367949/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81367949", "weekday": "tue"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81351951/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81351951", "weekday": "tue"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 75}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 55}, {"slot": "late_night", "relativeHeight": 5}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81447945/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81447945", "weekday": "tue"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81415951/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81415951", "weekday": "tue"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81415941/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81415941", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81367943/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81367943", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81431940/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81431940", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81431942/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81431942", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81447939/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81447939", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 70}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 70}, {"slot": "late_night", "relativeHeight": 10}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81367948/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81367948", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81383947/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81383947", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 45}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 70}, {"slot": "late_night", "relativeHeight": 5}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81447942/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81447942", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 70}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 75}, {"slot": "late_night", "relativeHeight": 5}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81463940/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81463940", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81463941/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81463941", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81367949/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81367949", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81399942/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81399942", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623937/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81623937", "weekday": "tue"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 10}, {"slot": "afternoon", "relativeHeight": 20}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 25}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81607939/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81607939", "weekday": "tue"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 45}, {"slot": "afternoon", "relativeHeight": 75}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 30}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81655935/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81655935", "weekday": "tue"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 25}, {"slot": "afternoon", "relativeHeight": 45}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 30}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81463965/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81463965", "weekday": "sun"}, "status": "INCOMPLETE_TIME_SLOTS", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81447966/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81447966", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 50}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 35}, {"slot": "late_night", "relativeHeight": 1}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81447965/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81447965", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 70}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 50}, {"slot": "late_night", "relativeHeight": 15}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81463963/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81463963", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 80}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 30}, {"slot": "late_night", "relativeHeight": 5}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81447964/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81447964", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 70}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 55}, {"slot": "late_night", "relativeHeight": 20}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81495960/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81495960", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 60}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 50}, {"slot": "late_night", "relativeHeight": 10}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81415970/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81415970", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 45}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 60}, {"slot": "late_night", "relativeHeight": 5}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81623938", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81575938/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81575938", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81655935/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81655935", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 30}, {"slot": "afternoon", "relativeHeight": 60}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 40}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81655932/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81655932", "weekday": "sun"}, "status": "NO_DISTINCT_PEAK", "graph": null}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81623932/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81623932", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "afternoon", "bars": [{"slot": "lunch", "relativeHeight": 75}, {"slot": "afternoon", "relativeHeight": 100}, {"slot": "dinner", "relativeHeight": 70}, {"slot": "late_night", "relativeHeight": 15}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81639936/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81639936", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 10}, {"slot": "afternoon", "relativeHeight": 45}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 35}]}}, "error": null}
+      }
+    },
+    {
+      "request": {"method": "GET", "urlPath": "/api/v2/cells/81639935/visit-pattern", "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}}},
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "cellId": "81639935", "weekday": "sun"}, "status": "AVAILABLE", "graph": {"metric": "visit", "comparison": "SAME_CELL_SAME_WEEKDAY", "scaleMax": 100, "highlightSlot": "dinner", "bars": [{"slot": "lunch", "relativeHeight": 15}, {"slot": "afternoon", "relativeHeight": 60}, {"slot": "dinner", "relativeHeight": 100}, {"slot": "late_night", "relativeHeight": 25}]}}, "error": null}
+      }
+    }
+  ]
+}

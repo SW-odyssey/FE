@@ -1,0 +1,481 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-12-b7786edeeae8"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81607938,81591938,81591940,81623937"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-12-b7786edeeae8", "referenceMonth": "2025-12", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81607938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81591938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81591940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81623937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81607938,81591938,81591940,81607939,81623937"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81607938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81591938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81591940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81607939": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81623937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-10-82979aa73b37"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81591938,81591940,81607939,81623937"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-10-82979aa73b37", "referenceMonth": "2025-10", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81591938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81591940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81607939": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81623937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-09-b09ff896cc5b"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81591938,81591940,81607939,81623937"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-09-b09ff896cc5b", "referenceMonth": "2025-09", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81591938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81591940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81607939": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81623937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-08-6ea1c855b746"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81591940,81623937"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-08-6ea1c855b746", "referenceMonth": "2025-08", "weekday": "sun", "slot": "dinner"}, "reasonsByCellId": {"81591940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]}, "81623937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]}}}, "error": null}
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-07-77f309edb00c"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81591938,81575938,81591941,81655935"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-07-77f309edb00c", "referenceMonth": "2025-07", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81591938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81575938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81591941": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81655935": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-06-e3e6310a1ca6"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81639936,81575938,81591941,81655935,81655936"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-06-e3e6310a1ca6", "referenceMonth": "2025-06", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81639936": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "STAY_DISTINCT"}]},
+              "81575938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81591941": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81655935": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81655936": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-05-ab54fcc45249"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81623937,81623936,81591937,81607936"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-05-ab54fcc45249", "referenceMonth": "2025-05", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81623937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81623936": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81591937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81607936": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-04-696f6e13e45b"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81623937,81591937,81607936,81575938"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-04-696f6e13e45b", "referenceMonth": "2025-04", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81623937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "STAY_DISTINCT"}]},
+              "81591937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81607936": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81575938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-03-ba4390a4c8ff"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81607938,81591939,81607937,81591940,81607939"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-03-ba4390a4c8ff", "referenceMonth": "2025-03", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81607938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81591939": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "STAY_DISTINCT"}]},
+              "81607937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81591940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81607939": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-02-6e3d1c78d42e"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81607938,81591938,81607937,81591940,81607939"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-02-6e3d1c78d42e", "referenceMonth": "2025-02", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81607938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81591938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81607937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81591940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81607939": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-01-d7890779cf8d"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81607938,81591939,81607937,81591940,81607939"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-01-d7890779cf8d", "referenceMonth": "2025-01", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81607938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81591939": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81607937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81591940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81607939": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}, "slot": {"equalTo": "lunch"}, "cellIds": {"equalTo": "81399949,81367949,81351951,81447945,81415951"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "tue", "slot": "lunch"},
+            "reasonsByCellId": {
+              "81399949": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81367949": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81351951": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81447945": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81415951": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}, "slot": {"equalTo": "lunch"}, "cellIds": {"equalTo": "81399949"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "tue", "slot": "lunch"}, "reasonsByCellId": {"81399949": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]}}}, "error": null}
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {
+          "datasetId": {"equalTo": "2025-11-3579cd2a97d8"},
+          "weekday": {"equalTo": "sun"},
+          "slot": {"equalTo": "lunch"},
+          "cellIds": {"equalTo": "81415941,81367943,81431940,81431942,81447939,81367948,81383947,81447942,81463940,81463941,81367949"}
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "sun", "slot": "lunch"},
+            "reasonsByCellId": {
+              "81415941": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "STAY_DISTINCT"}]},
+              "81367943": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81431940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81431942": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "STAY_DISTINCT"}]},
+              "81447939": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81367948": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81383947": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81447942": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81463940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81463941": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81367949": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "lunch"}, "cellIds": {"equalTo": "81399942"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "sun", "slot": "lunch"}, "reasonsByCellId": {"81399942": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]}}}, "error": null}
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}, "slot": {"equalTo": "late_night"}, "cellIds": {"equalTo": "81623937,81607939,81655935"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "tue", "slot": "late_night"}, "reasonsByCellId": {"81623937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]}, "81607939": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]}, "81655935": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]}}}, "error": null}
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "tue"}, "slot": {"equalTo": "late_night"}, "cellIds": {"equalTo": "81623937"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "tue", "slot": "late_night"}, "reasonsByCellId": {"81623937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]}}}, "error": null}
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "afternoon"}, "cellIds": {"equalTo": "81463965,81447966,81447965,81463963,81447964,81495960,81415970"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "sun", "slot": "afternoon"},
+            "reasonsByCellId": {
+              "81463965": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81447966": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81447965": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81463963": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81447964": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "STAY_DISTINCT"}]},
+              "81495960": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]},
+              "81415970": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "afternoon"}, "cellIds": {"equalTo": "81463965"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "sun", "slot": "afternoon"}, "reasonsByCellId": {"81463965": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE20_DISTINCT"}]}}}, "error": null}
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {
+          "datasetId": {"equalTo": "2025-11-3579cd2a97d8"},
+          "weekday": {"equalTo": "sun"},
+          "slot": {"equalTo": "dinner"},
+          "cellIds": {"equalTo": "81607938,81591938,81591940,81623938,81623937,81575938,81655935,81655932,81623932,81639936,81639935"}
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {
+          "success": true,
+          "data": {
+            "context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "sun", "slot": "dinner"},
+            "reasonsByCellId": {
+              "81607938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81591938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81591940": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81623938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81623937": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "AGE30_DISTINCT"}]},
+              "81575938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81655935": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]},
+              "81655932": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}]},
+              "81623932": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "STAY_DISTINCT"}]},
+              "81639936": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "STAY_DISTINCT"}]},
+              "81639935": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]}
+            }
+          },
+          "error": null
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPath": "/api/v2/cells/reasons",
+        "queryParameters": {"datasetId": {"equalTo": "2025-11-3579cd2a97d8"}, "weekday": {"equalTo": "sun"}, "slot": {"equalTo": "dinner"}, "cellIds": {"equalTo": "81591938"}}
+      },
+      "response": {
+        "status": 200,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": true, "data": {"context": {"datasetId": "2025-11-3579cd2a97d8", "referenceMonth": "2025-11", "weekday": "sun", "slot": "dinner"}, "reasonsByCellId": {"81591938": {"status": "AVAILABLE", "reasons": [{"code": "VISIT_RELATIVE_HIGH"}, {"code": "TIME_PEAK"}]}}}, "error": null}
+      }
+    }
+  ]
+}
