@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   images: { unoptimized: true },
   output: pagesBuild ? "export" : undefined,
+  // Pages Functions serves the review API on Cloudflare. Next serves it locally.
+  ...(!pagesBuild && { pageExtensions: ["tsx", "ts", "jsx", "js", "mjs"] }),
   trailingSlash: pagesBuild,
   allowedDevOrigins: [
     "127.0.0.1",
