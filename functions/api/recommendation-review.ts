@@ -1,9 +1,8 @@
 const REVIEW_ORIGIN =
   "https://local-restaurant-card-review.linedchord4.chatgpt.site";
-export const dynamic = "force-dynamic";
 
 /** Forward this review screen to its public Sites backend; provider keys stay there. */
-async function forward(request: Request) {
+export async function onRequestGet({ request }: { request: Request }) {
   const noStore = { "Cache-Control": "private, no-store, max-age=0" };
   const origin = request.headers.get("Origin");
   if (origin && origin !== new URL(request.url).origin)
@@ -49,5 +48,4 @@ async function forward(request: Request) {
   }
 }
 
-export const GET = forward;
-export const POST = forward;
+export const onRequestPost = onRequestGet;
