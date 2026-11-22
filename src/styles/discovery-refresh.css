@@ -165,7 +165,7 @@ body {
   background: var(--refresh-card);
 }
 .local-shell.local-refined .local-detail-hero {
-  aspect-ratio: 393 / 300;
+  aspect-ratio: 393 / 220;
 }
 /* Back: a white circular button. No padding, so the 36px chevron centres in the 44px circle. */
 .local-shell.local-refined .local-detail-back {
@@ -253,24 +253,32 @@ body {
   flex-direction: column;
   gap: 8px;
 }
-.local-detail-section > h2 {
+.local-detail-section > h2,
+.local-visit-pattern-heading > h2 {
   color: var(--refresh-ink);
   font-size: 17px;
   font-weight: 700;
   line-height: 24px;
 }
-.local-detail-section > p:not(.local-place-source) {
+.local-detail-section > p {
   color: #45454c;
   font-size: 14px;
   line-height: 22px;
 }
-.local-shell.local-refined .local-place-source {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
+.local-place-ai-note,
+.local-place-source {
   color: var(--refresh-muted);
   font-size: 12px;
   line-height: 18px;
+}
+.local-place-source {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+}
+.local-place-source a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 .local-shell.local-refined .local-address {
   color: #45454c;

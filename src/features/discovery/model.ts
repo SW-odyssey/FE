@@ -18,7 +18,7 @@ export type LocalPlace = {
   imageCredit?: string;
   imageSourceUrl?: string;
 };
-export type DiscoveryView = "discover" | "map";
+export type DiscoveryView = "discover" | "course" | "map";
 export type DiscoveryLanguage = "en" | "ko" | "ja" | "zh";
 export type DiscoveryArea = "all" | LocalArea;
 export type DiscoveryCategory = "all" | LocalCategory;

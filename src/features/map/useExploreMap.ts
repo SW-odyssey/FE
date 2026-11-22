@@ -32,6 +32,7 @@ export function useExploreMap(props: ExploreMapProps) {
   const [error, setError] = useState(false);
   const [zoom, setZoom] = useState(5);
   const [retry, setRetry] = useState(0);
+  const displayed = props.courseStops ?? props.places;
   useEffect(() => {
     return attachMapSession(
       prepareKakaoMap,
@@ -57,6 +58,7 @@ export function useExploreMap(props: ExploreMapProps) {
     session.current?.render();
   }, [
     props.places,
+    props.courseStops,
     props.selected,
     props.language,
     props.scope,
@@ -68,10 +70,10 @@ export function useExploreMap(props: ExploreMapProps) {
   ]);
   useEffect(() => {
     if (ready) session.current?.fitRecommendations(true);
-  }, [props.places, ready]);
+  }, [displayed, ready]);
   useEffect(() => {
     if (ready) session.current?.focusSelected();
-  }, [props.selected, ready, props.focusSelected]);
+  }, [props.selected, ready, props.focusSelected, props.focusRequest]);
   useEffect(() => {
     if (ready && props.currentLocation) {
       session.current?.setCurrentLocation(props.currentLocation);

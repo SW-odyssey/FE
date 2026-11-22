@@ -561,10 +561,6 @@
   flex: none;
   line-height: 0;
 }
-.local-refined .local-place-source {
-  color: #56657e;
-  line-height: 22px;
-}
 .local-refined .local-map-preview {
   background: var(--refined-reading);
   box-shadow: 0 4px 16px #314f800d;

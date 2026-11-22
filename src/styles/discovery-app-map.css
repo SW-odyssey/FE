@@ -1,12 +1,5 @@
 .local-web.is-map-mode::before {
-  height: calc(76px + var(--local-safe-top));
-  background: linear-gradient(
-    to bottom,
-    var(--local-top-surface) var(--local-safe-top),
-    #edf5ff9c calc(var(--local-safe-top) + 16px),
-    #ecf4ff38 calc(var(--local-safe-top) + 55px),
-    transparent
-  );
+  content: none;
 }
 
 .local-web .local-map-canvas {
@@ -16,8 +9,9 @@
 }
 
 .local-web .local-map-page {
+  --local-map-sheet-clearance: 0px;
   --local-map-sheet-bottom: calc(
-    var(--local-nav-bottom) + var(--local-nav-height) + 16px
+    var(--local-nav-bottom) + var(--local-nav-height) + 10px
   );
   --local-map-chrome-top: calc(184px + var(--local-safe-top));
   --local-map-chrome-bottom: calc(
@@ -32,12 +26,19 @@
 }
 
 .local-web .local-map-context {
-  top: calc(var(--local-search-row-height) + var(--local-safe-top) + 4px);
+  top: calc(12px + var(--local-safe-top));
 }
 
 .local-web .local-place-sheet {
   width: auto;
   bottom: var(--local-map-sheet-bottom);
+  max-height: max(
+    88px,
+    calc(
+      100% - var(--local-map-chrome-top) - var(--local-map-sheet-bottom) -
+        var(--local-map-sheet-clearance)
+    )
+  );
 }
 
 .local-web .local-map-canvas div:has(> div > a[href="http://map.kakao.com/"]) {
@@ -60,6 +61,35 @@
 
 .local-web .local-map-tools > * {
   pointer-events: auto;
+}
+
+.local-map-step-icon {
+  position: relative;
+  width: 16px;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+}
+
+.local-map-step-icon.is-plus::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  transform: rotate(90deg);
+  background: inherit;
+  content: "";
+}
+
+.local-web .local-map-tools button:focus-visible {
+  outline: 2px solid var(--local-plum);
+  outline-offset: -3px;
+}
+
+@media (hover: hover) {
+  .local-web .local-map-tools button:enabled:hover {
+    background: var(--local-pale);
+    color: var(--local-plum);
+  }
 }
 
 .local-map-location-dot {
@@ -92,8 +122,14 @@
   right: calc(72px + var(--local-safe-right));
 }
 
-@container local-map-chrome (height < 206px) {
-  .local-map-tools > .local-map-fit {
+@container local-map-chrome (height < 144px) {
+  .local-map-tools .local-map-fit {
+    display: none;
+  }
+}
+
+@container local-map-chrome (height < 201px) {
+  .local-map-tools:has(.local-map-locate) .local-map-fit {
     display: none;
   }
 }
@@ -141,29 +177,48 @@
   }
 }
 
-@media (max-height: 480px) {
-  .local-shell.local-web.is-map-mode {
-    --local-search-row-height: 48px;
-    --local-search-block-padding: 0px;
-  }
+@media (min-width: 560px) {
+  @container local-map-chrome (48px <= height < 150px) {
+    .local-web .local-map-tools {
+      flex-direction: row;
+      gap: 8px;
+    }
 
+    .local-web .local-map-tools > .local-map-zoom {
+      display: flex;
+      width: auto;
+    }
+
+    .local-web .local-map-zoom > button {
+      width: 44px;
+    }
+
+    .local-web .local-map-tools .local-map-fit {
+      display: grid;
+    }
+
+    .local-web .local-map-zoom > button + button {
+      border-block-start: 0;
+      border-inline-start: 1px solid var(--refresh-line);
+    }
+  }
+}
+
+@media (max-height: 640px) {
+  .local-web .local-map-page {
+    --local-map-sheet-clearance: 80px;
+  }
+}
+
+@media (max-height: 480px) {
   .local-web .local-map-context .local-context {
     height: 48px;
   }
 
   .local-web .local-map-page {
-    --local-map-sheet-bottom: calc(
-      var(--local-nav-bottom) + var(--local-nav-height) + 4px
-    );
+    /* Keep clear of the dock during the tall-to-compact height transition. */
+    --local-map-sheet-bottom: calc(var(--local-nav-bottom) + 64px + 4px);
     --local-map-chrome-top: calc(152px + var(--local-safe-top));
-  }
-
-  .local-web .local-place-sheet {
-    /* Keep the controls clear while the sheet remeasures after rotation. */
-    max-height: max(
-      0px,
-      calc(100% - var(--local-map-chrome-top) - var(--local-map-sheet-bottom))
-    );
   }
 
   .local-web .local-place-sheet .local-sheet-handle {

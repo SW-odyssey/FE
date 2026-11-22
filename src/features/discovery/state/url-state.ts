@@ -8,7 +8,7 @@ export function readDiscoveryUrl(search: string) {
   const view = params.get("view");
   const area = params.get("area");
   return {
-    view: (["discover", "map"].includes(view ?? "")
+    view: (["discover", "course", "map"].includes(view ?? "")
       ? view
       : "discover") as DiscoveryView,
     area: (["all", "jongno", "ikseon", "insa", "eulji", "bukchon"].includes(

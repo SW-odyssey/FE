@@ -1,3 +1,17 @@
+import type { DiscoveryLanguage } from "../../model";
+
+// Generated once with Gemini 3.8 Flash from VISITKOREA and Glow Seoul venue information.
+export const previewGeminiSummaries: Partial<
+  Record<string, Record<DiscoveryLanguage, string>>
+> = {
+  oncheonjip: {
+    ko: "익선동 한옥에서 여러 종류의 샤부샤부를 맛볼 수 있어요. 중정은 흰 자갈과 나무 욕조를 놓아 온천 정원처럼 꾸몄어요.",
+    en: "Located in Ikseon-dong, this restaurant serves several varieties of shabu-shabu. Its hanok courtyard is designed as a hot-spring garden, featuring white gravel and a wooden tub.",
+    ja: "益善洞に位置し、数種類のしゃぶしゃぶを提供している店舗です。韓屋の中庭は白い砂利と木製桶を配し、温泉庭園をモチーフにした空間にデザインされています。",
+    zh: "这家位于益善洞的餐厅提供数种涮涮锅。其韩屋中庭布置有白砾石和木桶，设计呈现出温泉庭园的景观特色。",
+  },
+};
+
 // Editorial introduction copy used by the current preview.
 export const previewSummaries: Record<string, [string, string]> = {
   cheongsudang: [

@@ -1,0 +1,435 @@
+.local-web .local-course {
+  padding: 12px calc(var(--local-content-gutter) + var(--local-safe-right))
+    calc(var(--local-nav-height) + var(--local-nav-bottom) + 24px)
+    calc(var(--local-content-gutter) + var(--local-safe-left));
+  scroll-padding-bottom: calc(
+    var(--local-nav-height) + var(--local-nav-bottom) + 8px
+  );
+}
+
+.local-course-modes {
+  --local-segment-track-padding: 3px;
+  --local-segment-lens-radius: var(--r-pill);
+  --local-segment-lens-fill: var(--local-pale);
+  --local-segment-reduced-fill: var(--local-pale);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 46px;
+  margin-bottom: 16px;
+  padding: 3px;
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-pill);
+  background: var(--refresh-card);
+}
+
+.local-course-modes > button {
+  position: relative;
+  z-index: 1;
+  min-height: 40px;
+  padding: 4px 8px;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: var(--r-pill);
+}
+
+.local-course-modes > button[aria-pressed="true"] {
+  color: var(--local-plum);
+}
+
+.local-auto-hero {
+  display: grid;
+  position: relative;
+  isolation: isolate;
+  align-items: end;
+  min-height: 98px;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  background: var(--refresh-card);
+}
+
+.local-auto-hero.has-photo {
+  min-height: clamp(150px, 23vw, 192px);
+  color: #fff;
+}
+
+.local-auto-hero > .local-photo,
+.local-auto-hero.has-photo::after {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.local-auto-hero > .local-photo {
+  object-fit: cover;
+  z-index: -2;
+}
+
+.local-auto-hero.has-photo::after {
+  content: "";
+  z-index: -1;
+  background: linear-gradient(0deg, #131019d4, #13101945 57%, transparent);
+}
+
+.local-auto-hero-copy {
+  padding: 16px 18px;
+}
+
+.local-auto-hero-copy h1 {
+  font-size: clamp(26px, 4vw, 35px);
+  line-height: 1.2;
+}
+
+.local-auto-hero-copy p {
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.local-auto-options {
+  margin: 12px 0;
+}
+
+.local-auto-context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 2px 6px;
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-lg);
+  background: var(--refresh-card);
+  box-shadow: var(--refresh-shadow);
+}
+
+.local-auto-context button,
+.local-auto-chips button,
+.local-auto-late,
+.local-auto-swap {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  padding: 4px 9px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--r-pill);
+}
+
+.local-auto-context button:nth-child(2) {
+  flex: 1;
+}
+
+.local-auto-context button > .local-icon:first-child,
+.local-auto-swap {
+  color: var(--local-plum);
+}
+
+.local-auto-preferences,
+.local-auto-chips {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.local-auto-preferences {
+  margin-top: 8px;
+  justify-content: space-between;
+}
+
+.local-auto-chips button,
+.local-auto-late {
+  padding-inline: 12px;
+  border: 1px solid var(--refresh-line);
+  background: var(--refresh-card);
+}
+
+.local-auto-chips button[aria-pressed="true"],
+.local-auto-late[aria-pressed="true"] {
+  color: var(--local-plum);
+  background: var(--local-pale);
+  border-color: transparent;
+}
+
+.local-auto-itinerary .local-course-section-heading {
+  min-height: 48px;
+}
+
+.local-auto-itinerary .local-course-timeline .local-auto-stage {
+  color: var(--local-plum);
+  font-size: 12px;
+  line-height: 17px;
+  font-weight: 600;
+}
+
+.local-auto-itinerary .local-place-info {
+  gap: 2px;
+}
+
+.local-auto-itinerary .local-course-stop-detail {
+  gap: 8px;
+}
+
+.local-auto-itinerary .local-course-stop-detail .local-place-info {
+  min-width: 0;
+}
+
+.local-auto-itinerary .local-course-stop-detail strong {
+  overflow-wrap: anywhere;
+}
+
+.local-auto-swap {
+  flex: none;
+  padding-inline: 4px;
+}
+
+.local-auto-alternatives {
+  display: grid;
+  gap: 2px;
+  margin-inline-start: 38px;
+  padding-block: 4px;
+}
+
+.local-auto-alternatives button {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  min-height: 46px;
+  border-radius: var(--r-md);
+  background: var(--refresh-ground);
+  text-align: start;
+}
+
+.local-auto-alternatives .local-photo {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-sm);
+  object-fit: cover;
+}
+
+.local-auto-itinerary-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+}
+
+.local-auto-itinerary-title > small {
+  color: var(--refresh-muted);
+  font-size: 11px;
+}
+
+@media (max-width: 360px) {
+  .local-auto-itinerary .local-course-stop-detail .local-photo {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+.local-course-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.local-course-heading p,
+.local-course-origin,
+.local-course-distance,
+.local-course-map figcaption,
+.local-course-empty {
+  color: var(--refresh-muted);
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.local-course-heading p {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.local-course-itinerary {
+  padding: 8px 12px 0;
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-lg);
+  background: var(--refresh-card);
+  box-shadow: var(--refresh-shadow);
+}
+
+.local-course-section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.local-course-section-heading h2 {
+  font-size: 19px;
+  line-height: 25px;
+}
+
+.local-course-itinerary .local-course-section-heading {
+  padding-left: 4px;
+}
+
+.local-course-text-action {
+  min-height: 44px;
+  padding: 0 4px 0 8px;
+  color: var(--local-plum);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: end;
+}
+
+.local-course-timeline {
+  position: relative;
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.local-course-timeline:has(li + li)::before {
+  position: absolute;
+  inset: 32px auto 32px 14px;
+  width: 1px;
+  background: var(--local-pale);
+  content: "";
+}
+
+.local-course-pin {
+  position: relative;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--local-plum);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.local-course-stop,
+.local-course-stop-detail {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.local-course-stop-detail {
+  flex: 1;
+  min-width: 0;
+  min-height: 64px;
+  padding: 6px 4px 6px 0;
+  text-align: start;
+}
+
+.local-course-stop-detail .local-photo {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--r-sm);
+  object-fit: cover;
+}
+
+.local-course-stop-detail .local-place-info {
+  flex: 1;
+}
+
+.local-course-stop-detail > .local-icon {
+  color: var(--refresh-muted);
+}
+
+.local-course-distance {
+  padding: 3px 0 3px 38px;
+}
+
+.local-course-edit {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.local-course-edit > button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-sm);
+  color: var(--local-plum);
+}
+
+.local-course-edit > button:first-child .local-icon {
+  transform: rotate(-90deg);
+}
+
+.local-course-edit > button:nth-child(2) .local-icon {
+  transform: rotate(90deg);
+}
+
+.local-course-map-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 0 4px;
+  border-top: 1px solid var(--refresh-line);
+  color: var(--local-plum);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: start;
+}
+
+.local-course-map-toggle .local-icon:last-child {
+  margin-inline-start: auto;
+}
+
+.local-course-candidates {
+  margin-top: 24px;
+}
+
+.local-course-candidates .local-place-list {
+  margin-top: 8px;
+}
+
+.local-course-origin {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.local-course-origin .local-icon {
+  color: var(--local-plum);
+}
+
+.local-course-empty {
+  margin-top: 12px;
+}
+
+.local-course-candidates > .local-secondary {
+  margin-top: 12px;
+}
+
+.local-course-detail-actions {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.local-course-detail-actions > .local-course-detail-map {
+  height: 52px;
+  padding: 0;
+}

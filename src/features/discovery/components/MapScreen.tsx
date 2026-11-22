@@ -13,14 +13,21 @@ import { DiscoveryControls } from "./DiscoveryControls";
 import { Photo } from "./PlacePhoto";
 import { renderPlaceRow } from "./PlaceRow";
 import { ResourceNotice } from "./ResourceNotice";
+import { SearchHeader } from "./SearchHeader";
+import { SegmentedChoice } from "./SegmentedChoice";
 type Props = Pick<
   DiscoveryController,
   | "language"
   | "mapCamera"
+  | "mapFocusRequest"
   | "mapId"
   | "mapPlaces"
   | "mapScope"
   | "mapSelected"
+  | "selected"
+  | "courseMapStops"
+  | "changeMapLayer"
+  | "navigate"
   | "openFilters"
   | "openPlace"
   | "selectMapGroup"
@@ -40,11 +47,15 @@ type Props = Pick<
     currentLocation: Coordinate | null;
     onLocate: (point: Coordinate) => void;
     viewportScale: number;
-  };
+    desktop: boolean;
+    showCourse: boolean;
+  } & React.ComponentProps<typeof SearchHeader>;
+const desktopInsets: MapViewportInsets = { top: 76, bottom: 48 };
 export function MapScreen(props: Props) {
   const {
     language,
     mapCamera,
+    mapFocusRequest,
     mapId,
     mapPlaces,
     mapScope,
@@ -63,32 +74,65 @@ export function MapScreen(props: Props) {
     visible,
     status,
     retry,
+    desktop,
+    showCourse,
+    courseMapStops,
+    changeMapLayer,
+    selected,
+    navigate,
+    name,
+    kind,
   } = props;
   const page = useRef<HTMLDivElement>(null);
   const context = useRef<HTMLDivElement>(null);
   const [layout, setLayout] = useState<{
     insets: MapViewportInsets;
     maxSheetHeight: number;
+    courseContentHeight?: number;
   } | null>(null);
   useLayoutEffect(() => {
     const root = page.current;
     const controls = context.current;
     const panel = root?.querySelector<HTMLElement>(".local-place-sheet");
-    if (!root?.closest(".local-web") || !controls || !panel) return;
+    if (desktop || !root?.closest(".local-web") || !controls || !panel) return;
+    const courseContent = showCourse
+      ? panel.querySelector<HTMLElement>(
+          ".local-map-course-list, .local-empty-map",
+        )
+      : null;
+    const listLayer = courseContent?.closest<HTMLElement>(
+      ".local-sheet-list-layer",
+    );
 
     const measure = () => {
       const top = controls.offsetTop + controls.offsetHeight + 8;
       const bottom = Number.parseFloat(getComputedStyle(panel).bottom) || 0;
+      const remaining = root.clientHeight - bottom - top;
+      const mapSpace =
+        Number.parseFloat(
+          getComputedStyle(root).getPropertyValue(
+            "--local-map-sheet-clearance",
+          ),
+        ) || 0;
       const maxSheetHeight = Math.min(
         sheetHeights.expanded,
-        root.clientHeight - bottom - top,
+        Math.max(sheetHeights.collapsed, remaining - mapSpace),
       );
+      const layerStyle = listLayer && getComputedStyle(listLayer);
+      const courseContentHeight =
+        courseContent && layerStyle
+          ? courseContent.offsetHeight +
+            parseFloat(layerStyle.top) +
+            parseFloat(layerStyle.bottom) +
+            2
+          : undefined;
       setLayout((previous) =>
         previous?.maxSheetHeight === maxSheetHeight &&
         previous.insets.top === top &&
-        previous.insets.bottom === bottom
+        previous.insets.bottom === bottom &&
+        previous.courseContentHeight === courseContentHeight
           ? previous
-          : { insets: { top, bottom }, maxSheetHeight },
+          : { insets: { top, bottom }, maxSheetHeight, courseContentHeight },
       );
     };
 
@@ -96,82 +140,202 @@ export function MapScreen(props: Props) {
     const resize = new ResizeObserver(measure);
     resize.observe(root);
     resize.observe(controls);
+    if (courseContent) resize.observe(courseContent);
     return () => resize.disconnect();
-  }, []);
+  }, [desktop, showCourse, courseMapStops.length]);
 
   const maximumHeight = layout?.maxSheetHeight ?? sheetHeights.expanded;
-  const heights = sheetHeightsForSpace(maximumHeight);
+  const courseContentHeight = showCourse
+    ? layout?.courseContentHeight
+    : undefined;
+  const heights = sheetHeightsForSpace(maximumHeight, courseContentHeight);
+  const displayed = showCourse ? courseMapStops : mapPlaces;
+  const highlighted = selected ?? (showCourse ? null : mapSelected);
   return (
-    <div key="map" ref={page} className="local-content local-map-page">
+    <div
+      ref={page}
+      className={`local-content local-map-page ${showCourse ? "is-course-map" : ""}`}
+      style={
+        !desktop && layout
+          ? ({
+              "--local-map-measured-top": `${layout.insets.top}px`,
+            } as React.CSSProperties)
+          : undefined
+      }
+      role="region"
+      aria-label={
+        showCourse
+          ? t("Course map", "코스 지도")
+          : t("Map of nearby places", "주변 장소 지도")
+      }
+    >
       <ExploreMap
         memory={mapCamera}
         scope={mapScope}
         onGroupSelect={selectMapGroup}
         places={visible}
-        selected={mapSelected}
+        selected={highlighted}
+        courseStops={showCourse ? courseMapStops : undefined}
+        onCourseStopSelect={openPlace}
         language={language}
         currentLocation={currentLocation}
         onLocate={onLocate}
-        sheetInset={heights[sheet]}
+        sheetInset={desktop ? 0 : heights[sheet]}
         viewportScale={viewportScale}
-        viewportInsets={layout?.insets}
-        focusSelected={Boolean(mapId)}
-        onSelect={selectMapPlace}
+        viewportInsets={desktop ? desktopInsets : layout?.insets}
+        focusSelected={Boolean(selected || (!showCourse && mapId))}
+        focusRequest={mapFocusRequest}
+        onSelect={desktop ? openPlace : selectMapPlace}
       />
       <div className="local-map-context" ref={context}>
-        <DiscoveryControls {...props} />
-      </div>
-      <PlaceSheet
-        state={sheet}
-        onStateChange={setSheet}
-        scale={viewportScale}
-        maximumHeight={maximumHeight}
-        language={language}
-        summary={
-          <button
-            className="local-sheet-summary"
-            onClick={() => setSheet("half")}
-            aria-label={placeCount(language, mapPlaces.length, true)}
-          >
-            <span className="local-sheet-thumbnails" aria-hidden="true">
-              {mapPlaces.slice(0, 3).map((p) => (
-                <Photo key={p.id} place={p} />
-              ))}
-            </span>
-            <strong>{placeCount(language, mapPlaces.length)}</strong>
-            <LocalIcon name="chevron-right" size={16} />
-          </button>
-        }
-      >
-        {mapScope && (
-          <div className="local-scope-row">
+        {desktop ? (
+          <div className="local-desktop-map-title">
+            <LocalIcon name={showCourse ? "route" : "map"} size={18} />
             <span>
-              {t("Selected area", "선택한 구역")} {mapPlaces.length}
+              {showCourse
+                ? t("Course map", "코스 지도")
+                : t("Map of nearby places", "주변 장소 지도")}
             </span>
-            <button onClick={clearMapScope}>
-              {t("Show all", "전체 보기")}
-            </button>
+          </div>
+        ) : (
+          <div className="local-map-mobile-tools">
+            <SegmentedChoice
+              className="local-map-layers"
+              label={t("Map layer", "지도 표시")}
+              value={showCourse ? "course" : "places"}
+              onChange={(layer) => changeMapLayer(layer === "course")}
+              options={[
+                {
+                  value: "places",
+                  label: (
+                    <>
+                      <LocalIcon name="places" size={16} />
+                      {t("Places", "장소")}
+                    </>
+                  ),
+                },
+                {
+                  value: "course",
+                  label: (
+                    <>
+                      <LocalIcon name="route" size={16} />
+                      {t("Course", "코스")}
+                    </>
+                  ),
+                },
+              ]}
+            />
+            {!showCourse && (
+              <>
+                <SearchHeader {...props} />
+                <DiscoveryControls {...props} />
+              </>
+            )}
           </div>
         )}
-        <div className="local-sheet-scroll">
-          {status === "loading" || status === "error" ? (
-            <ResourceNotice status={status} retry={retry} t={t} />
-          ) : mapPlaces.length ? (
-            mapPlaces.map((p) =>
-              renderPlaceRow(props, p, () => {
-                openPlace(p);
-              }),
-            )
-          ) : (
-            <div className="local-empty-map">
-              {t("No places found", "장소가 없어요")}
-              <button className="local-secondary" onClick={openFilters}>
-                {t("Edit filters", "필터 변경")}
+      </div>
+      {!desktop && (
+        <PlaceSheet
+          state={sheet}
+          onStateChange={setSheet}
+          scale={viewportScale}
+          maximumHeight={maximumHeight}
+          contentHeight={courseContentHeight}
+          language={language}
+          label={showCourse ? t("Visit order", "방문 순서") : undefined}
+          summary={
+            <button
+              className="local-sheet-summary"
+              onClick={() => setSheet("half")}
+              aria-label={
+                showCourse
+                  ? t("Visit order", "방문 순서")
+                  : placeCount(language, displayed.length, true)
+              }
+            >
+              <span className="local-sheet-thumbnails" aria-hidden="true">
+                {displayed.slice(0, 3).map((p) => (
+                  <Photo key={p.id} place={p} />
+                ))}
+              </span>
+              <strong>
+                {showCourse
+                  ? t("Visit order", "방문 순서")
+                  : placeCount(language, displayed.length)}
+              </strong>
+              <LocalIcon name="chevron-right" size={16} />
+            </button>
+          }
+        >
+          {mapScope && !showCourse && (
+            <div className="local-scope-row">
+              <span>
+                {t("Selected area", "선택한 구역")} {mapPlaces.length}
+              </span>
+              <button onClick={clearMapScope}>
+                {t("Show all", "전체 보기")}
               </button>
             </div>
           )}
-        </div>
-      </PlaceSheet>
+          <div className="local-sheet-scroll">
+            {showCourse ? (
+              courseMapStops.length ? (
+                <ol
+                  className="local-map-course-list"
+                  aria-label={t("Visit order", "방문 순서")}
+                >
+                  {courseMapStops.map((place, index) => (
+                    <li key={place.id}>
+                      <button
+                        className="local-course-stop-detail"
+                        onClick={() => openPlace(place)}
+                      >
+                        <span className="local-course-pin" aria-hidden="true">
+                          {index + 1}
+                        </span>
+                        <Photo place={place} decorative />
+                        <span className="local-place-info">
+                          <strong>{name(place)}</strong>
+                          <span>{kind(place)}</span>
+                        </span>
+                        <LocalIcon name="chevron-right" size={16} />
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <div className="local-empty-map">
+                  {t(
+                    "No course for these conditions",
+                    "이 조건에 맞는 코스가 없어요",
+                  )}
+                  <button
+                    className="local-secondary"
+                    onClick={() => navigate("course")}
+                  >
+                    {t("View course", "코스 보기")}
+                  </button>
+                </div>
+              )
+            ) : status === "loading" || status === "error" ? (
+              <ResourceNotice status={status} retry={retry} t={t} />
+            ) : mapPlaces.length ? (
+              mapPlaces.map((p) =>
+                renderPlaceRow(props, p, () => {
+                  openPlace(p);
+                }),
+              )
+            ) : (
+              <div className="local-empty-map">
+                {t("No places found", "장소가 없어요")}
+                <button className="local-secondary" onClick={openFilters}>
+                  {t("Edit filters", "필터 변경")}
+                </button>
+              </div>
+            )}
+          </div>
+        </PlaceSheet>
+      )}
     </div>
   );
 }

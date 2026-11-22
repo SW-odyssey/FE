@@ -25,14 +25,25 @@ type Props = Pick<
   | "featuredId"
   | "setFeaturedId"
   | "modal"
+  | "clearMapScope"
 > &
-  React.ComponentProps<typeof DiscoveryControls>;
+  React.ComponentProps<typeof DiscoveryControls> & { mapScopeActive?: boolean };
 export function DiscoverScreen(props: Props) {
   const { query, scroll, resetFilters, t, visible, status, retry, language } =
     props;
   return (
     <div key="places" className="local-content local-places" ref={scroll}>
       <DiscoveryControls {...props} />
+      {props.mapScopeActive && (
+        <div className="local-scope-row">
+          <span>
+            {t("Selected area", "선택한 구역")} · {visible.length}
+          </span>
+          <button onClick={props.clearMapScope}>
+            {t("Show all", "전체 보기")}
+          </button>
+        </div>
+      )}
       <h1 className="local-sr-only">
         {query ? t("Search results", "검색 결과") : t("Nearby", "주변 장소")}
       </h1>

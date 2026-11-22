@@ -120,7 +120,7 @@ test("only a missing area or Jongno restores the current-area flag", () => {
 
 test("invalid values retain the controller's fallbacks and leave place validation to its data source", () => {
   const state = readPreviewUrl(
-    "?view=course&area=unknown&place=nogari&panel=other&sheet=full&slot=dinner&day=oops&activity=moderate&category=culture&space=unknown&lang=fr&q=++",
+    "?view=unknown&area=unknown&place=nogari&panel=other&sheet=full&slot=dinner&day=oops&activity=moderate&category=culture&space=unknown&lang=fr&q=++",
     now,
     "ko",
   );
@@ -141,6 +141,43 @@ test("invalid values retain the controller's fallbacks and leave place validatio
     category: "all",
     language: "en",
   });
+});
+
+test("course detail links restore the course, selected place and discovery context", () => {
+  const params = serializePreviewUrl({
+    ...defaults,
+    view: "course",
+    place: "cheongsudang",
+    query: "coffee",
+    category: "cafe",
+    language: "ko",
+  });
+  const state = readPreviewUrl(params.toString(), now, null);
+  assert.equal(state.view, "course");
+  assert.equal(state.place, "cheongsudang");
+  assert.equal(state.query, "coffee");
+  assert.equal(state.category, "cafe");
+  assert.equal(state.language, "ko");
+  assert.equal(params.has("sheet"), false);
+});
+
+test("course map links retain the course layer and saved-course mode", () => {
+  const params = serializePreviewUrl({
+    ...defaults,
+    view: "map",
+    courseMap: true,
+    savedCourse: true,
+    place: "ssamziegil",
+  });
+  const restored = readPreviewUrl(params.toString(), now, null);
+  assert.equal(restored.courseMap, true);
+  assert.equal(restored.savedCourse, true);
+  assert.equal(restored.place, "ssamziegil");
+  assert.equal(
+    readPreviewUrl("?view=discover&layer=course&course=saved", now, null)
+      .savedCourse,
+    undefined,
+  );
 });
 
 test("day restoration preserves numeric coercion and clamps only to zero through six", () => {

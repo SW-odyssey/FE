@@ -33,13 +33,21 @@ export type RecommendationAnalysis = {
   slot: VisitSlot;
   activity: AreaActivity;
 };
+export type VisitDayGroup = "monThu" | "fri" | "sat" | "sun";
+export type AreaVisitPattern = {
+  provenance?: "preview";
+  /** Values are relative to the highest time slot within the selected day group. */
+  byDay: Record<VisitDayGroup, Record<VisitSlot, number>>;
+};
 export type DiscoveryPlaceDetail = {
   place: LocalPlace;
   photos: PlacePhoto[];
   summaries: Record<DiscoveryLanguage, string>;
   descriptions: Record<DiscoveryLanguage, string>;
+  aiSummary?: Record<DiscoveryLanguage, string>;
   sourceUrl: string;
   photoCredits: string[];
+  visitPattern?: AreaVisitPattern;
 };
 export type DiscoveryRequestOptions = {
   signal?: AbortSignal;
@@ -48,6 +56,7 @@ export type DiscoveryRequestOptions = {
 export type DiscoverySnapshot = {
   query(input: DiscoveryQuery): DiscoveryQueryResult;
   getPlace(id: string): DiscoveryPlaceDetail | null;
+  browseCourse?(area: DiscoveryArea): LocalPlace | null;
 };
 /** Async adapters return the same screen model; only preview supplies snapshot. */
 export interface DiscoveryDataSource {

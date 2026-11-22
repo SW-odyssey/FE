@@ -4,16 +4,29 @@ import { type UIEvent, useRef, useState } from "react";
 import type { DiscoveryView } from "../model";
 
 export function useCompactNavigation(view: DiscoveryView) {
-  const [compact, setCompact] = useState({ discover: false, map: false });
+  const [compact, setCompact] = useState({
+    discover: false,
+    course: false,
+    map: false,
+  });
   const positions = useRef({
     discover: { top: 0, travel: 0 },
+    course: { top: 0, travel: 0 },
     map: { top: 0, travel: 0 },
   });
 
+  const scrollers: Record<DiscoveryView, string> = {
+    discover: ".local-places",
+    course: ".local-course",
+    map: ".local-sheet-scroll",
+  };
+
   function onScroll(event: UIEvent<HTMLElement>) {
     const scroller = event.target;
-    const selector = view === "map" ? ".local-sheet-scroll" : ".local-places";
-    if (!(scroller instanceof HTMLElement) || !scroller.matches(selector)) {
+    if (
+      !(scroller instanceof HTMLElement) ||
+      !scroller.matches(scrollers[view])
+    ) {
       return;
     }
 

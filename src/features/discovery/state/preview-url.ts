@@ -22,6 +22,8 @@ export type PreviewUrlState = {
   place: string | null;
   modal: Modal;
   sheet?: SheetState;
+  courseMap?: true;
+  savedCourse?: true;
   query: string;
   autoTime: boolean;
   slot?: VisitSlot;
@@ -48,6 +50,8 @@ export type PreviewUrlSelection = Pick<
 > & {
   slot: VisitSlot;
   sheet: SheetState;
+  courseMap?: boolean;
+  savedCourse?: boolean;
   spaces: readonly SpacePreference[];
 };
 
@@ -82,7 +86,12 @@ export function readPreviewUrl(
   const linkedCategory = params.get("category");
 
   return {
-    view: state.view === "map" ? "map" : "discover",
+    view: state.view,
+    ...(state.view === "map" &&
+      params.get("layer") === "course" && { courseMap: true as const }),
+    ...((state.view === "course" ||
+      (state.view === "map" && params.get("layer") === "course")) &&
+      params.get("course") === "saved" && { savedCourse: true as const }),
     area: params.has("area") ? state.area : "jongno",
     currentArea: !params.has("area") || state.area === "jongno",
     place: state.place,
@@ -134,5 +143,11 @@ export function serializePreviewUrl(
   if (state.spaces.length) params.set("space", state.spaces.join(","));
   if (state.modal) params.set("panel", state.modal);
   if (state.view === "map") params.set("sheet", state.sheet);
+  if (state.view === "map" && state.courseMap) params.set("layer", "course");
+  if (
+    (state.view === "course" || (state.view === "map" && state.courseMap)) &&
+    state.savedCourse
+  )
+    params.set("course", "saved");
   return params;
 }

@@ -54,6 +54,79 @@
   font-size: 14px;
   line-height: 21px;
 }
+.local-visit-pattern-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+.local-visit-pattern-day {
+  position: relative;
+  max-width: 100%;
+}
+.local-visit-pattern-day::after {
+  position: absolute;
+  inset-inline-end: 13px;
+  top: calc(50% - 5px);
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  pointer-events: none;
+  content: "";
+}
+.local-visit-pattern-day select {
+  appearance: none;
+  min-height: 40px;
+  max-width: 100%;
+  padding: 4px 30px 4px 12px;
+  border: 0;
+  border-radius: var(--r-pill);
+  background: var(--refresh-ground, var(--local-bg));
+  color: var(--local-ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.local-visit-pattern-day select:focus-visible {
+  outline: 2px solid var(--local-plum);
+  outline-offset: 2px;
+}
+.local-visit-pattern-chart {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+.local-visit-pattern-chart > li {
+  display: grid;
+  grid-template-rows: 56px auto;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 18px;
+}
+.local-visit-pattern-track {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: 1px solid var(--local-border);
+}
+.local-visit-pattern-track > span {
+  width: min(36px, 60%);
+  border-radius: 8px 8px 0 0;
+  background: #dccee5;
+}
+.local-visit-pattern-chart > li[data-peak="true"] {
+  color: var(--local-plum);
+  font-weight: 700;
+}
+.local-visit-pattern-chart > li[data-peak="true"] .local-visit-pattern-track > span {
+  background: var(--local-plum);
+}
 .local-address {
   display: flex;
   align-items: center;
@@ -97,18 +170,6 @@
   color: white;
   display: grid;
   place-items: center;
-}
-.local-place-source {
-  font-size: 12px;
-  line-height: 18px;
-  color: #6a606f;
-}
-.local-place-source p {
-  padding: 8px 0;
-}
-.local-place-source a {
-  color: var(--local-plum);
-  text-decoration: underline;
 }
 .local-detail-safe-area {
   height: 26px;

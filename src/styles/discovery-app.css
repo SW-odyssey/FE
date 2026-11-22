@@ -159,6 +159,39 @@
   }
 }
 
+/* The same screens remain in flow on wider web viewports. */
+@media (min-width: 600px) {
+  .local-shell.local-web.local-responsive-web {
+    --local-content-gutter: clamp(24px, 4vw, 48px);
+    max-width: min(100%, 920px);
+  }
+
+  .local-responsive-web > .local-bottom-nav {
+    --local-nav-inset-left: max(var(--local-content-gutter), calc((100% - 440px) / 2));
+    --local-nav-inset-right: var(--local-nav-inset-left);
+  }
+
+  .local-responsive-web > .local-search-header,
+  .local-responsive-web > .local-places,
+  .local-responsive-web > .local-course,
+  .local-responsive-web .local-detail-body,
+  .local-responsive-web .local-detail-action {
+    width: 100%;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+
+  .local-shell.local-refined.local-responsive-web .local-detail-hero {
+    max-height: 350px;
+  }
+
+  .local-responsive-web .local-map-context,
+  .local-responsive-web .local-place-sheet {
+    max-width: 590px;
+    margin-inline: auto;
+  }
+}
+
 /* Device frame (/guide): the real web layout inside a 393x852 phone. */
 .local-phone-frame > .local-shell.local-web {
   --local-safe-top: 61px;
