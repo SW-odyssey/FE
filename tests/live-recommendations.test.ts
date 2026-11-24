@@ -50,6 +50,7 @@ test("the live source keeps cafés and restaurants in backend order and shares t
             ? {
                 status: "AVAILABLE",
                 graph: {
+                  highlightSlot: "dinner",
                   bars: [
                     { slot: "lunch", relativeHeight: 60 },
                     { slot: "afternoon", relativeHeight: 80 },
@@ -87,10 +88,8 @@ test("the live source keeps cafés and restaurants in backend order and shares t
   });
   assert.ok(pattern?.provenance === "live");
   assert.deepEqual(await getLiveVisitPattern(pattern), {
-    lunch: 60,
-    afternoon: 80,
-    evening: 100,
-    late: 20,
+    heights: { lunch: 60, afternoon: 80, evening: 100, late: 20 },
+    highlightSlot: "evening",
   });
   assert.equal(calls.filter((url) => url.pathname.endsWith("/meta")).length, 1);
   assert.equal(calls.at(-1)?.searchParams.get("datasetId"), "public-latest");
@@ -114,4 +113,61 @@ test("empty recommendations and missing place links are handled without demo dat
   assert.equal(await source.getPlace("1557", { query }), null);
   assert.equal(await source.getPlace("old-preview-slug", { query }), null);
   assert.equal(fetch.mock.callCount(), 3);
+});
+
+test("방문 패턴은 동률과 일부 자료 누락의 막대를 보존한다", async (t) => {
+  const slots = ["lunch", "afternoon", "dinner", "late_night"];
+  const payloads = [
+    { status: "NO_DISTINCT_PEAK", values: [100, 100, 100, 100] },
+    { status: "NO_DISTINCT_PEAK", values: [80, 100, 95, 50] },
+    { status: "INCOMPLETE_TIME_SLOTS", values: [null, 100, 0, null] },
+  ];
+  let index = 0;
+  t.mock.method(globalThis, "fetch", async () => {
+    const { status, values } = payloads[index++];
+    return Response.json({
+      success: true,
+      data: {
+        status,
+        graph: {
+          highlightSlot: null,
+          bars: slots.map((slot, i) => ({ slot, relativeHeight: values[i] })),
+        },
+      },
+    });
+  });
+  const input = {
+    datasetId: "public-latest",
+    cellId: "81655936",
+    weekday: "fri",
+  } as const;
+  assert.deepEqual(await getLiveVisitPattern(input), {
+    heights: { lunch: 100, afternoon: 100, evening: 100, late: 100 },
+    highlightSlot: null,
+  });
+  assert.deepEqual(await getLiveVisitPattern(input), {
+    heights: { lunch: 80, afternoon: 100, evening: 95, late: 50 },
+    highlightSlot: null,
+  });
+  assert.deepEqual(await getLiveVisitPattern(input), {
+    heights: { lunch: null, afternoon: 100, evening: 0, late: null },
+    highlightSlot: null,
+  });
+});
+
+test("관측한 막대가 없는 방문 패턴은 그래프를 만들지 않는다", async (t) => {
+  const inputs = ["INCOMPLETE_TIME_SLOTS", "NO_POSITIVE_VISITS"];
+  t.mock.method(globalThis, "fetch", async () =>
+    Response.json({
+      success: true,
+      data: { status: inputs.shift(), graph: null },
+    }),
+  );
+  const input = {
+    datasetId: "public-latest",
+    cellId: "81655936",
+    weekday: "fri",
+  } as const;
+  assert.equal(await getLiveVisitPattern(input), null);
+  assert.equal(await getLiveVisitPattern(input), null);
 });

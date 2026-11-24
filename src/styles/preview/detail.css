@@ -120,6 +120,23 @@
   border-radius: 8px 8px 0 0;
   background: #dccee5;
 }
+.local-visit-pattern-track.is-missing {
+  align-items: center;
+  margin-inline: 4px;
+  padding: 2px;
+  border: 1px dashed var(--local-border);
+  border-radius: 8px;
+  overflow-wrap: anywhere;
+}
+.local-visit-pattern-track.is-missing small {
+  font-size: 11px;
+  line-height: 1.25;
+}
+.local-visit-pattern-message {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
 .local-visit-pattern-chart > li[data-peak="true"] {
   color: var(--local-plum);
   font-weight: 700;

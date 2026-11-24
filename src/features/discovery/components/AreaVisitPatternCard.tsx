@@ -30,21 +30,33 @@ const copy = {
   ko: {
     title: "주변 방문 패턴",
     dayLabel: "방문 패턴 요일",
+    missing: "자료 없음",
+    loading: "방문 패턴을 불러오는 중…",
+    unavailable: "이 요일의 방문 패턴 자료가 없어요.",
     days: { monThu: "월~목", fri: "금요일", sat: "토요일", sun: "일요일" },
   },
   en: {
     title: "Nearby visit patterns",
     dayLabel: "Day for visit patterns",
+    missing: "No data",
+    loading: "Loading visit patterns…",
+    unavailable: "Visit pattern data is unavailable for this day.",
     days: { monThu: "Mon–Thu", fri: "Friday", sat: "Saturday", sun: "Sunday" },
   },
   ja: {
     title: "周辺の来訪傾向",
     dayLabel: "来訪傾向の曜日",
+    missing: "データなし",
+    loading: "来訪傾向を読み込み中…",
+    unavailable: "この曜日の来訪データはありません。",
     days: { monThu: "月〜木", fri: "金曜日", sat: "土曜日", sun: "日曜日" },
   },
   zh: {
     title: "周边到访趋势",
     dayLabel: "到访趋势的星期",
+    missing: "暂无数据",
+    loading: "正在加载到访趋势…",
+    unavailable: "当天暂无到访趋势数据。",
     days: { monThu: "周一至周四", fri: "周五", sat: "周六", sun: "周日" },
   },
 };
@@ -87,16 +99,22 @@ export function AreaVisitPatternCard({
       });
     return () => controller.abort();
   }, [cellId, datasetId, key, weekday]);
-  const values =
-    pattern.provenance === "live" ? result?.data : pattern.byDay[day];
-  if (!values) return null;
-  const heights = visitSlots.map((slot) => values[slot]);
-  const highest = Math.max(...heights);
-  const hasPeak =
-    heights.every(
-      (value) => Number.isFinite(value) && value >= 0 && value <= 100,
-    ) && highest > Math.min(...heights);
-  if (!hasPeak) return null;
+  const current = result?.key === key ? result : undefined;
+  const graph = current?.data;
+  const pending = Boolean(live && !current);
+  const preview =
+    pattern.provenance === "preview" ? pattern.byDay[day] : undefined;
+  const previewHeights = preview ? visitSlots.map((slot) => preview[slot]) : [];
+  const previewHighest = Math.max(...previewHeights);
+  if (
+    preview &&
+    (previewHeights.some(
+      (value) => !Number.isFinite(value) || value < 0 || value > 100,
+    ) ||
+      previewHighest <= Math.min(...previewHeights))
+  )
+    return null;
+  const heights = live ? graph?.heights : preview;
   const labels = copy[language];
   const weekdayLabel = new Intl.DateTimeFormat(dateLocales[language], {
     weekday: "long",
@@ -107,7 +125,7 @@ export function AreaVisitPatternCard({
     <section
       className="local-detail-section local-visit-pattern"
       aria-labelledby={titleId}
-      aria-busy={Boolean(live && result?.key !== key)}
+      aria-busy={pending}
     >
       <div className="local-visit-pattern-heading">
         <h2 id={titleId}>
@@ -142,29 +160,50 @@ export function AreaVisitPatternCard({
           </select>
         </label>
       </div>
-      <ul
-        className="local-visit-pattern-chart"
-        role="list"
-        aria-label={
-          (live &&
-            localText(
-              language,
-              "LG U+ · Relative visits by time of day in the surrounding 50 m cell",
-              "LG U+ · 주변 50m 구역의 시간대별 상대 방문 지표",
-            )) ||
-          undefined
-        }
-      >
-        {visitSlots.map((slot) => (
-          <li key={slot} data-peak={values[slot] === highest}>
-            <div className="local-visit-pattern-track" aria-hidden="true">
-              <span style={{ height: `${values[slot]}%` }} />
-            </div>
-            <span>{slotLabels[language][slot]}</span>
-            <span className="local-sr-only">{values[slot]} / 100</span>
-          </li>
-        ))}
-      </ul>
+      {heights ? (
+        <ul
+          className="local-visit-pattern-chart"
+          role="list"
+          aria-label={
+            (live &&
+              localText(
+                language,
+                "LG U+ · Relative visits by time of day in the surrounding 50 m cell",
+                "LG U+ · 주변 50m 구역의 시간대별 상대 방문 지표",
+              )) ||
+            undefined
+          }
+        >
+          {visitSlots.map((slot) => {
+            const height = heights[slot];
+            const peak = live
+              ? graph?.highlightSlot === slot
+              : height === previewHighest;
+            return (
+              <li key={slot} data-peak={peak}>
+                <div
+                  className={`local-visit-pattern-track${height === null ? " is-missing" : ""}`}
+                  aria-hidden="true"
+                >
+                  {height === null ? (
+                    <small>{labels.missing}</small>
+                  ) : (
+                    <span style={{ height: `${height}%` }} />
+                  )}
+                </div>
+                <span>{slotLabels[language][slot]}</span>
+                <span className="local-sr-only">
+                  {height === null ? labels.missing : `${height} / 100`}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="local-visit-pattern-message" role="status">
+          {pending ? labels.loading : labels.unavailable}
+        </p>
+      )}
     </section>
   );
 }
