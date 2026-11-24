@@ -2,6 +2,10 @@
   --local-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.local-web .local-skeleton {
+  background-color: var(--local-skeleton-color, #e8e4ec);
+}
+
 .local-shell.local-web > .local-bottom-nav {
   --local-nav-resize: 240ms var(--local-ease-out);
   --local-segment-track-padding: min(
@@ -83,6 +87,17 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .local-web .local-skeleton {
+    background-image: linear-gradient(
+      105deg,
+      transparent 32%,
+      rgb(255 255 255 / 68%) 50%,
+      transparent 68%
+    );
+    background-size: 240% 100%;
+    animation: local-skeleton-shimmer 1.6s ease-in-out infinite;
+  }
+
   .local-web
     > .local-mobile-sidebar-content
     > :is(.local-places, .local-course) {
@@ -118,6 +133,15 @@
 
   .local-web.is-map-mode .local-map-chrome {
     transition: top 180ms var(--local-ease-out);
+  }
+}
+
+@keyframes local-skeleton-shimmer {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -40% 0;
   }
 }
 
