@@ -156,6 +156,45 @@
   height: 44px;
 }
 
+.local-web .local-context:not(:has(> .local-filter-button)) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding-inline: 6px;
+}
+
+.local-web .local-context:not(:has(> .local-filter-button))
+  > :is(.local-area-select, .local-time-select) {
+  justify-content: center;
+  min-width: 0;
+  gap: 6px;
+  padding-inline: 8px;
+}
+
+.local-web .local-context:not(:has(> .local-filter-button))
+  > .local-area-select::after {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.local-web .local-context:not(:has(> .local-filter-button))
+  > :is(.local-area-select, .local-time-select)
+  > .local-icon {
+  flex: none;
+}
+
+.local-web .local-context:not(:has(> .local-filter-button))
+  > :is(.local-area-select, .local-time-select)
+  > span:not(.local-icon) {
+  flex: 0 1 auto;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 18px;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .local-web > .local-bottom-nav {
   --refined-clear: var(--refined-reading);
   --local-nav-inset-left: calc(var(--local-content-gutter) + var(--local-safe-left));

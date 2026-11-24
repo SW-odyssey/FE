@@ -75,3 +75,15 @@ test("공개 사전에서 반미를 Banh Mi로 찾고 죽 상호를 일본어로
   );
   assert.equal(porridge?.name, "お粥が一番");
 });
+
+test("공개 사전에 상점과 놀거리의 상호가 포함되지 않는다", () => {
+  const dictionary = JSON.parse(
+    readFileSync(
+      new URL("../public/data/place-search.json", import.meta.url),
+      "utf8",
+    ),
+  ) as PlaceSearchEntry[];
+
+  assert.deepEqual(suggestPlaces(dictionary, "연화정주", "ko"), []);
+  assert.deepEqual(suggestPlaces(dictionary, "지지게임존", "ko"), []);
+});
