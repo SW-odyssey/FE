@@ -92,6 +92,7 @@ const copy: Record<string, readonly [string, string]> = {
   " min": ["分", "分钟"],
   Activity: ["アクティビティ", "体验活动"],
   Bar: ["バー", "酒吧"],
+  Dinner: ["夕食", "晚餐"],
   "Check opening hours": ["営業時間を要確認", "需要确认营业时间"],
   "Course options": ["コースの設定", "行程安排"],
   "Course summary": ["コース概要", "路线概览"],

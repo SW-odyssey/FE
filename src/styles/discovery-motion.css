@@ -83,7 +83,9 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .local-web > :is(.local-places, .local-course) {
+  .local-web
+    > .local-mobile-sidebar-content
+    > :is(.local-places, .local-course) {
     animation: local-view-in 190ms var(--local-ease-out);
   }
 

@@ -20,14 +20,19 @@ export function renderPlaceRow(
       aria-current={view === "map" && mapId === p.id ? "true" : undefined}
       onClick={onClick}
     >
-      <Photo place={p} />
-      <span className="local-place-info">
-        <strong>{name(p)}</strong>
-        <span>
-          {kind(p)}
-          {p.area && `, ${areaLabels[language][p.area]}`}
-        </span>
-      </span>
+      <Photo
+        place={p}
+        caption={(attribution) => (
+          <span className="local-place-info">
+            <strong>{name(p)}</strong>
+            <span>
+              {kind(p)}
+              {p.area && `, ${areaLabels[language][p.area]}`}
+            </span>
+            {attribution}
+          </span>
+        )}
+      />
       <LocalIcon name="chevron-right" size={16} />
     </button>
   );
