@@ -60,7 +60,7 @@ export function useCourseRecommendations({
   language: DiscoveryLanguage;
   enabled: boolean;
 }) {
-  const departure = origin ?? initialLink?.origin;
+  const departure = initialLink?.origin ?? origin;
   const hasCustomOrigin = Boolean(departure);
   const { lat, lng } = departure
     ? {

@@ -43,7 +43,7 @@ export default function DiscoveryApp({
     source ??
     (previewScale === undefined ? liveDiscoveryDataSource : undefined);
   const controller = useDiscoveryController(activeSource, desktop);
-  const courseLocation = useDeviceLocation(controller.setCurrentLocation);
+  const courseLocation = useDeviceLocation(controller.updateDeviceLocation);
   const {
     shell,
     scroll,
@@ -154,7 +154,7 @@ export default function DiscoveryApp({
           desktop={desktop}
           showCourse={mapShowsCourse}
           currentLocation={controller.currentLocation}
-          onLocate={controller.setCurrentLocation}
+          onLocate={controller.updateDeviceLocation}
           viewportScale={previewScale ?? 1}
         />
       )}

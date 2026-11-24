@@ -486,3 +486,25 @@ test("course map URLs recover the departure, seed, previous stores and suffix se
     undefined,
   );
 });
+
+test("course links preserve valid place IDs while dropping invalid ones", async () => {
+  const { readCourseLink, writeCourseLink } =
+    await import("../src/features/discovery/state/course-url.ts");
+  const params = new URLSearchParams();
+  const maxId = String(Number.MAX_SAFE_INTEGER);
+  writeCourseLink(params, {
+    seed: 7,
+    previousStopIds: ["0", "42", "-3", maxId],
+    replacements: [
+      { slot: "lunch", excludeIds: ["-1"] },
+      { slot: "evening", excludeIds: ["55", "9007199254740992"] },
+    ],
+  });
+  assert.equal(params.get("previousStopIds"), `42,${maxId}`);
+  assert.equal(params.get("courseChanges"), "evening:55");
+  const restored = readCourseLink(params);
+  assert.deepEqual(restored?.previousStopIds, ["42", maxId]);
+  assert.deepEqual(restored?.replacements, [
+    { slot: "evening", excludeIds: ["55"] },
+  ]);
+});

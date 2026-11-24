@@ -151,7 +151,7 @@ export function mapDiscoveryIdToApi(id: string): ApiMappingResult<number> {
  * @returns Its stable UI string representation, preserving the current screen model
  */
 export function mapApiIdToDiscovery(id: number): string {
-  if (!Number.isSafeInteger(id))
-    throw new TypeError("API ID must be a safely representable integer");
+  if (!Number.isSafeInteger(id) || id <= 0)
+    throw new TypeError("API ID must be a positive safe integer");
   return String(id);
 }

@@ -16,7 +16,9 @@ export type CourseLink = {
   replacements: CourseReplacement[];
 };
 
-const numericId = /^[1-9]\d{0,15}$/;
+function isCoursePlaceId(id: string): boolean {
+  return /^[1-9]\d{0,15}$/.test(id) && Number.isSafeInteger(Number(id));
+}
 
 export function readCourseLink(
   params: URLSearchParams,
@@ -39,9 +41,7 @@ export function readCourseLink(
   const validPreviousStops =
     previousStopIds &&
     previousStopIds.length <= 6 &&
-    previousStopIds.every(
-      (id) => numericId.test(id) && Number.isSafeInteger(Number(id)),
-    );
+    previousStopIds.every(isCoursePlaceId);
   const replacements: CourseReplacement[] = [];
   for (const entry of (params.get("courseChanges") ?? "")
     .split(";")
@@ -52,9 +52,7 @@ export function readCourseLink(
     if (
       visitSlots.includes(changeSlot) &&
       excludeIds.length <= 2 &&
-      excludeIds.every(
-        (id) => numericId.test(id) && Number.isSafeInteger(Number(id)),
-      ) &&
+      excludeIds.every(isCoursePlaceId) &&
       !replacements.some(({ slot }) => slot === changeSlot)
     ) {
       replacements.push({ slot: changeSlot, excludeIds });
@@ -89,13 +87,12 @@ export function writeCourseLink(params: URLSearchParams, link: CourseLink) {
     params.set("courseLat", String(link.origin.lat));
     params.set("courseLng", String(link.origin.lng));
   }
-  if (link.previousStopIds?.length)
-    params.set("previousStopIds", link.previousStopIds.join(","));
-  if (link.replacements.length)
-    params.set(
-      "courseChanges",
-      link.replacements
-        .map(({ slot, excludeIds }) => `${slot}:${excludeIds.join(",")}`)
-        .join(";"),
-    );
+  const previousStopIds = link.previousStopIds?.filter(isCoursePlaceId);
+  if (previousStopIds?.length)
+    params.set("previousStopIds", previousStopIds.join(","));
+  const changes = link.replacements.flatMap(({ slot, excludeIds }) => {
+    const ids = excludeIds.filter(isCoursePlaceId);
+    return ids.length ? [`${slot}:${ids.join(",")}`] : [];
+  });
+  if (changes.length) params.set("courseChanges", changes.join(";"));
 }

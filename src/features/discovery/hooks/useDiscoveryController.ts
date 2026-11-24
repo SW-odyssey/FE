@@ -603,6 +603,11 @@ export function useDiscoveryController(
     setSheet("half");
     url(view, selectedId, next);
   }
+  /** Apply a device location selected by the user. */
+  function updateDeviceLocation(point: Coordinate) {
+    if (currentArea) setCourseLink(undefined);
+    setCurrentLocation(point);
+  }
   /** 프리뷰의 내 위치는 종로 기본 영역으로 이동합니다. */
   function selectPreviewLocation() {
     chooseArea("jongno");
@@ -855,7 +860,7 @@ export function useDiscoveryController(
     selectedId,
     selectedVisitDate: inCourse ? courseDate : selectedVisitDate,
     visitPattern: data.selectedDetail?.visitPattern,
-    setCurrentLocation,
+    updateDeviceLocation,
     setDraftActivity,
     setDraftDay,
     setDraftSlot,

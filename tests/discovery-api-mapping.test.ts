@@ -111,5 +111,7 @@ test("server numeric IDs round-trip through the UI model without treating fixtur
   assert.deepEqual(mapDiscoveryIdToApi("412"), { ok: true, value: 412 });
   assert.equal(mapDiscoveryIdToApi("cheongsudang").ok, false);
   assert.equal(mapDiscoveryIdToApi("9007199254740993").ok, false);
-  assert.throws(() => mapApiIdToDiscovery(Number.NaN), TypeError);
+  for (const id of [0, -1, 1.5, Number.NaN, Number.MAX_SAFE_INTEGER + 1]) {
+    assert.throws(() => mapApiIdToDiscovery(id), TypeError);
+  }
 });
