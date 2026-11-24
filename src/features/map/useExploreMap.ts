@@ -83,7 +83,7 @@ export function useExploreMap(props: ExploreMapProps) {
         if (dragAnchor.current && !canSearch()) setSearchablePlaces(undefined);
       },
     });
-    return attachPreferredMapSession(
+    const detach = attachPreferredMapSession(
       options.current.language,
       {
         google: () =>
@@ -100,6 +100,11 @@ export function useExploreMap(props: ExploreMapProps) {
         setError(failed);
       },
     );
+    return () => {
+      detach();
+      session.current = null;
+      setProvider(null);
+    };
   }, [retry, sdkEnabled]);
   useEffect(() => {
     if (!ready) return;

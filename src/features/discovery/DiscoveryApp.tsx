@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { Activity, useState, useSyncExternalStore } from "react";
 import { LocalIcon } from "../../components/ui/LocalIcon";
 import { useDeviceLocation } from "../map/useDeviceLocation";
 import { CourseScreen } from "./components/CourseScreen";
@@ -65,30 +65,14 @@ export default function DiscoveryApp({
     !isDetail && (view === "course" || (desktop && mapShowsCourse));
   const mapVisible = desktop || isMap;
   const navigation = useCompactNavigation(view);
-
-  const sidebar =
-    !isDetail && (desktop || !isMap) ? (
-      <>
-        {!isCourse && <SearchHeader {...controller} />}
-        {isCourse ? (
-          <CourseScreen
-            {...controller}
-            location={courseLocation}
-            desktop={desktop}
-          />
-        ) : (
-          <DiscoverScreen
-            {...controller}
-            visible={
-              desktop && controller.mapScope
-                ? controller.mapPlaces
-                : controller.visible
-            }
-            mapScopeActive={desktop && Boolean(controller.mapScope)}
-          />
-        )}
-      </>
-    ) : null;
+  const sidebarVisible = !isDetail && (desktop || !isMap);
+  const sidebarClass = desktop
+    ? "local-desktop-sidebar-content"
+    : "local-mobile-sidebar-content";
+  const [lastMapLayer, setLastMapLayer] = useState<boolean | null>(null);
+  if (mapVisible && lastMapLayer !== mapShowsCourse)
+    setLastMapLayer(mapShowsCourse);
+  const mapLayer = mapVisible ? mapShowsCourse : lastMapLayer;
 
   return (
     <main
@@ -135,29 +119,44 @@ export default function DiscoveryApp({
           <ResourceNotice status={detailStatus} retry={retry} t={t} missing />
         </div>
       ) : null}
-      {sidebar && (
-        <div
-          className={
-            desktop
-              ? "local-desktop-sidebar-content"
-              : "local-mobile-sidebar-content"
-          }
-          key={isCourse ? "course" : "places"}
-        >
-          {sidebar}
+      <Activity mode={sidebarVisible && !isCourse ? "visible" : "hidden"}>
+        <div className={sidebarClass}>
+          <SearchHeader {...controller} />
+          <DiscoverScreen
+            {...controller}
+            scroll={controller.placesScroll}
+            visible={
+              desktop && controller.mapScope
+                ? controller.mapPlaces
+                : controller.visible
+            }
+            mapScopeActive={desktop && Boolean(controller.mapScope)}
+          />
         </div>
-      )}
-      {mapVisible && (
-        <MapScreen
-          {...controller}
-          visible={controller.mapVisible}
-          desktop={desktop}
-          showCourse={mapShowsCourse}
-          currentLocation={controller.currentLocation}
-          onLocate={controller.setCurrentLocation}
-          viewportScale={previewScale ?? 1}
-        />
-      )}
+      </Activity>
+      <Activity mode={sidebarVisible && isCourse ? "visible" : "hidden"}>
+        <div className={sidebarClass}>
+          <CourseScreen
+            {...controller}
+            scroll={controller.courseScroll}
+            location={courseLocation}
+            desktop={desktop}
+          />
+        </div>
+      </Activity>
+      <Activity mode={mapVisible ? "visible" : "hidden"}>
+        {mapLayer !== null && (
+          <MapScreen
+            {...controller}
+            visible={controller.mapVisible}
+            desktop={desktop}
+            showCourse={mapLayer}
+            currentLocation={controller.currentLocation}
+            onLocate={controller.setCurrentLocation}
+            viewportScale={previewScale ?? 1}
+          />
+        )}
+      </Activity>
       {isDetail ? (
         <div className="local-detail-safe-area" aria-hidden="true" />
       ) : !desktop ? (

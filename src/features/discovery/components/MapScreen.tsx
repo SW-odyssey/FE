@@ -9,7 +9,7 @@ import PlaceSheet from "../../map/PlaceSheet";
 import { sheetHeights, sheetHeightsForSpace } from "../../map/sheet-motion";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { placeCount } from "../localization";
-import type { Coordinate } from "../model";
+import type { Coordinate, PlacePhoto } from "../model";
 import { DiscoveryControls } from "./DiscoveryControls";
 import { LanguageButton } from "./LanguageButton";
 import { renderPlaceRow } from "./PlaceRow";
@@ -155,6 +155,26 @@ export function MapScreen(props: Props) {
     : undefined;
   const heights = sheetHeightsForSpace(maximumHeight, courseContentHeight);
   const displayed = showCourse ? courseMapStops : mapPlaces;
+  const summaryPlaces = displayed.slice(0, 3);
+  const summaryKey = JSON.stringify(summaryPlaces.map(({ id }) => id));
+  const [thumbnails, setThumbnails] = useState<{
+    key: string;
+    photos: Partial<Record<string, PlacePhoto | null>>;
+  }>({ key: summaryKey, photos: {} });
+  if (thumbnails.key !== summaryKey)
+    setThumbnails({ key: summaryKey, photos: {} });
+  function thumbnailFor(id: string) {
+    if (!summaryPlaces.some((place) => place.id === id)) return;
+    return {
+      photo: thumbnails.photos[id],
+      publish: (photoId: string, photo: PlacePhoto | null) =>
+        setThumbnails((current) =>
+          current.key === summaryKey
+            ? { ...current, photos: { ...current.photos, [photoId]: photo } }
+            : current,
+        ),
+    };
+  }
   const highlighted = selected ?? (showCourse ? null : mapSelected);
   return (
     <div
@@ -252,8 +272,14 @@ export function MapScreen(props: Props) {
               }
             >
               <span className="local-sheet-thumbnails" aria-hidden="true">
-                {displayed.slice(0, 3).map((p) => (
-                  <Photo key={p.id} place={p} />
+                {summaryPlaces.map((p) => (
+                  <Photo
+                    key={p.id}
+                    place={p}
+                    decorative
+                    thumbnail={thumbnailFor(p.id)}
+                    loadThumbnail={sheet === "collapsed"}
+                  />
                 ))}
               </span>
               <strong>
@@ -297,6 +323,7 @@ export function MapScreen(props: Props) {
                         <Photo
                           place={place}
                           decorative
+                          thumbnail={thumbnailFor(place.id)}
                           caption={(attribution) => (
                             <span className="local-place-info">
                               <strong>{name(place)}</strong>
@@ -335,9 +362,7 @@ export function MapScreen(props: Props) {
               <ResourceNotice status={status} retry={retry} t={t} />
             ) : mapPlaces.length ? (
               mapPlaces.map((p) =>
-                renderPlaceRow(props, p, () => {
-                  openPlace(p);
-                }),
+                renderPlaceRow(props, p, undefined, false, thumbnailFor(p.id)),
               )
             ) : (
               <div className="local-empty-map">
