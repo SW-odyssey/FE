@@ -443,7 +443,7 @@ test("duplicate query keys use their first value, matching URLSearchParams resto
   assert.deepEqual(state.spaces, ["retro"]);
 });
 
-test("course map URLs recover the generated seed and suffix selections", async () => {
+test("course map URLs recover the departure, seed, previous stores and suffix selections", async () => {
   const { readCourseLink, writeCourseLink } =
     await import("../src/features/discovery/state/course-url.ts");
   const link = {
@@ -451,6 +451,8 @@ test("course map URLs recover the generated seed and suffix selections", async (
     datasetId: "2025-12-published",
     visitDate: "2026-11-27",
     startSlot: "lunch" as const,
+    origin: { lat: 37.5804, lng: 126.9849 },
+    previousStopIds: ["41", "42"],
     replacements: [{ slot: "evening" as const, excludeIds: ["44", "55"] }],
   };
   const params = new URLSearchParams("view=map&layer=course");
@@ -460,9 +462,49 @@ test("course map URLs recover the generated seed and suffix selections", async (
     readPreviewUrl(params.toString(), now, null).courseLink,
     link,
   );
+  for (const [lat, lng] of [
+    ["", "126.9849"],
+    ["91", "126.9849"],
+    ["37.5804", "-181"],
+  ]) {
+    params.set("courseLat", lat);
+    params.set("courseLng", lng);
+    assert.equal(readCourseLink(params)?.origin, undefined);
+  }
+  for (const previousStopIds of [
+    "",
+    "0,42",
+    "9007199254740992",
+    "1,2,3,4,5,6,7",
+  ]) {
+    params.set("previousStopIds", previousStopIds);
+    assert.equal(readCourseLink(params)?.previousStopIds, undefined);
+  }
   params.delete("layer");
   assert.equal(
     readPreviewUrl(params.toString(), now, null).courseLink,
     undefined,
   );
+});
+
+test("course links preserve valid place IDs while dropping invalid ones", async () => {
+  const { readCourseLink, writeCourseLink } =
+    await import("../src/features/discovery/state/course-url.ts");
+  const params = new URLSearchParams();
+  const maxId = String(Number.MAX_SAFE_INTEGER);
+  writeCourseLink(params, {
+    seed: 7,
+    previousStopIds: ["0", "42", "-3", maxId],
+    replacements: [
+      { slot: "lunch", excludeIds: ["-1"] },
+      { slot: "evening", excludeIds: ["55", "9007199254740992"] },
+    ],
+  });
+  assert.equal(params.get("previousStopIds"), `42,${maxId}`);
+  assert.equal(params.get("courseChanges"), "evening:55");
+  const restored = readCourseLink(params);
+  assert.deepEqual(restored?.previousStopIds, ["42", maxId]);
+  assert.deepEqual(restored?.replacements, [
+    { slot: "evening", excludeIds: ["55"] },
+  ]);
 });

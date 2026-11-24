@@ -25,6 +25,17 @@ test("course queries use the Seoul weekday and v2 start slot", () => {
   });
 });
 
+test("full course rebuild sends previous stores without excluding them", () => {
+  const query = courseSearchParams({
+    ...request,
+    previousStopIds: ["41", "42"],
+    seed: 8,
+  });
+  assert.equal(query.get("previousStopIds"), "41,42");
+  assert.equal(query.get("seed"), "8");
+  assert.equal(query.has("excludeIds"), false);
+});
+
 test("course adapter loads the published batch and keeps server positions and empty states", async (t) => {
   const response = {
     status: "PARTIAL",
@@ -130,6 +141,7 @@ test("changing a slot uses the previous stop and excludes the visited and replac
   assert.equal(urls[1].searchParams.get("lat"), "37.56");
   assert.equal(urls[1].searchParams.get("lng"), "126.99");
   assert.equal(urls[1].searchParams.get("excludeIds"), "11,44");
+  assert.equal(urls[1].searchParams.has("previousStopIds"), false);
   assert.equal(urls[1].searchParams.get("seed"), "7");
   assert.equal(urls[0].searchParams.get("lang"), "ja");
   assert.equal(urls[1].searchParams.get("lang"), "ja");

@@ -65,7 +65,14 @@ export function useCourseRecommendations({
   language: DiscoveryLanguage;
   enabled: boolean;
 }) {
-  const { lat, lng } = origin ?? courseOrigin(area);
+  const departure = initialLink?.origin ?? origin;
+  const hasCustomOrigin = Boolean(departure);
+  const { lat, lng } = departure
+    ? {
+        lat: Number(departure.lat.toFixed(5)),
+        lng: Number(departure.lng.toFixed(5)),
+      }
+    : courseOrigin(area);
   const start = initialLink?.startSlot ?? slot;
   const date = initialLink?.visitDate ?? visitDate;
   const [attempt, setAttempt] = useState(0);
@@ -97,7 +104,8 @@ export function useCourseRecommendations({
           options,
           language,
         };
-        let result = await getCourse(request, signal);
+        const previousStopIds = initialLink?.previousStopIds;
+        let result = await getCourse({ ...request, previousStopIds }, signal);
         const replacements = [];
         for (const change of initialLink?.replacements ?? []) {
           const suffix = await replaceCourseSuffix(
@@ -117,6 +125,8 @@ export function useCourseRecommendations({
             datasetId,
             visitDate: date,
             startSlot: start,
+            ...(hasCustomOrigin && { origin: request.origin }),
+            previousStopIds,
             replacements,
           },
         };
@@ -155,6 +165,7 @@ export function useCourseRecommendations({
     settingsKey,
     contextKey,
     lane,
+    hasCustomOrigin,
     lat,
     lng,
     start,
@@ -212,10 +223,21 @@ export function useCourseRecommendations({
           loaded.result.seed === Number.MAX_SAFE_INTEGER
             ? 1
             : loaded.result.seed + 1;
-        const result = await getCourse({ ...request, seed }, signal);
+        const previousStopIds = loaded.result.route.map(
+          ({ place }) => place.id,
+        );
+        const result = await getCourse(
+          { ...request, seed, previousStopIds },
+          signal,
+        );
         return {
           result,
-          link: { ...loaded.link, seed: result.seed, replacements: [] },
+          link: {
+            ...loaded.link,
+            seed: result.seed,
+            previousStopIds,
+            replacements: [],
+          },
         };
       },
       {

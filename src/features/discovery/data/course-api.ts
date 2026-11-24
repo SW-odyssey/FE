@@ -96,6 +96,7 @@ export type CourseRequest = {
   origin: Coordinate;
   seed?: number;
   excludeIds?: readonly string[];
+  previousStopIds?: readonly string[];
   options?: CourseOptions;
   language?: DiscoveryLanguage;
 };
@@ -120,6 +121,8 @@ export function courseSearchParams(request: CourseRequest): URLSearchParams {
   if (request.seed !== undefined) params.set("seed", String(request.seed));
   if (request.excludeIds?.length)
     params.set("excludeIds", request.excludeIds.join(","));
+  if (request.previousStopIds?.length)
+    params.set("previousStopIds", request.previousStopIds.join(","));
   if (request.options && request.options.afternoon !== "cafe")
     params.set("afternoon", request.options.afternoon);
   if (request.options?.walk === "short") params.set("walk", "short");

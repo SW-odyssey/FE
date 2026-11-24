@@ -1,4 +1,4 @@
-import type { VisitSlot } from "../model.ts";
+import type { Coordinate, VisitSlot } from "../model.ts";
 import { visitSlots } from "../visit-time.ts";
 
 export type CourseReplacement = {
@@ -11,10 +11,14 @@ export type CourseLink = {
   datasetId?: string;
   visitDate?: string;
   startSlot?: VisitSlot;
+  origin?: Coordinate;
+  previousStopIds?: string[];
   replacements: CourseReplacement[];
 };
 
-const numericId = /^[1-9]\d{0,15}$/;
+function isCoursePlaceId(id: string): boolean {
+  return /^[1-9]\d{0,15}$/.test(id) && Number.isSafeInteger(Number(id));
+}
 
 export function readCourseLink(
   params: URLSearchParams,
@@ -25,6 +29,19 @@ export function readCourseLink(
   const dataset = params.get("courseDataset");
   const date = params.get("courseDate");
   const slot = params.get("courseStart") as VisitSlot;
+  const linkedLat = params.get("courseLat")?.trim();
+  const linkedLng = params.get("courseLng")?.trim();
+  const lat = Number(linkedLat);
+  const lng = Number(linkedLng);
+  const origin =
+    linkedLat && linkedLng && Math.abs(lat) <= 90 && Math.abs(lng) <= 180
+      ? { lat, lng }
+      : undefined;
+  const previousStopIds = params.get("previousStopIds")?.split(",");
+  const validPreviousStops =
+    previousStopIds &&
+    previousStopIds.length <= 6 &&
+    previousStopIds.every(isCoursePlaceId);
   const replacements: CourseReplacement[] = [];
   for (const entry of (params.get("courseChanges") ?? "")
     .split(";")
@@ -35,9 +52,7 @@ export function readCourseLink(
     if (
       visitSlots.includes(changeSlot) &&
       excludeIds.length <= 2 &&
-      excludeIds.every(
-        (id) => numericId.test(id) && Number.isSafeInteger(Number(id)),
-      ) &&
+      excludeIds.every(isCoursePlaceId) &&
       !replacements.some(({ slot }) => slot === changeSlot)
     ) {
       replacements.push({ slot: changeSlot, excludeIds });
@@ -57,6 +72,8 @@ export function readCourseLink(
         ? date
         : undefined,
     startSlot: visitSlots.includes(slot) ? slot : undefined,
+    ...(origin && { origin }),
+    ...(validPreviousStops && { previousStopIds }),
     replacements,
   };
 }
@@ -66,11 +83,16 @@ export function writeCourseLink(params: URLSearchParams, link: CourseLink) {
   if (link.datasetId) params.set("courseDataset", link.datasetId);
   if (link.visitDate) params.set("courseDate", link.visitDate);
   if (link.startSlot) params.set("courseStart", link.startSlot);
-  if (link.replacements.length)
-    params.set(
-      "courseChanges",
-      link.replacements
-        .map(({ slot, excludeIds }) => `${slot}:${excludeIds.join(",")}`)
-        .join(";"),
-    );
+  if (link.origin) {
+    params.set("courseLat", String(link.origin.lat));
+    params.set("courseLng", String(link.origin.lng));
+  }
+  const previousStopIds = link.previousStopIds?.filter(isCoursePlaceId);
+  if (previousStopIds?.length)
+    params.set("previousStopIds", previousStopIds.join(","));
+  const changes = link.replacements.flatMap(({ slot, excludeIds }) => {
+    const ids = excludeIds.filter(isCoursePlaceId);
+    return ids.length ? [`${slot}:${ids.join(",")}`] : [];
+  });
+  if (changes.length) params.set("courseChanges", changes.join(";"));
 }
