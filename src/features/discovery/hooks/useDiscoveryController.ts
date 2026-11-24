@@ -2,8 +2,9 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { MapCamera } from "../../map/controller";
 import type { MapPlaceGroup } from "../../map/geometry";
-import { inMapScope } from "../../map/geometry";
+import { distanceMeters, inMapScope } from "../../map/geometry";
 import { type SheetState } from "../../map/sheet-motion";
+import { defaultCourseOptions, type CourseOptions } from "../course";
 import { previewDataSource, type DiscoveryDataSource } from "../data";
 import { spacePreferences } from "../filters";
 import { dateLocales, localText } from "../localization";
@@ -14,6 +15,7 @@ import {
   type DiscoveryArea,
   type DiscoveryCategory,
   type DiscoveryLanguage,
+  type DiscoveryView,
   type SpacePreference,
   type VisitSlot,
 } from "../model";
@@ -27,14 +29,19 @@ import {
 import { readPreviewUrl, serializePreviewUrl } from "../state/preview-url";
 import { seoulHour, visitDate } from "../visit-date";
 import { slotAt } from "../visit-time";
+import { useAutoCourse } from "./useAutoCourse";
 import { useDialogLifecycle } from "./useDialogLifecycle";
 import { useDiscoveryData } from "./useDiscoveryData";
 /** Owns applied/draft state, navigation and restoration for discovery. */
 export function useDiscoveryController(
   source: DiscoveryDataSource = previewDataSource,
+  currentLocation: Coordinate | null = null,
+  desktop = false,
 ) {
   const [restored, setRestored] = useState(false);
-  const [view, setView] = useState<"discover" | "map">("discover");
+  const [view, setView] = useState<DiscoveryView>("discover");
+  const [courseMap, setCourseMap] = useState(false);
+  const [courseOptions, setCourseOptions] = useState(defaultCourseOptions);
   const [language, setLanguage] = useState<DiscoveryLanguage>("en");
   const [area, setArea] = useState<DiscoveryArea>("jongno");
   const [currentArea, setCurrentArea] = useState(true);
@@ -42,15 +49,16 @@ export function useDiscoveryController(
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mapId, setMapId] = useState<string | null>(null);
+  const [mapFocusRequest, setMapFocusRequest] = useState(0);
+  const [placeOnMap, setPlaceOnMap] = useState<LocalPlace | null>(null);
   const [featuredId, setFeaturedId] = useState<string | null>(null);
   const [mapScope, setMapScope] = useState<string | null>(null);
-  const readingPositions = useRef({ discover: 0, map: 0 });
+  const readingPositions = useRef({ discover: 0, course: 0, map: 0 });
   const mapCamera = useRef<MapCamera | null>(null);
   const shell = useRef<HTMLElement>(null);
   const [modal, setModal] = useState<Modal>(null);
   const [sheet, setSheet] = useState<SheetState>("half");
   const [clock, setClock] = useState(new Date("2026-10-14T15:20:00+09:00"));
-  const origin: Coordinate | null = null;
   const [autoTime, setAutoTime] = useState(true);
   const [day, setDay] = useState(0);
   const [slot, setSlot] = useState<VisitSlot>("afternoon");
@@ -87,9 +95,14 @@ export function useDiscoveryController(
   const draftCurrentSlot = draftTime.autoTime
     ? slotAt(seoulHour(clock))
     : draftTime.slot;
-  const name = (p: LocalPlace) => (ko ? p.koreanName : p.name);
-  const kind = (p: LocalPlace) =>
-    p.category === "cafe" ? t("Café", "카페") : t("Restaurant", "음식점");
+  const name = (p: Pick<LocalPlace, "name" | "koreanName">) =>
+    ko ? p.koreanName : p.name;
+  const kind = (p: Pick<LocalPlace, "category">) =>
+    p.category === "cafe"
+      ? t("Café", "카페")
+      : p.category === "culture"
+        ? t("Attraction", "볼거리")
+        : t("Restaurant", "음식점");
 
   /* eslint-disable react-hooks/set-state-in-effect -- 주소 기록과 기기 시계에서 초기 상태를 복원합니다. */
   useEffect(() => {
@@ -106,6 +119,8 @@ export function useDiscoveryController(
         storedLanguage,
       );
       setView(state.view);
+      setCourseMap(Boolean(state.courseMap));
+      if (state.courseOptions) setCourseOptions(state.courseOptions);
       setArea(state.area);
       setCurrentArea(state.currentArea);
       const place = sourceRef.current.snapshot?.getPlace(
@@ -113,7 +128,11 @@ export function useDiscoveryController(
       )?.place;
       setSelectedId(
         sourceRef.current.snapshot
-          ? place && place.category !== "culture" && place.id !== "nogari"
+          ? place &&
+            (state.view === "course" ||
+              state.courseMap ||
+              place.category !== "culture") &&
+            place.id !== "nogari"
             ? state.place
             : null
           : state.place,
@@ -166,6 +185,8 @@ export function useDiscoveryController(
       spaces,
       modal,
       sheet,
+      courseMap,
+      courseOptions,
     });
     window.history.replaceState(
       window.history.state,
@@ -187,6 +208,8 @@ export function useDiscoveryController(
     spaces,
     modal,
     sheet,
+    courseMap,
+    courseOptions,
   ]);
   useEffect(() => {
     document.documentElement.lang = language;
@@ -199,17 +222,17 @@ export function useDiscoveryController(
   }, [toast]);
   useLayoutEffect(() => {
     const node =
-      selectedId || view === "discover"
+      selectedId || view !== "map" || desktop
         ? scroll.current
         : shell.current?.querySelector<HTMLElement>(".local-sheet-scroll");
     node?.scrollTo({
       top: selectedId ? 0 : readingPositions.current[view],
       behavior: "instant",
     });
-  }, [view, selectedId]);
+  }, [view, selectedId, desktop]);
   /* eslint-disable react-hooks/exhaustive-deps -- 상세 복귀의 selectedId 변경은 바로 위 복원 효과가 처리하고, 필터 변경 때만 읽던 위치를 초기화합니다. */
   useLayoutEffect(() => {
-    readingPositions.current = { discover: 0, map: 0 };
+    readingPositions.current = { discover: 0, course: 0, map: 0 };
     if (!selectedId) {
       scroll.current?.scrollTo({ top: 0 });
       shell.current?.querySelector(".local-sheet-scroll")?.scrollTo({ top: 0 });
@@ -219,30 +242,68 @@ export function useDiscoveryController(
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- 적용 조건이 바뀌면 이전 셀 선택 범위를 해제합니다.
     setMapScope(null);
+    setPlaceOnMap(null);
   }, [area, category, query, activity, spaces, currentSlot]);
 
+  const selectedVisitDate = visitDate(clock, autoTime ? 0 : day);
+  const inCourse = view === "course" || (view === "map" && courseMap);
+  const courseAfterHours = autoTime && currentSlot === "late";
+  const courseDay = courseAfterHours && seoulHour(clock) >= 22 ? 1 : 0;
+  const courseFallbackTime: VisitTimeChoice = {
+    autoTime: false,
+    day: courseDay,
+    slot: "lunch",
+  };
+  const courseDate = courseAfterHours
+    ? visitDate(clock, courseDay)
+    : selectedVisitDate;
+  const courseLocation =
+    currentArea &&
+    currentLocation &&
+    distanceMeters(currentLocation, { lat: 37.5716, lng: 126.9861 }) <= 4500
+      ? currentLocation
+      : null;
+  const autoCourse = useAutoCourse(
+    source,
+    {
+      area,
+      category: "all",
+      query: "",
+      slot: courseAfterHours ? "lunch" : currentSlot,
+      activity: "any",
+      origin: courseLocation,
+      spaces: [],
+      visitDate: courseDate,
+    },
+    courseOptions,
+    inCourse,
+  );
+  const courseMapStops = useMemo(
+    () => autoCourse.route.map(({ place }) => place),
+    [autoCourse.route],
+  );
+  const appliedQuery = {
+    area,
+    category: inCourse ? ("all" as const) : category,
+    query: inCourse ? "" : query,
+    slot: currentSlot,
+    activity,
+    origin: null,
+    spaces,
+    visitDate: selectedVisitDate,
+  };
   const data = useDiscoveryData({
     source,
-    query: {
-      area,
-      category,
-      query,
-      slot: currentSlot,
-      activity,
-      origin,
-      spaces,
-      visitDate: visitDate(clock, autoTime ? 0 : day),
-    },
-    draftQuery: {
-      area,
-      category,
-      query,
-      slot: draftCurrentSlot,
-      activity: draftActivity,
-      origin,
-      spaces: draftSpaces,
-      visitDate: visitDate(clock, draftTime.autoTime ? 0 : draftTime.day),
-    },
+    query: appliedQuery,
+    draftQuery: inCourse
+      ? appliedQuery
+      : {
+          ...appliedQuery,
+          slot: draftCurrentSlot,
+          activity: draftActivity,
+          spaces: draftSpaces,
+          visitDate: visitDate(clock, draftTime.autoTime ? 0 : draftTime.day),
+        },
     selectedId,
   });
   const {
@@ -259,10 +320,22 @@ export function useDiscoveryController(
   const analysisFor = (place: LocalPlace) => data.analyses[place.id];
   const description = (place: LocalPlace) =>
     data.descriptionFor(place, language);
-  const mapSelected = visible.find((p) => p.id === mapId) ?? null;
-  const mapPlaces = useMemo(() => {
-    return mapScope ? visible.filter((p) => inMapScope(p, mapScope)) : visible;
-  }, [visible, mapScope]);
+  const mapVisible = useMemo(
+    () =>
+      (view === "map" || desktop) &&
+      placeOnMap &&
+      placeOnMap.id === mapId &&
+      !visible.some((place) => place.id === mapId)
+        ? [placeOnMap, ...visible]
+        : visible,
+    [view, desktop, mapId, placeOnMap, visible],
+  );
+  const mapSelected = mapVisible.find((p) => p.id === mapId) ?? null;
+  const mapPlaces = useMemo(
+    () =>
+      mapScope ? mapVisible.filter((p) => inMapScope(p, mapScope)) : mapVisible,
+    [mapVisible, mapScope],
+  );
   const days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(`${visitDate(clock, i)}T00:00:00+09:00`);
     return i === 0
@@ -289,6 +362,9 @@ export function useDiscoveryController(
     return `${label} ${slotLabels[language][choice.slot]}`;
   }
   const timeLabel = visitTimeLabel({ autoTime, day, slot });
+  const courseTimeLabel = courseAfterHours
+    ? visitTimeLabel(courseFallbackTime)
+    : timeLabel;
   const draftTimeLabel = visitTimeLabel(draftTime);
   function url(
     nextView = view,
@@ -296,6 +372,7 @@ export function useDiscoveryController(
     nextArea = area,
     nextLang = language,
     mode: "push" | "replace" = "replace",
+    nextCourseMap = courseMap,
   ) {
     const p = serializePreviewUrl({
       view: nextView,
@@ -311,6 +388,8 @@ export function useDiscoveryController(
       spaces,
       modal: null,
       sheet,
+      courseMap: nextCourseMap,
+      courseOptions,
     });
     const state = {
       ...window.history.state,
@@ -325,16 +404,27 @@ export function useDiscoveryController(
       `${window.location.pathname}?${p}`,
     );
   }
-  function navigate(next: "discover" | "map") {
-    if (next === view && !selectedId) return;
+  function navigate(next: DiscoveryView, nextCourseMap = false) {
+    if (next === view && !selectedId && nextCourseMap === courseMap) return;
     rememberList();
     if (next === "map" && view !== "map") setSheet("half");
+    setCourseMap(nextCourseMap);
     setView(next);
     setSelectedId(null);
     setModal(null);
-    url(next, null, area, language, selectedId ? "push" : "replace");
+    url(
+      next,
+      null,
+      area,
+      language,
+      selectedId ? "push" : "replace",
+      nextCourseMap,
+    );
   }
-  function openPlace(p: LocalPlace) {
+  function showCourseOnMap() {
+    navigate("map", true);
+  }
+  function openPlace(p: Pick<LocalPlace, "id">) {
     rememberList();
     setSelectedId(p.id);
     setModal(null);
@@ -351,7 +441,7 @@ export function useDiscoveryController(
   function rememberList() {
     if (selectedId) return;
     const node =
-      view === "map"
+      view === "map" && !desktop
         ? shell.current?.querySelector<HTMLElement>(".local-sheet-scroll")
         : scroll.current;
     readingPositions.current[view] = node?.scrollTop ?? 0;
@@ -361,7 +451,12 @@ export function useDiscoveryController(
    * @returns 일시 시트 열기
    */
   function openTime(from: "filters" | null = null) {
-    const choice = from === "filters" ? draftTime : { autoTime, day, slot };
+    const choice =
+      from === "filters"
+        ? draftTime
+        : inCourse && courseAfterHours
+          ? courseFallbackTime
+          : { autoTime, day, slot };
     setDraftDay(choice.autoTime ? 0 : choice.day);
     setDraftSlot(choice.autoTime ? slotAt(seoulHour(clock)) : choice.slot);
     setTimeReturn(from);
@@ -373,6 +468,12 @@ export function useDiscoveryController(
     setDraftTime({ autoTime, day, slot });
     setTimeReturn(null);
     setModal("filters");
+  }
+  function toggleCourseOption(option: keyof CourseOptions) {
+    setCourseOptions((previous) => ({
+      ...previous,
+      [option]: !previous[option],
+    }));
   }
   function chooseArea(next: DiscoveryArea) {
     setCurrentArea(false);
@@ -466,9 +567,11 @@ export function useDiscoveryController(
   }
   function showPlaceOnMap(place: LocalPlace) {
     setMapId(place.id);
+    setPlaceOnMap(place);
     setMapScope(null);
     setSheet("half");
-    navigate("map");
+    if (!desktop) navigate("map", false);
+    else setMapFocusRequest((request) => request + 1);
   }
   async function copyAddress(place: LocalPlace) {
     try {
@@ -546,9 +649,19 @@ export function useDiscoveryController(
     closingModal,
     confirmTime,
     contextAreaLabel,
+    courseMap,
+    courseMapStops,
+    courseOptions,
+    toggleCourseOption,
+    showCourseOnMap,
+    autoCourse,
+    courseDate,
+    courseTimeLabel,
+    courseLocation,
     currentArea,
     days,
     description,
+    aiSummary: data.selectedDetail?.aiSummary?.[language],
     dialog,
     draftActivity,
     draftCount,
@@ -560,10 +673,12 @@ export function useDiscoveryController(
     kind,
     language,
     mapCamera,
+    mapFocusRequest,
     mapId,
     mapPlaces,
     mapScope,
     mapSelected,
+    mapVisible,
     modal,
     name,
     navigate,
@@ -576,6 +691,8 @@ export function useDiscoveryController(
     selectPreviewLocation,
     selected,
     selectedId,
+    selectedVisitDate: inCourse ? courseDate : selectedVisitDate,
+    visitPattern: data.selectedDetail?.visitPattern,
     setDraftActivity,
     setDraftDay,
     setDraftSlot,

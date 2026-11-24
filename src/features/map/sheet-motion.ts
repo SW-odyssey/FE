@@ -8,9 +8,13 @@ export const sheetHeights: Record<SheetState, number> = {
 
 /** Fit the map sheet's three stops within the room below the map controls.
  * @param availableHeight Space in CSS pixels above the bottom navigation
+ * @param contentHeight Optional height of the complete list and its insets
  * @returns Heights for the collapsed, half and expanded sheet states
  */
-export function sheetHeightsForSpace(availableHeight: number) {
+export function sheetHeightsForSpace(
+  availableHeight: number,
+  contentHeight = Number.POSITIVE_INFINITY,
+) {
   const collapsed = sheetHeights.collapsed;
   const expanded = Math.min(
     sheetHeights.expanded,
@@ -18,10 +22,16 @@ export function sheetHeightsForSpace(availableHeight: number) {
   );
   const middle =
     (sheetHeights.half - collapsed) / (sheetHeights.expanded - collapsed);
+  const contentCap = Math.max(collapsed, contentHeight);
+  // Let short course lists use their padding without adding a nearly identical snap.
+  const shortListFits =
+    contentCap <= Math.min(sheetHeights.half + 12, expanded);
   return {
     collapsed,
-    half: Math.round(collapsed + (expanded - collapsed) * middle),
-    expanded,
+    half: shortListFits
+      ? contentCap
+      : Math.round(collapsed + (expanded - collapsed) * middle),
+    expanded: Math.min(contentCap, expanded),
   };
 }
 
@@ -38,8 +48,12 @@ export function sheetSnapTarget(
   velocity: number,
   start: number,
   maximum = 500,
+  contentHeight?: number,
 ) {
-  const { collapsed, half, expanded } = sheetHeightsForSpace(maximum);
+  const { collapsed, half, expanded } = sheetHeightsForSpace(
+    maximum,
+    contentHeight,
+  );
   const stops = [collapsed, half, expanded];
   // Tiny movements remain a tap; a paused drag has no residual flick velocity.
   const projected =

@@ -74,3 +74,11 @@ export function groupMapPlaces(
     };
   });
 }
+
+/** Return cells that need a count marker, keeping a selected venue visible as a pin. */
+export function groupedMarkerCells(places: LocalPlace[], selectedId?: string) {
+  return groupMapPlaces(places, true).filter(
+    ({ places: members }) =>
+      members.length > 1 && !members.some(({ id }) => id === selectedId),
+  );
+}

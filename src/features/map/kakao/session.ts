@@ -6,9 +6,10 @@ import {
   type ExploreMapOptions,
   type ExploreMapSession,
 } from "../controller.ts";
-import { createMapCells } from "./cells.ts";
+import { inMapScope } from "../geometry.ts";
 import { loadKakaoSdk } from "./load-sdk.ts";
 import { createMapOverlays } from "./overlays.ts";
+import type { CourseStop } from "../../discovery/course.ts";
 
 /** Prepare the preview's SDK; callers own cancellation and visible failure state.
  * @returns Shared SDK load promise, rejected when the preview key is unavailable
@@ -34,10 +35,13 @@ export function createExploreMapSession(
   onZoom: (level: number) => void,
 ): ExploreMapSession {
   const initial = readOptions();
-  const collection = () =>
-    readOptions()
-      .places.map((place) => place.id)
-      .join(",");
+  const collection = () => {
+    const { courseStops, places } = readOptions();
+    return (
+      (courseStops ? "course:" : "") +
+      (courseStops ?? places).map((place) => place.id).join(",")
+    );
+  };
   const cached = restorableMapCamera(initial.memory?.current, collection());
   let restoreFit = Boolean(cached);
   let restoreFocus = cached?.selectedId;
@@ -58,7 +62,13 @@ export function createExploreMapSession(
   map.setMinLevel(1);
   map.setMaxLevel(10);
   const overlays = createMapOverlays(map, element);
-  const cells = createMapCells(map);
+  const course = createCourseOverlays(map, element, readOptions);
+  function placeOptions() {
+    const options = readOptions();
+    return options.courseStops
+      ? { ...options, places: [], selected: null }
+      : options;
+  }
   let locationOverlay: kakao.maps.CustomOverlay | undefined;
   function remember() {
     const options = readOptions();
@@ -75,11 +85,17 @@ export function createExploreMapSession(
   const zoomChanged = () => onZoom(map.getLevel());
   const idle = () => {
     remember();
-    overlays.render(readOptions());
+    overlays.render(placeOptions());
   };
   kakao.maps.event.addListener(map, "zoom_changed", zoomChanged);
   kakao.maps.event.addListener(map, "idle", idle);
-  const observer = new ResizeObserver(() => map.relayout());
+  const observer = new ResizeObserver(() => {
+    if (!element.clientWidth || !element.clientHeight) return;
+    const center = map.getCenter();
+    map.relayout();
+    map.setCenter(center);
+    overlays.render(placeOptions());
+  });
   observer.observe(element);
   onZoom(map.getLevel());
 
@@ -90,19 +106,33 @@ export function createExploreMapSession(
     }
     const {
       places,
+      courseStops,
+      scope,
       viewportScale,
       sheetInset,
       viewportInsets = previewMapInsets,
     } = readOptions();
-    if (!places.length) return;
+    const targets =
+      courseStops ?? places.filter((place) => inMapScope(place, scope));
+    if (!targets.length) return;
     const bounds = new kakao.maps.LatLngBounds();
-    for (const place of places)
+    for (const place of targets)
       bounds.extend(new kakao.maps.LatLng(place.lat, place.lng));
     const top = viewportInsets.top + 12;
     const bottom = Math.min(
       Math.min(sheetInset, 292) + viewportInsets.bottom + 76,
       Math.max(0, element.clientHeight / viewportScale - top - 64),
     );
+    if (
+      courseStops &&
+      targets.every(
+        (place) => place.lat === targets[0].lat && place.lng === targets[0].lng,
+      )
+    ) {
+      map.setLevel(3);
+      centerOn(targets[0]);
+      return;
+    }
     map.setBounds(
       bounds,
       top * viewportScale,
@@ -142,9 +172,9 @@ export function createExploreMapSession(
   return {
     render() {
       cancelAnimationFrame(frame);
-      overlays.render(readOptions());
-      cells.render(readOptions());
-      frame = requestAnimationFrame(() => overlays.render(readOptions()));
+      overlays.render(placeOptions());
+      course.render();
+      frame = requestAnimationFrame(() => overlays.render(placeOptions()));
     },
     fitRecommendations,
     focusSelected,
@@ -182,7 +212,7 @@ export function createExploreMapSession(
       kakao.maps.event.removeListener(map, "idle", idle);
       locationOverlay?.setMap(null);
       overlays.dispose();
-      cells.dispose();
+      course.dispose();
     },
   };
 }
@@ -207,4 +237,77 @@ export function createMiniMapSession(
   dot.className = "local-mini-map-marker";
   const overlay = new kakao.maps.CustomOverlay({ map, position, content: dot });
   return { dispose: () => overlay.setMap(null) };
+}
+
+/** Display an ordered course on the current map without recreating its camera. */
+function createCourseOverlays(
+  map: kakao.maps.Map,
+  element: HTMLDivElement,
+  read: () => ExploreMapOptions,
+) {
+  let displayed: readonly CourseStop[] | undefined;
+  let pins: { button: HTMLButtonElement; overlay: kakao.maps.CustomOverlay }[] =
+    [];
+  let line: kakao.maps.Polyline | undefined;
+  function dispose() {
+    line?.setMap(null);
+    line = undefined;
+    pins.forEach(({ overlay }) => overlay.setMap(null));
+    pins = [];
+  }
+  return {
+    render() {
+      const { courseStops, language, selected } = read();
+      if (displayed !== courseStops) {
+        dispose();
+        displayed = courseStops;
+        if (!courseStops?.length) return;
+        const path = courseStops.map(
+          ({ lat, lng }) => new kakao.maps.LatLng(lat, lng),
+        );
+        if (path.length > 1) {
+          line = new kakao.maps.Polyline({
+            map,
+            path,
+            strokeColor: getComputedStyle(element)
+              .getPropertyValue("--local-plum")
+              .trim(),
+            strokeWeight: 3,
+            strokeStyle: "shortdash",
+          });
+        }
+        pins = path.map((position, index) => {
+          const button = element.ownerDocument.createElement("button");
+          button.type = "button";
+          button.type = "button";
+          button.className = "local-course-map-pin";
+          button.textContent = String(index + 1);
+          button.addEventListener("click", (event) => {
+            event.stopPropagation();
+            read().onCourseStopSelect?.(courseStops[index]);
+          });
+          const overlay = new kakao.maps.CustomOverlay({
+            map,
+            position,
+            content: button,
+            xAnchor: 0.5,
+            yAnchor: 0.5,
+            zIndex: 15,
+          });
+          return { button, overlay };
+        });
+      }
+      pins.forEach(({ button }, index) => {
+        const stop = courseStops![index];
+        button.setAttribute(
+          "aria-label",
+          `${index + 1}. ${language === "ko" ? stop.koreanName : stop.name}`,
+        );
+        if (selected?.id === stop.id)
+          button.setAttribute("aria-current", "true");
+        else button.removeAttribute("aria-current");
+      });
+    },
+    dispose,
+  };
 }

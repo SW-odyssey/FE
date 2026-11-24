@@ -37,7 +37,9 @@ export default function PlaceSheet({
   onStateChange,
   scale,
   maximumHeight = sheetHeights.expanded,
+  contentHeight,
   language,
+  label,
   summary,
   children,
 }: {
@@ -45,14 +47,17 @@ export default function PlaceSheet({
   onStateChange: (state: SheetState) => void;
   scale: number;
   maximumHeight?: number;
+  contentHeight?: number;
   language: DiscoveryLanguage;
+  label?: string;
   summary: ReactNode;
   children: ReactNode;
 }) {
   const heights = useMemo(
-    () => sheetHeightsForSpace(maximumHeight),
-    [maximumHeight],
+    () => sheetHeightsForSpace(maximumHeight, contentHeight),
+    [maximumHeight, contentHeight],
   );
+  const hasExpandedStop = heights.expanded > heights.half;
   const root = useRef<HTMLElement>(null);
   const [height, setHeight] = useState(heights[state]);
   const [dragging, setDragging] = useState(false);
@@ -141,12 +146,23 @@ export default function PlaceSheet({
     paint(heights[targetState.current]);
   }, [heights, scale, paint, stop]);
   useLayoutEffect(() => {
-    // The SDK attribution follows the same frame as the sheet; the map camera stays still.
-    root.current?.parentElement?.style.setProperty(
-      "--local-map-sheet-inset",
-      `${height}px`,
-    );
-  }, [height]);
+    const sheet = root.current;
+    const page = sheet?.parentElement;
+    if (!sheet || !page) return;
+    // Controls and attribution follow the rendered height, including the CSS cap.
+    const measure = () =>
+      page.style.setProperty(
+        "--local-map-sheet-inset",
+        `${sheet.offsetHeight}px`,
+      );
+    const observer = new ResizeObserver(measure);
+    observer.observe(sheet);
+    measure();
+    return () => {
+      observer.disconnect();
+      page.style.removeProperty("--local-map-sheet-inset");
+    };
+  }, []);
 
   function endDrag(event: PointerEvent<HTMLButtonElement>, cancelled = false) {
     const current = drag.current;
@@ -171,7 +187,8 @@ export default function PlaceSheet({
           motion.current.height,
           velocity,
           current.height,
-          heights.expanded,
+          maximumHeight,
+          contentHeight,
         );
     const next =
       snap === heights.collapsed
@@ -210,7 +227,7 @@ export default function PlaceSheet({
           "--sheet-summary-reveal": summaryReveal,
         } as CSSProperties
       }
-      aria-label={t("Places on map", "지도 위 장소")}
+      aria-label={label ?? t("Places on map", "지도 위 장소")}
       data-sheet-state={state}
       data-sheet-dragging={dragging}
     >
@@ -231,7 +248,7 @@ export default function PlaceSheet({
           onStateChange(
             state === "collapsed"
               ? "half"
-              : state === "half"
+              : state === "half" && hasExpandedStop
                 ? "expanded"
                 : "collapsed",
           );
@@ -241,7 +258,9 @@ export default function PlaceSheet({
             event.key === "ArrowUp"
               ? state === "collapsed"
                 ? "half"
-                : "expanded"
+                : hasExpandedStop
+                  ? "expanded"
+                  : "half"
               : event.key === "ArrowDown"
                 ? state === "expanded"
                   ? "half"
@@ -249,7 +268,9 @@ export default function PlaceSheet({
                 : event.key === "Home"
                   ? "collapsed"
                   : event.key === "End"
-                    ? "expanded"
+                    ? hasExpandedStop
+                      ? "expanded"
+                      : "half"
                     : null;
           if (next) {
             event.preventDefault();

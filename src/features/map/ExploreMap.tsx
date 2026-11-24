@@ -3,8 +3,12 @@ import type { CSSProperties } from "react";
 import { LocalIcon } from "../../components/ui/LocalIcon";
 import { localText } from "../discovery/localization";
 import type { ExploreMapProps } from "./controller";
+import { inMapScope } from "./geometry";
+import { MapDiagram } from "./MapDiagram";
+import { hasLiveMapKey } from "./provider";
 import { useDeviceLocation } from "./useDeviceLocation";
 import { useExploreMap } from "./useExploreMap";
+import { usePreviewMap } from "./usePreviewMap";
 export type { MapCamera } from "./controller";
 
 export default function ExploreMap(props: ExploreMapProps) {
@@ -12,11 +16,15 @@ export default function ExploreMap(props: ExploreMapProps) {
     places,
     language,
     currentLocation,
+    courseStops,
     onLocate,
     viewportScale = 1,
+    viewportInsets,
+    sheetInset = 320,
   } = props;
   const {
     element,
+    provider,
     ready,
     error,
     zoom,
@@ -25,11 +33,26 @@ export default function ExploreMap(props: ExploreMapProps) {
     fitRecommendations,
     centerOn,
   } = useExploreMap(props);
+  const displayed =
+    courseStops ?? places.filter((place) => inMapScope(place, props.scope));
+  const { attachFrame, ...preview } = usePreviewMap({
+    enabled: !ready,
+    stops: courseStops ?? places,
+    numbered: Boolean(courseStops),
+    top: viewportInsets?.top ?? 72,
+    bottom: sheetInset + (viewportInsets?.bottom ?? 100),
+    viewportScale,
+    focus: props.focusSelected ? props.selected : null,
+    focusRequest: props.focusRequest,
+  });
+  const zoomMap = (direction: -1 | 1) => {
+    if (ready) zoomBy(direction);
+    else preview.zoomBy(direction);
+  };
   const { locate, status } = useDeviceLocation((point) => {
     onLocate(point);
     centerOn(point);
   });
-  const grid = zoom <= 4;
   const t = (en: string, kr: string) => localText(language, en, kr);
   const locationMessage = {
     idle: "",
@@ -45,7 +68,8 @@ export default function ExploreMap(props: ExploreMapProps) {
   }[status];
   return (
     <div
-      className={`local-explore-map ${grid ? "is-cell-preview" : ""} ${!ready ? "is-map-fallback" : ""}`}
+      data-map-provider={provider ?? "preview"}
+      className={`local-explore-map${!ready ? " is-map-fallback" : ""}`}
       style={
         {
           "--local-map-viewport-scale": viewportScale,
@@ -58,24 +82,47 @@ export default function ExploreMap(props: ExploreMapProps) {
       <div
         ref={element}
         className="local-map-canvas"
-        aria-label={t("Map of nearby places", "주변 장소 지도")}
+        aria-label={
+          courseStops
+            ? t("Course map", "코스 지도")
+            : t("Map of nearby places", "주변 장소 지도")
+        }
       />
+      {!ready && (
+        <MapDiagram
+          attachFrame={attachFrame}
+          map={preview}
+          stops={courseStops ?? places}
+          places={courseStops ? [] : places}
+          numbered={Boolean(courseStops)}
+          selectedId={props.selected?.id}
+          scope={props.scope}
+          onGroupSelect={props.onGroupSelect}
+          language={language}
+          onSelect={(stop) => {
+            if (courseStops) props.onCourseStopSelect?.(stop);
+            else {
+              const place = places.find(({ id }) => id === stop.id);
+              if (place) props.onSelect(place);
+            }
+          }}
+        />
+      )}
       <div className="local-map-chrome">
-        {!ready && (
-          <div className="local-refined-map-status" role="status">
-            <strong>
-              {error
-                ? t("Map unavailable", "지도를 연결하지 못했어요")
-                : t("Loading map…", "지도를 불러오는 중…")}
-            </strong>
-            <span>
-              {t(
-                "The place list is available below.",
-                "아래 장소 목록은 이용할 수 있어요.",
-              )}
+        <div className="local-map-notes">
+          {Boolean(courseStops && courseStops.length > 1) && (
+            <span className="local-map-route-legend">
+              {t("Straight-line connections", "직선 연결")}
             </span>
-          </div>
-        )}
+          )}
+          {!ready && (
+            <span className="local-map-preview-status" role="status">
+              {error
+                ? t("Map preview", "지도 미리보기")
+                : t("Loading map…", "지도를 불러오는 중…")}
+            </span>
+          )}
+        </div>
         {ready && (
           <div className="local-map-location-status" role="status">
             {locationMessage && (
@@ -85,9 +132,14 @@ export default function ExploreMap(props: ExploreMapProps) {
             )}
           </div>
         )}
-        <div className="local-map-tools">
+        <div
+          className="local-map-tools"
+          role="group"
+          aria-label={t("Map controls", "지도 조작")}
+        >
           {ready && (
             <button
+              type="button"
               className={`local-map-locate ${currentLocation ? "is-active" : ""}`}
               aria-label={t("My location", "내 위치")}
               title={t("My location", "내 위치")}
@@ -100,38 +152,41 @@ export default function ExploreMap(props: ExploreMapProps) {
           )}
           <div className="local-map-zoom">
             <button
+              type="button"
               aria-label={t("Zoom in", "확대")}
-              disabled={!ready || zoom <= 1}
-              onClick={() => zoomBy(-1)}
+              title={t("Zoom in", "확대")}
+              disabled={ready ? zoom <= 1 : !preview.canZoomIn}
+              onClick={() => zoomMap(-1)}
             >
-              ＋
+              <span
+                className="local-map-step-icon is-plus"
+                aria-hidden="true"
+              />
             </button>
             <button
+              type="button"
               aria-label={t("Zoom out", "축소")}
-              disabled={!ready || zoom >= 10}
-              onClick={() => zoomBy(1)}
+              title={t("Zoom out", "축소")}
+              disabled={ready ? zoom >= 10 : !preview.canZoomOut}
+              onClick={() => zoomMap(1)}
             >
-              −
+              <span className="local-map-step-icon" aria-hidden="true" />
             </button>
-          </div>
-          {error && process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY && (
             <button
-              aria-label={t("Retry live map", "지도 다시 연결")}
-              onClick={retry}
-            >
-              ↻
-            </button>
-          )}
-          {ready && (
-            <button
+              type="button"
               className="local-map-fit"
-              aria-label={t(
-                "Show all recommended locations",
-                "추천 위치 전체 보기",
-              )}
-              title={t("Show all recommended locations", "추천 위치 전체 보기")}
-              onClick={fitRecommendations}
-              disabled={!places.length}
+              aria-label={
+                courseStops
+                  ? t("Fit course", "코스 전체 보기")
+                  : t("Fit places", "추천 장소 전체 보기")
+              }
+              title={
+                courseStops
+                  ? t("Fit course", "코스 전체 보기")
+                  : t("Fit places", "추천 장소 전체 보기")
+              }
+              onClick={ready ? fitRecommendations : preview.fit}
+              disabled={!displayed.length}
             >
               <svg
                 width="20"
@@ -142,9 +197,19 @@ export default function ExploreMap(props: ExploreMapProps) {
                 strokeWidth="1.7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                aria-hidden="true"
               >
                 <path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5" />
               </svg>
+            </button>
+          </div>
+          {error && hasLiveMapKey && (
+            <button
+              type="button"
+              aria-label={t("Retry live map", "지도 다시 연결")}
+              onClick={retry}
+            >
+              ↻
             </button>
           )}
         </div>

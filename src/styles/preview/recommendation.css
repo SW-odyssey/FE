@@ -12,6 +12,19 @@
 .local-featured-track::-webkit-scrollbar {
   display: none;
 }
+.local-featured-track[data-mouse-scroll] {
+  cursor: grab;
+  user-select: none;
+}
+.local-featured-track[data-dragging] {
+  cursor: grabbing;
+}
+.local-featured-track:is([data-dragging], [data-mouse-settling]) {
+  scroll-snap-type: none;
+}
+.local-featured-track[data-mouse-scroll] > .local-featured {
+  cursor: inherit;
+}
 .local-featured-track > .local-featured {
   flex: 0 0 100%;
   scroll-snap-align: start;

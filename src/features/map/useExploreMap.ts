@@ -2,12 +2,13 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Coordinate } from "../discovery/model.ts";
 import {
-  attachMapSession,
   type ExploreMapOptions,
   type ExploreMapProps,
   type ExploreMapSession,
 } from "./controller.ts";
-import { createExploreMapSession, prepareKakaoMap } from "./kakao/session.ts";
+import { createGoogleExploreMapSession } from "./google/session.ts";
+import { createExploreMapSession } from "./kakao/session.ts";
+import { attachPreferredMapSession, type MapProvider } from "./provider.ts";
 
 /** Bind the view's state to one provider session and discard late SDK completions.
  * @param props Current places, selection, callbacks and uncovered map size
@@ -28,28 +29,33 @@ export function useExploreMap(props: ExploreMapProps) {
       viewportScale: props.viewportScale ?? 1,
     };
   }, [props]);
-  const [ready, setReady] = useState(false);
+  const [provider, setProvider] = useState<MapProvider | null>(null);
+  const ready = provider !== null;
   const [error, setError] = useState(false);
   const [zoom, setZoom] = useState(5);
   const [retry, setRetry] = useState(0);
+  const displayed = props.courseStops ?? props.places;
   useEffect(() => {
-    return attachMapSession(
-      prepareKakaoMap,
-      () =>
-        createExploreMapSession(
-          element.current!,
-          () => ({
-            ...options.current,
-            onSelect: (place) => options.current.onSelect(place),
-            onGroupSelect: (group) => options.current.onGroupSelect?.(group),
-          }),
-          setZoom,
-        ),
-      (next) => {
-        session.current = next;
-        setReady(true);
+    const read = (): ExploreMapOptions => ({
+      ...options.current,
+      onSelect: (place) => options.current.onSelect(place),
+      onGroupSelect: (group) => options.current.onGroupSelect?.(group),
+    });
+    return attachPreferredMapSession(
+      {
+        google: () =>
+          createGoogleExploreMapSession(element.current!, read, setZoom),
+        kakao: () => createExploreMapSession(element.current!, read, setZoom),
       },
-      () => setError(true),
+      (next, provider) => {
+        session.current = next;
+        setProvider(provider);
+      },
+      (failed) => {
+        session.current = null;
+        setProvider(null);
+        setError(failed);
+      },
     );
   }, [retry]);
   useEffect(() => {
@@ -57,6 +63,7 @@ export function useExploreMap(props: ExploreMapProps) {
     session.current?.render();
   }, [
     props.places,
+    props.courseStops,
     props.selected,
     props.language,
     props.scope,
@@ -68,10 +75,10 @@ export function useExploreMap(props: ExploreMapProps) {
   ]);
   useEffect(() => {
     if (ready) session.current?.fitRecommendations(true);
-  }, [props.places, ready]);
+  }, [displayed, ready]);
   useEffect(() => {
     if (ready) session.current?.focusSelected();
-  }, [props.selected, ready, props.focusSelected]);
+  }, [props.selected, ready, props.focusSelected, props.focusRequest]);
   useEffect(() => {
     if (ready && props.currentLocation) {
       session.current?.setCurrentLocation(props.currentLocation);
@@ -79,6 +86,7 @@ export function useExploreMap(props: ExploreMapProps) {
   }, [ready, props.currentLocation]);
   return {
     element,
+    provider,
     ready,
     error,
     zoom,

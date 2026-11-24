@@ -120,7 +120,7 @@ test("only a missing area or Jongno restores the current-area flag", () => {
 
 test("invalid values retain the controller's fallbacks and leave place validation to its data source", () => {
   const state = readPreviewUrl(
-    "?view=course&area=unknown&place=nogari&panel=other&sheet=full&slot=dinner&day=oops&activity=moderate&category=culture&space=unknown&lang=fr&q=++",
+    "?view=unknown&area=unknown&place=nogari&panel=other&sheet=full&slot=dinner&day=oops&activity=moderate&category=culture&space=unknown&lang=fr&q=++",
     now,
     "ko",
   );
@@ -141,6 +141,93 @@ test("invalid values retain the controller's fallbacks and leave place validatio
     category: "all",
     language: "en",
   });
+});
+
+test("course detail links restore the course, selected place and discovery context", () => {
+  const params = serializePreviewUrl({
+    ...defaults,
+    view: "course",
+    place: "cheongsudang",
+    query: "coffee",
+    category: "cafe",
+    language: "ko",
+  });
+  const state = readPreviewUrl(params.toString(), now, null);
+  assert.equal(state.view, "course");
+  assert.equal(state.place, "cheongsudang");
+  assert.equal(state.query, "coffee");
+  assert.equal(state.category, "cafe");
+  assert.equal(state.language, "ko");
+  assert.equal(params.has("sheet"), false);
+});
+
+test("course map links retain the course layer and accept old saved-course links", () => {
+  const params = serializePreviewUrl({
+    ...defaults,
+    view: "map",
+    courseMap: true,
+    place: "ssamziegil",
+  });
+  const restored = readPreviewUrl(params.toString(), now, null);
+  assert.equal(restored.courseMap, true);
+  assert.equal(restored.place, "ssamziegil");
+  assert.equal(params.has("course"), false);
+  assert.deepEqual(
+    readPreviewUrl(`${params}&course=saved`, now, null),
+    restored,
+  );
+});
+
+test("every course chip selection round-trips on the itinerary and map layer", () => {
+  const combinations = [
+    { includeCafe: true, includeBrowse: false, afternoon: null },
+    { includeCafe: false, includeBrowse: true, afternoon: "browse" },
+    { includeCafe: true, includeBrowse: true, afternoon: "both" },
+    { includeCafe: false, includeBrowse: false, afternoon: "none" },
+  ];
+  for (const view of ["course", "map"] as const) {
+    for (const { afternoon, ...choices } of combinations) {
+      const courseOptions = { ...choices, includeLate: true };
+      const params = serializePreviewUrl({
+        ...defaults,
+        view,
+        courseMap: view === "map",
+        courseOptions,
+        activity: "quiet",
+        spaces: ["retro"],
+      });
+      assert.equal(params.get("afternoon"), afternoon);
+      assert.equal(params.get("late"), "1");
+      const state = readPreviewUrl(params.toString(), now, null);
+      assert.deepEqual(state.courseOptions, courseOptions);
+      assert.equal(state.modal, null);
+      assert.equal(state.activity, "quiet");
+      assert.deepEqual(state.spaces, ["retro"]);
+    }
+  }
+});
+
+test("older course links keep their selection and open the chips directly", () => {
+  for (const panel of ["course-options", "filters"]) {
+    const course = readPreviewUrl(
+      `?view=course&panel=${panel}&afternoon=browse&late=yes`,
+      now,
+      null,
+    );
+    assert.equal(course.modal, null);
+    assert.deepEqual(course.courseOptions, {
+      includeCafe: false,
+      includeBrowse: true,
+      includeLate: false,
+    });
+  }
+  const places = readPreviewUrl(
+    "?view=map&afternoon=browse&late=1&panel=filters",
+    now,
+    null,
+  );
+  assert.equal(places.modal, "filters");
+  assert.equal(places.courseOptions, undefined);
 });
 
 test("day restoration preserves numeric coercion and clamps only to zero through six", () => {

@@ -7,6 +7,43 @@ export function LocalIcon({
   name: string;
   size?: number;
 }) {
+  if (name === "refresh")
+    return (
+      <svg
+        className="local-icon"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M20 4v5h-5M4 20v-5h5" />
+        <path d="M19.7 9a8 8 0 0 0-13.2-3M4.3 15a8 8 0 0 0 13.2 3" />
+      </svg>
+    );
+  if (name === "route")
+    return (
+      <svg
+        className="local-icon"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="6" cy="5" r="2" />
+        <circle cx="18" cy="19" r="2" />
+        <path d="M8 5h8a3.5 3.5 0 0 1 0 7H8a3.5 3.5 0 0 0 0 7h8" />
+      </svg>
+    );
   if (name === "places")
     return (
       <svg

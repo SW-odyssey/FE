@@ -44,6 +44,22 @@ test("compact layouts retain a reachable middle stop inside the available height
   assert.equal(sheetSnapTarget(235, 0, compact.half, 248), compact.expanded);
 });
 
+test("a short course opens to its content height and retains a collapsed stop", () => {
+  assert.deepEqual(sheetHeightsForSpace(500, 244), {
+    collapsed: 88,
+    half: 244,
+    expanded: 244,
+  });
+  assert.equal(sheetSnapTarget(230, 0, 88, 500, 244), 244);
+  assert.equal(sheetHeightsForSpace(300, 244).half, 244);
+  assert.deepEqual(sheetHeightsForSpace(500, 322), {
+    collapsed: 88,
+    half: 322,
+    expanded: 322,
+  });
+  assert.equal(sheetHeightsForSpace(210, 244).expanded, 210);
+});
+
 test("the spring is frame-rate independent, converges, and can reverse mid-flight", () => {
   const once = stepSheetSpring(88, 0, 500, 0.032);
   const first = stepSheetSpring(88, 0, 500, 0.016);

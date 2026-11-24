@@ -1,0 +1,422 @@
+.local-web .local-map-page {
+  --local-map-chrome-top: var(
+    --local-map-measured-top,
+    calc(226px + var(--local-safe-top))
+  );
+}
+
+.local-web .local-map-page.is-course-map {
+  --local-map-sheet-gap: 4px;
+  --local-map-chrome-top: var(
+    --local-map-measured-top,
+    calc(76px + var(--local-safe-top))
+  );
+}
+
+.local-map-mobile-tools {
+  display: grid;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.local-map-mobile-tools > *,
+.local-course-map-header > * {
+  pointer-events: auto;
+}
+
+.local-map-mobile-tools > .local-search-header {
+  height: 48px;
+  min-width: 0;
+  padding: 0;
+}
+
+.local-course-map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.local-course-map-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding-inline: 11px 15px;
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-pill);
+  background: var(--refresh-card);
+  box-shadow: var(--refresh-shadow);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.local-course-map-back .local-icon {
+  color: var(--local-plum);
+}
+
+.local-shell.local-web.local-refined .is-course-map .local-sheet-list-layer {
+  inset: 44px 18px 20px;
+}
+
+.local-map-course-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.local-map-course-list > li + li {
+  border-top: 1px solid var(--refresh-line);
+}
+
+.local-map-course-list button {
+  width: 100%;
+}
+
+.local-web .local-sheet-scroll .local-place-row {
+  margin-block-end: 0;
+}
+
+.local-map-notes {
+  position: absolute;
+  inset: 0 var(--local-content-gutter);
+}
+
+.local-map-route-legend,
+.local-map-preview-status {
+  position: absolute;
+  inset-inline-start: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 26px;
+  padding: 4px 8px;
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-sm);
+  background: var(--refresh-card);
+  color: var(--refresh-muted);
+  font-size: 12px;
+}
+
+.local-map-route-legend {
+  inset-block-end: 5px;
+}
+
+.local-map-preview-status {
+  inset-block-start: 0;
+}
+
+.local-map-route-legend::before {
+  width: 16px;
+  border-top: 2px dashed var(--local-plum);
+  content: "";
+}
+
+.local-map-diagram {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #eeeee8;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.local-map-diagram.is-panning,
+.local-map-diagram.is-panning > button {
+  cursor: grabbing;
+}
+
+.local-map-diagram > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.local-map-diagram polyline {
+  fill: none;
+  stroke: var(--local-plum);
+  stroke-width: 2.5;
+  stroke-dasharray: 5 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.local-course-map-pin {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 7px #25203230;
+  background: var(--local-plum);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  pointer-events: auto;
+}
+
+.local-map-diagram > button {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.local-shell.local-refined .local-map-diagram .local-map-pin:not(.is-cluster) {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.local-map-attribution {
+  position: absolute;
+  inset-inline-end: var(--local-content-gutter);
+  bottom: calc(var(--local-map-chrome-bottom) + 5px);
+  display: grid;
+  align-items: center;
+  min-height: 26px;
+  padding: 3px 7px;
+  border-radius: var(--r-sm);
+  background: #ffffffe6;
+  color: #45454c;
+  font-size: 10px;
+  pointer-events: auto;
+}
+
+.local-map-diagram > button[aria-current] {
+  z-index: 1;
+}
+
+.local-map-diagram > .local-course-map-pin[aria-current] {
+  outline: 2px solid var(--local-plum);
+  outline-offset: 2px;
+}
+
+.local-google-pins {
+  position: absolute;
+  inset: 0 auto auto 0;
+}
+
+.local-google-pins > button {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.local-google-pins > button[aria-current="true"] {
+  z-index: 1;
+}
+
+[data-map-provider="google"] .local-mini-map-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.local-diagram-pin-label {
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 130px;
+  padding: 4px 8px;
+  border: 1px solid var(--refresh-line);
+  border-radius: var(--r-sm);
+  background: var(--refresh-card);
+  color: var(--refresh-ink);
+  font-size: 12px;
+  text-align: center;
+}
+
+@media (max-height: 480px) and (min-width: 560px) and (max-width: 959px) {
+  .local-map-mobile-tools {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .local-map-context .local-discovery-controls {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+}
+
+@media (max-height: 480px) and (min-width: 720px) and (max-width: 959px) {
+  .local-web .local-map-page {
+    --local-map-sheet-clearance: 48px;
+  }
+
+  .local-map-mobile-tools .local-discovery-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .local-shell.local-refined
+    .local-map-mobile-tools
+    .local-discovery-controls
+    > .local-category-tabs {
+    max-width: min(37vw, 260px);
+    margin-block-start: 0;
+    padding-block-end: 0;
+  }
+}
+
+@media (max-width: 959px) and (max-height: 480px) {
+  .local-shell.local-web.local-refined .is-course-map .local-sheet-list-layer {
+    inset-block: 38px 14px;
+  }
+}
+
+@media (max-width: 959px) {
+  .local-course-map-pin {
+    position: relative;
+    isolation: isolate;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .local-course-map-pin::before {
+    position: absolute;
+    z-index: -1;
+    inset: 6px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--local-plum);
+    box-shadow: 0 2px 7px #25203230;
+    content: "";
+  }
+}
+
+@media (min-width: 960px) {
+  .local-shell.local-web.is-desktop-map-layout {
+    --local-sidebar-width: clamp(360px, 34vw, 448px);
+    --local-content-gutter: 24px;
+    display: grid;
+    grid-template-columns: var(--local-sidebar-width) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    max-width: none;
+    box-shadow: none;
+  }
+
+  .local-desktop-sidebar-content {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .local-web .local-desktop-sidebar-content > .local-search-header {
+    padding-inline: var(--local-content-gutter);
+  }
+
+  .local-shell.local-refined.is-desktop-map-layout > .local-bottom-nav {
+    --local-segment-track-padding: 4px;
+    position: relative;
+    inset: auto;
+    grid-column: 1;
+    grid-row: 1;
+    height: 54px;
+    margin: 16px var(--local-content-gutter) 4px;
+  }
+
+  .is-desktop-map-layout > .local-bottom-nav > button {
+    flex-direction: row;
+    gap: 7px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .is-desktop-map-layout > .local-bottom-nav > button > span:not(.local-icon) {
+    max-height: none;
+  }
+
+  .local-web
+    .local-desktop-sidebar-content
+    > :is(.local-places, .local-course) {
+    min-width: 0;
+    padding-bottom: 24px;
+    scroll-padding-bottom: 12px;
+  }
+
+  .is-desktop-map-layout > .local-detail {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    min-width: 0;
+  }
+
+  .is-desktop-map-layout > .local-detail-safe-area {
+    display: none;
+  }
+
+  .local-web.is-desktop-map-layout > .local-map-page {
+    --local-map-edge: 21px;
+    --local-map-chrome-top: var(--local-map-edge);
+    --local-map-chrome-bottom: var(--local-map-edge);
+    grid-column: 2;
+    grid-row: 1 / -1;
+    position: relative;
+    inset: auto;
+    border-inline-start: 1px solid var(--refresh-line);
+  }
+
+  .local-web.is-desktop-map-layout .local-map-page .local-map-context {
+    top: var(--local-map-edge);
+    max-width: none;
+    pointer-events: none;
+  }
+
+  .local-web.is-desktop-map-layout .local-map-page .local-map-tools {
+    top: 0;
+    gap: 8px;
+  }
+
+  .is-desktop-map-layout .local-map-notes {
+    inset-block-start: auto;
+    display: flex;
+    gap: 6px;
+  }
+
+  .is-desktop-map-layout .local-map-notes > span {
+    position: static;
+  }
+
+  .is-desktop-map-layout .local-map-attribution {
+    bottom: var(--local-map-edge);
+  }
+
+  .local-web.is-desktop-map-layout .local-map-chrome .local-refined-map-status {
+    top: 50px;
+    width: fit-content;
+  }
+
+  .local-desktop-map-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding-inline: 14px;
+    border: 1px solid var(--refresh-line);
+    border-radius: var(--r-pill);
+    background: var(--refresh-card);
+    box-shadow: var(--refresh-shadow);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .local-desktop-map-title > .local-icon {
+    color: var(--local-plum);
+  }
+
+  .is-desktop-map-layout > .local-modal-layer {
+    width: var(--local-sidebar-width);
+  }
+}

@@ -1,6 +1,6 @@
 import { localizedPlaceSummary } from "../localization.ts";
 import type { DiscoveryLanguage, LocalPlace, PlacePhoto } from "../model";
-import { previewSummaries } from "./preview/copy.ts";
+import { previewGeminiSummaries, previewSummaries } from "./preview/copy.ts";
 import photoManifest from "./preview/guide-photos.json" with { type: "json" };
 import { localPlaces } from "./preview/places.ts";
 import {
@@ -9,6 +9,7 @@ import {
   recommendPlaces,
 } from "./preview/recommendations.ts";
 import type {
+  AreaVisitPattern,
   DiscoveryDataSource,
   DiscoveryPlaceDetail,
   DiscoveryQuery,
@@ -16,6 +17,15 @@ import type {
   DiscoveryRequestOptions,
 } from "./types";
 const languages: DiscoveryLanguage[] = ["en", "ko", "ja", "zh"];
+const oncheonjipVisitPattern: AreaVisitPattern = {
+  provenance: "preview",
+  byDay: {
+    monThu: { lunch: 88, afternoon: 54, evening: 100, late: 23 },
+    fri: { lunch: 56, afternoon: 64, evening: 100, late: 48 },
+    sat: { lunch: 62, afternoon: 77, evening: 100, late: 33 },
+    sun: { lunch: 82, afternoon: 100, evening: 74, late: 19 },
+  },
+};
 /**
  * @param place A preview fixture, including its existing source and photo paths
  * @returns Gallery order and text fallbacks identical to the current screen
@@ -32,6 +42,7 @@ export function previewPlaceDetail(place: LocalPlace): DiscoveryPlaceDetail {
   ];
   const summaries = {} as Record<DiscoveryLanguage, string>;
   const descriptions = {} as Record<DiscoveryLanguage, string>;
+  const aiSummary = previewGeminiSummaries[place.id];
   for (const language of languages) {
     const ko = language === "ko";
     const translated = localizedPlaceSummary(place.id, language);
@@ -51,6 +62,8 @@ export function previewPlaceDetail(place: LocalPlace): DiscoveryPlaceDetail {
     descriptions,
     sourceUrl: place.sourceUrl,
     photoCredits: [...new Set(photos.map((photo) => photo.credit))],
+    ...(aiSummary && { aiSummary }),
+    ...(place.id === "oncheonjip" && { visitPattern: oncheonjipVisitPattern }),
   };
 }
 const details = new Map(
@@ -96,6 +109,10 @@ export const previewDataSource: DiscoveryDataSource = {
   snapshot: {
     query: previewQuery,
     getPlace: (id) => details.get(id) ?? null,
+    browseCourse: (area) =>
+      area === "all" || area === "jongno" || area === "insa"
+        ? (details.get("ssamziegil")?.place ?? null)
+        : null,
   },
   async query(input, options) {
     checkAbort(options);

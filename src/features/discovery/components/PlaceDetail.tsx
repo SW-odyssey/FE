@@ -3,10 +3,11 @@ import { LocalIcon } from "../../../components/ui/LocalIcon";
 import MiniMap from "../../map/MiniMap";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { areaLabels } from "../presentation";
+import { AreaVisitPatternCard } from "./AreaVisitPatternCard";
 import PhotoGallery from "./PhotoGallery";
-import { PlaceSummary } from "./PlaceSummary";
 type Props = Pick<
   DiscoveryController,
+  | "aiSummary"
   | "copyAddress"
   | "description"
   | "kind"
@@ -16,11 +17,13 @@ type Props = Pick<
   | "scroll"
   | "selected"
   | "showPlaceOnMap"
-  | "analysisFor"
+  | "selectedVisitDate"
+  | "visitPattern"
   | "t"
 > & { selected: NonNullable<DiscoveryController["selected"]> };
 export function PlaceDetail(props: Props) {
   const {
+    aiSummary,
     copyAddress,
     description,
     kind,
@@ -30,10 +33,18 @@ export function PlaceDetail(props: Props) {
     scroll,
     selected,
     showPlaceOnMap,
-    analysisFor,
+    selectedVisitDate,
+    visitPattern,
     t,
   } = props;
   const area = areaLabels[language][selected.area];
+  const photoCredits = [
+    ...new Set(
+      photosFor(selected)
+        .map((photo) => photo.credit)
+        .filter(Boolean),
+    ),
+  ];
   return (
     <div
       key={`place-${selected.id}`}
@@ -54,26 +65,37 @@ export function PlaceDetail(props: Props) {
             {area} · {kind(selected)}
           </p>
         </header>
-        <PlaceSummary
-          place={selected}
-          analysisFor={analysisFor}
-          language={language}
-        />
         <section className="local-detail-section">
           <h2>{t("About this place", "장소 소개")}</h2>
           <p>{description(selected)}</p>
-          <p className="local-place-source">
+          <small className="local-place-source">
             <a href={selected.sourceUrl} target="_blank" rel="noreferrer">
               {t("Original source", "원문 보기")} ↗
             </a>
-            <span>
-              {t("Photo", "사진")}{" "}
-              {[
-                ...new Set(photosFor(selected).map((photo) => photo.credit)),
-              ].join(" / ")}
-            </span>
-          </p>
+            {photoCredits.length > 0 && (
+              <span>
+                {t("Photo", "사진")} {photoCredits.join(" / ")}
+              </span>
+            )}
+          </small>
         </section>
+        {visitPattern && (
+          <AreaVisitPatternCard
+            key={selectedVisitDate}
+            language={language}
+            pattern={visitPattern}
+            visitDate={selectedVisitDate}
+          />
+        )}
+        {aiSummary && (
+          <section className="local-detail-section">
+            <h2>{t("AI place summary", "AI 매장 요약")}</h2>
+            <p>{aiSummary}</p>
+            <small className="local-place-ai-note">
+              {t("Generated with Gemini", "Gemini로 자동 생성")}
+            </small>
+          </section>
+        )}
         <section className="local-detail-section">
           <h2>{t("Getting there", "위치")}</h2>
           <button

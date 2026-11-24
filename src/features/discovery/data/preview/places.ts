@@ -4,6 +4,7 @@ import type { LocalPlace } from "../../model.ts";
 export const localPlaces: LocalPlace[] = [
   {
     id: "cheongsudang",
+    googlePlaceId: "ChIJFSe90eejfDURnI3qwtRtTF8",
     name: "Cheongsudang",
     koreanName: "청수당",
     area: "ikseon",
@@ -21,6 +22,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "seoulcoffee",
+    googlePlaceId: "ChIJNQ3m-j-jfDURjUgkTKrY16o",
     name: "Seoul Coffee",
     koreanName: "서울커피 익선점",
     area: "ikseon",
@@ -38,6 +40,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "oncheonjip",
+    googlePlaceId: "ChIJ-53H9-mjfDURpOg-_9us6qo",
     name: "Oncheonjip",
     koreanName: "온천집 익선",
     area: "ikseon",
@@ -57,6 +60,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "hanyakbang",
+    googlePlaceId: "ChIJedlDzuWifDURBaOCaa5hkL4",
     name: "Coffee Hanyakbang",
     koreanName: "커피한약방",
     area: "eulji",
@@ -74,6 +78,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "ssamziegil",
+    googlePlaceId: "ChIJQRutlcKifDURiMoaUPYmWX4",
     name: "Ssamziegil",
     koreanName: "쌈지길",
     area: "insa",
@@ -109,6 +114,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "osulloc",
+    googlePlaceId: "ChIJx3KYRuSjfDURTmn2MdETH0k",
     name: "Osulloc Bukchon",
     koreanName: "오설록 북촌",
     area: "bukchon",
@@ -127,6 +133,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "imun",
+    googlePlaceId: "ChIJN0aOM-iifDUR98SZc1MQre0",
     name: "Imun Seollongtang",
     koreanName: "이문설농탕",
     area: "insa",
@@ -144,6 +151,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "layered",
+    googlePlaceId: "ChIJr1nKrsSifDURgg2lrxJlNZU",
     name: "Café Layered",
     koreanName: "카페 레이어드",
     area: "bukchon",
@@ -162,6 +170,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "songam",
+    googlePlaceId: "ChIJcRD4lXSjfDURr8a9Gw93CVo",
     name: "Songam Onban",
     koreanName: "송암온반",
     area: "ikseon",
@@ -184,6 +193,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "gowundon",
+    googlePlaceId: "ChIJJawtZQCjfDURYKP2MnwsfQk",
     name: "Gowundon Ikseon",
     koreanName: "고운돈 익선점",
     area: "ikseon",
@@ -205,6 +215,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "highwaist",
+    googlePlaceId: "ChIJKdXxrwCjfDURCnG-FUFQA_U",
     name: "Café Highwaist",
     koreanName: "카페 하이웨스트 익선점",
     area: "ikseon",
@@ -227,6 +238,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "chatteul",
+    googlePlaceId: "ChIJJ9CNUjOjfDURfSXr8cXKQ4o",
     name: "Cha Masineun Tteul",
     koreanName: "차마시는뜰",
     area: "bukchon",
@@ -248,6 +260,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "beautifultea",
+    googlePlaceId: "ChIJswulBeiifDUR9vi4V4siQ8I",
     name: "Beautiful Tea Room",
     koreanName: "아름다운 차박물관 찻집",
     area: "insa",
@@ -270,6 +283,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "sujebi",
+    googlePlaceId: "ChIJI9JAR8-ifDURSFjz37c33lE",
     name: "Samcheong-dong Sujebi",
     koreanName: "삼청동수제비",
     area: "bukchon",
@@ -292,6 +306,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "joseonok",
+    googlePlaceId: "ChIJn75_FOGifDUR29kfireXljw",
     name: "Joseonok",
     koreanName: "조선옥",
     area: "eulji",
@@ -314,6 +329,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "dalmaji",
+    googlePlaceId: "ChIJ2xI4RQCjfDURiZ0atPhWxcY",
     name: "Dalmaji Barbecue",
     koreanName: "달맞이광장 바베큐",
     area: "eulji",
@@ -336,6 +352,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "sammijung",
+    googlePlaceId: "ChIJwXiLP-CifDURg8Q2HfLxWK8",
     name: "Sammijung",
     koreanName: "삼미정",
     area: "eulji",
@@ -357,6 +374,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "banjjak",
+    googlePlaceId: "ChIJqw-SrcKifDURleSrRbcdhDE",
     name: "Banjjak Tea House",
     koreanName: "반짝반짝 빛나는",
     area: "insa",
@@ -379,6 +397,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "soseonjae",
+    googlePlaceId: "ChIJVS4NJs-ifDURkgXADmJ4Ui4",
     name: "Soseonjae",
     koreanName: "소선재",
     area: "bukchon",
@@ -400,6 +419,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "hanaro",
+    googlePlaceId: "ChIJG_zBE-iifDURGS5-a17d2Qs",
     name: "Hanaro Hwaegwan",
     koreanName: "하나로회관",
     area: "insa",
@@ -422,6 +442,7 @@ export const localPlaces: LocalPlace[] = [
   },
   {
     id: "rainreport",
+    googlePlaceId: "ChIJsayuXgCjfDUR1uzNP788BYc",
     name: "Rain Report Rainbow",
     koreanName: "레인리포트 레인보우",
     area: "ikseon",

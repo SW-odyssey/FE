@@ -4,6 +4,7 @@ import type {
   LocalPlace,
 } from "../discovery/model.ts";
 import type { MapPlaceGroup } from "./geometry.ts";
+import type { CourseStop } from "../discovery/course.ts";
 
 export type MapCamera = Coordinate & {
   level: number;
@@ -21,12 +22,15 @@ export type ExploreMapProps = {
   onLocate: (point: Coordinate) => void;
   onSelect: (place: LocalPlace) => void;
   focusSelected?: boolean;
+  focusRequest?: number;
   sheetInset?: number;
   viewportScale?: number;
   viewportInsets?: MapViewportInsets;
   memory?: { current: MapCamera | null };
   scope?: string | null;
   onGroupSelect?: (group: MapPlaceGroup) => void;
+  courseStops?: readonly CourseStop[];
+  onCourseStopSelect?: (stop: CourseStop) => void;
 };
 export type ExploreMapOptions = ExploreMapProps & {
   sheetInset: number;
