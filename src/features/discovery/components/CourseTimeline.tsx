@@ -29,8 +29,8 @@ type Props = Pick<
 };
 
 const rowTransitionMs = 240;
-const rebuildTransitionMs = 300;
-const rebuildStaggerMs = 65;
+const rebuildTransitionMs = 220;
+const rebuildStaggerMs = 60;
 
 function courseRows(route: CourseLeg[]): Row[] {
   return route.map((leg, index) => ({
@@ -115,6 +115,7 @@ export function CourseTimeline({
     return () => window.clearTimeout(timer);
   }, [timeline]);
 
+  const rebuilding = timeline.rows.some((row) => row.reveal);
   function renderStop(
     {
       slot,
@@ -200,6 +201,7 @@ export function CourseTimeline({
   return (
     <ol
       className="local-course-timeline"
+      data-rebuilding={rebuilding || undefined}
       aria-label={t("Visit order", "방문 순서")}
       style={
         {

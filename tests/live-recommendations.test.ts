@@ -25,14 +25,24 @@ const place = {
   googlePlaceId: "ChIJtest",
 };
 
-test("the live source keeps backend order and shares the published dataset across cell requests", async (t) => {
+test("the live source keeps cafés and restaurants in backend order and shares the published dataset", async (t) => {
   const calls: URL[] = [];
   t.mock.method(globalThis, "fetch", async (url: URL) => {
     calls.push(url);
     const data = url.pathname.endsWith("/meta")
       ? { datasets: [{ id: "public-latest" }] }
       : url.pathname.endsWith("/recommendations")
-        ? { total: 2, items: [place, { ...place, id: 141 }] }
+        ? {
+            total: 6,
+            items: [
+              { ...place, id: 101, kind: "shop" },
+              place,
+              { ...place, id: 102, kind: "bar" },
+              { ...place, id: 141, kind: "cafe" },
+              { ...place, id: 103, kind: "play" },
+              { ...place, id: 142, kind: "other" },
+            ],
+          }
         : url.pathname.endsWith("/visit-pattern") &&
             url.searchParams.get("weekday") === "sat"
           ? { status: "NO_DISTINCT_PEAK", graph: null }
@@ -55,8 +65,9 @@ test("the live source keeps backend order and shares the published dataset acros
   const found = await source.query(query);
   assert.deepEqual(
     found.items.map(({ id }) => id),
-    ["1557", "141"],
+    ["1557", "141", "142"],
   );
+  assert.equal(found.total, 3);
   assert.equal(calls[1]?.searchParams.get("weekday"), "fri");
   assert.equal(calls[1]?.searchParams.get("slot"), "dinner");
   assert.equal(calls[1]?.searchParams.get("lang"), "en");

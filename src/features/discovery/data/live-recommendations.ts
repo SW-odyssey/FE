@@ -52,14 +52,19 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
       try {
         data = await getV2Data<{
           items: (ApiPlace & { cellId: string })[];
-          total: number;
         }>("recommendations", signal, params);
       } catch (error) {
         if (error instanceof V2RequestError && error.status === 404)
           published = undefined;
         throw error;
       }
-      return { items: data.items.map(v2Place), total: data.total };
+      const items = data.items
+        .filter(
+          ({ kind }) =>
+            kind === "cafe" || kind === "korean" || kind === "other",
+        )
+        .map(v2Place);
+      return { items, total: items.length };
     },
     async getPlace(id, { signal, query } = {}) {
       if (!/^[1-9]\d{0,15}$/.test(id) || !Number.isSafeInteger(Number(id)))

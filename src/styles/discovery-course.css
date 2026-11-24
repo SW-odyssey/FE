@@ -32,10 +32,6 @@
   box-shadow: var(--refresh-shadow);
 }
 
-.local-course .local-context {
-  grid-template-columns: minmax(92px, 2fr) minmax(0, 3fr);
-}
-
 .local-shell.local-refined .local-course-controls > .local-course-option-chips {
   flex-wrap: wrap;
   gap: 8px;
@@ -363,6 +359,14 @@
 
 .local-course-timeline > li[data-last] .local-course-stop::before {
   inset-block-end: 50%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .local-course-timeline[data-rebuilding]
+    > li
+    :is(.local-course-stop-controls, .local-course-stop)::before {
+    visibility: hidden;
+  }
 }
 
 .local-course-pin {
