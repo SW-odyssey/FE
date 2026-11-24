@@ -119,9 +119,10 @@ test("changing a slot uses the previous stop and excludes the visited and replac
     });
   });
   const { signal } = new AbortController();
-  const course = await getCourse(request, signal);
+  const localizedRequest = { ...request, language: "ja" as const };
+  const course = await getCourse(localizedRequest, signal);
   const result = await replaceCourseSuffix(
-    request,
+    localizedRequest,
     course,
     { slot: "evening", excludeIds: ["44"] },
     signal,
@@ -130,6 +131,8 @@ test("changing a slot uses the previous stop and excludes the visited and replac
   assert.equal(urls[1].searchParams.get("lng"), "126.99");
   assert.equal(urls[1].searchParams.get("excludeIds"), "11,44");
   assert.equal(urls[1].searchParams.get("seed"), "7");
+  assert.equal(urls[0].searchParams.get("lang"), "ja");
+  assert.equal(urls[1].searchParams.get("lang"), "ja");
   assert.deepEqual(
     result?.route.map(({ place }) => place.id),
     ["11", "45", "55"],

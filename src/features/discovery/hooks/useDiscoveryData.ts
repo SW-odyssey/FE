@@ -132,7 +132,11 @@ export function useDiscoveryData({
   source?: DiscoveryDataSource;
   queryEnabled?: boolean;
   draftEnabled?: boolean;
-  getPlace?: (id: string, signal: AbortSignal) => Promise<DiscoveryPlaceDetail>;
+  getPlace?: (
+    id: string,
+    signal: AbortSignal,
+    language?: DiscoveryLanguage,
+  ) => Promise<DiscoveryPlaceDetail>;
 }) {
   const [attempt, setAttempt] = useState(0);
   const retry = useCallback(() => {
@@ -167,7 +171,7 @@ export function useDiscoveryData({
   const loadDetail = useCallback(
     (signal: AbortSignal) =>
       getPlace
-        ? getPlace(selectedId!, signal)
+        ? getPlace(selectedId!, signal, appliedInput.language)
         : source.getPlace(selectedId!, { signal, query: appliedInput }),
     [getPlace, source, selectedId, appliedInput],
   );
@@ -193,7 +197,7 @@ export function useDiscoveryData({
   });
   const detail = useSourceResource<DiscoveryPlaceDetail | null>({
     source,
-    key: `${getPlace ? "course:" : ""}${selectedId ?? ""}`,
+    key: `${getPlace ? "course:" : ""}${selectedId ?? ""}:${query.language ?? ""}`,
     synchronous: !getPlace && Boolean(source.snapshot),
     attempt,
     snapshot: detailSnapshot,

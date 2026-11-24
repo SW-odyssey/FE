@@ -15,7 +15,12 @@ import {
   replaceCourseSuffix,
 } from "../data/course-replacement";
 import { createLatestRequest } from "../data/latest-request";
-import type { Coordinate, DiscoveryArea, VisitSlot } from "../model";
+import type {
+  Coordinate,
+  DiscoveryArea,
+  DiscoveryLanguage,
+  VisitSlot,
+} from "../model";
 import type { CourseLink } from "../state/course-url";
 
 const emptyRoute: CourseResult["route"] = [];
@@ -42,6 +47,7 @@ export function useCourseRecommendations({
   visitDate,
   initialLink,
   options,
+  language,
   enabled,
 }: {
   area: DiscoveryArea;
@@ -50,6 +56,7 @@ export function useCourseRecommendations({
   visitDate: string;
   initialLink?: CourseLink;
   options: CourseOptions;
+  language: DiscoveryLanguage;
   enabled: boolean;
 }) {
   const { lat, lng } = origin ?? courseOrigin(area);
@@ -57,7 +64,13 @@ export function useCourseRecommendations({
   const date = initialLink?.visitDate ?? visitDate;
   const [attempt, setAttempt] = useState(0);
   const contextKey = JSON.stringify([lat, lng, start, date]);
-  const key = JSON.stringify([contextKey, initialLink, options, attempt]);
+  const key = JSON.stringify([
+    contextKey,
+    initialLink,
+    options,
+    language,
+    attempt,
+  ]);
   const [state, setState] = useState<CourseState>();
   const latest = useRef<CourseState>(undefined);
   const lane = useMemo(() => createLatestRequest<LoadedCourse | null>(), []);
@@ -81,6 +94,7 @@ export function useCourseRecommendations({
           visitDate: date,
           seed: initialLink?.seed,
           options,
+          language,
         };
         let result = await getCourse(request, signal);
         const replacements = [];
@@ -137,6 +151,7 @@ export function useCourseRecommendations({
     date,
     initialLink,
     options,
+    language,
   ]);
 
   useEffect(() => lane.cancel, [enabled, key, lane]);
@@ -155,6 +170,7 @@ export function useCourseRecommendations({
       slot: start,
       visitDate: date,
       options,
+      language,
     };
     const pending = { ...current, pending: true, error: undefined };
     latest.current = pending;

@@ -104,7 +104,7 @@ BE 구현 상태는 2026년 11월 7일 main 기준이다. 같은 날 [BE 배포 
 
 셀과 군집에 표시할 수는 추천 장소 수다. 상세의 방문 그래프는 `/api/v2/cells/{id}/visit-pattern`의 공개 데이터셋과 선택 요일을 사용한다. LG U+ 수치는 50m 구역의 시간대별 상대 방문 지표다. 서버가 그래프를 제공하는 요일에만 방문 패턴 영역을 표시한다.
 
-원문 소개와 사전 생성한 Gemini 요약은 동일한 Google 장소 ID에 연결한다. 생성된 요약이 없는 장소는 `/api/place-summary`에서 확인된 인허가 이력을 근거로 요약한다. 인허가 이력이 없거나 생성에 실패하면 요약 영역을 숨긴다. 장소 상세에서 선택 언어의 이름은 기존 Google 사진 목록 요청으로 받는다. 추천 목록과 지도 핀은 v2 API에 다국어 이름이 제공될 때까지 서버에서 받은 상호를 사용한다. `GOOGLE_PLACES_API_KEY`와 `GEMINIAI_API_KEY`는 로컬 서버 및 Cloudflare Pages 서버 환경변수에 설정한다.
+원문 소개와 사전 생성한 Gemini 요약은 동일한 Google 장소 ID에 연결한다. 생성된 요약이 없는 장소는 `/api/place-summary`에서 확인된 인허가 이력을 근거로 요약한다. 인허가 이력이 없거나 생성에 실패하면 요약 영역을 숨긴다. 추천, 코스, 상세 요청에는 선택 언어를 `lang=ko|en|ja|zh`로 보내며 목록과 지도 핀에도 서버가 반환한 `name`을 표시한다. BE에 해당 언어의 상호가 없으면 BE가 원래 상호를 반환한다. `GOOGLE_PLACES_API_KEY`와 `GEMINIAI_API_KEY`는 로컬 서버 및 Cloudflare Pages 서버 환경변수에 설정한다.
 
 ## adapter 연결 순서
 

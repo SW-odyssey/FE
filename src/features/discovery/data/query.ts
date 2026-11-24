@@ -15,6 +15,7 @@ export function discoveryQueryKey(input: DiscoveryQuery): string {
     [...input.spaces],
     input.visitDate ?? null,
     input.datasetId ?? null,
+    input.language ?? null,
   ]);
 }
 /**

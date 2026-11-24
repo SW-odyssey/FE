@@ -3,6 +3,7 @@ import type {
   Coordinate,
   CoursePlaceKind,
   DiscoveryArea,
+  DiscoveryLanguage,
   LocalPlace,
   VisitSlot,
 } from "../model.ts";
@@ -96,6 +97,7 @@ export type CourseRequest = {
   seed?: number;
   excludeIds?: readonly string[];
   options?: CourseOptions;
+  language?: DiscoveryLanguage;
 };
 
 /** Return the departure point for a selected area in the course API. */
@@ -123,6 +125,7 @@ export function courseSearchParams(request: CourseRequest): URLSearchParams {
   if (request.options?.walk === "short") params.set("walk", "short");
   if (request.options?.lateNight || request.slot === "late")
     params.set("lateNight", "true");
+  if (request.language) params.set("lang", request.language);
   return params;
 }
 
@@ -187,9 +190,14 @@ export async function getCourse(
 export async function getCoursePlaceDetail(
   id: string,
   signal?: AbortSignal,
+  language?: DiscoveryLanguage,
 ): Promise<DiscoveryPlaceDetail> {
   const place = v2Place(
-    await getV2Data<ApiPlace>(`places/${encodeURIComponent(id)}`, signal),
+    await getV2Data<ApiPlace>(
+      `places/${encodeURIComponent(id)}`,
+      signal,
+      language ? new URLSearchParams({ lang: language }) : undefined,
+    ),
   );
   const matched = place.googlePlaceId
     ? localPlaces.find(
