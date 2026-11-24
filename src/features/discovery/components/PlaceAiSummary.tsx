@@ -20,7 +20,8 @@ export function PlaceAiSummary({
     key: string;
     result: PlaceSummary | null;
   }>();
-  const enabled = Boolean(googlePlaceId) && /^\d+$/.test(id) && !curatedSummary;
+  const livePlace = /^\d+$/.test(id);
+  const enabled = livePlace && Boolean(googlePlaceId) && !curatedSummary;
   const key = new URLSearchParams({ id, lang: language }).toString();
   useEffect(() => {
     if (!enabled) return;
@@ -45,7 +46,7 @@ export function PlaceAiSummary({
   const grounded = response?.key === key ? response.result : null;
   const summary = curatedSummary || grounded?.summary;
   const pending = enabled && response?.key !== key;
-  if (!summary && !pending) return null;
+  if (!livePlace && !summary) return null;
   const t = (en: string, ko: string) => localText(language, en, ko);
   return (
     <section className="local-detail-section local-place-ai">
@@ -89,7 +90,7 @@ export function PlaceAiSummary({
             {t("Generated with Gemini", "Gemini로 자동 생성")}
           </small>
         </>
-      ) : (
+      ) : pending ? (
         <>
           <div className="local-place-ai-placeholder" aria-hidden="true">
             <span className="local-skeleton" />
@@ -99,6 +100,10 @@ export function PlaceAiSummary({
             {t("Gemini is writing the summary…", "Gemini가 요약하는 중…")}
           </small>
         </>
+      ) : (
+        <p className="local-place-ai-unavailable" role="status">
+          {t("AI summary is unavailable.", "AI 요약 정보가 없어요.")}
+        </p>
       )}
     </section>
   );

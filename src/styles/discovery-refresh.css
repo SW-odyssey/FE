@@ -389,6 +389,9 @@ body {
   background: var(--refresh-ground);
   border-radius: var(--r-md);
 }
+.local-place-ai > .local-place-ai-unavailable {
+  color: var(--refresh-muted);
+}
 .local-place-grounded-text {
   white-space: pre-wrap;
 }

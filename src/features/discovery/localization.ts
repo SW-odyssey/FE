@@ -141,6 +141,10 @@ const copy: Record<string, readonly [string, string]> = {
   "Straight line": ["直線距離", "直线距离"],
   Attraction: ["観光スポット", "景点"],
   "AI place summary": ["AIによる店舗概要", "AI店铺简介"],
+  "AI summary is unavailable.": [
+    "AIによる概要はありません。",
+    "暂无 AI 简介。",
+  ],
   "Generated with Gemini": ["Geminiで自動生成", "由 Gemini 自动生成"],
   "Gemini is writing the summary…": [
     "Gemini が概要を作成中…",
