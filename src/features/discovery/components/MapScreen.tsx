@@ -25,6 +25,7 @@ type Props = Pick<
   | "mapPlaces"
   | "mapScope"
   | "mapSearchOrigin"
+  | "mapSdkEnabled"
   | "searchMapArea"
   | "mapSelected"
   | "selected"
@@ -174,6 +175,7 @@ export function MapScreen(props: Props) {
       }
     >
       <ExploreMap
+        sdkEnabled={props.mapSdkEnabled}
         memory={mapCamera}
         scope={mapScope}
         searchOrigin={showCourse ? null : props.mapSearchOrigin}

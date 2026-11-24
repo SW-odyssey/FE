@@ -14,6 +14,49 @@ const flush = async () => {
   await Promise.resolve();
 };
 
+test("Google Maps loads in the app language and flags a later language switch", async (t) => {
+  const key = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY = "test-key";
+  const browser: {
+    localGoogleMapsReady?: () => void;
+    setTimeout: typeof setTimeout;
+    clearTimeout: typeof clearTimeout;
+  } = { setTimeout, clearTimeout };
+  const scripts: { src: string }[] = [];
+  Object.defineProperty(globalThis, "window", {
+    configurable: true,
+    value: browser,
+  });
+  Object.defineProperty(globalThis, "document", {
+    configurable: true,
+    value: {
+      createElement: () => ({}),
+      head: { append: (script: { src: string }) => scripts.push(script) },
+    },
+  });
+  t.after(() => {
+    Reflect.deleteProperty(globalThis, "window");
+    Reflect.deleteProperty(globalThis, "document");
+    if (key === undefined) delete process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    else process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY = key;
+  });
+
+  const { prepareGoogleMap, googleMapsNeedsReload } =
+    await import("../src/features/map/google/load-sdk.ts");
+  assert.equal(googleMapsNeedsReload("zh"), false);
+  const loaded = prepareGoogleMap("zh");
+  assert.equal(prepareGoogleMap("zh"), loaded);
+  assert.equal(scripts.length, 1);
+  const params = new URL(scripts[0].src).searchParams;
+  assert.equal(params.get("language"), "zh-CN");
+  assert.equal(params.get("region"), "KR");
+  browser.localGoogleMapsReady?.();
+  await loaded;
+  assert.equal(googleMapsNeedsReload("zh"), false);
+  for (const language of ["en", "ja", "ko"] as const)
+    assert.equal(googleMapsNeedsReload(language), true);
+});
+
 test("map search requires a substantial pan and no recommendation in view", () => {
   const origin = { lat: 37.57, lng: 126.98 };
   const recommendation = { lat: 37.571, lng: 126.982 };

@@ -137,7 +137,7 @@ export function PlaceDetail(props: Props) {
             onClick={() => showPlaceOnMap(selected)}
             aria-label={t("View on map", "지도에서 보기")}
           >
-            <MiniMap place={selected} />
+            <MiniMap place={selected} language={language} />
           </button>
           <a
             className="local-detail-maps-link"

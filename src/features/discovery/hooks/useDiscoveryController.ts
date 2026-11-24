@@ -3,6 +3,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { MapCamera } from "../../map/controller";
 import type { MapPlaceGroup } from "../../map/geometry";
 import { inMapScope } from "../../map/geometry";
+import { googleMapsNeedsReload } from "../../map/google/load-sdk";
 import { type SheetState } from "../../map/sheet-motion";
 import { defaultCourseOptions, type CourseOptions } from "../course";
 import { previewDataSource, type DiscoveryDataSource } from "../data";
@@ -35,14 +36,25 @@ import { slotAt } from "../visit-time";
 import { useCourseRecommendations } from "./useCourseRecommendations";
 import { useDialogLifecycle } from "./useDialogLifecycle";
 import { useDiscoveryData } from "./useDiscoveryData";
+
+type MapLanguageRestore = {
+  language: DiscoveryLanguage;
+  camera: MapCamera | null;
+  currentLocation: Coordinate | null;
+  mapId: string | null;
+};
+
 /** Owns applied/draft state, navigation and restoration for discovery. */
 export function useDiscoveryController(
   source: DiscoveryDataSource = previewDataSource,
-  currentLocation: Coordinate | null = null,
   desktop = false,
 ) {
   const liveRecommendations = source === liveDiscoveryDataSource;
   const [restored, setRestored] = useState(false);
+  const [restoringMap, setRestoringMap] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState<Coordinate | null>(
+    null,
+  );
   const [view, setView] = useState<DiscoveryView>("discover");
   const [courseMap, setCourseMap] = useState(false);
   const [courseLink, setCourseLink] = useState<CourseLink>();
@@ -132,6 +144,26 @@ export function useDiscoveryController(
         new Date(),
         storedLanguage,
       );
+      if (googleMapsNeedsReload(state.language)) {
+        window.location.reload();
+        return;
+      }
+      const resume = window.history.state?.localMapLanguageRestore as
+        MapLanguageRestore | undefined;
+      if (resume?.language === state.language) {
+        const historyState = { ...window.history.state };
+        delete historyState.localMapLanguageRestore;
+        window.history.replaceState(historyState, "");
+        setCurrentLocation(resume.currentLocation);
+        setMapId(resume.mapId);
+        if (resume.camera) {
+          mapCamera.current = {
+            ...resume.camera,
+            restoreAfterLanguageChange: true,
+          };
+          setRestoringMap(true);
+        }
+      }
       setView(state.view);
       setCourseMap(Boolean(state.courseMap));
       if (state.view === "course" || state.courseMap)
@@ -372,6 +404,11 @@ export function useDiscoveryController(
     detailStatus,
     retry,
   } = data;
+  const mapDataPending = inCourse
+    ? autoCourse.status === "loading"
+    : status === "loading";
+  if (restoringMap && !mapDataPending) setRestoringMap(false);
+  const mapSdkEnabled = restored && (!restoringMap || !mapDataPending);
   const summary = (place: LocalPlace) => data.summaryFor(place, language);
   const analysisFor = (place: LocalPlace) => data.analyses[place.id];
   const description = (place: LocalPlace) =>
@@ -572,14 +609,30 @@ export function useDiscoveryController(
     setCategory(next);
   }
   function chooseLanguage(next: DiscoveryLanguage) {
-    if (next !== language && inCourse && activeCourseLink)
-      setCourseLink(activeCourseLink);
-    setLanguage(next);
     try {
       localStorage.setItem(LANGUAGE_KEY, next);
     } catch {
       /* Storage can be unavailable in private browsing. */
     }
+    if (googleMapsNeedsReload(next)) {
+      const previousHistory = window.history.state;
+      const resume: MapLanguageRestore = {
+        language: next,
+        camera: mapCamera.current,
+        currentLocation,
+        mapId,
+      };
+      url(view, selectedId, area, next);
+      window.history.replaceState(
+        { ...previousHistory, localMapLanguageRestore: resume },
+        "",
+      );
+      window.location.reload();
+      return;
+    }
+    if (next !== language && inCourse && activeCourseLink)
+      setCourseLink(activeCourseLink);
+    setLanguage(next);
     url(view, selectedId, area, next);
   }
   function toggleDraftSpace(id: SpacePreference) {
@@ -760,6 +813,7 @@ export function useDiscoveryController(
     courseTimeLabel,
     courseLocation,
     currentArea,
+    currentLocation,
     days,
     description,
     aiSummary: data.selectedDetail?.aiSummary?.[language],
@@ -779,6 +833,7 @@ export function useDiscoveryController(
     mapPlaces,
     mapScope,
     mapSearchOrigin,
+    mapSdkEnabled,
     searchMapArea,
     mapSelected,
     mapVisible,
@@ -796,6 +851,7 @@ export function useDiscoveryController(
     selectedId,
     selectedVisitDate: inCourse ? courseDate : selectedVisitDate,
     visitPattern: data.selectedDetail?.visitPattern,
+    setCurrentLocation,
     setDraftActivity,
     setDraftDay,
     setDraftSlot,
