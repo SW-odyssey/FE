@@ -288,17 +288,21 @@ export function FeaturedCarousel({
 
   function cardContent(place: LocalPlace, eager: boolean) {
     return (
-      <>
-        <Photo place={place} eager={eager} />
-        <span className="local-featured-copy">
-          <strong>{name(place)}</strong>
-          <span>
-            <LocalIcon name="map-pin" size={13} />
-            {place.area && `${areaLabels[language][place.area]} · `}
-            {kind(place)}
+      <Photo
+        place={place}
+        eager={eager}
+        caption={(attribution) => (
+          <span className="local-featured-copy">
+            <strong>{name(place)}</strong>
+            <span>
+              <LocalIcon name="map-pin" size={13} />
+              {place.area && `${areaLabels[language][place.area]} · `}
+              {kind(place)}
+            </span>
+            {attribution}
           </span>
-        </span>
-      </>
+        )}
+      />
     );
   }
   return (

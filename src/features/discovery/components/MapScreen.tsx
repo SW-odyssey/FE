@@ -281,11 +281,17 @@ export function MapScreen(props: Props) {
                         <span className="local-course-pin" aria-hidden="true">
                           {place.position}
                         </span>
-                        <Photo place={place} decorative />
-                        <span className="local-place-info">
-                          <strong>{name(place)}</strong>
-                          <span>{kind(place)}</span>
-                        </span>
+                        <Photo
+                          place={place}
+                          decorative
+                          caption={(attribution) => (
+                            <span className="local-place-info">
+                              <strong>{name(place)}</strong>
+                              <span>{kind(place)}</span>
+                              {attribution}
+                            </span>
+                          )}
+                        />
                         <LocalIcon name="chevron-right" size={16} />
                       </button>
                     </li>

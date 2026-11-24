@@ -1,3 +1,7 @@
+.local-mobile-sidebar-content {
+  display: contents;
+}
+
 .local-shell.local-web {
   --local-safe-top: env(safe-area-inset-top, 0px);
   --local-safe-right: env(safe-area-inset-right, 0px);
@@ -23,7 +27,7 @@
   isolation: isolate;
 }
 
-.local-web > .local-search-header {
+.local-web > .local-mobile-sidebar-content > .local-search-header {
   height: var(--local-search-row-height);
   padding-block: var(--local-search-block-padding);
   padding-left: calc(var(--local-content-gutter) + var(--local-safe-left));
@@ -41,7 +45,10 @@
     --local-places-top: calc(var(--local-search-row-height) + 4px);
   }
 
-  [data-local-ios-home-screen] .local-web > .local-search-header {
+  [data-local-ios-home-screen]
+    .local-web
+    > .local-mobile-sidebar-content
+    > .local-search-header {
     position: fixed;
     inset: 0 0 auto;
     height: calc(var(--local-safe-top) + var(--local-search-row-height));
@@ -171,9 +178,9 @@
     --local-nav-inset-right: var(--local-nav-inset-left);
   }
 
-  .local-responsive-web > .local-search-header,
-  .local-responsive-web > .local-places,
-  .local-responsive-web > .local-course,
+  .local-responsive-web > .local-mobile-sidebar-content > .local-search-header,
+  .local-responsive-web > .local-mobile-sidebar-content > .local-places,
+  .local-responsive-web > .local-mobile-sidebar-content > .local-course,
   .local-responsive-web .local-detail-body,
   .local-responsive-web .local-detail-action {
     width: 100%;

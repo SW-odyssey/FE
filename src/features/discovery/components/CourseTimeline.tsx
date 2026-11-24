@@ -98,8 +98,6 @@ export function CourseTimeline({
           place,
           position,
           index,
-          visitTime,
-          leaveTime,
           walkMinutes,
           hoursUnknown,
           distanceMeters,
@@ -149,22 +147,29 @@ export function CourseTimeline({
                           ? "compass"
                           : "map-pin"
                     }
+                    caption={(attribution) => (
+                      <span className="local-place-info">
+                        <span className="local-auto-stage">
+                          {slot === "evening" && place.category === "food"
+                            ? t("Dinner", "저녁 식사")
+                            : slotLabels[language][slot]}
+                        </span>
+                        <strong>{name(place)}</strong>
+                        <span className="local-course-stop-meta">
+                          <span>{kind(place)}</span>
+                          {hoursUnknown && (
+                            <span className="local-course-hours">
+                              {t("Check opening hours", "영업시간 확인 필요")}
+                            </span>
+                          )}
+                        </span>
+                        {attribution}
+                      </span>
+                    )}
                   />
-                  <span className="local-place-info">
-                    <span className="local-auto-stage">
-                      {slotLabels[language][slot]} · {visitTime}–{leaveTime}
-                    </span>
-                    <strong>{name(place)}</strong>
-                    <span>{kind(place)}</span>
-                  </span>
                   <LocalIcon name="chevron-right" size={16} />
                 </button>
               </div>
-              {hoursUnknown && (
-                <p className="local-course-hours">
-                  {t("Check opening hours", "영업시간 확인 필요")}
-                </p>
-              )}
             </div>
           </li>
         ),

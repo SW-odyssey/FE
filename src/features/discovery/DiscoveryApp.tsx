@@ -143,15 +143,17 @@ export default function DiscoveryApp({
           <ResourceNotice status={detailStatus} retry={retry} t={t} missing />
         </div>
       ) : null}
-      {desktop && sidebar ? (
+      {sidebar && (
         <div
-          className="local-desktop-sidebar-content"
+          className={
+            desktop
+              ? "local-desktop-sidebar-content"
+              : "local-mobile-sidebar-content"
+          }
           key={isCourse ? "course" : "places"}
         >
           {sidebar}
         </div>
-      ) : (
-        sidebar
       )}
       {mapVisible && (
         <MapScreen

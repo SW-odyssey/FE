@@ -1,26 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import { getPlaceMedia, hasPlaceMedia } from "../data/place-media";
 import type { LocalPlace, PlacePhoto } from "../model";
 
+/** Render a place image and pass any required attribution to its caption. */
 export function Photo({
   place,
   className = "",
   eager = false,
   decorative = false,
   placeholderIcon = "map-pin",
+  caption,
 }: {
   place: Pick<LocalPlace, "image" | "id" | "koreanName" | "googlePlaceId">;
   className?: string;
   eager?: boolean;
   decorative?: boolean;
   placeholderIcon?: "map-pin" | "coffee" | "compass";
+  caption?: (attribution: ReactNode) => ReactNode;
 }) {
   const frame = useRef<HTMLSpanElement>(null);
   const { id } = place;
-  const canRequest = !place.image && hasPlaceMedia(place);
+  const canRequest = Boolean(caption) && !place.image && hasPlaceMedia(place);
   const [photo, setPhoto] = useState<{ id: string; value?: PlacePhoto }>();
   const [failedSource, setFailedSource] = useState<string>();
   useEffect(() => {
@@ -50,43 +53,49 @@ export function Photo({
   const src = place.image || current?.src;
   const alt = decorative ? "" : place.koreanName;
   const classes = `local-photo ${className}`;
-  if (place.image && src && failedSource !== src) {
-    return (
-      <img
-        src={src}
-        alt={alt}
-        className={classes}
-        loading={eager ? "eager" : "lazy"}
-        data-place={id}
-        onError={() => setFailedSource(src)}
-      />
-    );
-  }
+  const showPhoto = Boolean(src && failedSource !== src);
   const credit =
-    current &&
-    [current.credit, ...(current.authors?.map(({ name }) => name) ?? [])]
-      .filter(Boolean)
-      .join(" · ");
+    current && showPhoto
+      ? [current.credit, ...(current.authors?.map(({ name }) => name) ?? [])]
+          .filter(Boolean)
+          .join(" · ")
+      : undefined;
+  const attribution = credit && (
+    <span className="local-photo-credit" title={credit}>
+      {credit}
+    </span>
+  );
 
   return (
-    <span className={`${classes} local-live-photo`} ref={frame} data-place={id}>
-      {src && failedSource !== src ? (
-        <>
-          <img
-            src={src}
-            alt={alt}
-            decoding="async"
-            onError={() => setFailedSource(src)}
-          />
-          {credit && (
-            <span className="local-photo-credit" title={credit}>
-              {credit}
-            </span>
-          )}
-        </>
+    <>
+      {place.image && showPhoto ? (
+        <img
+          src={src}
+          alt={alt}
+          className={classes}
+          loading={eager ? "eager" : "lazy"}
+          data-place={id}
+          onError={() => setFailedSource(src)}
+        />
       ) : (
-        <LocalIcon name={placeholderIcon} size={21} />
+        <span
+          className={`${classes} local-live-photo`}
+          ref={frame}
+          data-place={id}
+        >
+          {showPhoto ? (
+            <img
+              src={src}
+              alt={alt}
+              decoding="async"
+              onError={() => setFailedSource(src)}
+            />
+          ) : (
+            <LocalIcon name={placeholderIcon} size={21} />
+          )}
+        </span>
       )}
-    </span>
+      {caption?.(attribution)}
+    </>
   );
 }

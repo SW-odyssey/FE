@@ -53,8 +53,6 @@ export type ApiPlace = Coordinate & {
 type ApiCourseStop = {
   position: number;
   slot: ApiSlot;
-  visitTime: string;
-  leaveTime: string;
   walkMinutes: number;
   hoursUnknown: boolean;
   place: ApiPlace & { distanceMeters: number };
@@ -160,18 +158,8 @@ export async function getCourse(
     datasetId: data.context.datasetId,
     seed: data.seed,
     route: data.stops.map(
-      ({
-        slot,
-        place,
+      ({ slot, place, position, walkMinutes, hoursUnknown }) => ({
         position,
-        visitTime,
-        leaveTime,
-        walkMinutes,
-        hoursUnknown,
-      }) => ({
-        position,
-        visitTime,
-        leaveTime,
         walkMinutes,
         hoursUnknown,
         slot: screenSlots[slot],
