@@ -60,7 +60,14 @@ export function useCourseRecommendations({
   language: DiscoveryLanguage;
   enabled: boolean;
 }) {
-  const { lat, lng } = origin ?? courseOrigin(area);
+  const departure = origin ?? initialLink?.origin;
+  const hasCustomOrigin = Boolean(departure);
+  const { lat, lng } = departure
+    ? {
+        lat: Number(departure.lat.toFixed(5)),
+        lng: Number(departure.lng.toFixed(5)),
+      }
+    : courseOrigin(area);
   const start = initialLink?.startSlot ?? slot;
   const date = initialLink?.visitDate ?? visitDate;
   const [attempt, setAttempt] = useState(0);
@@ -118,6 +125,7 @@ export function useCourseRecommendations({
             datasetId,
             visitDate: date,
             startSlot: start,
+            ...(hasCustomOrigin && { origin: request.origin }),
             previousStopIds,
             replacements,
           },
@@ -148,6 +156,7 @@ export function useCourseRecommendations({
     key,
     contextKey,
     lane,
+    hasCustomOrigin,
     lat,
     lng,
     start,

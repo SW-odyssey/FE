@@ -1,4 +1,4 @@
-import type { VisitSlot } from "../model.ts";
+import type { Coordinate, VisitSlot } from "../model.ts";
 import { visitSlots } from "../visit-time.ts";
 
 export type CourseReplacement = {
@@ -11,6 +11,7 @@ export type CourseLink = {
   datasetId?: string;
   visitDate?: string;
   startSlot?: VisitSlot;
+  origin?: Coordinate;
   previousStopIds?: string[];
   replacements: CourseReplacement[];
 };
@@ -26,6 +27,14 @@ export function readCourseLink(
   const dataset = params.get("courseDataset");
   const date = params.get("courseDate");
   const slot = params.get("courseStart") as VisitSlot;
+  const linkedLat = params.get("courseLat")?.trim();
+  const linkedLng = params.get("courseLng")?.trim();
+  const lat = Number(linkedLat);
+  const lng = Number(linkedLng);
+  const origin =
+    linkedLat && linkedLng && Math.abs(lat) <= 90 && Math.abs(lng) <= 180
+      ? { lat, lng }
+      : undefined;
   const previousStopIds = params.get("previousStopIds")?.split(",");
   const validPreviousStops =
     previousStopIds &&
@@ -65,6 +74,7 @@ export function readCourseLink(
         ? date
         : undefined,
     startSlot: visitSlots.includes(slot) ? slot : undefined,
+    ...(origin && { origin }),
     ...(validPreviousStops && { previousStopIds }),
     replacements,
   };
@@ -75,6 +85,10 @@ export function writeCourseLink(params: URLSearchParams, link: CourseLink) {
   if (link.datasetId) params.set("courseDataset", link.datasetId);
   if (link.visitDate) params.set("courseDate", link.visitDate);
   if (link.startSlot) params.set("courseStart", link.startSlot);
+  if (link.origin) {
+    params.set("courseLat", String(link.origin.lat));
+    params.set("courseLng", String(link.origin.lng));
+  }
   if (link.previousStopIds?.length)
     params.set("previousStopIds", link.previousStopIds.join(","));
   if (link.replacements.length)
