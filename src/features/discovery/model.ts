@@ -9,6 +9,7 @@ export type LocalPlace = {
   area: LocalArea | null;
   category: LocalCategory;
   courseKind?: CoursePlaceKind;
+  cellId?: string;
   image: string;
   descriptionEn: string;
   descriptionKo: string;
@@ -36,7 +37,8 @@ export type Coordinate = {
 
 export type PlacePhoto = {
   src: string;
-  kind: "exterior" | "interior" | "menu";
+  kind?: "exterior" | "interior" | "menu";
+  authors?: { name: string; uri?: string }[];
   credit: string;
   sourceUrl: string;
   imageUrl: string;

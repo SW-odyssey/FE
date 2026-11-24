@@ -18,6 +18,7 @@ export function SearchHeader(props: Props) {
             value={query}
             inputMode="search"
             enterKeyHint="search"
+            maxLength={80}
             onChange={(e) => {
               setQuery(e.target.value);
             }}

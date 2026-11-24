@@ -9,9 +9,12 @@ import type {
 import { mapApiIdToDiscovery, type ApiSlot } from "./api-mapping.ts";
 import type { DiscoveryPlaceDetail } from "./types.ts";
 
-const apiBase =
-  process.env.NEXT_PUBLIC_ODYSSEY_API_BASE_URL?.trim() ||
-  "https://odyssey-be-346395334988.asia-northeast3.run.app";
+import {
+  getPublishedDataset,
+  getV2Data,
+  screenSlots,
+  v2Time,
+} from "./v2-client.ts";
 
 const origins: Record<DiscoveryArea, Coordinate> = {
   all: { lat: 37.5716, lng: 126.9861 },
@@ -22,21 +25,6 @@ const origins: Record<DiscoveryArea, Coordinate> = {
   bukchon: { lat: 37.5804, lng: 126.9849 },
 };
 
-const apiSlots: Record<VisitSlot, ApiSlot> = {
-  lunch: "lunch",
-  afternoon: "afternoon",
-  evening: "dinner",
-  late: "late_night",
-};
-
-const screenSlots: Record<ApiSlot, VisitSlot> = {
-  lunch: "lunch",
-  afternoon: "afternoon",
-  dinner: "evening",
-  late_night: "late",
-};
-
-const weekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
 const categories = {
   korean: "food",
   bar: "food",
@@ -54,11 +42,12 @@ type StopReason =
   | "VERIFICATION_UNAVAILABLE"
   | "SKIPPED_FOR_ROUTE";
 
-type ApiPlace = Coordinate & {
+export type ApiPlace = Coordinate & {
   id: number;
   name: string;
   kind: CoursePlaceKind;
   googlePlaceId: string | null;
+  cellId?: string;
 };
 
 type ApiCourseStop = {
@@ -108,41 +97,20 @@ export type CourseRequest = {
   options?: CourseOptions;
 };
 
-async function getData<T>(path: string, signal?: AbortSignal): Promise<T> {
-  const response = await fetch(new URL(path, apiBase), { signal });
-  if (!response.ok) throw new Error(`Odyssey API returned ${response.status}`);
-  const payload = (await response.json()) as
-    { success: true; data: T } | { success: false; data: null };
-  if (!payload.success || payload.data == null)
-    throw new Error("Odyssey API did not return data");
-  return payload.data;
-}
-
 /** Return the departure point for a selected area in the course API. */
 export function courseOrigin(area: DiscoveryArea): Coordinate {
   return origins[area];
 }
 
-/** Read the newest published batch ID from the v2 meta response. */
-export async function getCourseDataset(signal: AbortSignal): Promise<string> {
-  const { datasets } = await getData<{ datasets: { id: string }[] }>(
-    "/api/v2/meta",
-    signal,
-  );
-  const dataset = datasets[0];
-  if (!dataset?.id) throw new Error("No published recommendation dataset");
-  return dataset.id;
-}
+export const getCourseDataset = getPublishedDataset;
 
 /** Map the Seoul calendar date and departure slot to the course endpoint parameters. */
 export function courseSearchParams(request: CourseRequest): URLSearchParams {
-  const day = new Date(`${request.visitDate}T00:00:00Z`).getUTCDay();
-  const weekday = weekdays[day];
-  if (!weekday) throw new Error("Invalid course date");
+  const { weekday, slot } = v2Time(request.visitDate, request.slot);
   const params = new URLSearchParams({
     datasetId: request.datasetId,
     weekday,
-    startSlot: apiSlots[request.slot],
+    startSlot: slot,
     lat: String(request.origin.lat),
     lng: String(request.origin.lng),
   });
@@ -156,7 +124,8 @@ export function courseSearchParams(request: CourseRequest): URLSearchParams {
   return params;
 }
 
-function coursePlace(place: ApiPlace): LocalPlace {
+/** Convert a numeric v2 place into the discovery model. */
+export function v2Place(place: ApiPlace): LocalPlace {
   return {
     id: mapApiIdToDiscovery(place.id),
     name: place.name,
@@ -164,6 +133,7 @@ function coursePlace(place: ApiPlace): LocalPlace {
     area: null,
     category: categories[place.kind],
     courseKind: place.kind,
+    cellId: place.cellId,
     image: "",
     descriptionEn: "",
     descriptionKo: "",
@@ -180,9 +150,10 @@ export async function getCourse(
   request: CourseRequest,
   signal: AbortSignal,
 ): Promise<CourseResult> {
-  const data = await getData<ApiCourse>(
-    `/api/v2/course-recommendations?${courseSearchParams(request)}`,
+  const data = await getV2Data<ApiCourse>(
+    "course-recommendations",
     signal,
+    courseSearchParams(request),
   );
   return {
     status: data.status,
@@ -204,7 +175,7 @@ export async function getCourse(
         walkMinutes,
         hoursUnknown,
         slot: screenSlots[slot],
-        place: coursePlace(place),
+        place: v2Place(place),
         distanceMeters: place.distanceMeters,
       }),
     ),
@@ -222,10 +193,10 @@ export async function getCourse(
 /** Fetch the basic detail for a numeric course result ID. */
 export async function getCoursePlaceDetail(
   id: string,
-  signal: AbortSignal,
+  signal?: AbortSignal,
 ): Promise<DiscoveryPlaceDetail> {
-  const place = coursePlace(
-    await getData<ApiPlace>(`/api/v2/places/${encodeURIComponent(id)}`, signal),
+  const place = v2Place(
+    await getV2Data<ApiPlace>(`places/${encodeURIComponent(id)}`, signal),
   );
   const empty = { ko: "", en: "", ja: "", zh: "" };
   return {

@@ -134,6 +134,7 @@ const copy: Record<string, readonly [string, string]> = {
   Attraction: ["観光スポット", "景点"],
   "AI place summary": ["AIによる店舗概要", "AI店铺简介"],
   "Generated with Gemini": ["Geminiで自動生成", "由 Gemini 自动生成"],
+  "Loading photos…": ["写真を読み込み中…", "正在加载照片…"],
   "Loading places…": ["お店を読み込み中…", "正在加载店铺…"],
   "Could not load places": ["お店を読み込めませんでした", "无法加载店铺"],
   "Try again": ["再試行", "重试"],

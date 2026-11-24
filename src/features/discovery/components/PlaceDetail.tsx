@@ -2,6 +2,7 @@
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import { googleMapsPlaceUrl } from "../course";
 import MiniMap from "../../map/MiniMap";
+import { usePlaceMedia } from "../hooks/usePlaceMedia";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { areaLabels } from "../presentation";
 import { AreaVisitPatternCard } from "./AreaVisitPatternCard";
@@ -20,6 +21,7 @@ type Props = Pick<
   | "showPlaceOnMap"
   | "selectedVisitDate"
   | "visitPattern"
+  | "cellReasons"
   | "t"
 > & { selected: NonNullable<DiscoveryController["selected"]> };
 export function PlaceDetail(props: Props) {
@@ -36,8 +38,14 @@ export function PlaceDetail(props: Props) {
     showPlaceOnMap,
     selectedVisitDate,
     visitPattern,
+    cellReasons,
     t,
   } = props;
+  const { media, pending } = usePlaceMedia(selected);
+  const photos = media?.photoList.length
+    ? media.photoList
+    : photosFor(selected);
+  const address = media?.address || selected.address;
   const area = selected.area && areaLabels[language][selected.area];
   const about = description(selected);
   const photoCredits = [
@@ -57,7 +65,8 @@ export function PlaceDetail(props: Props) {
         key={selected.id}
         place={selected}
         language={language}
-        photos={photosFor(selected)}
+        photos={photos}
+        pending={pending}
       />
       <div className="local-detail-body">
         <header className="local-detail-heading">
@@ -86,11 +95,12 @@ export function PlaceDetail(props: Props) {
             </small>
           </section>
         )}
-        {visitPattern && (
+        {(visitPattern || Boolean(cellReasons?.length)) && (
           <AreaVisitPatternCard
             key={selectedVisitDate}
             language={language}
             pattern={visitPattern}
+            reasons={cellReasons}
             visitDate={selectedVisitDate}
           />
         )}
@@ -105,13 +115,13 @@ export function PlaceDetail(props: Props) {
         )}
         <section className="local-detail-section">
           <h2>{t("Getting there", "위치")}</h2>
-          {selected.address ? (
+          {address ? (
             <button
               className="local-address"
-              onClick={() => copyAddress(selected)}
+              onClick={() => copyAddress({ ...selected, address })}
             >
               <LocalIcon name="map-pin" size={18} />
-              <span>{selected.address}</span>
+              <span>{address}</span>
               <LocalIcon name="copy" size={17} />
             </button>
           ) : (

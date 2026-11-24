@@ -6,6 +6,7 @@ import type { CourseLeg } from "../data/course-api";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import type { VisitSlot } from "../model";
 import { slotLabels } from "../presentation";
+import { Photo } from "./PlacePhoto";
 
 type Row = CourseLeg & {
   id: string;
@@ -138,21 +139,17 @@ export function CourseTimeline({
                   className="local-course-stop-detail"
                   onClick={() => openPlace(place)}
                 >
-                  <span
-                    className="local-photo local-course-stop-placeholder"
-                    aria-hidden="true"
-                  >
-                    <LocalIcon
-                      name={
-                        place.category === "cafe"
-                          ? "coffee"
-                          : place.category === "culture"
-                            ? "compass"
-                            : "map-pin"
-                      }
-                      size={21}
-                    />
-                  </span>
+                  <Photo
+                    place={place}
+                    decorative
+                    placeholderIcon={
+                      place.category === "cafe"
+                        ? "coffee"
+                        : place.category === "culture"
+                          ? "compass"
+                          : "map-pin"
+                    }
+                  />
                   <span className="local-place-info">
                     <span className="local-auto-stage">
                       {slotLabels[language][slot]} · {visitTime}–{leaveTime}

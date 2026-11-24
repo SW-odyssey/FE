@@ -24,7 +24,16 @@ export type DiscoveryQueryResult = {
   items: LocalPlace[];
   total: number;
   analyses?: Record<string, RecommendationAnalysis>;
+  cellReasons?: Record<string, CellReasonCode[]>;
 };
+export type CellReasonCode =
+  | "VISIT_RELATIVE_HIGH"
+  | "DAY_DISTINCT"
+  | "STAY_DISTINCT"
+  | "WALK_DISTINCT"
+  | "AGE20_DISTINCT"
+  | "AGE30_DISTINCT"
+  | "TIME_PEAK";
 /** Recommendation evidence belongs to the response that selected the place. */
 export type RecommendationAnalysis = {
   provenance: "preview" | "model";
@@ -34,11 +43,17 @@ export type RecommendationAnalysis = {
   activity: AreaActivity;
 };
 export type VisitDayGroup = "monThu" | "fri" | "sat" | "sun";
-export type AreaVisitPattern = {
-  provenance?: "preview";
-  /** Values are relative to the highest time slot within the selected day group. */
-  byDay: Record<VisitDayGroup, Record<VisitSlot, number>>;
-};
+export type AreaVisitPattern =
+  | {
+      provenance?: "preview";
+      /** Values are relative to the highest time slot within the selected day group. */
+      byDay: Record<VisitDayGroup, Record<VisitSlot, number>>;
+    }
+  | {
+      provenance: "live";
+      /** Relative heights for the selected Seoul weekday and this real cell. */
+      values: Record<VisitSlot, number>;
+    };
 export type DiscoveryPlaceDetail = {
   place: LocalPlace;
   photos: PlacePhoto[];
@@ -51,6 +66,7 @@ export type DiscoveryPlaceDetail = {
 };
 export type DiscoveryRequestOptions = {
   signal?: AbortSignal;
+  query?: DiscoveryQuery;
 };
 /** A complete synchronous source, used by the preview to avoid a loading frame. */
 export type DiscoverySnapshot = {

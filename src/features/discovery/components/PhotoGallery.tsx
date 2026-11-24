@@ -9,10 +9,12 @@ export default function PhotoGallery({
   place,
   language,
   photos,
+  pending = false,
 }: {
   place: LocalPlace;
   language: DiscoveryLanguage;
   photos: PlacePhoto[];
+  pending?: boolean;
 }) {
   const track = useRef<HTMLDivElement>(null);
   const sources = photos.map((photo) => photo.src);
@@ -47,7 +49,9 @@ export default function PhotoGallery({
       ? t("Exterior", "전경")
       : photo.kind === "interior"
         ? t("Interior", "실내")
-        : t("Food and drinks", "음식 및 음료");
+        : photo.kind === "menu"
+          ? t("Food and drinks", "음식 및 음료")
+          : "";
   function go(next: number) {
     const node = track.current;
     if (!node) return;
@@ -72,7 +76,9 @@ export default function PhotoGallery({
         aria-label={t("Place photos", "가게 사진")}
       >
         <div className="local-gallery-track" ref={track} role="status">
-          <p>{emptyText}</p>
+          <p>
+            {pending ? t("Loading photos…", "사진을 불러오는 중…") : emptyText}
+          </p>
         </div>
       </div>
     );
@@ -133,6 +139,29 @@ export default function PhotoGallery({
       >
         <span className="local-icon" />
       </button>
+      {currentPhoto.authors && (
+        <p className="local-gallery-credit">
+          {currentPhoto.sourceUrl ? (
+            <a href={currentPhoto.sourceUrl} target="_blank" rel="noreferrer">
+              Google Maps
+            </a>
+          ) : (
+            "Google Maps"
+          )}
+          {currentPhoto.authors.map(({ name, uri }) => (
+            <span key={`${name}:${uri ?? ""}`}>
+              {" · "}
+              {uri ? (
+                <a href={uri} target="_blank" rel="noreferrer">
+                  {name}
+                </a>
+              ) : (
+                name
+              )}
+            </span>
+          ))}
+        </p>
+      )}
       <span className="local-gallery-count" aria-live="polite">
         {kind(currentPhoto)}
         <span aria-hidden="true"> </span>
