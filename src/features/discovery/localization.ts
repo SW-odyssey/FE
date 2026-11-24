@@ -54,14 +54,9 @@ const copy: Record<string, readonly [string, string]> = {
   "Search this area": ["このエリアで再検索", "在此区域重新搜索"],
   "Map area": ["地図で選択", "地图选区"],
   "Apply filters": ["条件を適用", "应用条件"],
-  "Caf\u00e9 as first afternoon stop": [
-    "午後最初の立ち寄り先をカフェにする",
-    "下午第一站选咖啡馆",
-  ],
-  "Shop as first afternoon stop": [
-    "午後最初の立ち寄り先をお店にする",
-    "下午第一站选逛店",
-  ],
+  "Include a café": ["カフェを含める", "加入咖啡馆"],
+  "Include shopping": ["お店巡りを含める", "加入逛店"],
+  "No shops nearby": ["近くに立ち寄れるお店がありません", "附近没有合适的店铺"],
   "Short walks": ["歩く距離を短く", "少走路"],
   "No shops nearby. Try choosing a caf\u00e9.": [
     "近くにお店がありません。カフェを選んでください。",

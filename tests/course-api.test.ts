@@ -149,6 +149,16 @@ test("course filters and an explicit late-night start match server parameters", 
   assert.equal(query.get("seed"), "12");
 });
 
+test("a mixed afternoon is sent on the same course request", () => {
+  assert.equal(
+    courseSearchParams({
+      ...request,
+      options: { afternoon: "mixed", walk: "default", lateNight: false },
+    }).get("afternoon"),
+    "mixed",
+  );
+});
+
 test("live place detail restores sourced promo copy only for the matching Google ID", async (t) => {
   t.mock.method(globalThis, "fetch", async (url: URL) =>
     Response.json({

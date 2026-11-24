@@ -3,10 +3,19 @@ import { test } from "node:test";
 import {
   googleMapsCourseLink,
   googleMapsPlaceUrl,
+  toggleAfternoonChoice,
 } from "../src/features/discovery/course.ts";
 import { localPlaces } from "../src/features/discovery/data/preview/places.ts";
 
 const [first, second, third] = localPlaces;
+
+test("both afternoon chips can be selected and toggled back to either choice", () => {
+  assert.equal(toggleAfternoonChoice("cafe", "shop"), "mixed");
+  assert.equal(toggleAfternoonChoice("shop", "cafe"), "mixed");
+  assert.equal(toggleAfternoonChoice("mixed", "cafe"), "shop");
+  assert.equal(toggleAfternoonChoice("mixed", "shop"), "cafe");
+  assert.equal(toggleAfternoonChoice("cafe", "cafe"), "cafe");
+});
 
 test("Google Maps receives the place shortlist in visit order", () => {
   const placeIds = ["place-first", "place-second", "place-third"];
