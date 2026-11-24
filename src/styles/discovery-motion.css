@@ -47,10 +47,7 @@
 .local-shell.local-refined.local-web
   .local-discovery-controls
   > .local-category-tabs {
-  scrollbar-width: none;
-  overflow-x: auto;
   padding-bottom: 2px;
-  scroll-padding-inline: 3px;
 }
 
 .local-web .local-category-tabs button:focus-visible {

@@ -395,9 +395,11 @@ function CourseLoading({ t }: { t: Props["t"] }) {
             data-last={stop === 2 || undefined}
           >
             <div className="local-course-timeline-item">
-              <div className="local-course-stop-controls">
-                <span className="local-course-skeleton-leg local-skeleton" />
-              </div>
+              {stop > 0 && (
+                <div className="local-course-stop-controls">
+                  <span className="local-course-skeleton-leg local-skeleton" />
+                </div>
+              )}
               <div className="local-course-stop">
                 <span className="local-course-pin local-skeleton" />
                 <div className="local-course-stop-detail">
