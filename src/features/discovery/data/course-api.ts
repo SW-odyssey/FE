@@ -1,4 +1,4 @@
-import { googleMapsPlaceUrl } from "../course.ts";
+import type { CourseOptions } from "../course.ts";
 import type {
   Coordinate,
   CoursePlaceKind,
@@ -116,6 +116,7 @@ export type CourseRequest = {
   origin: Coordinate;
   seed?: number;
   excludeIds?: readonly string[];
+  options?: CourseOptions;
 };
 
 async function getData<T>(path: string, signal?: AbortSignal): Promise<T> {
@@ -159,6 +160,10 @@ export function courseSearchParams(request: CourseRequest): URLSearchParams {
   if (request.seed !== undefined) params.set("seed", String(request.seed));
   if (request.excludeIds?.length)
     params.set("excludeIds", request.excludeIds.join(","));
+  if (request.options?.afternoon === "shop") params.set("afternoon", "shop");
+  if (request.options?.walk === "short") params.set("walk", "short");
+  if (request.options?.lateNight || request.slot === "late")
+    params.set("lateNight", "true");
   return params;
 }
 
@@ -225,7 +230,7 @@ export async function getCoursePlaceDetail(
     photos: [],
     summaries: empty,
     descriptions: empty,
-    sourceUrl: googleMapsPlaceUrl(place),
+    sourceUrl: place.sourceUrl,
     photoCredits: [],
   };
 }

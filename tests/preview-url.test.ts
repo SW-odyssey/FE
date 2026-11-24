@@ -180,14 +180,12 @@ test("course map links retain the course layer and accept old saved-course links
 
 test("every course chip selection round-trips on the itinerary and map layer", () => {
   const combinations = [
-    { includeCafe: true, includeBrowse: false, afternoon: null },
-    { includeCafe: false, includeBrowse: true, afternoon: "browse" },
-    { includeCafe: true, includeBrowse: true, afternoon: "both" },
-    { includeCafe: false, includeBrowse: false, afternoon: "none" },
-  ];
+    { afternoon: "cafe", lateNight: false, walk: "default" },
+    { afternoon: "shop", lateNight: true, walk: "short" },
+    { afternoon: "cafe", lateNight: true, walk: "short" },
+  ] as const;
   for (const view of ["course", "map"] as const) {
-    for (const { afternoon, ...choices } of combinations) {
-      const courseOptions = { ...choices, includeLate: true };
+    for (const courseOptions of combinations) {
       const params = serializePreviewUrl({
         ...defaults,
         view,
@@ -196,8 +194,15 @@ test("every course chip selection round-trips on the itinerary and map layer", (
         activity: "quiet",
         spaces: ["retro"],
       });
-      assert.equal(params.get("afternoon"), afternoon);
-      assert.equal(params.get("late"), "1");
+      assert.equal(
+        params.get("afternoon"),
+        courseOptions.afternoon === "shop" ? "shop" : null,
+      );
+      assert.equal(params.get("late"), courseOptions.lateNight ? "1" : null);
+      assert.equal(
+        params.get("walk"),
+        courseOptions.walk === "short" ? "short" : null,
+      );
       const state = readPreviewUrl(params.toString(), now, null);
       assert.deepEqual(state.courseOptions, courseOptions);
       assert.equal(state.modal, null);
@@ -216,9 +221,9 @@ test("older course links keep their selection and open the chips directly", () =
     );
     assert.equal(course.modal, null);
     assert.deepEqual(course.courseOptions, {
-      includeCafe: false,
-      includeBrowse: true,
-      includeLate: false,
+      afternoon: "shop",
+      lateNight: false,
+      walk: "default",
     });
   }
   const places = readPreviewUrl(

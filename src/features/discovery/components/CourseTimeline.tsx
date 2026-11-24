@@ -6,6 +6,7 @@ import type { CourseLeg } from "../data/course-api";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import type { VisitSlot } from "../model";
 import { slotLabels } from "../presentation";
+import { courseReasonText } from "./course-reason-copy";
 
 type Row = CourseLeg & {
   id: string;
@@ -16,7 +17,7 @@ type Row = CourseLeg & {
 
 type Props = Pick<
   DiscoveryController,
-  "language" | "name" | "openPlace" | "t"
+  "language" | "kind" | "name" | "openPlace" | "t"
 > & {
   route: CourseLeg[];
   pending: boolean;
@@ -39,6 +40,7 @@ export function CourseTimeline({
   pending,
   changeSlot,
   language,
+  kind,
   name,
   openPlace,
   t,
@@ -97,6 +99,8 @@ export function CourseTimeline({
           visitTime,
           leaveTime,
           walkMinutes,
+          hoursUnknown,
+          reasons,
           exiting,
           entering,
         }) => (
@@ -157,21 +161,27 @@ export function CourseTimeline({
                       {slotLabels[language][slot]} · {visitTime}–{leaveTime}
                     </span>
                     <strong>{name(place)}</strong>
-                    <span>
-                      {place.courseKind === "shop"
-                        ? t("Browse shops", "구경")
-                        : place.courseKind === "play"
-                          ? t("Activity", "놀거리")
-                          : place.courseKind === "bar"
-                            ? t("Bar", "주점")
-                            : place.category === "cafe"
-                              ? t("Café", "카페")
-                              : t("Korean food", "한식")}
-                    </span>
+                    <span>{kind(place)}</span>
                   </span>
                   <LocalIcon name="chevron-right" size={16} />
                 </button>
               </div>
+              {hoursUnknown && (
+                <p className="local-course-hours">
+                  {t("Check opening hours", "영업시간 확인 필요")}
+                </p>
+              )}
+              {reasons.length > 0 && (
+                <details className="local-course-reasons">
+                  <summary>{t("Why this place", "고른 이유")}</summary>
+                  <ul>
+                    {reasons.map((reason) => {
+                      const text = courseReasonText(reason, language);
+                      return text && <li key={reason.code}>{text}</li>;
+                    })}
+                  </ul>
+                </details>
+              )}
             </div>
           </li>
         ),

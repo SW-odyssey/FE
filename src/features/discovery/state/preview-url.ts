@@ -103,9 +103,10 @@ export function readPreviewUrl(
     ...(courseLink && { courseLink }),
     ...(inCourse && {
       courseOptions: {
-        includeCafe: afternoon !== "browse" && afternoon !== "none",
-        includeBrowse: afternoon === "browse" || afternoon === "both",
-        includeLate: params.get("late") === "1",
+        afternoon:
+          afternoon === "shop" || afternoon === "browse" ? "shop" : "cafe",
+        lateNight: params.get("late") === "1",
+        walk: params.get("walk") === "short" ? "short" : "default",
       },
     }),
     area: params.has("area") ? state.area : "jongno",
@@ -166,10 +167,9 @@ export function serializePreviewUrl(
   if (state.view === "course" || (state.view === "map" && state.courseMap)) {
     const options = state.courseOptions;
     if (state.courseLink) writeCourseLink(params, state.courseLink);
-    if (options?.includeBrowse)
-      params.set("afternoon", options.includeCafe ? "both" : "browse");
-    else if (options && !options.includeCafe) params.set("afternoon", "none");
-    if (options?.includeLate) params.set("late", "1");
+    if (options?.afternoon === "shop") params.set("afternoon", "shop");
+    if (options?.lateNight) params.set("late", "1");
+    if (options?.walk === "short") params.set("walk", "short");
   }
   return params;
 }

@@ -20,8 +20,12 @@ type Props = Pick<
   | "contextAreaLabel"
   | "courseDate"
   | "courseLocation"
+  | "courseOptions"
+  | "courseStartSlot"
+  | "changeCourseOptions"
   | "courseTimeLabel"
   | "currentArea"
+  | "kind"
   | "language"
   | "name"
   | "openPlace"
@@ -38,9 +42,13 @@ export function CourseScreen({
   contextAreaLabel,
   courseDate,
   courseLocation,
+  courseOptions,
+  courseStartSlot,
+  changeCourseOptions,
   courseTimeLabel,
   currentArea,
   desktop,
+  kind,
   language,
   location,
   name,
@@ -52,6 +60,8 @@ export function CourseScreen({
   t,
 }: Props) {
   const { route, skipped, interruption } = autoCourse;
+  const showAfternoon =
+    courseStartSlot === "lunch" || courseStartSlot === "afternoon";
   const stops = route.map(({ place }) => place);
   const mapsLink = googleMapsCourseLink(stops);
   const totalDistance = route
@@ -91,6 +101,66 @@ export function CourseScreen({
           openTime={openTime}
           timeLabel={courseTimeLabel}
         />
+        <div
+          className="local-category-tabs local-course-option-chips"
+          role="group"
+          aria-label={t("Course options", "일정 구성")}
+        >
+          {showAfternoon &&
+            (["cafe", "shop"] as const).map((afternoon) => (
+              <button
+                key={afternoon}
+                type="button"
+                className={
+                  courseOptions.afternoon === afternoon ? "is-active" : ""
+                }
+                aria-pressed={courseOptions.afternoon === afternoon}
+                aria-label={
+                  afternoon === "cafe"
+                    ? t("Café as first afternoon stop", "오후 첫 방문 카페")
+                    : t("Shop as first afternoon stop", "오후 첫 방문 구경")
+                }
+                onClick={() =>
+                  changeCourseOptions({ ...courseOptions, afternoon })
+                }
+              >
+                <LocalIcon
+                  name={afternoon === "cafe" ? "coffee" : "compass"}
+                  size={16}
+                />
+                {afternoon === "cafe" ? t("Café", "카페") : t("Browse", "구경")}
+              </button>
+            ))}
+          {courseStartSlot !== "late" && (
+            <button
+              type="button"
+              className={courseOptions.lateNight ? "is-active" : ""}
+              aria-pressed={courseOptions.lateNight}
+              onClick={() =>
+                changeCourseOptions({
+                  ...courseOptions,
+                  lateNight: !courseOptions.lateNight,
+                })
+              }
+            >
+              <LocalIcon name="clock" size={16} />
+              {t("Late night", "심야")}
+            </button>
+          )}
+          <button
+            type="button"
+            className={courseOptions.walk === "short" ? "is-active" : ""}
+            aria-pressed={courseOptions.walk === "short"}
+            onClick={() =>
+              changeCourseOptions({
+                ...courseOptions,
+                walk: courseOptions.walk === "short" ? "default" : "short",
+              })
+            }
+          >
+            {t("Short walks", "짧게 걷기")}
+          </button>
+        </div>
         {currentArea &&
           (location.status === "denied" ||
             location.status === "unavailable") && (
@@ -135,6 +205,7 @@ export function CourseScreen({
             </div>
           )}
           <CourseTimeline
+            kind={kind}
             changeSlot={autoCourse.regenerate}
             pending={autoCourse.pending}
             route={route}
@@ -168,7 +239,15 @@ export function CourseScreen({
           {interruption && (
             <p className="local-course-location-note" role="status">
               {slotLabels[language][interruption.slot]} ·{" "}
-              {courseGapMessage(interruption, t)}
+              {!autoCourse.pending &&
+              courseOptions.afternoon === "shop" &&
+              interruption.slot === "afternoon" &&
+              interruption.reason === "NO_NEARBY_MATCH"
+                ? t(
+                    "No shops nearby. Try choosing a café.",
+                    "근처에 구경할 곳이 없어요. 카페로 바꿔 보세요.",
+                  )
+                : courseGapMessage(interruption, t)}
             </p>
           )}
           {route.length === 0 ? (

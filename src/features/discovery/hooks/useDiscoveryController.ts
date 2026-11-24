@@ -2,7 +2,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { MapCamera } from "../../map/controller";
 import type { MapPlaceGroup } from "../../map/geometry";
-import { distanceMeters, inMapScope } from "../../map/geometry";
+import { inMapScope } from "../../map/geometry";
 import { type SheetState } from "../../map/sheet-motion";
 import { defaultCourseOptions, type CourseOptions } from "../course";
 import { previewDataSource, type DiscoveryDataSource } from "../data";
@@ -230,18 +230,16 @@ export function useDiscoveryController(
   const automaticCourseDate = courseAfterHours
     ? visitDate(clock, courseDay)
     : selectedVisitDate;
-  const courseLocation =
-    currentArea &&
-    currentLocation &&
-    distanceMeters(currentLocation, { lat: 37.5716, lng: 126.9861 }) <= 4500
-      ? currentLocation
-      : null;
+  const courseLocation = currentArea ? currentLocation : null;
+  const courseStartSlot =
+    courseLink?.startSlot ?? (courseAfterHours ? "lunch" : currentSlot);
   const autoCourse = useCourseRecommendations({
     area,
-    slot: courseAfterHours ? "lunch" : currentSlot,
+    slot: courseStartSlot,
     origin: courseLocation,
     visitDate: automaticCourseDate,
     initialLink: courseLink,
+    options: courseOptions,
     enabled: restored && inCourse,
   });
   const activeCourseLink = autoCourse.link ?? courseLink;
@@ -381,7 +379,9 @@ export function useDiscoveryController(
   const timeLabel = visitTimeLabel({ autoTime, day, slot });
   const pinnedSlot = courseLink?.startSlot;
   const courseTimeLabel =
-    pinnedSlot && courseDate !== automaticCourseDate
+    pinnedSlot &&
+    (courseDate !== automaticCourseDate ||
+      pinnedSlot !== (courseAfterHours ? "lunch" : currentSlot))
       ? `${new Date(`${courseDate}T00:00:00+09:00`).toLocaleDateString(
           dateLocales[language],
           {
@@ -499,11 +499,16 @@ export function useDiscoveryController(
     setTimeReturn(null);
     setModal("filters");
   }
-  function toggleCourseOption(option: keyof CourseOptions) {
-    setCourseOptions((previous) => ({
-      ...previous,
-      [option]: !previous[option],
-    }));
+  function changeCourseOptions(next: CourseOptions) {
+    if (
+      next.afternoon === courseOptions.afternoon &&
+      next.lateNight === courseOptions.lateNight &&
+      next.walk === courseOptions.walk
+    )
+      return;
+    if (activeCourseLink)
+      setCourseLink({ ...activeCourseLink, replacements: [] });
+    setCourseOptions(next);
   }
   function chooseArea(next: DiscoveryArea) {
     setCourseLink(undefined);
@@ -644,12 +649,12 @@ export function useDiscoveryController(
    * @returns 진입 맥락에 따른 필터 복귀 또는 일시 시트 닫기
    */
   function confirmTime(choice: VisitTimeChoice) {
-    setCourseLink(undefined);
     if (timeReturn === "filters") {
       setDraftTime(choice);
       returnToFilters();
       return;
     }
+    setCourseLink(undefined);
     setMapId(null);
     setDay(choice.day);
     setSlot(choice.slot);
@@ -688,7 +693,8 @@ export function useDiscoveryController(
     courseMap,
     courseMapStops,
     courseOptions,
-    toggleCourseOption,
+    changeCourseOptions,
+    courseStartSlot,
     showCourseOnMap,
     autoCourse,
     courseDate,

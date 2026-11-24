@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { CourseOptions } from "../course";
 import {
   courseOrigin,
   getCourse,
@@ -27,6 +28,7 @@ type LoadedCourse = {
 
 type CourseState = {
   key: string;
+  contextKey: string;
   loaded: LoadedCourse | null;
   pending: boolean;
   error?: "load" | "replace" | "no-replacement";
@@ -39,6 +41,7 @@ export function useCourseRecommendations({
   slot,
   visitDate,
   initialLink,
+  options,
   enabled,
 }: {
   area: DiscoveryArea;
@@ -46,13 +49,15 @@ export function useCourseRecommendations({
   slot: VisitSlot;
   visitDate: string;
   initialLink?: CourseLink;
+  options: CourseOptions;
   enabled: boolean;
 }) {
   const { lat, lng } = origin ?? courseOrigin(area);
   const start = initialLink?.startSlot ?? slot;
   const date = initialLink?.visitDate ?? visitDate;
   const [attempt, setAttempt] = useState(0);
-  const key = JSON.stringify([lat, lng, start, date, initialLink, attempt]);
+  const contextKey = JSON.stringify([lat, lng, start, date]);
+  const key = JSON.stringify([contextKey, initialLink, options, attempt]);
   const [state, setState] = useState<CourseState>();
   const latest = useRef<CourseState>(undefined);
   const lane = useMemo(() => createLatestRequest<LoadedCourse | null>(), []);
@@ -75,6 +80,7 @@ export function useCourseRecommendations({
           slot: start,
           visitDate: date,
           seed: initialLink?.seed,
+          options,
         };
         let result = await getCourse(request, signal);
         const replacements = [];
@@ -102,7 +108,7 @@ export function useCourseRecommendations({
       },
       {
         resolve: (loaded) => {
-          const next = { key, loaded, pending: false };
+          const next = { key, contextKey, loaded, pending: false };
           latest.current = next;
           setState(next);
         },
@@ -110,6 +116,7 @@ export function useCourseRecommendations({
           dataset.current = null;
           const next = {
             key,
+            contextKey,
             loaded: null,
             pending: false,
             error: "load",
@@ -119,21 +126,35 @@ export function useCourseRecommendations({
         },
       },
     );
-  }, [enabled, key, lane, lat, lng, start, date, initialLink]);
+  }, [
+    enabled,
+    key,
+    contextKey,
+    lane,
+    lat,
+    lng,
+    start,
+    date,
+    initialLink,
+    options,
+  ]);
 
   useEffect(() => lane.cancel, [enabled, key, lane]);
 
   const current = state?.key === key ? state : undefined;
   const loaded = current?.loaded;
-  const result = loaded?.result;
+  const previous =
+    !current && state?.contextKey === contextKey ? state.loaded : null;
+  const result = loaded?.result ?? previous?.result;
 
   function regenerate(slot?: VisitSlot) {
-    if (!loaded || current.pending) return;
+    if (!loaded || latest.current?.pending) return;
     const request: CourseRequest = {
       datasetId: loaded.result.datasetId,
       origin: { lat, lng },
       slot: start,
       visitDate: date,
+      options,
     };
     const pending = { ...current, pending: true, error: undefined };
     latest.current = pending;
@@ -175,6 +196,7 @@ export function useCourseRecommendations({
         resolve: (replacement) => {
           const next = {
             key,
+            contextKey,
             loaded: replacement ?? loaded,
             pending: false,
             error: replacement ? undefined : ("no-replacement" as const),
@@ -185,6 +207,7 @@ export function useCourseRecommendations({
         reject: () => {
           const next = {
             key,
+            contextKey,
             loaded,
             pending: false,
             error: "replace",
@@ -200,12 +223,14 @@ export function useCourseRecommendations({
     route: result?.route ?? emptyRoute,
     skipped: result?.skipped ?? emptySkipped,
     interruption: result?.interruption ?? null,
-    pending: current?.pending ?? false,
+    pending: current?.pending ?? Boolean(previous),
     error: current?.error,
     link: loaded?.link,
     canRegenerate: Boolean(loaded),
     status: !current
-      ? ("loading" as const)
+      ? previous
+        ? ("success" as const)
+        : ("loading" as const)
       : loaded
         ? ("success" as const)
         : ("error" as const),

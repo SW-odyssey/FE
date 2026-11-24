@@ -14,15 +14,15 @@ export type CourseStop = Pick<
 > & { position?: number };
 
 export type CourseOptions = {
-  includeCafe: boolean;
-  includeBrowse: boolean;
-  includeLate: boolean;
+  afternoon: "cafe" | "shop";
+  lateNight: boolean;
+  walk: "default" | "short";
 };
 
 export const defaultCourseOptions: CourseOptions = {
-  includeCafe: true,
-  includeBrowse: false,
-  includeLate: false,
+  afternoon: "cafe",
+  lateNight: false,
+  walk: "default",
 };
 
 type GoogleMapsPlace = Pick<

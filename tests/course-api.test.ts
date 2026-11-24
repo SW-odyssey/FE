@@ -134,3 +134,16 @@ test("changing a slot uses the previous stop and excludes the visited and replac
     ["11", "45", "55"],
   );
 });
+
+test("course filters and an explicit late-night start match server parameters", () => {
+  const query = courseSearchParams({
+    ...request,
+    slot: "late",
+    seed: 12,
+    options: { afternoon: "shop", walk: "short", lateNight: false },
+  });
+  assert.equal(query.get("afternoon"), "shop");
+  assert.equal(query.get("lateNight"), "true");
+  assert.equal(query.get("walk"), "short");
+  assert.equal(query.get("seed"), "12");
+});
