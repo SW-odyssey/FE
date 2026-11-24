@@ -58,8 +58,8 @@ test("grounding uses the canonical Korean store and coordinates and preserves th
       assert.equal(init.redirect, "manual");
       const body = JSON.parse(String(init.body));
       assert.equal(body.store, false);
-      assert.equal(body.model, "gemini-3.8-flash");
-      assert.equal(body.generation_config.thinking_level, "low");
+      assert.equal(body.model, "gemini-3.5-flash-lite");
+      assert.equal(body.generation_config.thinking_level, "minimal");
       assert.deepEqual(body.tools, [
         { type: "google_maps", latitude: 37.57, longitude: 126.98 },
       ]);
