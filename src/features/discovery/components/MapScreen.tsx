@@ -54,7 +54,7 @@ type Props = Pick<
     desktop: boolean;
     showCourse: boolean;
   } & React.ComponentProps<typeof SearchHeader>;
-const desktopInsets: MapViewportInsets = { top: 76, bottom: 48 };
+const desktopInsets: MapViewportInsets = { top: 24, bottom: 48 };
 export function MapScreen(props: Props) {
   const {
     language,
@@ -179,8 +179,10 @@ export function MapScreen(props: Props) {
         searchOrigin={showCourse ? null : props.mapSearchOrigin}
         onSearchArea={
           props.liveRecommendations &&
+          status === "success" &&
           !showCourse &&
           !selected &&
+          !mapScope &&
           (desktop || sheet !== "expanded")
             ? props.searchMapArea
             : undefined
@@ -189,6 +191,7 @@ export function MapScreen(props: Props) {
         places={visible}
         selected={highlighted}
         courseStops={showCourse ? courseMapStops : undefined}
+        hideCourseLine={showCourse && autoCourse.pending}
         onCourseStopSelect={openPlace}
         language={language}
         currentLocation={currentLocation}
@@ -200,40 +203,33 @@ export function MapScreen(props: Props) {
         focusRequest={mapFocusRequest}
         onSelect={desktop ? openPlace : selectMapPlace}
       />
-      <div className="local-map-context" ref={context}>
-        {desktop ? (
-          <div className="local-desktop-map-title">
-            <LocalIcon name={showCourse ? "route" : "map"} size={18} />
-            <span>
-              {showCourse
-                ? t("Course map", "코스 지도")
-                : t("Map of nearby places", "주변 장소 지도")}
-            </span>
-          </div>
-        ) : showCourse ? (
-          <div className="local-course-map-header">
-            <button
-              type="button"
-              className="local-course-map-back"
-              aria-label={t("Back to course", "코스로 돌아가기")}
-              onClick={() => navigate("course")}
-            >
-              <LocalIcon name="chevron-left" size={19} />
-              <span>{t("Course map", "코스 지도")}</span>
-            </button>
-            <LanguageButton
-              className="local-course-language"
-              label={t("Choose language", "언어 선택")}
-              onClick={() => props.setModal("menu")}
-            />
-          </div>
-        ) : (
-          <div className="local-map-mobile-tools">
-            <SearchHeader {...props} />
-            <DiscoveryControls {...props} />
-          </div>
-        )}
-      </div>
+      {!desktop && (
+        <div className="local-map-context" ref={context}>
+          {showCourse ? (
+            <div className="local-course-map-header">
+              <button
+                type="button"
+                className="local-course-map-back"
+                aria-label={t("Back to course", "코스로 돌아가기")}
+                onClick={() => navigate("course")}
+              >
+                <LocalIcon name="chevron-left" size={19} />
+                <span>{t("Course map", "코스 지도")}</span>
+              </button>
+              <LanguageButton
+                className="local-course-language"
+                label={t("Choose language", "언어 선택")}
+                onClick={() => props.setModal("menu")}
+              />
+            </div>
+          ) : (
+            <div className="local-map-mobile-tools">
+              <SearchHeader {...props} />
+              <DiscoveryControls {...props} />
+            </div>
+          )}
+        </div>
+      )}
       {!desktop && (
         <PlaceSheet
           state={sheet}

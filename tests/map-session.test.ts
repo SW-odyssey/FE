@@ -3,6 +3,7 @@ import { test } from "node:test";
 import type { LocalPlace } from "../src/features/discovery/model.ts";
 import {
   attachMapSession,
+  canSearchMapViewport,
   type ExploreMapOptions,
   type MapCamera,
 } from "../src/features/map/controller.ts";
@@ -12,6 +13,33 @@ const flush = async () => {
   await Promise.resolve();
   await Promise.resolve();
 };
+
+test("map search requires a substantial pan and no recommendation in view", () => {
+  const origin = { lat: 37.57, lng: 126.98 };
+  const recommendation = { lat: 37.571, lng: 126.982 };
+  const empty = { center: { ...origin, lat: 37.573 }, contains: () => false };
+  assert.equal(canSearchMapViewport(origin, empty, [recommendation]), true);
+  assert.equal(
+    canSearchMapViewport(origin, { ...empty, center: origin }, []),
+    false,
+  );
+  assert.equal(
+    canSearchMapViewport(
+      origin,
+      { ...empty, center: { ...origin, lat: 37.5705 } },
+      [],
+    ),
+    false,
+  );
+  assert.equal(
+    canSearchMapViewport(
+      origin,
+      { ...empty, contains: (place) => place === recommendation },
+      [recommendation],
+    ),
+    false,
+  );
+});
 
 test("leaving while the SDK loads never creates a late map or reports its late failure", async () => {
   let resolve!: () => void;

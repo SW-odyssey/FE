@@ -246,7 +246,8 @@ export function createGoogleExploreMapSession(
 
   function render() {
     if (autoFit && fittedArea && fittedArea !== fitArea()) fitRecommendations();
-    const { courseStops, places, selected, scope, language } = read();
+    const { courseStops, hideCourseLine, places, selected, scope, language } =
+      read();
     const zoom = map.getZoom() ?? 16;
     if (shownZoom !== zoom) {
       shownZoom = zoom;
@@ -260,6 +261,8 @@ export function createGoogleExploreMapSession(
           : [],
       );
     }
+    if (line.getVisible() === Boolean(hideCourseLine))
+      line.setVisible(!hideCourseLine);
     const t = (en: string, ko: string) => localText(language, en, ko);
     const name = (place: { name: string; koreanName: string }) =>
       language === "ko" ? place.koreanName : place.name;
@@ -384,6 +387,7 @@ export function createGoogleExploreMapSession(
       if (focus) centerOn(focus);
     }
     render();
+    read().onViewportIdle?.();
     const center = map.getCenter();
     const { memory, selected } = read();
     if (memory && center)
@@ -397,7 +401,10 @@ export function createGoogleExploreMapSession(
   function markManual() {
     autoFit = false;
   }
-  const dragStart = map.addListener("dragstart", markManual);
+  const dragStart = map.addListener("dragstart", () => {
+    markManual();
+    read().onViewportDragStart?.();
+  });
   const dragEnd = map.addListener("dragend", () => read().onViewportDrag?.());
   element.addEventListener("wheel", markManual, { passive: true });
   element.addEventListener("dblclick", markManual);
@@ -414,7 +421,15 @@ export function createGoogleExploreMapSession(
 
   return {
     render,
-    getCenter: () => map.getCenter()?.toJSON() ?? null,
+    getSearchViewport: () => {
+      const center = map.getCenter();
+      const bounds = map.getBounds();
+      if (!center || !bounds) return null;
+      return {
+        center: center.toJSON(),
+        contains: (point) => bounds.contains(point),
+      };
+    },
     fitRecommendations,
     focusSelected: () => {
       const { selected, focusSelected } = read();

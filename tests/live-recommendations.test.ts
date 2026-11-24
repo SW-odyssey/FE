@@ -25,7 +25,7 @@ const place = {
   googlePlaceId: "ChIJtest",
 };
 
-test("the live source keeps cafés and restaurants in backend order and shares the published dataset", async (t) => {
+test("the live source includes bars in recommendations and shares the published dataset", async (t) => {
   const calls: URL[] = [];
   t.mock.method(globalThis, "fetch", async (url: URL) => {
     calls.push(url);
@@ -65,9 +65,9 @@ test("the live source keeps cafés and restaurants in backend order and shares t
   const found = await source.query(query);
   assert.deepEqual(
     found.items.map(({ id }) => id),
-    ["1557", "141", "142"],
+    ["1557", "102", "141", "142"],
   );
-  assert.equal(found.total, 3);
+  assert.equal(found.total, 4);
   assert.equal(calls[1]?.searchParams.get("weekday"), "fri");
   assert.equal(calls[1]?.searchParams.get("slot"), "dinner");
   assert.equal(calls[1]?.searchParams.get("lang"), "en");
@@ -96,6 +96,12 @@ test("the live source keeps cafés and restaurants in backend order and shares t
   assert.equal(calls.at(-1)?.searchParams.get("datasetId"), "public-latest");
   assert.equal(await getLiveVisitPattern({ ...pattern, weekday: "sat" }), null);
   assert.equal(calls.at(-1)?.searchParams.get("weekday"), "sat");
+  const search = await source.query({ ...query, query: "Recommended Place" });
+  assert.equal(calls.at(-1)?.searchParams.get("q"), "Recommended Place");
+  assert.deepEqual(
+    search.items.map(({ id }) => id),
+    ["1557", "141", "142"],
+  );
 });
 
 test("empty recommendations and missing place links are handled without demo data", async (t) => {

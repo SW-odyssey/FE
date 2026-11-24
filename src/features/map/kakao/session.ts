@@ -86,10 +86,13 @@ export function createExploreMapSession(
   const idle = () => {
     remember();
     overlays.render(placeOptions());
+    readOptions().onViewportIdle?.();
   };
   kakao.maps.event.addListener(map, "zoom_changed", zoomChanged);
   kakao.maps.event.addListener(map, "idle", idle);
+  const dragStart = () => readOptions().onViewportDragStart?.();
   const dragEnd = () => readOptions().onViewportDrag?.();
+  kakao.maps.event.addListener(map, "dragstart", dragStart);
   kakao.maps.event.addListener(map, "dragend", dragEnd);
   const observer = new ResizeObserver(() => {
     if (!element.clientWidth || !element.clientHeight) return;
@@ -172,9 +175,14 @@ export function createExploreMapSession(
     else map.panTo(point);
   }
   return {
-    getCenter() {
+    getSearchViewport() {
       const center = map.getCenter();
-      return { lat: center.getLat(), lng: center.getLng() };
+      const bounds = map.getBounds();
+      return {
+        center: { lat: center.getLat(), lng: center.getLng() },
+        contains: ({ lat, lng }) =>
+          bounds.contain(new kakao.maps.LatLng(lat, lng)),
+      };
     },
     render() {
       cancelAnimationFrame(frame);
@@ -215,6 +223,7 @@ export function createExploreMapSession(
       remember();
       observer.disconnect();
       kakao.maps.event.removeListener(map, "zoom_changed", zoomChanged);
+      kakao.maps.event.removeListener(map, "dragstart", dragStart);
       kakao.maps.event.removeListener(map, "dragend", dragEnd);
       kakao.maps.event.removeListener(map, "idle", idle);
       locationOverlay?.setMap(null);
@@ -253,6 +262,7 @@ function createCourseOverlays(
   read: () => ExploreMapOptions,
 ) {
   let displayed: readonly CourseStop[] | undefined;
+  let lineHidden = false;
   let pins: { button: HTMLButtonElement; overlay: kakao.maps.CustomOverlay }[] =
     [];
   let line: kakao.maps.Polyline | undefined;
@@ -264,7 +274,12 @@ function createCourseOverlays(
   }
   return {
     render() {
-      const { courseStops, language, selected } = read();
+      const { courseStops, hideCourseLine, language, selected } = read();
+      const hidden = Boolean(hideCourseLine);
+      if (lineHidden !== hidden) {
+        line?.setMap(hidden ? null : map);
+        lineHidden = hidden;
+      }
       if (displayed !== courseStops) {
         dispose();
         displayed = courseStops;
@@ -274,7 +289,7 @@ function createCourseOverlays(
         );
         if (path.length > 1) {
           line = new kakao.maps.Polyline({
-            map,
+            map: hidden ? undefined : map,
             path,
             strokeColor: getComputedStyle(element)
               .getPropertyValue("--local-plum")

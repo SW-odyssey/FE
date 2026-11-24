@@ -17,6 +17,7 @@ export default function ExploreMap(props: ExploreMapProps) {
     language,
     currentLocation,
     courseStops,
+    hideCourseLine,
     onLocate,
     viewportScale = 1,
     viewportInsets,
@@ -97,6 +98,7 @@ export default function ExploreMap(props: ExploreMapProps) {
           stops={courseStops ?? places}
           places={courseStops ? [] : places}
           numbered={Boolean(courseStops)}
+          hideCourseLine={hideCourseLine}
           selectedId={props.selected?.id}
           scope={props.scope}
           onGroupSelect={props.onGroupSelect}
@@ -122,7 +124,9 @@ export default function ExploreMap(props: ExploreMapProps) {
           </button>
         )}
         <div className="local-map-notes">
-          {Boolean(courseStops && courseStops.length > 1) && (
+          {Boolean(
+            !hideCourseLine && courseStops && courseStops.length > 1,
+          ) && (
             <span className="local-map-route-legend">
               {t("Straight-line connections", "직선 연결")}
             </span>

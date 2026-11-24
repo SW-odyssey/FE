@@ -21,6 +21,7 @@ export function MapDiagram({
   stops,
   places,
   numbered,
+  hideCourseLine = false,
   language,
   selectedId,
   scope,
@@ -32,6 +33,7 @@ export function MapDiagram({
   stops: readonly CourseStop[];
   places: LocalPlace[];
   numbered: boolean;
+  hideCourseLine?: boolean;
   language: DiscoveryLanguage;
   selectedId?: string;
   scope?: string | null;
@@ -124,7 +126,7 @@ export function MapDiagram({
             width={1800}
             height={3050}
           />
-          {numbered && map.worldPoints.length > 1 && (
+          {numbered && !hideCourseLine && map.worldPoints.length > 1 && (
             <polyline
               points={map.worldPoints.map(({ x, y }) => `${x},${y}`).join(" ")}
             />
