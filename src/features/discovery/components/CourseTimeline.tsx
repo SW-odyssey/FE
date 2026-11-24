@@ -6,7 +6,6 @@ import type { CourseLeg } from "../data/course-api";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import type { VisitSlot } from "../model";
 import { slotLabels } from "../presentation";
-import { courseReasonText } from "./course-reason-copy";
 
 type Row = CourseLeg & {
   id: string;
@@ -20,6 +19,7 @@ type Props = Pick<
   "language" | "kind" | "name" | "openPlace" | "t"
 > & {
   route: CourseLeg[];
+  formatDistance: Intl.NumberFormat;
   pending: boolean;
   changeSlot: (slot: VisitSlot) => void;
 };
@@ -37,6 +37,7 @@ function courseRows(route: CourseLeg[]): Row[] {
 
 export function CourseTimeline({
   route,
+  formatDistance,
   pending,
   changeSlot,
   language,
@@ -100,7 +101,7 @@ export function CourseTimeline({
           leaveTime,
           walkMinutes,
           hoursUnknown,
-          reasons,
+          distanceMeters,
           exiting,
           entering,
         }) => (
@@ -115,11 +116,7 @@ export function CourseTimeline({
             <div className="local-course-timeline-item">
               <div className="local-course-stop-controls">
                 <p className="local-course-distance">
-                  {index === 0
-                    ? t("From the start", "출발지에서")
-                    : t("From the previous stop", "이전 장소에서")}{" "}
-                  · {t("Est. walk", "예상 도보")} {walkMinutes}
-                  {t(" min", "분")}
+                  {`${t("Est. walk", "예상 도보")} ${walkMinutes}${t(" min", "분")} · ${t("Straight line", "직선 거리")} ${formatDistance.format(distanceMeters)}`}
                 </p>
                 {route[index - 1]?.slot !== slot && (
                   <button
@@ -170,17 +167,6 @@ export function CourseTimeline({
                 <p className="local-course-hours">
                   {t("Check opening hours", "영업시간 확인 필요")}
                 </p>
-              )}
-              {reasons.length > 0 && (
-                <details className="local-course-reasons">
-                  <summary>{t("Why this place", "고른 이유")}</summary>
-                  <ul>
-                    {reasons.map((reason) => {
-                      const text = courseReasonText(reason, language);
-                      return text && <li key={reason.code}>{text}</li>;
-                    })}
-                  </ul>
-                </details>
               )}
             </div>
           </li>

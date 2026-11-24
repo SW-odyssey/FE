@@ -46,16 +46,6 @@ const categories = {
   play: "culture",
 } as const;
 
-export type CourseReason =
-  | { code: "LOCAL_TOP"; percent: number }
-  | { code: "OPEN_DURING_STAY"; from: string; to: string }
-  | { code: "PEAK_NOW" }
-  | {
-      code: "AREA_TYPE";
-      type: "late_night" | "weekend_day" | "weekday_day" | "mixed";
-    }
-  | { code: "SIMILAR_CHOICES"; count: number };
-
 type StopReason =
   | "NO_NEARBY_MATCH"
   | "ALL_EXCLUDED"
@@ -78,7 +68,6 @@ type ApiCourseStop = {
   leaveTime: string;
   walkMinutes: number;
   hoursUnknown: boolean;
-  reasons: CourseReason[];
   place: ApiPlace & { distanceMeters: number };
 };
 
@@ -199,12 +188,26 @@ export async function getCourse(
     status: data.status,
     datasetId: data.context.datasetId,
     seed: data.seed,
-    route: data.stops.map(({ slot, place, ...stop }) => ({
-      ...stop,
-      slot: screenSlots[slot],
-      place: coursePlace(place),
-      distanceMeters: place.distanceMeters,
-    })),
+    route: data.stops.map(
+      ({
+        slot,
+        place,
+        position,
+        visitTime,
+        leaveTime,
+        walkMinutes,
+        hoursUnknown,
+      }) => ({
+        position,
+        visitTime,
+        leaveTime,
+        walkMinutes,
+        hoursUnknown,
+        slot: screenSlots[slot],
+        place: coursePlace(place),
+        distanceMeters: place.distanceMeters,
+      }),
+    ),
     skipped: data.skipped.map(({ slot, ...skip }) => ({
       ...skip,
       slot: screenSlots[slot],
