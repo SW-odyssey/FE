@@ -63,11 +63,21 @@ body {
 }
 .local-shell.local-refined .local-discovery-controls > .local-category-tabs {
   justify-content: flex-start;
+  flex-wrap: wrap;
   gap: 8px;
   height: auto;
   margin: 12px 0 0;
   padding: 0;
   border: 0;
+}
+
+@media (max-width: 360px) {
+  .local-shell.local-refined
+    .local-discovery-controls
+    > .local-category-tabs:not(.local-course-option-chips)
+    > button {
+    padding-inline: 9px;
+  }
 }
 .local-shell.local-refined
   .local-discovery-controls

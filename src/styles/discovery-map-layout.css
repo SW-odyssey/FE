@@ -15,6 +15,7 @@
 
 .local-map-mobile-tools {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
   pointer-events: none;
 }
@@ -22,6 +23,10 @@
 .local-map-mobile-tools > *,
 .local-course-map-header > * {
   pointer-events: auto;
+}
+
+.local-map-mobile-tools > .local-discovery-controls {
+  min-width: 0;
 }
 
 .local-map-mobile-tools > .local-search-header {
