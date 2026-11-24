@@ -272,9 +272,10 @@ export function createGoogleExploreMapSession(
     if (courseStops) {
       courseStops.forEach((stop, index) => {
         const id = `course:${stop.id}`;
-        const label = `${index + 1}. ${name(stop)}`;
+        const number = stop.position ?? index + 1;
+        const label = `${number}. ${name(stop)}`;
         const pin = pins.upsert(id, stop, "local-course-map-pin", label);
-        pin.symbol.textContent = String(index + 1);
+        pin.symbol.textContent = String(number);
         const active = selected?.id === stop.id;
         if (active) pin.button.setAttribute("aria-current", "true");
         else pin.button.removeAttribute("aria-current");
@@ -323,7 +324,8 @@ export function createGoogleExploreMapSession(
         );
         return {
           group: { id, places: members, lat, lng },
-          kind: members.length === 1 ? ("place" as const) : ("cluster" as const),
+          kind:
+            members.length === 1 ? ("place" as const) : ("cluster" as const),
         };
       }),
     ];

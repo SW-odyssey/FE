@@ -56,7 +56,6 @@ export type DiscoveryRequestOptions = {
 export type DiscoverySnapshot = {
   query(input: DiscoveryQuery): DiscoveryQueryResult;
   getPlace(id: string): DiscoveryPlaceDetail | null;
-  browseCourse?(area: DiscoveryArea): LocalPlace | null;
 };
 /** Async adapters return the same screen model; only preview supplies snapshot. */
 export interface DiscoveryDataSource {

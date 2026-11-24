@@ -269,16 +269,21 @@ export function MapScreen(props: Props) {
                   className="local-map-course-list"
                   aria-label={t("Visit order", "방문 순서")}
                 >
-                  {courseMapStops.map((place, index) => (
+                  {courseMapStops.map((place) => (
                     <li key={place.id}>
                       <button
                         className="local-course-stop-detail"
                         onClick={() => openPlace(place)}
                       >
                         <span className="local-course-pin" aria-hidden="true">
-                          {index + 1}
+                          {place.position}
                         </span>
-                        <Photo place={place} decorative />
+                        <span
+                          className="local-photo local-course-stop-placeholder"
+                          aria-hidden="true"
+                        >
+                          <LocalIcon name="map-pin" size={18} />
+                        </span>
                         <span className="local-place-info">
                           <strong>{name(place)}</strong>
                           <span>{kind(place)}</span>

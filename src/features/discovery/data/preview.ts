@@ -109,10 +109,6 @@ export const previewDataSource: DiscoveryDataSource = {
   snapshot: {
     query: previewQuery,
     getPlace: (id) => details.get(id) ?? null,
-    browseCourse: (area) =>
-      area === "all" || area === "jongno" || area === "insa"
-        ? (details.get("ssamziegil")?.place ?? null)
-        : null,
   },
   async query(input, options) {
     checkAbort(options);

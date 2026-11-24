@@ -2,8 +2,16 @@ import type { LocalPlace } from "./model.ts";
 
 export type CourseStop = Pick<
   LocalPlace,
-  "id" | "name" | "koreanName" | "area" | "category" | "image" | "lat" | "lng"
->;
+  | "id"
+  | "name"
+  | "koreanName"
+  | "area"
+  | "category"
+  | "courseKind"
+  | "image"
+  | "lat"
+  | "lng"
+> & { position?: number };
 
 export type CourseOptions = {
   includeCafe: boolean;

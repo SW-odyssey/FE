@@ -447,3 +447,17 @@
     text-underline-offset: 3px;
   }
 }
+
+.local-course-stop-detail .local-course-stop-placeholder {
+  display: grid;
+  place-items: center;
+  color: var(--local-plum);
+  background: color-mix(in srgb, var(--local-plum) 9%, white);
+}
+
+.local-course-gaps {
+  margin: 0;
+  padding-inline-start: 20px;
+  color: var(--local-muted);
+  font-size: 0.8rem;
+}

@@ -120,7 +120,12 @@ export function FeaturedCarousel({
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     const changed = () => {
       const node = track.current;
-      if (media.matches && loopOffset && node?.clientWidth && !mouseDrag.current) {
+      if (
+        media.matches &&
+        loopOffset &&
+        node?.clientWidth &&
+        !mouseDrag.current
+      ) {
         delete node.dataset.mouseSettling;
         scrollToSlide(node, position.current.index + loopOffset, "instant");
       }
@@ -204,7 +209,10 @@ export function FeaturedCarousel({
       node.scrollLeft = drag.startScroll + offset;
     }
   }
-  function finishMouseDrag(event: PointerEvent<HTMLDivElement>, commit = false) {
+  function finishMouseDrag(
+    event: PointerEvent<HTMLDivElement>,
+    commit = false,
+  ) {
     const drag = mouseDrag.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
     mouseDrag.current = null;
@@ -286,7 +294,8 @@ export function FeaturedCarousel({
           <strong>{name(place)}</strong>
           <span>
             <LocalIcon name="map-pin" size={13} />
-            {areaLabels[language][place.area]} · {kind(place)}
+            {place.area && `${areaLabels[language][place.area]} · `}
+            {kind(place)}
           </span>
         </span>
       </>

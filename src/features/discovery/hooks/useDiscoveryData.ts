@@ -26,6 +26,7 @@ function useSourceResource<T>({
   enabled = true,
   keepPrevious = false,
   attempt,
+  synchronous = Boolean(source.snapshot),
 }: {
   source: DiscoveryDataSource;
   key: string;
@@ -35,8 +36,8 @@ function useSourceResource<T>({
   enabled?: boolean;
   keepPrevious?: boolean;
   attempt: number;
+  synchronous?: boolean;
 }): DiscoveryResource<T> {
-  const synchronous = Boolean(source.snapshot);
   const [state, setState] = useState<ResourceState<T>>(() => ({
     source,
     key,
@@ -116,16 +117,18 @@ export function useDiscoveryData({
   draftQuery = query,
   selectedId,
   source = previewDataSource,
+  getPlace,
 }: {
   query: DiscoveryQuery;
   draftQuery?: DiscoveryQuery;
   selectedId: string | null;
   source?: DiscoveryDataSource;
+  getPlace?: (id: string, signal: AbortSignal) => Promise<DiscoveryPlaceDetail>;
 }) {
   const [attempt, setAttempt] = useState(0);
   const retry = useCallback(() => {
-    if (!source.snapshot) setAttempt((previous) => previous + 1);
-  }, [source]);
+    if (getPlace || !source.snapshot) setAttempt((previous) => previous + 1);
+  }, [getPlace, source]);
   const key = discoveryQueryKey(query);
   const draftKey = discoveryQueryKey(draftQuery);
   // eslint-disable-next-line react-hooks/exhaustive-deps -- key는 query 전체 필드의 직렬화 값이며 같은 조건의 요청 참조를 유지합니다.
@@ -153,8 +156,11 @@ export function useDiscoveryData({
     [source, draftInput],
   );
   const loadDetail = useCallback(
-    (signal: AbortSignal) => source.getPlace(selectedId!, { signal }),
-    [source, selectedId],
+    (signal: AbortSignal) =>
+      getPlace
+        ? getPlace(selectedId!, signal)
+        : source.getPlace(selectedId!, { signal }),
+    [getPlace, source, selectedId],
   );
   const result = useSourceResource({
     source,
@@ -177,7 +183,8 @@ export function useDiscoveryData({
   });
   const detail = useSourceResource<DiscoveryPlaceDetail | null>({
     source,
-    key: selectedId ?? "",
+    key: `${getPlace ? "course:" : ""}${selectedId ?? ""}`,
+    synchronous: !getPlace && Boolean(source.snapshot),
     attempt,
     snapshot: detailSnapshot,
     empty: null,

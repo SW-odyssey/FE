@@ -279,9 +279,8 @@ function createCourseOverlays(
         pins = path.map((position, index) => {
           const button = element.ownerDocument.createElement("button");
           button.type = "button";
-          button.type = "button";
           button.className = "local-course-map-pin";
-          button.textContent = String(index + 1);
+          button.textContent = String(courseStops[index].position ?? index + 1);
           button.addEventListener("click", (event) => {
             event.stopPropagation();
             read().onCourseStopSelect?.(courseStops[index]);
@@ -301,7 +300,7 @@ function createCourseOverlays(
         const stop = courseStops![index];
         button.setAttribute(
           "aria-label",
-          `${index + 1}. ${language === "ko" ? stop.koreanName : stop.name}`,
+          `${stop.position ?? index + 1}. ${language === "ko" ? stop.koreanName : stop.name}`,
         );
         if (selected?.id === stop.id)
           button.setAttribute("aria-current", "true");

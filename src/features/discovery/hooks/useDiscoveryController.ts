@@ -6,6 +6,7 @@ import { distanceMeters, inMapScope } from "../../map/geometry";
 import { type SheetState } from "../../map/sheet-motion";
 import { defaultCourseOptions, type CourseOptions } from "../course";
 import { previewDataSource, type DiscoveryDataSource } from "../data";
+import { getCoursePlaceDetail } from "../data/course-api";
 import { spacePreferences } from "../filters";
 import { dateLocales, localText } from "../localization";
 import type { LocalPlace } from "../model";
@@ -29,7 +30,7 @@ import {
 import { readPreviewUrl, serializePreviewUrl } from "../state/preview-url";
 import { seoulHour, visitDate } from "../visit-date";
 import { slotAt } from "../visit-time";
-import { useAutoCourse } from "./useAutoCourse";
+import { useCourseRecommendations } from "./useCourseRecommendations";
 import { useDialogLifecycle } from "./useDialogLifecycle";
 import { useDiscoveryData } from "./useDiscoveryData";
 /** Owns applied/draft state, navigation and restoration for discovery. */
@@ -97,12 +98,18 @@ export function useDiscoveryController(
     : draftTime.slot;
   const name = (p: Pick<LocalPlace, "name" | "koreanName">) =>
     ko ? p.koreanName : p.name;
-  const kind = (p: Pick<LocalPlace, "category">) =>
-    p.category === "cafe"
-      ? t("Café", "카페")
-      : p.category === "culture"
-        ? t("Attraction", "볼거리")
-        : t("Restaurant", "음식점");
+  const kind = (p: Pick<LocalPlace, "category" | "courseKind">) =>
+    p.courseKind === "bar"
+      ? t("Bar", "주점")
+      : p.courseKind === "shop"
+        ? t("Browse shops", "구경")
+        : p.courseKind === "play"
+          ? t("Activity", "놀거리")
+          : p.category === "cafe"
+            ? t("Café", "카페")
+            : p.category === "culture"
+              ? t("Attraction", "볼거리")
+              : t("Restaurant", "음식점");
 
   /* eslint-disable react-hooks/set-state-in-effect -- 주소 기록과 기기 시계에서 초기 상태를 복원합니다. */
   useEffect(() => {
@@ -127,15 +134,19 @@ export function useDiscoveryController(
         state.place ?? "",
       )?.place;
       setSelectedId(
-        sourceRef.current.snapshot
-          ? place &&
-            (state.view === "course" ||
-              state.courseMap ||
-              place.category !== "culture") &&
-            place.id !== "nogari"
-            ? state.place
-            : null
-          : state.place,
+        state.place &&
+          (state.view === "course" || state.courseMap) &&
+          /^[1-9]\d*$/.test(state.place)
+          ? state.place
+          : sourceRef.current.snapshot
+            ? place &&
+              (state.view === "course" ||
+                state.courseMap ||
+                place.category !== "culture") &&
+              place.id !== "nogari"
+              ? state.place
+              : null
+            : state.place,
       );
       setModal(state.modal);
       if (state.sheet) setSheet(state.sheet);
@@ -263,23 +274,16 @@ export function useDiscoveryController(
     distanceMeters(currentLocation, { lat: 37.5716, lng: 126.9861 }) <= 4500
       ? currentLocation
       : null;
-  const autoCourse = useAutoCourse(
-    source,
-    {
-      area,
-      category: "all",
-      query: "",
-      slot: courseAfterHours ? "lunch" : currentSlot,
-      activity: "any",
-      origin: courseLocation,
-      spaces: [],
-      visitDate: courseDate,
-    },
-    courseOptions,
-    inCourse,
-  );
+  const autoCourse = useCourseRecommendations({
+    area,
+    slot: courseAfterHours ? "lunch" : currentSlot,
+    origin: courseLocation,
+    visitDate: courseDate,
+    enabled: restored && inCourse,
+  });
   const courseMapStops = useMemo(
-    () => autoCourse.route.map(({ place }) => place),
+    () =>
+      autoCourse.route.map(({ place, position }) => ({ ...place, position })),
     [autoCourse.route],
   );
   const appliedQuery = {
@@ -305,6 +309,10 @@ export function useDiscoveryController(
           visitDate: visitDate(clock, draftTime.autoTime ? 0 : draftTime.day),
         },
     selectedId,
+    getPlace:
+      inCourse && selectedId && /^[1-9]\d*$/.test(selectedId)
+        ? getCoursePlaceDetail
+        : undefined,
   });
   const {
     visible,
@@ -570,7 +578,9 @@ export function useDiscoveryController(
     setPlaceOnMap(place);
     setMapScope(null);
     setSheet("half");
-    if (!desktop) navigate("map", false);
+    if (inCourse && courseMapStops.some(({ id }) => id === place.id)) {
+      navigate("map", true);
+    } else if (!desktop) navigate("map", false);
     else setMapFocusRequest((request) => request + 1);
   }
   async function copyAddress(place: LocalPlace) {

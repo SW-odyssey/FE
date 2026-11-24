@@ -24,7 +24,8 @@ export function renderPlaceRow(
       <span className="local-place-info">
         <strong>{name(p)}</strong>
         <span>
-          {kind(p)}, {areaLabels[language][p.area]}
+          {kind(p)}
+          {p.area && `, ${areaLabels[language][p.area]}`}
         </span>
       </span>
       <LocalIcon name="chevron-right" size={16} />

@@ -1,11 +1,14 @@
 export type LocalArea = "jongno" | "ikseon" | "insa" | "eulji" | "bukchon";
+export type CoursePlaceKind =
+  "korean" | "cafe" | "shop" | "play" | "bar" | "other";
 export type LocalCategory = "food" | "cafe" | "culture";
 export type LocalPlace = {
   id: string;
   name: string;
   koreanName: string;
-  area: LocalArea;
+  area: LocalArea | null;
   category: LocalCategory;
+  courseKind?: CoursePlaceKind;
   image: string;
   descriptionEn: string;
   descriptionKo: string;
