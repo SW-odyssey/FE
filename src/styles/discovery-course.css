@@ -240,6 +240,7 @@
 
 .local-course-timeline-item {
   position: relative;
+  min-width: 0;
   min-height: 0;
   overflow: clip;
   overflow-clip-margin: 6px;
@@ -426,6 +427,7 @@
 
 .local-course-timeline .local-place-info > .local-course-photo-credit {
   block-size: 13px;
+  contain: inline-size;
   overflow: hidden;
   font-size: 10px;
   line-height: 13px;
