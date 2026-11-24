@@ -281,6 +281,7 @@ body {
 }
 .local-detail-section > h2,
 .local-business-heading > h2,
+.local-place-ai-heading > h2,
 .local-visit-pattern-heading > h2 {
   color: var(--refresh-ink);
   font-size: 17px;
@@ -387,6 +388,34 @@ body {
   padding: 14px 16px;
   background: var(--refresh-ground);
   border-radius: var(--r-md);
+}
+.local-place-ai-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.local-place-ai-icon {
+  display: grid;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--local-plum) 11%, white);
+  color: var(--local-plum);
+}
+.local-place-ai-placeholder {
+  display: grid;
+  gap: 8px;
+  padding-block: 4px;
+}
+.local-place-ai-placeholder > span {
+  width: 94%;
+  height: 12px;
+  border-radius: 8px;
+}
+.local-place-ai-placeholder > span:last-child {
+  width: 66%;
 }
 .local-shell.local-refined .local-address {
   color: #45454c;

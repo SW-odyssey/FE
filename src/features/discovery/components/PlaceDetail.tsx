@@ -46,8 +46,6 @@ export function PlaceDetail(props: Props) {
     ? media.photoList
     : photosFor(selected);
   const address = media?.address || selected.address;
-  const displayName =
-    language === "ko" ? name(selected) : media?.displayName || name(selected);
   const area = selected.area && areaLabels[language][selected.area];
   const editorial = description(selected);
   const about = editorial || media?.business?.about;
@@ -73,7 +71,7 @@ export function PlaceDetail(props: Props) {
       />
       <div className="local-detail-body">
         <header className="local-detail-heading">
-          <h1>{displayName}</h1>
+          <h1>{name(selected)}</h1>
           <p className="local-detail-meta">
             <LocalIcon name="map-pin" size={15} />
             {area ? `${area} · ` : ""}

@@ -37,6 +37,16 @@ export function useExploreMap(props: ExploreMapProps) {
   const [draggedPlaces, setDraggedPlaces] =
     useState<ExploreMapProps["places"]>();
   const displayed = props.courseStops ?? props.places;
+  const fitKey = JSON.stringify(
+    displayed.map(({ id, lat, lng }) => [id, lat, lng]),
+  );
+  const focusKey = props.selected
+    ? JSON.stringify([
+        props.selected.id,
+        props.selected.lat,
+        props.selected.lng,
+      ])
+    : null;
   useEffect(() => {
     const read = (): ExploreMapOptions => ({
       ...options.current,
@@ -81,10 +91,10 @@ export function useExploreMap(props: ExploreMapProps) {
   ]);
   useEffect(() => {
     if (ready && !props.searchOrigin) session.current?.fitRecommendations(true);
-  }, [displayed, ready, props.searchOrigin]);
+  }, [fitKey, ready, props.searchOrigin]);
   useEffect(() => {
     if (ready) session.current?.focusSelected();
-  }, [props.selected, ready, props.focusSelected, props.focusRequest]);
+  }, [focusKey, ready, props.focusSelected, props.focusRequest]);
   useEffect(() => {
     if (ready && props.currentLocation) {
       session.current?.setCurrentLocation(props.currentLocation);

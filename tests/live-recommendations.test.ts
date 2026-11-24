@@ -6,6 +6,7 @@ import { getLiveVisitPattern } from "../src/features/discovery/data/visit-patter
 
 const query: DiscoveryQuery = {
   area: "eulji",
+  language: "en",
   category: "all",
   query: "",
   slot: "evening",
@@ -16,7 +17,7 @@ const query: DiscoveryQuery = {
 };
 const place = {
   id: 1557,
-  name: "추천 장소",
+  name: "Recommended Place",
   cellId: "81655936",
   kind: "korean",
   lat: 37.56,
@@ -58,10 +59,14 @@ test("the live source keeps backend order and shares the published dataset acros
   );
   assert.equal(calls[1]?.searchParams.get("weekday"), "fri");
   assert.equal(calls[1]?.searchParams.get("slot"), "dinner");
+  assert.equal(calls[1]?.searchParams.get("lang"), "en");
+  assert.equal(found.items[0]?.name, "Recommended Place");
   assert.equal(calls.length, 2);
   for (const url of calls.slice(1))
     assert.equal(url.searchParams.get("datasetId"), "public-latest");
   const detail = await source.getPlace("1557", { query });
+  assert.equal(calls[2]?.searchParams.get("lang"), "en");
+  assert.equal(detail?.place.name, found.items[0]?.name);
   const pattern = detail?.visitPattern;
   assert.deepEqual(pattern, {
     provenance: "live",

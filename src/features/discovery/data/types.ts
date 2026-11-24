@@ -21,6 +21,7 @@ export type DiscoveryQuery = {
   spaces: readonly SpacePreference[];
   visitDate?: string;
   datasetId?: string;
+  language?: DiscoveryLanguage;
 };
 export type DiscoveryQueryResult = {
   items: LocalPlace[];

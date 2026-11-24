@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { LocalIcon } from "../../../components/ui/LocalIcon";
 import { localText } from "../localization";
 import type { DiscoveryLanguage } from "../model";
 
@@ -41,7 +42,12 @@ export function PlaceAiSummary({
   const t = (en: string, ko: string) => localText(language, en, ko);
   return (
     <section className="local-detail-section local-place-ai">
-      <h2>{t("AI place summary", "AI 매장 요약")}</h2>
+      <div className="local-place-ai-heading">
+        <span className="local-place-ai-icon" aria-hidden="true">
+          <LocalIcon name="sparkles" size={17} />
+        </span>
+        <h2>{t("AI place summary", "AI 매장 요약")}</h2>
+      </div>
       {summary ? (
         <>
           <p>{summary}</p>
@@ -51,9 +57,15 @@ export function PlaceAiSummary({
           </small>
         </>
       ) : (
-        <p role="status">
-          {t("Loading summary…", "요약을 불러오는 중이에요.")}
-        </p>
+        <>
+          <div className="local-place-ai-placeholder" aria-hidden="true">
+            <span className="local-skeleton" />
+            <span className="local-skeleton" />
+          </div>
+          <small className="local-place-ai-note" role="status">
+            {t("Gemini is writing the summary…", "Gemini가 요약하는 중…")}
+          </small>
+        </>
       )}
     </section>
   );

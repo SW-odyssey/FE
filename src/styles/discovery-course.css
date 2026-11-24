@@ -102,6 +102,48 @@
   line-height: 24px;
 }
 
+.local-course-loading .local-course-location-note {
+  margin: 0;
+}
+
+.local-course-loading .local-course-stop-controls {
+  min-height: var(--local-course-leg-height);
+}
+
+.local-course-skeleton-leg {
+  width: 38%;
+  height: 9px;
+  margin-inline-start: calc(
+    var(--local-course-rail-width) + var(--local-course-gap)
+  );
+  border-radius: 8px;
+}
+
+.local-course-skeleton-copy {
+  display: grid;
+  flex: 1;
+  gap: 6px;
+}
+
+.local-course-skeleton-copy > span {
+  width: 70%;
+  height: 13px;
+  border-radius: 8px;
+}
+
+.local-course-skeleton-copy > span:first-child,
+.local-course-skeleton-copy > span:last-child {
+  width: 34%;
+  height: 8px;
+}
+
+.local-course-progress {
+  --local-skeleton-color: color-mix(in srgb, var(--local-plum) 36%, white);
+  height: 3px;
+  margin-block: -3px 0;
+  border-radius: 999px;
+}
+
 .local-course-footer {
   display: grid;
   gap: 4px;

@@ -64,6 +64,9 @@ export function CourseScreen({
   t,
 }: Props) {
   const { route, skipped, interruption } = autoCourse;
+  const loading =
+    autoCourse.status === "loading" || (autoCourse.pending && !route.length);
+  const updating = autoCourse.pending && !loading;
   const showAfternoon =
     courseStartSlot === "lunch" || courseStartSlot === "afternoon";
   const stops = route.map(({ place }) => place);
@@ -185,7 +188,14 @@ export function CourseScreen({
           )}
       </div>
 
-      {autoCourse.status !== "success" ? (
+      {updating && (
+        <p className="local-sr-only" role="status">
+          {t("Updating course…", "코스를 업데이트하는 중…")}
+        </p>
+      )}
+      {loading ? (
+        <CourseLoading t={t} />
+      ) : autoCourse.status !== "success" ? (
         <ResourceNotice
           status={autoCourse.status}
           retry={autoCourse.retry}
@@ -196,6 +206,12 @@ export function CourseScreen({
           className="local-course-itinerary"
           aria-busy={autoCourse.pending}
         >
+          {updating && (
+            <div
+              className="local-course-progress local-skeleton"
+              aria-hidden="true"
+            />
+          )}
           {route.length > 0 && (
             <div className="local-course-overview">
               <h2>{t("Visit order", "방문 순서")}</h2>
@@ -363,6 +379,45 @@ export function CourseScreen({
         {route.map(({ place }) => name(place)).join(", ")}
       </p>
     </div>
+  );
+}
+
+function CourseLoading({ t }: { t: Props["t"] }) {
+  return (
+    <section className="local-course-itinerary local-course-loading">
+      <div className="local-course-overview">
+        <h2>{t("Visit order", "방문 순서")}</h2>
+        <p className="local-course-location-note" role="status">
+          {t("Loading course…", "코스를 불러오는 중…")}
+        </p>
+      </div>
+      <ol className="local-course-timeline" aria-hidden="true">
+        {[0, 1, 2].map((stop) => (
+          <li
+            key={stop}
+            data-first={stop === 0 || undefined}
+            data-last={stop === 2 || undefined}
+          >
+            <div className="local-course-timeline-item">
+              <div className="local-course-stop-controls">
+                <span className="local-course-skeleton-leg local-skeleton" />
+              </div>
+              <div className="local-course-stop">
+                <span className="local-course-pin local-skeleton" />
+                <div className="local-course-stop-detail">
+                  <div className="local-photo local-skeleton" />
+                  <div className="local-course-skeleton-copy">
+                    <span className="local-skeleton" />
+                    <span className="local-skeleton" />
+                    <span className="local-skeleton" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }
 

@@ -47,6 +47,7 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
       });
       const q = input.query.trim().slice(0, 80);
       if (q) params.set("q", q);
+      if (input.language) params.set("lang", input.language);
       let data;
       try {
         data = await getV2Data<{
@@ -63,7 +64,11 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
     async getPlace(id, { signal, query } = {}) {
       if (!/^[1-9]\d{0,15}$/.test(id) || !Number.isSafeInteger(Number(id)))
         return previewDataSource.snapshot?.getPlace(id) ?? null;
-      const detail = await getCoursePlaceDetail(id, signal).catch((error) => {
+      const detail = await getCoursePlaceDetail(
+        id,
+        signal,
+        query?.language,
+      ).catch((error) => {
         if (error instanceof V2RequestError && error.status === 404)
           return null;
         throw error;

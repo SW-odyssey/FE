@@ -255,6 +255,7 @@ export function useDiscoveryController(
     visitDate: automaticCourseDate,
     initialLink: courseLink,
     options: courseOptions,
+    language,
     enabled: restored && inCourse,
   });
   const activeCourseLink = autoCourse.link ?? courseLink;
@@ -322,6 +323,7 @@ export function useDiscoveryController(
     spaces,
     visitDate: inCourse ? courseDate : selectedVisitDate,
     datasetId: inCourse ? activeCourseLink?.datasetId : undefined,
+    language,
   };
   const data = useDiscoveryData({
     source,
@@ -556,6 +558,8 @@ export function useDiscoveryController(
     setCategory(next);
   }
   function chooseLanguage(next: DiscoveryLanguage) {
+    if (next !== language && inCourse && activeCourseLink)
+      setCourseLink(activeCourseLink);
     setLanguage(next);
     try {
       localStorage.setItem(LANGUAGE_KEY, next);
