@@ -142,8 +142,14 @@ export function AreaVisitPatternCard({
           <select
             value={live ? weekday : day}
             onChange={(event) => {
-              if (live) setWeekday(event.currentTarget.value as ApiWeekday);
-              else setDay(event.currentTarget.value as VisitDayGroup);
+              if (live) {
+                const nextWeekday = event.currentTarget.value as ApiWeekday;
+                if (nextWeekday === weekday) return;
+                setResult(undefined);
+                setWeekday(nextWeekday);
+              } else {
+                setDay(event.currentTarget.value as VisitDayGroup);
+              }
             }}
           >
             {live
