@@ -2,19 +2,27 @@ import type { LocalPlace } from "./model.ts";
 
 export type CourseStop = Pick<
   LocalPlace,
-  "id" | "name" | "koreanName" | "area" | "category" | "image" | "lat" | "lng"
->;
+  | "id"
+  | "name"
+  | "koreanName"
+  | "area"
+  | "category"
+  | "courseKind"
+  | "image"
+  | "lat"
+  | "lng"
+> & { position?: number };
 
 export type CourseOptions = {
-  includeCafe: boolean;
-  includeBrowse: boolean;
-  includeLate: boolean;
+  afternoon: "cafe" | "shop";
+  lateNight: boolean;
+  walk: "default" | "short";
 };
 
 export const defaultCourseOptions: CourseOptions = {
-  includeCafe: true,
-  includeBrowse: false,
-  includeLate: false,
+  afternoon: "cafe",
+  lateNight: false,
+  walk: "default",
 };
 
 type GoogleMapsPlace = Pick<

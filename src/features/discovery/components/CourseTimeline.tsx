@@ -2,26 +2,26 @@
 
 import { useEffect, useState, type CSSProperties } from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
-import { distanceMeters } from "../../map/geometry";
-import type { CourseLeg } from "../auto-course";
+import type { CourseLeg } from "../data/course-api";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
-import { areaLabels, slotLabels } from "../presentation";
-import { Photo } from "./PlacePhoto";
+import type { VisitSlot } from "../model";
+import { slotLabels } from "../presentation";
+import { courseReasonText } from "./course-reason-copy";
 
 type Row = CourseLeg & {
   id: string;
   index: number;
-  distance?: number;
   exiting: boolean;
   entering?: boolean;
 };
 
 type Props = Pick<
   DiscoveryController,
-  "language" | "name" | "openPlace" | "t"
+  "language" | "kind" | "name" | "openPlace" | "t"
 > & {
   route: CourseLeg[];
-  formatDistance: Intl.NumberFormat;
+  pending: boolean;
+  changeSlot: (slot: VisitSlot) => void;
 };
 
 const rowTransitionMs = 240;
@@ -29,18 +29,18 @@ const rowTransitionMs = 240;
 function courseRows(route: CourseLeg[]): Row[] {
   return route.map((leg, index) => ({
     ...leg,
-    id: `${leg.slot}:${leg.place.category}`,
+    id: String(leg.position),
     index,
-    distance:
-      index > 0 ? distanceMeters(route[index - 1].place, leg.place) : undefined,
     exiting: false,
   }));
 }
 
 export function CourseTimeline({
   route,
-  formatDistance,
+  pending,
+  changeSlot,
   language,
+  kind,
   name,
   openPlace,
   t,
@@ -90,7 +90,20 @@ export function CourseTimeline({
       }
     >
       {timeline.rows.map(
-        ({ id, slot, place, index, distance, exiting, entering }) => (
+        ({
+          id,
+          slot,
+          place,
+          position,
+          index,
+          visitTime,
+          leaveTime,
+          walkMinutes,
+          hoursUnknown,
+          reasons,
+          exiting,
+          entering,
+        }) => (
           <li
             key={id}
             inert={exiting}
@@ -100,34 +113,75 @@ export function CourseTimeline({
             data-last={!exiting && index === route.length - 1 ? "" : undefined}
           >
             <div className="local-course-timeline-item">
-              {distance !== undefined && (
+              <div className="local-course-stop-controls">
                 <p className="local-course-distance">
-                  {t("Straight line", "직선")} {formatDistance.format(distance)}
+                  {index === 0
+                    ? t("From the start", "출발지에서")
+                    : t("From the previous stop", "이전 장소에서")}{" "}
+                  · {t("Est. walk", "예상 도보")} {walkMinutes}
+                  {t(" min", "분")}
                 </p>
-              )}
+                {route[index - 1]?.slot !== slot && (
+                  <button
+                    type="button"
+                    className="local-course-change-slot"
+                    disabled={pending}
+                    onClick={() => changeSlot(slot)}
+                    aria-label={`${slotLabels[language][slot]} · ${t("Change from this time", "이 시간대부터 바꾸기")}`}
+                  >
+                    {t("Change from here", "여기부터 바꾸기")}
+                  </button>
+                )}
+              </div>
               <div className="local-course-stop">
                 <span className="local-course-pin" aria-hidden="true">
-                  {index + 1}
+                  {position}
                 </span>
                 <button
                   className="local-course-stop-detail"
                   onClick={() => openPlace(place)}
                 >
-                  <Photo place={place} decorative />
+                  <span
+                    className="local-photo local-course-stop-placeholder"
+                    aria-hidden="true"
+                  >
+                    <LocalIcon
+                      name={
+                        place.category === "cafe"
+                          ? "coffee"
+                          : place.category === "culture"
+                            ? "compass"
+                            : "map-pin"
+                      }
+                      size={21}
+                    />
+                  </span>
                   <span className="local-place-info">
                     <span className="local-auto-stage">
-                      {place.category === "culture"
-                        ? t("Browse shops", "구경")
-                        : slot === "afternoon"
-                          ? t("Café", "카페")
-                          : slotLabels[language][slot]}
+                      {slotLabels[language][slot]} · {visitTime}–{leaveTime}
                     </span>
                     <strong>{name(place)}</strong>
-                    <span>{areaLabels[language][place.area]}</span>
+                    <span>{kind(place)}</span>
                   </span>
                   <LocalIcon name="chevron-right" size={16} />
                 </button>
               </div>
+              {hoursUnknown && (
+                <p className="local-course-hours">
+                  {t("Check opening hours", "영업시간 확인 필요")}
+                </p>
+              )}
+              {reasons.length > 0 && (
+                <details className="local-course-reasons">
+                  <summary>{t("Why this place", "고른 이유")}</summary>
+                  <ul>
+                    {reasons.map((reason) => {
+                      const text = courseReasonText(reason, language);
+                      return text && <li key={reason.code}>{text}</li>;
+                    })}
+                  </ul>
+                </details>
+              )}
             </div>
           </li>
         ),

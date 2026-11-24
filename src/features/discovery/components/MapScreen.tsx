@@ -25,6 +25,7 @@ type Props = Pick<
   | "mapScope"
   | "mapSelected"
   | "selected"
+  | "autoCourse"
   | "courseMapStops"
   | "navigate"
   | "openFilters"
@@ -75,6 +76,7 @@ export function MapScreen(props: Props) {
     retry,
     desktop,
     showCourse,
+    autoCourse,
     courseMapStops,
     selected,
     navigate,
@@ -269,16 +271,21 @@ export function MapScreen(props: Props) {
                   className="local-map-course-list"
                   aria-label={t("Visit order", "방문 순서")}
                 >
-                  {courseMapStops.map((place, index) => (
+                  {courseMapStops.map((place) => (
                     <li key={place.id}>
                       <button
                         className="local-course-stop-detail"
                         onClick={() => openPlace(place)}
                       >
                         <span className="local-course-pin" aria-hidden="true">
-                          {index + 1}
+                          {place.position}
                         </span>
-                        <Photo place={place} decorative />
+                        <span
+                          className="local-photo local-course-stop-placeholder"
+                          aria-hidden="true"
+                        >
+                          <LocalIcon name="map-pin" size={18} />
+                        </span>
                         <span className="local-place-info">
                           <strong>{name(place)}</strong>
                           <span>{kind(place)}</span>
@@ -289,17 +296,24 @@ export function MapScreen(props: Props) {
                   ))}
                 </ol>
               ) : (
-                <div className="local-empty-map">
-                  {t(
-                    "No course for these conditions",
-                    "이 조건에 맞는 코스가 없어요",
+                <div className="local-empty-map" role="status">
+                  {autoCourse.status === "loading"
+                    ? t("Loading places…", "장소를 불러오는 중…")
+                    : autoCourse.status === "error"
+                      ? t("Could not load places", "장소를 불러오지 못했어요")
+                      : t(
+                          "No course for these conditions",
+                          "이 조건에 맞는 코스가 없어요",
+                        )}
+                  {autoCourse.status === "error" && (
+                    <button
+                      type="button"
+                      className="local-secondary"
+                      onClick={autoCourse.retry}
+                    >
+                      {t("Try again", "다시 시도")}
+                    </button>
                   )}
-                  <button
-                    className="local-secondary"
-                    onClick={() => navigate("course")}
-                  >
-                    {t("View course", "코스 보기")}
-                  </button>
                 </div>
               )
             ) : status === "loading" || status === "error" ? (

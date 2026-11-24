@@ -150,6 +150,7 @@ export function MapDiagram({
         const label = names.get(stop.id);
         const point = points[index];
         const caption = captions?.get(stop.id);
+        const number = stop.position ?? index + 1;
         return (
           <button
             key={stop.id}
@@ -160,12 +161,12 @@ export function MapDiagram({
                 : `local-map-pin is-anchored-place ${selected ? "is-selected" : ""}`
             }
             style={{ left: point.x, top: point.y }}
-            aria-label={numbered ? `${index + 1}. ${label}` : label}
+            aria-label={numbered ? `${number}. ${label}` : label}
             aria-current={selected ? "true" : undefined}
             title={label}
             onClick={() => onSelect(stop)}
           >
-            {numbered ? index + 1 : <span className="local-location-dot" />}
+            {numbered ? number : <span className="local-location-dot" />}
             {caption && (
               <span
                 className={`local-map-caption is-${caption.side === "top" ? "above" : "below"}`}

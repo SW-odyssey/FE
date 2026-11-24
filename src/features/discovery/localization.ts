@@ -44,6 +44,84 @@ const copy: Record<string, readonly [string, string]> = {
   "Back to map": ["地図に戻る", "返回地图"],
   "Map preview": ["地図プレビュー", "地图预览"],
   "Apply filters": ["条件を適用", "应用条件"],
+  "Caf\u00e9 as first afternoon stop": [
+    "午後最初の立ち寄り先をカフェにする",
+    "下午第一站选咖啡馆",
+  ],
+  "Shop as first afternoon stop": [
+    "午後最初の立ち寄り先をお店にする",
+    "下午第一站选逛店",
+  ],
+  "Short walks": ["歩く距離を短く", "少走路"],
+  "No shops nearby. Try choosing a caf\u00e9.": [
+    "近くにお店がありません。カフェを選んでください。",
+    "附近没有适合逛的店铺，试试选择咖啡馆。",
+  ],
+  "Stop skipped": ["立ち寄り先をスキップ", "跳过此站"],
+  "No matching places nearby": [
+    "近くに条件に合う場所がありません",
+    "附近没有符合条件的地点",
+  ],
+  "No other places nearby": [
+    "近くに代わりの場所がありません",
+    "附近没有可替换的地点",
+  ],
+  "No places with confirmed hours": [
+    "営業時間が合う場所が見つかりませんでした",
+    "没有找到营业时间合适的地点",
+  ],
+  "Try rebuilding to check other places": [
+    "コースを作り直して別の場所を探してください",
+    "重新生成路线以查找其他地点",
+  ],
+  "Could not check hours. Try again shortly.": [
+    "営業時間を確認できませんでした。少し待って再試行してください。",
+    "无法验证营业时间，请稍后重试。",
+  ],
+  "Skipped to keep the route walkable": [
+    "徒歩でつなげにくい立ち寄り先をスキップしました",
+    "已跳过步行不便的地点",
+  ],
+  "Could not update the course": [
+    "コースを更新できませんでした",
+    "无法更新路线",
+  ],
+  "Change from this time": ["この時間帯から変更", "从此时段重新选择"],
+  "Change from here": ["ここから変更", "从这里重选"],
+  "From the start": ["出発地から", "从出发地"],
+  "From the previous stop": ["前の立ち寄り先から", "从上一站"],
+  "Est. walk": ["徒歩約", "预计步行"],
+  " min": ["分", "分钟"],
+  Activity: ["アクティビティ", "体验活动"],
+  Bar: ["バー", "酒吧"],
+  "Check opening hours": ["営業時間を要確認", "需要确认营业时间"],
+  "Why this place": ["この場所を選んだ理由", "推荐理由"],
+  "Nearby 50 m area ranks in the top {n}% for visits at this time": [
+    "この時間帯の周辺50m区画の訪問数は上位{n}%",
+    "此时段周边50米区域到访量排名前{n}%",
+  ],
+  "within business hours": ["営業時間内", "营业时间内"],
+  "The busiest time for this area": [
+    "この区画が最もにぎわう時間帯",
+    "此区域最繁忙的时段",
+  ],
+  "Area busiest at night": ["夜ににぎわうエリア", "夜间较热闹的街区"],
+  "Area busiest on weekend days": [
+    "週末の昼ににぎわうエリア",
+    "周末白天较热闹的街区",
+  ],
+  "Area busiest on weekday days": [
+    "平日の昼ににぎわうエリア",
+    "工作日白天较热闹的街区",
+  ],
+  "Area busy across different times": [
+    "どの時間帯もにぎわうエリア",
+    "各个时段都较热闹的街区",
+  ],
+  "One of {n} similarly scored places": [
+    "スコアが近い{n}候補の一つ",
+    "得分相近的{n}个候选地点之一",
+  ],
   "Course options": ["コースの設定", "行程安排"],
   "Course summary": ["コース概要", "路线概览"],
   Stops: ["立ち寄り先", "到访地点"],
