@@ -212,9 +212,11 @@ export function createMapOverlays(
           ? `${t("Zoom in", "확대")} ${placeCount(language, group.places.length)}`
           : group.kind === "cell"
             ? `${t("Choose a cell", "구역 선택")} ${placeCount(language, group.places.length)}`
-            : ko
-              ? place.koreanName
-              : place.name,
+            : group.kind === "overlap"
+              ? `${t("Show grouped places", "겹친 장소 보기")} ${placeCount(language, group.places.length)}`
+              : ko
+                ? place.koreanName
+                : place.name,
       );
       node.symbol.className =
         group.kind === "place" ? "local-location-dot" : "local-cluster-count";
@@ -226,7 +228,8 @@ export function createMapOverlays(
         event.stopPropagation();
         kakao.maps.event.preventMap();
         if (group.kind === "place") onSelect(place);
-        else if (group.kind === "cell") onGroupSelect?.(group);
+        else if (group.kind === "cell" || group.kind === "overlap")
+          onGroupSelect?.(group);
         else {
           const bounds = new kakao.maps.LatLngBounds();
           group.places.forEach((member) =>

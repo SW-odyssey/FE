@@ -135,10 +135,13 @@ export function MapDiagram({
         const active = Boolean(
           scope && group.places.some((place) => inMapScope(place, scope)),
         );
-        const select = group.kind === "cell";
-        const label = select
-          ? localText(language, "Choose a cell", "구역 선택")
-          : localText(language, "Zoom in", "확대");
+        const select = group.kind === "cell" || group.kind === "overlap";
+        const label =
+          group.kind === "overlap"
+            ? localText(language, "Show grouped places", "겹친 장소 보기")
+            : select
+              ? localText(language, "Choose a cell", "구역 선택")
+              : localText(language, "Zoom in", "확대");
         return (
           <button
             key={group.id}

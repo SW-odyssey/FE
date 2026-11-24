@@ -40,13 +40,24 @@ export type MapPlaceGroup = Coordinate & {
   places: LocalPlace[];
 };
 export type MapMarkerGroup = MapPlaceGroup & {
-  kind: "cluster" | "cell" | "place";
+  kind: "cluster" | "cell" | "overlap" | "place";
 };
+
+export function isOverlapScope(
+  scope: string | null | undefined,
+): scope is `overlap:${string}` {
+  return Boolean(scope?.startsWith("overlap:"));
+}
 
 export function inMapScope(
   place: LocalPlace,
   scope: string | null | undefined,
 ): boolean {
+  if (isOverlapScope(scope))
+    return scope
+      .slice("overlap:".length)
+      .split("|")
+      .includes(encodeURIComponent(place.id));
   return (
     !scope ||
     scope === `area:${place.area}` ||
@@ -119,7 +130,10 @@ export function groupMapMarkers(
     const point = project(group);
     return point ? [{ ...point, id: group.id }] : [];
   });
-  const radius = [34, 52, 80, 90][Math.max(0, Math.floor(level) - 1)] ?? 105;
+  const atMaxZoom = level <= 1;
+  const radius = atMaxZoom
+    ? 24
+    : ([52, 80, 90][Math.max(0, Math.floor(level) - 2)] ?? 105);
   return clusterScreenPlaces(points, {
     radius,
     selectedId: selectedId ? `place:${selectedId}` : undefined,
@@ -127,12 +141,13 @@ export function groupMapMarkers(
     if (memberIds.length === 1) return anchors.get(memberIds[0])!;
     const members = memberIds.flatMap((id) => anchors.get(id)!.places);
     const ids = members.map(({ id }) => encodeURIComponent(id)).sort();
+    const kind = atMaxZoom ? "overlap" : "cluster";
     return {
-      id: `cluster:${ids.join("|")}`,
+      id: `${kind}:${ids.join("|")}`,
       lat: members.reduce((sum, place) => sum + place.lat, 0) / members.length,
       lng: members.reduce((sum, place) => sum + place.lng, 0) / members.length,
       places: members,
-      kind: "cluster",
+      kind,
     };
   });
 }

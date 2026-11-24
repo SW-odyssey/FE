@@ -1,6 +1,7 @@
 "use client";
 import type * as React from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
+import { isOverlapScope } from "../../map/geometry";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { discoveryCopy } from "../recommendation-analysis";
 import { DiscoveryControls } from "./DiscoveryControls";
@@ -26,6 +27,7 @@ type Props = Pick<
   | "setFeaturedId"
   | "modal"
   | "clearMapScope"
+  | "mapScope"
 > &
   React.ComponentProps<typeof DiscoveryControls> & { mapScopeActive?: boolean };
 export function DiscoverScreen(props: Props) {
@@ -37,7 +39,10 @@ export function DiscoverScreen(props: Props) {
       {props.mapScopeActive && (
         <div className="local-scope-row">
           <span>
-            {t("Selected area", "선택한 구역")} · {visible.length}
+            {isOverlapScope(props.mapScope)
+              ? t("Overlapping places", "겹친 장소")
+              : t("Selected area", "선택한 구역")}{" "}
+            · {visible.length}
           </span>
           <button onClick={props.clearMapScope}>
             {t("Show all", "전체 보기")}
@@ -50,7 +55,7 @@ export function DiscoverScreen(props: Props) {
       {status === "loading" || status === "error" ? (
         <ResourceNotice status={status} retry={retry} t={t} />
       ) : visible.length > 0 ? (
-        query ? (
+        query || props.mapScopeActive ? (
           <div className="local-place-list">
             {visible.map((p) => renderPlaceRow(props, p))}
           </div>

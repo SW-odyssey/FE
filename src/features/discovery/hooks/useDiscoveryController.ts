@@ -630,6 +630,7 @@ export function useDiscoveryController(
     setMapScope(group.id);
     setMapId(null);
     setSheet("half");
+    if (desktop && selectedId) closePlace();
   }
   function clearMapScope() {
     setMapScope(null);
