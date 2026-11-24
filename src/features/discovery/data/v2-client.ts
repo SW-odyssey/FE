@@ -18,6 +18,7 @@ export const screenSlots: Record<ApiSlot, VisitSlot> = {
   late_night: "late",
 };
 const weekdays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
+export type ApiWeekday = (typeof weekdays)[number];
 
 /** Return the API weekday and slot for an applied Seoul calendar date. */
 export function v2Time(date: string, slot: VisitSlot) {

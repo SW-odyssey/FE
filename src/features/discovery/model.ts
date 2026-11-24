@@ -10,6 +10,7 @@ export type LocalPlace = {
   category: LocalCategory;
   courseKind?: CoursePlaceKind;
   cellId?: string;
+  sinceDate?: string;
   image: string;
   descriptionEn: string;
   descriptionKo: string;

@@ -9,6 +9,7 @@ import type {
   SpacePreference,
   VisitSlot,
 } from "../model";
+import type { ApiWeekday } from "./v2-client";
 /** UI selections already derived by the screen; the source does not read its clock. */
 export type DiscoveryQuery = {
   area: DiscoveryArea;
@@ -19,6 +20,7 @@ export type DiscoveryQuery = {
   origin: Coordinate | null;
   spaces: readonly SpacePreference[];
   visitDate?: string;
+  datasetId?: string;
 };
 export type DiscoveryQueryResult = {
   items: LocalPlace[];
@@ -51,8 +53,9 @@ export type AreaVisitPattern =
     }
   | {
       provenance: "live";
-      /** Relative heights for the selected Seoul weekday and this real cell. */
-      values: Record<VisitSlot, number>;
+      datasetId: string;
+      cellId: string;
+      weekday: ApiWeekday;
     };
 export type DiscoveryPlaceDetail = {
   place: LocalPlace;

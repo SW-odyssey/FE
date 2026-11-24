@@ -8,6 +8,8 @@ import type {
 } from "../model.ts";
 import { mapApiIdToDiscovery, type ApiSlot } from "./api-mapping.ts";
 import type { DiscoveryPlaceDetail } from "./types.ts";
+import { previewPlaceDetail } from "./preview.ts";
+import { localPlaces } from "./preview/places.ts";
 
 import {
   getPublishedDataset,
@@ -48,6 +50,7 @@ export type ApiPlace = Coordinate & {
   kind: CoursePlaceKind;
   googlePlaceId: string | null;
   cellId?: string;
+  sinceDate?: string | null;
 };
 
 type ApiCourseStop = {
@@ -132,6 +135,7 @@ export function v2Place(place: ApiPlace): LocalPlace {
     category: categories[place.kind],
     courseKind: place.kind,
     cellId: place.cellId,
+    sinceDate: place.sinceDate ?? undefined,
     image: "",
     descriptionEn: "",
     descriptionKo: "",
@@ -186,13 +190,20 @@ export async function getCoursePlaceDetail(
   const place = v2Place(
     await getV2Data<ApiPlace>(`places/${encodeURIComponent(id)}`, signal),
   );
+  const matched = place.googlePlaceId
+    ? localPlaces.find(
+        (candidate) => candidate.googlePlaceId === place.googlePlaceId,
+      )
+    : undefined;
+  const editorial = matched && previewPlaceDetail(matched);
   const empty = { ko: "", en: "", ja: "", zh: "" };
   return {
-    place,
+    place: { ...place, sourceUrl: editorial?.sourceUrl ?? place.sourceUrl },
     photos: [],
     summaries: empty,
-    descriptions: empty,
-    sourceUrl: place.sourceUrl,
+    descriptions: editorial?.descriptions ?? empty,
+    aiSummary: editorial?.aiSummary,
+    sourceUrl: editorial?.sourceUrl ?? place.sourceUrl,
     photoCredits: [],
   };
 }

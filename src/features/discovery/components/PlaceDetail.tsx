@@ -7,6 +7,8 @@ import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { areaLabels } from "../presentation";
 import { AreaVisitPatternCard } from "./AreaVisitPatternCard";
 import PhotoGallery from "./PhotoGallery";
+import { PlaceAiSummary } from "./PlaceAiSummary";
+import { PlaceBusinessInfo } from "./PlaceBusinessInfo";
 type Props = Pick<
   DiscoveryController,
   | "aiSummary"
@@ -41,13 +43,14 @@ export function PlaceDetail(props: Props) {
     cellReasons,
     t,
   } = props;
-  const { media, pending } = usePlaceMedia(selected);
+  const { media, pending } = usePlaceMedia(selected, language);
   const photos = media?.photoList.length
     ? media.photoList
     : photosFor(selected);
   const address = media?.address || selected.address;
   const area = selected.area && areaLabels[language][selected.area];
-  const about = description(selected);
+  const editorial = description(selected);
+  const about = editorial || media?.business?.about;
   const photoCredits = [
     ...new Set(
       photosFor(selected)
@@ -87,6 +90,19 @@ export function PlaceDetail(props: Props) {
                   {t("Original source", "원문 보기")} ↗
                 </a>
               )}
+              {!editorial &&
+                media?.business?.about &&
+                (media.business.mapsUrl ? (
+                  <a
+                    href={media.business.mapsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Google Maps ↗
+                  </a>
+                ) : (
+                  <span>Google Maps</span>
+                ))}
               {photoCredits.length > 0 && (
                 <span>
                   {t("Photo", "사진")} {photoCredits.join(" / ")}
@@ -95,24 +111,28 @@ export function PlaceDetail(props: Props) {
             </small>
           </section>
         )}
+        {media?.business && (
+          <PlaceBusinessInfo business={media.business} language={language} />
+        )}
         {(visitPattern || Boolean(cellReasons?.length)) && (
           <AreaVisitPatternCard
-            key={selectedVisitDate}
+            key={
+              visitPattern?.provenance === "live"
+                ? `${visitPattern.datasetId}/${selectedVisitDate}`
+                : selectedVisitDate
+            }
             language={language}
             pattern={visitPattern}
             reasons={cellReasons}
             visitDate={selectedVisitDate}
           />
         )}
-        {aiSummary && (
-          <section className="local-detail-section">
-            <h2>{t("AI place summary", "AI 매장 요약")}</h2>
-            <p>{aiSummary}</p>
-            <small className="local-place-ai-note">
-              {t("Generated with Gemini", "Gemini로 자동 생성")}
-            </small>
-          </section>
-        )}
+        <PlaceAiSummary
+          id={selected.id}
+          sinceDate={selected.sinceDate}
+          editorialSummary={aiSummary}
+          language={language}
+        />
         <section className="local-detail-section">
           <h2>{t("Getting there", "위치")}</h2>
           {address ? (
