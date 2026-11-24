@@ -73,7 +73,7 @@ export async function handlePlaceSummary(
             parts: [
               {
                 text: JSON.stringify({
-                  placeName: place.name,
+                  placeName: language === "ko" ? place.name : undefined,
                   category: place.kind && placeCategories[place.kind],
                   permitRecordYear: year,
                 }),
