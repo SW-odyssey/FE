@@ -61,7 +61,10 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
       const items = data.items
         .filter(
           ({ kind }) =>
-            kind === "cafe" || kind === "korean" || kind === "other",
+            kind === "cafe" ||
+            kind === "korean" ||
+            kind === "other" ||
+            (!q && kind === "bar"),
         )
         .map(v2Place);
       return { items, total: items.length };

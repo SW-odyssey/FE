@@ -3,7 +3,7 @@ import type {
   DiscoveryLanguage,
   LocalPlace,
 } from "../discovery/model.ts";
-import type { MapPlaceGroup } from "./geometry.ts";
+import { distanceMeters, type MapPlaceGroup } from "./geometry.ts";
 import type { CourseStop } from "../discovery/course.ts";
 
 export type MapCamera = Coordinate & {
@@ -13,6 +13,23 @@ export type MapCamera = Coordinate & {
 };
 export type MapViewportInsets = { top: number; bottom: number };
 export const previewMapInsets: MapViewportInsets = { top: 240, bottom: 86 };
+
+export type MapSearchViewport = {
+  center: Coordinate;
+  contains: (point: Coordinate) => boolean;
+};
+
+/** Offer a new search after a substantial pan into a viewport with no current results. */
+export function canSearchMapViewport(
+  anchor: Coordinate,
+  viewport: MapSearchViewport,
+  places: readonly Coordinate[],
+): boolean {
+  return (
+    distanceMeters(anchor, viewport.center) >= 120 &&
+    !places.some((place) => viewport.contains(place))
+  );
+}
 
 export type ExploreMapProps = {
   places: LocalPlace[];
@@ -32,12 +49,15 @@ export type ExploreMapProps = {
   scope?: string | null;
   onGroupSelect?: (group: MapPlaceGroup) => void;
   courseStops?: readonly CourseStop[];
+  hideCourseLine?: boolean;
   onCourseStopSelect?: (stop: CourseStop) => void;
 };
 export type ExploreMapOptions = ExploreMapProps & {
   sheetInset: number;
   viewportScale: number;
+  onViewportDragStart?: () => void;
   onViewportDrag?: () => void;
+  onViewportIdle?: () => void;
 };
 export type DisposableMapSession = { dispose: () => void };
 export type ExploreMapSession = DisposableMapSession & {
@@ -47,7 +67,7 @@ export type ExploreMapSession = DisposableMapSession & {
   zoomBy: (delta: number) => void;
   setCurrentLocation: (point: Coordinate) => void;
   centerOn: (point: Coordinate) => void;
-  getCenter: () => Coordinate | null;
+  getSearchViewport: () => MapSearchViewport | null;
 };
 
 /** Restore a camera only for the same ordered recommendation collection.

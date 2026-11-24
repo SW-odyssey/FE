@@ -2,6 +2,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Coordinate } from "../discovery/model.ts";
 import {
+  canSearchMapViewport,
   type ExploreMapOptions,
   type ExploreMapProps,
   type ExploreMapSession,
@@ -34,7 +35,11 @@ export function useExploreMap(props: ExploreMapProps) {
   const [error, setError] = useState(false);
   const [zoom, setZoom] = useState(5);
   const [retry, setRetry] = useState(0);
-  const [draggedPlaces, setDraggedPlaces] =
+  const dragAnchor = useRef<{
+    places: ExploreMapProps["places"];
+    center: Coordinate;
+  }>(null);
+  const [searchablePlaces, setSearchablePlaces] =
     useState<ExploreMapProps["places"]>();
   const displayed = props.courseStops ?? props.places;
   const fitKey = JSON.stringify(
@@ -48,13 +53,32 @@ export function useExploreMap(props: ExploreMapProps) {
       ])
     : null;
   useEffect(() => {
+    const canSearch = () => {
+      const { onSearchArea, places } = options.current;
+      const viewport = session.current?.getSearchViewport();
+      const anchor = dragAnchor.current;
+      return (
+        onSearchArea &&
+        viewport &&
+        anchor?.places === places &&
+        canSearchMapViewport(anchor.center, viewport, places)
+      );
+    };
     const read = (): ExploreMapOptions => ({
       ...options.current,
       onSelect: (place) => options.current.onSelect(place),
       onGroupSelect: (group) => options.current.onGroupSelect?.(group),
+      onViewportDragStart: () => {
+        const { onSearchArea, places } = options.current;
+        if (!onSearchArea || dragAnchor.current?.places === places) return;
+        const viewport = session.current?.getSearchViewport();
+        if (viewport) dragAnchor.current = { places, center: viewport.center };
+      },
       onViewportDrag: () => {
-        if (options.current.onSearchArea)
-          setDraggedPlaces(options.current.places);
+        setSearchablePlaces(canSearch() ? options.current.places : undefined);
+      },
+      onViewportIdle: () => {
+        if (dragAnchor.current && !canSearch()) setSearchablePlaces(undefined);
       },
     });
     return attachPreferredMapSession(
@@ -80,6 +104,7 @@ export function useExploreMap(props: ExploreMapProps) {
   }, [
     props.places,
     props.courseStops,
+    props.hideCourseLine,
     props.selected,
     props.language,
     props.scope,
@@ -112,19 +137,22 @@ export function useExploreMap(props: ExploreMapProps) {
     },
     zoomBy: (delta: number) => session.current?.zoomBy(delta),
     fitRecommendations: () => {
-      setDraggedPlaces(undefined);
+      dragAnchor.current = null;
+      setSearchablePlaces(undefined);
       session.current?.fitRecommendations();
     },
     centerOn: (point: Coordinate) => {
-      setDraggedPlaces(undefined);
+      dragAnchor.current = null;
+      setSearchablePlaces(undefined);
       session.current?.centerOn(point);
     },
     canSearchArea:
-      ready && Boolean(props.onSearchArea) && draggedPlaces === props.places,
+      ready && Boolean(props.onSearchArea) && searchablePlaces === props.places,
     searchArea: () => {
-      const point = session.current?.getCenter();
+      const point = session.current?.getSearchViewport()?.center;
       if (!point) return;
-      setDraggedPlaces(undefined);
+      dragAnchor.current = null;
+      setSearchablePlaces(undefined);
       props.onSearchArea?.(point);
     },
   };

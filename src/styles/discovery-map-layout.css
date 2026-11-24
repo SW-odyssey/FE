@@ -368,12 +368,6 @@
     border-inline-start: 1px solid var(--refresh-line);
   }
 
-  .local-web.is-desktop-map-layout .local-map-page .local-map-context {
-    top: var(--local-map-edge);
-    max-width: none;
-    pointer-events: none;
-  }
-
   .local-web.is-desktop-map-layout .local-map-page .local-map-tools {
     top: 0;
     gap: 8px;
@@ -396,24 +390,6 @@
   .local-web.is-desktop-map-layout .local-map-chrome .local-refined-map-status {
     top: 50px;
     width: fit-content;
-  }
-
-  .local-desktop-map-title {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 44px;
-    padding-inline: 14px;
-    border: 1px solid var(--refresh-line);
-    border-radius: var(--r-pill);
-    background: var(--refresh-card);
-    box-shadow: var(--refresh-shadow);
-    font-size: 14px;
-    font-weight: 700;
-  }
-
-  .local-desktop-map-title > .local-icon {
-    color: var(--local-plum);
   }
 
   .is-desktop-map-layout > .local-modal-layer {

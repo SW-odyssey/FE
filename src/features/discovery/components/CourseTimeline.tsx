@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties, type RefObject } from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { CourseLeg } from "../data/course-api";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
@@ -11,10 +11,16 @@ import { Photo } from "./PlacePhoto";
 type Row = CourseLeg & {
   id: string;
   index: number;
+  changeFromHere: boolean;
   exiting: boolean;
   entering?: boolean;
-  reveal?: "incoming" | "settling";
-  previous?: CourseLeg;
+};
+
+type Timeline = {
+  route: CourseLeg[];
+  rebuildVersion: number;
+  rows: Row[];
+  rebuildPhase?: "leaving" | "arriving";
 };
 
 type Props = Pick<
@@ -25,18 +31,22 @@ type Props = Pick<
   formatDistance: Intl.NumberFormat;
   pending: boolean;
   rebuildVersion: number;
+  scrollOnRebuild?: RefObject<HTMLDivElement | null>;
   changeSlot: (slot: VisitSlot) => void;
 };
 
 const rowTransitionMs = 240;
-const rebuildTransitionMs = 220;
-const rebuildStaggerMs = 60;
+const rebuildExitMs = 140;
+const rebuildEntryMs = 200;
+const rebuildStaggerMs = 76;
+const maximumScrollWaitMs = 520;
 
 function courseRows(route: CourseLeg[]): Row[] {
   return route.map((leg, index) => ({
     ...leg,
     id: String(leg.position),
     index,
+    changeFromHere: index > 0 && route[index - 1].slot !== leg.slot,
     exiting: false,
   }));
 }
@@ -46,6 +56,7 @@ export function CourseTimeline({
   formatDistance,
   pending,
   rebuildVersion,
+  scrollOnRebuild,
   changeSlot,
   language,
   kind,
@@ -53,7 +64,7 @@ export function CourseTimeline({
   openPlace,
   t,
 }: Props) {
-  const [timeline, setTimeline] = useState(() => ({
+  const [timeline, setTimeline] = useState<Timeline>(() => ({
     route,
     rebuildVersion,
     rows: courseRows(route),
@@ -61,87 +72,97 @@ export function CourseTimeline({
   if (timeline.route !== route) {
     const rebuilt =
       rebuildVersion > 0 && rebuildVersion !== timeline.rebuildVersion;
-    const previousRows = new Map(
-      timeline.rows.filter((row) => !row.exiting).map((row) => [row.id, row]),
-    );
-    const rows = courseRows(route).map((row) => {
-      const previous = previousRows.get(row.id);
-      const reveal = rebuilt
-        ? previous?.place.id === row.place.id
-          ? ("settling" as const)
-          : ("incoming" as const)
-        : undefined;
-      return {
+    const previousRows = timeline.rows.filter((row) => !row.exiting);
+    if (rebuilt) {
+      setTimeline({
+        route,
+        rebuildVersion,
+        rows: previousRows.length ? previousRows : courseRows(route),
+        rebuildPhase: previousRows.length ? "leaving" : "arriving",
+      });
+    } else {
+      const previousIds = new Set(previousRows.map(({ id }) => id));
+      const rows = courseRows(route).map((row) => ({
         ...row,
-        entering: !rebuilt && !previous,
-        reveal,
-        previous: reveal === "incoming" ? previous : undefined,
-      };
-    });
-    const nextIds = new Set(rows.map(({ id }) => id));
-    timeline.rows.forEach((row, index) => {
-      if (!nextIds.has(row.id))
-        rows.splice(index, 0, {
-          ...row,
-          entering: false,
-          exiting: true,
-          reveal: undefined,
-          previous: undefined,
-        });
-    });
-    setTimeline({ route, rebuildVersion, rows });
+        entering: !previousIds.has(row.id),
+      }));
+      const nextIds = new Set(rows.map(({ id }) => id));
+      timeline.rows.forEach((row, index) => {
+        if (!nextIds.has(row.id))
+          rows.splice(index, 0, { ...row, entering: false, exiting: true });
+      });
+      setTimeline({ route, rebuildVersion, rows });
+    }
   }
 
   useEffect(() => {
-    const lastReveal = timeline.rows.findLast((row) => row.reveal);
-    if (!lastReveal && !timeline.rows.some(({ exiting }) => exiting)) return;
+    const { rebuildPhase, rows, route } = timeline;
+    if (!rebuildPhase && !rows.some(({ exiting }) => exiting)) return;
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const timer = window.setTimeout(
-      () =>
-        setTimeline((current) => ({
+    const scroller =
+      rebuildPhase === "leaving" ? scrollOnRebuild?.current : null;
+    const startedAt = performance.now();
+    scroller?.scrollTo({
+      top: 0,
+      behavior: reducedMotion ? "instant" : "smooth",
+    });
+    const duration =
+      rebuildPhase === "leaving"
+        ? rebuildExitMs
+        : rebuildPhase === "arriving"
+          ? rebuildEntryMs + Math.max(rows.length - 1, 0) * rebuildStaggerMs
+          : rowTransitionMs;
+    let timer: number;
+    const advance = () => {
+      if (
+        !reducedMotion &&
+        scroller &&
+        scroller.scrollTop > 2 &&
+        performance.now() - startedAt < maximumScrollWaitMs
+      ) {
+        timer = window.setTimeout(advance, 32);
+        return;
+      }
+      setTimeline((current) => {
+        if (current !== timeline) return current;
+        if (rebuildPhase === "leaving") {
+          return {
+            ...current,
+            rows: courseRows(route),
+            rebuildPhase: reducedMotion ? undefined : "arriving",
+          };
+        }
+        return {
           ...current,
-          rows: current.rows
-            .filter(({ exiting }) => !exiting)
-            .map((row) => ({ ...row, reveal: undefined, previous: undefined })),
-        })),
-      reducedMotion
-        ? 0
-        : (lastReveal
-            ? rebuildTransitionMs + lastReveal.index * rebuildStaggerMs
-            : rowTransitionMs) + 32,
-    );
+          rows: rows.filter(({ exiting }) => !exiting),
+          rebuildPhase: undefined,
+        };
+      });
+    };
+    timer = window.setTimeout(advance, reducedMotion ? 0 : duration + 16);
     return () => window.clearTimeout(timer);
-  }, [timeline]);
+  }, [timeline, scrollOnRebuild]);
 
-  const rebuilding = timeline.rows.some((row) => row.reveal);
-  function renderStop(
-    {
-      slot,
-      place,
-      position,
-      walkMinutes,
-      hoursUnknown,
-      distanceMeters,
-    }: CourseLeg,
-    index: number,
-    exiting: boolean,
-    motion?: Row["reveal"] | "outgoing",
-  ) {
+  const lastStop = timeline.rows.findLast(({ exiting }) => !exiting);
+  function renderStop({
+    slot,
+    place,
+    position,
+    walkMinutes,
+    hoursUnknown,
+    distanceMeters,
+    changeFromHere,
+    exiting,
+  }: Row) {
     return (
-      <div
-        key={place.id}
-        className="local-course-row-content"
-        data-rebuild-motion={motion}
-        inert={motion === "outgoing"}
-        aria-hidden={motion === "outgoing" || undefined}
-      >
+      <div key={place.id} className="local-course-row-content">
         <div className="local-course-stop-controls">
           <p className="local-course-distance">
             {`${t("Est. walk", "예상 도보")} ${walkMinutes}${t(" min", "분")} (${t("Straight line", "직선 거리")} ${formatDistance.format(distanceMeters)})`}
           </p>
-          {!exiting && index > 0 && route[index - 1]?.slot !== slot && (
+          {!exiting && changeFromHere && (
             <button
               type="button"
               className="local-course-change-slot"
@@ -187,7 +208,9 @@ export function CourseTimeline({
                       </span>
                     )}
                   </span>
-                  {attribution}
+                  <span className="local-course-photo-credit">
+                    {attribution}
+                  </span>
                 </span>
               )}
             />
@@ -201,39 +224,31 @@ export function CourseTimeline({
   return (
     <ol
       className="local-course-timeline"
-      data-rebuilding={rebuilding || undefined}
+      data-rebuild-phase={timeline.rebuildPhase}
       aria-label={t("Visit order", "방문 순서")}
       style={
         {
           "--local-course-row-duration": `${rowTransitionMs}ms`,
-          "--local-course-rebuild-duration": `${rebuildTransitionMs}ms`,
+          "--local-course-rebuild-exit": `${rebuildExitMs}ms`,
+          "--local-course-rebuild-entry": `${rebuildEntryMs}ms`,
+          "--local-course-rebuild-stagger": `${rebuildStaggerMs}ms`,
         } as CSSProperties
       }
     >
       {timeline.rows.map((row) => (
         <li
           key={row.id}
-          inert={row.exiting}
+          inert={row.exiting || timeline.rebuildPhase === "leaving"}
           data-exiting={row.exiting ? "" : undefined}
           data-entering={row.entering ? "" : undefined}
           data-first={!row.exiting && row.index === 0 ? "" : undefined}
-          data-last={
-            !row.exiting && row.index === route.length - 1 ? "" : undefined
-          }
+          data-last={row === lastStop ? "" : undefined}
         >
           <div
             className="local-course-timeline-item"
-            style={
-              row.reveal
-                ? ({
-                    "--local-course-rebuild-delay": `${row.index * rebuildStaggerMs}ms`,
-                  } as CSSProperties)
-                : undefined
-            }
+            style={{ "--local-course-stop-index": row.index } as CSSProperties}
           >
-            {row.previous &&
-              renderStop(row.previous, row.index, false, "outgoing")}
-            {renderStop(row, row.index, row.exiting, row.reveal)}
+            {renderStop(row)}
           </div>
         </li>
       ))}

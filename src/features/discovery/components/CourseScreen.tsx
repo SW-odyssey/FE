@@ -206,12 +206,6 @@ export function CourseScreen({
           className="local-course-itinerary"
           aria-busy={autoCourse.pending}
         >
-          {updating && (
-            <div
-              className="local-course-progress local-skeleton"
-              aria-hidden="true"
-            />
-          )}
           {route.length > 0 && (
             <div className="local-course-overview">
               <h2>{t("Visit order", "방문 순서")}</h2>
@@ -241,6 +235,7 @@ export function CourseScreen({
             pending={autoCourse.pending}
             route={route}
             rebuildVersion={autoCourse.rebuildVersion}
+            scrollOnRebuild={desktop ? undefined : scroll}
             formatDistance={formatDistance}
             language={language}
             name={name}

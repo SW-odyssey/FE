@@ -125,18 +125,10 @@
 
   .local-web
     .local-map-context
-    > :is(
-      .local-course-map-header,
-      .local-desktop-map-title,
-      .local-map-mobile-tools
-    ),
+    > :is(.local-course-map-header, .local-map-mobile-tools),
   .local-web .local-scope-row,
   .local-web .local-place-ai > :is(p, .local-place-ai-credits) {
     animation: local-view-in 200ms var(--local-ease-out);
-  }
-
-  .local-web .local-map-diagram polyline {
-    animation: local-photo-in 180ms ease-out;
   }
 
   .local-web .local-map-course-list {
