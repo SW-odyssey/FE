@@ -77,3 +77,60 @@ test("course adapter loads the published batch and keeps server positions and em
     reason: "NO_NEARBY_MATCH",
   });
 });
+
+test("changing a slot uses the previous stop and excludes the visited and replaced places", async (t) => {
+  const { replaceCourseSuffix } =
+    await import("../src/features/discovery/data/course-replacement.ts");
+  const urls: URL[] = [];
+  const stop = (position: number, slot: string, id: number) => ({
+    position,
+    slot,
+    visitTime: "12:00",
+    leaveTime: "12:50",
+    walkMinutes: 4,
+    hoursUnknown: false,
+    reasons: [],
+    place: {
+      id,
+      name: String(id),
+      kind: "korean",
+      lat: 37.56,
+      lng: 126.99,
+      distanceMeters: 200,
+      googlePlaceId: null,
+    },
+  });
+  t.mock.method(globalThis, "fetch", async (url: URL) => {
+    urls.push(url);
+    return Response.json({
+      success: true,
+      data: {
+        status: "COMPLETE",
+        context: { datasetId: "published" },
+        seed: 7,
+        stops:
+          urls.length === 1
+            ? [stop(1, "lunch", 11), stop(4, "dinner", 44)]
+            : [stop(4, "dinner", 45), stop(5, "dinner", 55)],
+        skipped: [],
+        interruption: null,
+      },
+    });
+  });
+  const { signal } = new AbortController();
+  const course = await getCourse(request, signal);
+  const result = await replaceCourseSuffix(
+    request,
+    course,
+    { slot: "evening", excludeIds: ["44"] },
+    signal,
+  );
+  assert.equal(urls[1].searchParams.get("lat"), "37.56");
+  assert.equal(urls[1].searchParams.get("lng"), "126.99");
+  assert.equal(urls[1].searchParams.get("excludeIds"), "11,44");
+  assert.equal(urls[1].searchParams.get("seed"), "7");
+  assert.deepEqual(
+    result?.route.map(({ place }) => place.id),
+    ["11", "45", "55"],
+  );
+});

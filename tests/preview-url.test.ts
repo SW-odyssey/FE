@@ -415,3 +415,27 @@ test("duplicate query keys use their first value, matching URLSearchParams resto
   assert.equal(state.query, "first");
   assert.deepEqual(state.spaces, ["retro"]);
 });
+
+test("course map URLs recover the generated seed and suffix selections", async () => {
+  const { readCourseLink, writeCourseLink } =
+    await import("../src/features/discovery/state/course-url.ts");
+  const link = {
+    seed: Number.MAX_SAFE_INTEGER,
+    datasetId: "2025-12-published",
+    visitDate: "2026-11-27",
+    startSlot: "lunch" as const,
+    replacements: [{ slot: "evening" as const, excludeIds: ["44", "55"] }],
+  };
+  const params = new URLSearchParams("view=map&layer=course");
+  writeCourseLink(params, link);
+  assert.deepEqual(readCourseLink(params), link);
+  assert.deepEqual(
+    readPreviewUrl(params.toString(), now, null).courseLink,
+    link,
+  );
+  params.delete("layer");
+  assert.equal(
+    readPreviewUrl(params.toString(), now, null).courseLink,
+    undefined,
+  );
+});

@@ -5,70 +5,211 @@ import {
   courseOrigin,
   getCourse,
   getCourseDataset,
+  type CourseRequest,
   type CourseResult,
 } from "../data/course-api";
+import {
+  appendCourseReplacement,
+  courseReplacement,
+  replaceCourseSuffix,
+} from "../data/course-replacement";
 import { createLatestRequest } from "../data/latest-request";
 import type { Coordinate, DiscoveryArea, VisitSlot } from "../model";
+import type { CourseLink } from "../state/course-url";
 
 const emptyRoute: CourseResult["route"] = [];
 const emptySkipped: CourseResult["skipped"] = [];
 
-/** Resolve the current course selection against the published recommendation API. */
+type LoadedCourse = {
+  result: CourseResult;
+  link: CourseLink;
+};
+
+type CourseState = {
+  key: string;
+  loaded: LoadedCourse | null;
+  pending: boolean;
+  error?: "load" | "replace" | "no-replacement";
+};
+
+/** Load, replay, or replace the selected itinerary while ignoring obsolete requests. */
 export function useCourseRecommendations({
   area,
   origin,
   slot,
   visitDate,
+  initialLink,
   enabled,
 }: {
   area: DiscoveryArea;
   origin: Coordinate | null;
   slot: VisitSlot;
   visitDate: string;
+  initialLink?: CourseLink;
   enabled: boolean;
 }) {
   const { lat, lng } = origin ?? courseOrigin(area);
+  const start = initialLink?.startSlot ?? slot;
+  const date = initialLink?.visitDate ?? visitDate;
   const [attempt, setAttempt] = useState(0);
-  const key = JSON.stringify([lat, lng, slot, visitDate, attempt]);
-  const [response, setResponse] = useState<{
-    key: string;
-    value: CourseResult | null;
-  }>();
-  const lane = useMemo(() => createLatestRequest<CourseResult>(), []);
+  const key = JSON.stringify([lat, lng, start, date, initialLink, attempt]);
+  const [state, setState] = useState<CourseState>();
+  const latest = useRef<CourseState>(undefined);
+  const lane = useMemo(() => createLatestRequest<LoadedCourse | null>(), []);
   const dataset = useRef<string | null>(null);
+
   useEffect(() => {
     if (!enabled) return;
+    if (latest.current?.key === key && !latest.current.pending) return;
     return lane.run(
       async (signal) => {
-        const datasetId = dataset.current ?? (await getCourseDataset(signal));
+        const datasetId =
+          initialLink?.datasetId ??
+          dataset.current ??
+          (await getCourseDataset(signal));
         signal.throwIfAborted();
-        dataset.current = datasetId;
-        return getCourse(
-          { datasetId, origin: { lat, lng }, slot, visitDate },
-          signal,
-        );
+        if (!initialLink?.datasetId) dataset.current = datasetId;
+        const request = {
+          datasetId,
+          origin: { lat, lng },
+          slot: start,
+          visitDate: date,
+          seed: initialLink?.seed,
+        };
+        let result = await getCourse(request, signal);
+        const replacements = [];
+        for (const change of initialLink?.replacements ?? []) {
+          const suffix = await replaceCourseSuffix(
+            request,
+            result,
+            change,
+            signal,
+          );
+          if (!suffix) break;
+          result = suffix;
+          replacements.push(change);
+        }
+        return {
+          result,
+          link: {
+            seed: result.seed,
+            datasetId,
+            visitDate: date,
+            startSlot: start,
+            replacements,
+          },
+        };
       },
       {
-        resolve: (value) => setResponse({ key, value }),
+        resolve: (loaded) => {
+          const next = { key, loaded, pending: false };
+          latest.current = next;
+          setState(next);
+        },
         reject: () => {
           dataset.current = null;
-          setResponse({ key, value: null });
+          const next = {
+            key,
+            loaded: null,
+            pending: false,
+            error: "load",
+          } as const;
+          latest.current = next;
+          setState(next);
         },
       },
     );
-  }, [enabled, key, lane, lat, lng, slot, visitDate]);
+  }, [enabled, key, lane, lat, lng, start, date, initialLink]);
 
-  const current = response?.key === key ? response : undefined;
-  const result = current?.value;
+  useEffect(() => lane.cancel, [enabled, key, lane]);
+
+  const current = state?.key === key ? state : undefined;
+  const loaded = current?.loaded;
+  const result = loaded?.result;
+
+  function regenerate(slot?: VisitSlot) {
+    if (!loaded || current.pending) return;
+    const request: CourseRequest = {
+      datasetId: loaded.result.datasetId,
+      origin: { lat, lng },
+      slot: start,
+      visitDate: date,
+    };
+    const pending = { ...current, pending: true, error: undefined };
+    latest.current = pending;
+    setState(pending);
+    lane.run(
+      async (signal) => {
+        if (slot) {
+          const change = courseReplacement(loaded.result, slot);
+          const result = await replaceCourseSuffix(
+            request,
+            loaded.result,
+            change,
+            signal,
+          );
+          return (
+            result && {
+              result,
+              link: {
+                ...loaded.link,
+                replacements: appendCourseReplacement(
+                  loaded.link.replacements,
+                  change,
+                ),
+              },
+            }
+          );
+        }
+        const seed =
+          loaded.result.seed === Number.MAX_SAFE_INTEGER
+            ? 1
+            : loaded.result.seed + 1;
+        const result = await getCourse({ ...request, seed }, signal);
+        return {
+          result,
+          link: { ...loaded.link, seed: result.seed, replacements: [] },
+        };
+      },
+      {
+        resolve: (replacement) => {
+          const next = {
+            key,
+            loaded: replacement ?? loaded,
+            pending: false,
+            error: replacement ? undefined : ("no-replacement" as const),
+          };
+          latest.current = next;
+          setState(next);
+        },
+        reject: () => {
+          const next = {
+            key,
+            loaded,
+            pending: false,
+            error: "replace",
+          } as const;
+          latest.current = next;
+          setState(next);
+        },
+      },
+    );
+  }
+
   return {
     route: result?.route ?? emptyRoute,
     skipped: result?.skipped ?? emptySkipped,
     interruption: result?.interruption ?? null,
+    pending: current?.pending ?? false,
+    error: current?.error,
+    link: loaded?.link,
+    canRegenerate: Boolean(loaded),
     status: !current
       ? ("loading" as const)
-      : result
+      : loaded
         ? ("success" as const)
         : ("error" as const),
     retry: () => setAttempt((value) => value + 1),
+    regenerate,
   };
 }

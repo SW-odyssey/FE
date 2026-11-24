@@ -4,6 +4,7 @@ import { useEffect, useState, type CSSProperties } from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { CourseLeg } from "../data/course-api";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
+import type { VisitSlot } from "../model";
 import { slotLabels } from "../presentation";
 
 type Row = CourseLeg & {
@@ -18,6 +19,8 @@ type Props = Pick<
   "language" | "name" | "openPlace" | "t"
 > & {
   route: CourseLeg[];
+  pending: boolean;
+  changeSlot: (slot: VisitSlot) => void;
 };
 
 const rowTransitionMs = 240;
@@ -31,7 +34,15 @@ function courseRows(route: CourseLeg[]): Row[] {
   }));
 }
 
-export function CourseTimeline({ route, language, name, openPlace, t }: Props) {
+export function CourseTimeline({
+  route,
+  pending,
+  changeSlot,
+  language,
+  name,
+  openPlace,
+  t,
+}: Props) {
   const [timeline, setTimeline] = useState(() => ({
     route,
     rows: courseRows(route),
@@ -98,13 +109,26 @@ export function CourseTimeline({ route, language, name, openPlace, t }: Props) {
             data-last={!exiting && index === route.length - 1 ? "" : undefined}
           >
             <div className="local-course-timeline-item">
-              <p className="local-course-distance">
-                {index === 0
-                  ? t("From the start", "출발지에서")
-                  : t("From the previous stop", "이전 장소에서")}{" "}
-                · {t("Est. walk", "예상 도보")} {walkMinutes}
-                {t(" min", "분")}
-              </p>
+              <div className="local-course-stop-controls">
+                <p className="local-course-distance">
+                  {index === 0
+                    ? t("From the start", "출발지에서")
+                    : t("From the previous stop", "이전 장소에서")}{" "}
+                  · {t("Est. walk", "예상 도보")} {walkMinutes}
+                  {t(" min", "분")}
+                </p>
+                {route[index - 1]?.slot !== slot && (
+                  <button
+                    type="button"
+                    className="local-course-change-slot"
+                    disabled={pending}
+                    onClick={() => changeSlot(slot)}
+                    aria-label={`${slotLabels[language][slot]} · ${t("Change from this time", "이 시간대부터 바꾸기")}`}
+                  >
+                    {t("Change from here", "여기부터 바꾸기")}
+                  </button>
+                )}
+              </div>
               <div className="local-course-stop">
                 <span className="local-course-pin" aria-hidden="true">
                   {position}

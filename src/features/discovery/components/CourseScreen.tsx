@@ -107,7 +107,10 @@ export function CourseScreen({
           t={t}
         />
       ) : (
-        <section className="local-course-itinerary">
+        <section
+          className="local-course-itinerary"
+          aria-busy={autoCourse.pending}
+        >
           {route.length > 0 && (
             <div className="local-course-overview">
               <h2>{t("Visit order", "방문 순서")}</h2>
@@ -132,12 +135,25 @@ export function CourseScreen({
             </div>
           )}
           <CourseTimeline
+            changeSlot={autoCourse.regenerate}
+            pending={autoCourse.pending}
             route={route}
             language={language}
             name={name}
             openPlace={openPlace}
             t={t}
           />
+          {(autoCourse.error === "replace" ||
+            autoCourse.error === "no-replacement") && (
+            <p className="local-course-location-note" role="status">
+              {autoCourse.error === "no-replacement"
+                ? t("No other places nearby", "근처에 바꿀 만한 곳이 없어요")
+                : t(
+                    "Could not update the course",
+                    "코스를 다시 만들지 못했어요",
+                  )}
+            </p>
+          )}
           {skipped.length > 0 && (
             <ul className="local-course-gaps">
               {skipped.map((gap) => (
@@ -167,11 +183,29 @@ export function CourseScreen({
               <button className="local-secondary" onClick={() => openTime()}>
                 {t("Choose visit time", "방문 시간 선택")}
               </button>
+              {autoCourse.canRegenerate && (
+                <button
+                  className="local-secondary"
+                  disabled={autoCourse.pending}
+                  onClick={() => autoCourse.regenerate()}
+                >
+                  {t("Rebuild course", "코스 다시 만들기")}
+                </button>
+              )}
             </div>
           ) : (
             <div className="local-course-footer">
-              {!desktop && (
-                <div className="local-course-actions">
+              <div className="local-course-actions">
+                <button
+                  type="button"
+                  className="local-course-resuggest"
+                  disabled={autoCourse.pending}
+                  onClick={() => autoCourse.regenerate()}
+                >
+                  <LocalIcon name="refresh" size={15} />
+                  {t("Rebuild course", "코스 다시 만들기")}
+                </button>
+                {!desktop && (
                   <button
                     type="button"
                     className="local-primary local-course-map-toggle"
@@ -180,8 +214,8 @@ export function CourseScreen({
                     <LocalIcon name="map" size={17} />
                     {t("View map", "지도 보기")}
                   </button>
-                </div>
-              )}
+                )}
+              </div>
               {mapsLink ? (
                 <a
                   className="local-course-google"

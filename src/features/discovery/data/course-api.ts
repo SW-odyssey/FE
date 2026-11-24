@@ -109,11 +109,13 @@ export type CourseResult = {
   interruption: CourseGap | null;
 };
 
-type CourseRequest = {
+export type CourseRequest = {
   datasetId: string;
   visitDate: string;
   slot: VisitSlot;
   origin: Coordinate;
+  seed?: number;
+  excludeIds?: readonly string[];
 };
 
 async function getData<T>(path: string, signal?: AbortSignal): Promise<T> {
@@ -147,13 +149,17 @@ export function courseSearchParams(request: CourseRequest): URLSearchParams {
   const day = new Date(`${request.visitDate}T00:00:00Z`).getUTCDay();
   const weekday = weekdays[day];
   if (!weekday) throw new Error("Invalid course date");
-  return new URLSearchParams({
+  const params = new URLSearchParams({
     datasetId: request.datasetId,
     weekday,
     startSlot: apiSlots[request.slot],
     lat: String(request.origin.lat),
     lng: String(request.origin.lng),
   });
+  if (request.seed !== undefined) params.set("seed", String(request.seed));
+  if (request.excludeIds?.length)
+    params.set("excludeIds", request.excludeIds.join(","));
+  return params;
 }
 
 function coursePlace(place: ApiPlace): LocalPlace {

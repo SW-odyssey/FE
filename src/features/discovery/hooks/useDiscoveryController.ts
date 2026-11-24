@@ -27,6 +27,7 @@ import {
   type Modal,
   type VisitTimeChoice,
 } from "../presentation";
+import type { CourseLink } from "../state/course-url";
 import { readPreviewUrl, serializePreviewUrl } from "../state/preview-url";
 import { seoulHour, visitDate } from "../visit-date";
 import { slotAt } from "../visit-time";
@@ -42,6 +43,7 @@ export function useDiscoveryController(
   const [restored, setRestored] = useState(false);
   const [view, setView] = useState<DiscoveryView>("discover");
   const [courseMap, setCourseMap] = useState(false);
+  const [courseLink, setCourseLink] = useState<CourseLink>();
   const [courseOptions, setCourseOptions] = useState(defaultCourseOptions);
   const [language, setLanguage] = useState<DiscoveryLanguage>("en");
   const [area, setArea] = useState<DiscoveryArea>("jongno");
@@ -127,6 +129,8 @@ export function useDiscoveryController(
       );
       setView(state.view);
       setCourseMap(Boolean(state.courseMap));
+      if (state.view === "course" || state.courseMap)
+        setCourseLink(state.courseLink);
       if (state.courseOptions) setCourseOptions(state.courseOptions);
       setArea(state.area);
       setCurrentArea(state.currentArea);
@@ -181,48 +185,6 @@ export function useDiscoveryController(
   }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
   useEffect(() => {
-    if (!restored) return;
-    const params = serializePreviewUrl({
-      view,
-      area,
-      place: selectedId,
-      language,
-      query,
-      category,
-      autoTime,
-      slot,
-      day,
-      activity,
-      spaces,
-      modal,
-      sheet,
-      courseMap,
-      courseOptions,
-    });
-    window.history.replaceState(
-      window.history.state,
-      "",
-      `${window.location.pathname}?${params}`,
-    );
-  }, [
-    restored,
-    view,
-    area,
-    selectedId,
-    language,
-    query,
-    category,
-    autoTime,
-    slot,
-    day,
-    activity,
-    spaces,
-    modal,
-    sheet,
-    courseMap,
-    courseOptions,
-  ]);
-  useEffect(() => {
     document.documentElement.lang = language;
   }, [language]);
 
@@ -265,7 +227,7 @@ export function useDiscoveryController(
     day: courseDay,
     slot: "lunch",
   };
-  const courseDate = courseAfterHours
+  const automaticCourseDate = courseAfterHours
     ? visitDate(clock, courseDay)
     : selectedVisitDate;
   const courseLocation =
@@ -278,9 +240,56 @@ export function useDiscoveryController(
     area,
     slot: courseAfterHours ? "lunch" : currentSlot,
     origin: courseLocation,
-    visitDate: courseDate,
+    visitDate: automaticCourseDate,
+    initialLink: courseLink,
     enabled: restored && inCourse,
   });
+  const activeCourseLink = autoCourse.link ?? courseLink;
+  const courseDate = activeCourseLink?.visitDate ?? automaticCourseDate;
+  useEffect(() => {
+    if (!restored) return;
+    const params = serializePreviewUrl({
+      view,
+      area,
+      place: selectedId,
+      language,
+      query,
+      category,
+      autoTime,
+      slot,
+      day,
+      activity,
+      spaces,
+      modal,
+      sheet,
+      courseMap,
+      courseOptions,
+      courseLink: activeCourseLink,
+    });
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${window.location.pathname}?${params}`,
+    );
+  }, [
+    restored,
+    view,
+    area,
+    selectedId,
+    language,
+    query,
+    category,
+    autoTime,
+    slot,
+    day,
+    activity,
+    spaces,
+    modal,
+    sheet,
+    courseMap,
+    courseOptions,
+    activeCourseLink,
+  ]);
   const courseMapStops = useMemo(
     () =>
       autoCourse.route.map(({ place, position }) => ({ ...place, position })),
@@ -370,9 +379,21 @@ export function useDiscoveryController(
     return `${label} ${slotLabels[language][choice.slot]}`;
   }
   const timeLabel = visitTimeLabel({ autoTime, day, slot });
-  const courseTimeLabel = courseAfterHours
-    ? visitTimeLabel(courseFallbackTime)
-    : timeLabel;
+  const pinnedSlot = courseLink?.startSlot;
+  const courseTimeLabel =
+    pinnedSlot && courseDate !== automaticCourseDate
+      ? `${new Date(`${courseDate}T00:00:00+09:00`).toLocaleDateString(
+          dateLocales[language],
+          {
+            timeZone: "Asia/Seoul",
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+          },
+        )} ${slotLabels[language][pinnedSlot]}`
+      : courseAfterHours
+        ? visitTimeLabel(courseFallbackTime)
+        : timeLabel;
   const draftTimeLabel = visitTimeLabel(draftTime);
   function url(
     nextView = view,
@@ -398,6 +419,7 @@ export function useDiscoveryController(
       sheet,
       courseMap: nextCourseMap,
       courseOptions,
+      courseLink: activeCourseLink,
     });
     const state = {
       ...window.history.state,
@@ -484,6 +506,7 @@ export function useDiscoveryController(
     }));
   }
   function chooseArea(next: DiscoveryArea) {
+    setCourseLink(undefined);
     setCurrentArea(false);
     setMapId(null);
     setArea(next);
@@ -522,6 +545,7 @@ export function useDiscoveryController(
     setDraftTime({ autoTime: true, day: 0, slot: slotAt(seoulHour(clock)) });
   }
   function applyFilters() {
+    setCourseLink(undefined);
     setMapId(null);
     setMapScope(null);
     setActivity(draftActivity);
@@ -533,6 +557,7 @@ export function useDiscoveryController(
     setSheet("half");
   }
   function resetFilters() {
+    setCourseLink(undefined);
     setQuery("");
     setCategory("all");
     setActivity("any");
@@ -619,6 +644,7 @@ export function useDiscoveryController(
    * @returns 진입 맥락에 따른 필터 복귀 또는 일시 시트 닫기
    */
   function confirmTime(choice: VisitTimeChoice) {
+    setCourseLink(undefined);
     if (timeReturn === "filters") {
       setDraftTime(choice);
       returnToFilters();

@@ -461,3 +461,26 @@
   color: var(--local-muted);
   font-size: 0.8rem;
 }
+
+.local-course-stop-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.local-course-change-slot {
+  min-height: 32px;
+  border: 0;
+  padding-inline: 6px;
+  background: transparent;
+  color: var(--local-plum);
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.local-course-change-slot:disabled,
+.local-course-resuggest:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
