@@ -860,7 +860,7 @@ export function useDiscoveryController(
     selectedId,
     selectedVisitDate: inCourse ? courseDate : selectedVisitDate,
     visitPattern: data.selectedDetail?.visitPattern,
-    updateDeviceLocation,
+    setCurrentLocation: updateDeviceLocation,
     setDraftActivity,
     setDraftDay,
     setDraftSlot,
