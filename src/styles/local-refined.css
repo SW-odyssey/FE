@@ -273,7 +273,8 @@
   position: absolute;
   inset: 0;
   background: var(--local-plum);
-  mask: url("/assets/icons/local/map-pin-current.svg") center / contain no-repeat;
+  mask: url("/assets/icons/local/map-pin-current.svg") center / contain
+    no-repeat;
   content: "";
 }
 
@@ -361,9 +362,6 @@
 }
 .local-refined .local-pin-symbol.is-food {
   mask-image: url("/assets/icons/local/utensils.svg");
-}
-.local-refined .local-pin-line {
-  background: var(--local-plum);
 }
 .local-refined .local-map-tools > button,
 .local-refined .local-map-zoom {

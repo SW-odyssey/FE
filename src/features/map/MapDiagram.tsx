@@ -3,8 +3,13 @@
 import type { CourseStop } from "../discovery/course";
 import { localText, placeCount } from "../discovery/localization";
 import type { DiscoveryLanguage, LocalPlace } from "../discovery/model";
-import { clusterScreenPlaces, layoutMapCaptions } from "./clusters";
-import { groupedMarkerCells, type MapPlaceGroup } from "./geometry";
+import { layoutMapCaptions } from "./clusters";
+import {
+  groupMapMarkers,
+  inMapScope,
+  mapCaptionLimit,
+  type MapPlaceGroup,
+} from "./geometry";
 import type { usePreviewMap } from "./usePreviewMap";
 
 type PreviewMap = Omit<ReturnType<typeof usePreviewMap>, "attachFrame">;
@@ -33,10 +38,16 @@ export function MapDiagram({
   onGroupSelect?: (group: MapPlaceGroup) => void;
   onSelect: (stop: CourseStop) => void;
 }) {
-  const mode =
-    map.scale < 0.48 ? "overview" : map.scale < 1.18 ? "cells" : "places";
-  const cells =
-    !numbered && mode === "cells" ? groupedMarkerCells(places, selectedId) : [];
+  const level =
+    map.scale < 0.48
+      ? 6
+      : map.scale < 0.8
+        ? 5
+        : map.scale < 1.18
+          ? 4
+          : map.scale < 1.6
+            ? 3
+            : 2;
   const bounds = {
     left: 12,
     right: map.width - 12,
@@ -53,20 +64,19 @@ export function MapDiagram({
     ...map.screenPoints[index],
   }));
   const visiblePoints = points.filter(fits);
-  const clusters =
-    !numbered && mode === "overview"
-      ? clusterScreenPlaces(visiblePoints, { radius: 52, selectedId }).filter(
-          ({ count }) => count > 1,
-        )
-      : [];
-  const cellMarkers = cells
+  const markers = numbered
+    ? []
+    : groupMapMarkers(places, map.screenPointFor, level, selectedId);
+  const groups = markers
+    .filter(({ kind }) => kind !== "place")
     .map((group) => ({ id: group.id, group, ...map.screenPointFor(group) }))
     .filter(fits);
-  const grouped = new Set([
-    ...clusters.flatMap(({ memberIds }) => memberIds),
-    ...cellMarkers.flatMap(({ group }) => group.places.map(({ id }) => id)),
-  ]);
-  const pinPoints = visiblePoints.filter(({ id }) => !grouped.has(id));
+  const singletons = new Set(
+    markers
+      .filter(({ kind }) => kind === "place")
+      .map(({ places }) => places[0].id),
+  );
+  const pinPoints = visiblePoints.filter(({ id }) => singletons.has(id));
   const pinIds = new Set(pinPoints.map(({ id }) => id));
   const names = new Map(
     stops.map(({ id, name, koreanName }) => [
@@ -77,20 +87,24 @@ export function MapDiagram({
   const captions = numbered
     ? null
     : layoutMapCaptions(
-        pinPoints.map((point) => ({
-          ...point,
-          width: Math.max(
-            72,
-            (names.get(point.id)?.length ?? 0) * (language === "en" ? 7 : 11) +
-              16,
-          ),
-          height: 24,
-        })),
+        pinPoints
+          .filter(({ id }) => level <= 4 || id === selectedId)
+          .map((point) => ({
+            ...point,
+            width: Math.max(
+              72,
+              (names.get(point.id)?.length ?? 0) *
+                (language === "en" ? 7 : 11) +
+                16,
+            ),
+            height: 24,
+          })),
         {
           ...bounds,
           right: Math.max(bounds.left, map.width - 72),
           selectedId,
-          obstacles: [...pinPoints, ...clusters, ...cellMarkers],
+          obstacles: [...pinPoints, ...groups],
+          maxLabels: mapCaptionLimit(level, map.width),
         },
       );
 
@@ -115,30 +129,26 @@ export function MapDiagram({
           )}
         </g>
       </svg>
-      {clusters.map(({ id, count, x, y }) => (
-        <button
-          key={id}
-          type="button"
-          className="local-map-pin is-cluster"
-          style={{ left: x, top: y }}
-          aria-label={`${localText(language, "Zoom in", "확대")} ${placeCount(language, count)}`}
-          onClick={() => map.zoomInto({ x, y })}
-        >
-          <span className="local-cluster-count">{count}</span>
-        </button>
-      ))}
-      {cellMarkers.map(({ group, x, y }) => {
-        const active = scope === group.id;
+      {groups.map(({ group, x, y }) => {
+        const active = Boolean(
+          scope && group.places.some((place) => inMapScope(place, scope)),
+        );
+        const select = group.kind === "cell";
+        const label = select
+          ? localText(language, "Choose a cell", "구역 선택")
+          : localText(language, "Zoom in", "확대");
         return (
           <button
             key={group.id}
             type="button"
             className={`local-map-pin is-cluster${active ? " is-selected" : ""}`}
-            data-map-kind="cell"
+            data-map-kind={group.kind}
             style={{ left: x, top: y }}
-            aria-label={`${localText(language, "Choose a cell", "구역 선택")} ${placeCount(language, group.places.length)}`}
+            aria-label={`${label} ${placeCount(language, group.places.length)}`}
             aria-pressed={active}
-            onClick={() => onGroupSelect?.(group)}
+            onClick={() =>
+              select ? onGroupSelect?.(group) : map.zoomInto({ x, y })
+            }
           >
             <span className="local-cluster-count">{group.places.length}</span>
           </button>

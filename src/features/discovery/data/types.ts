@@ -26,16 +26,7 @@ export type DiscoveryQueryResult = {
   items: LocalPlace[];
   total: number;
   analyses?: Record<string, RecommendationAnalysis>;
-  cellReasons?: Record<string, CellReasonCode[]>;
 };
-export type CellReasonCode =
-  | "VISIT_RELATIVE_HIGH"
-  | "DAY_DISTINCT"
-  | "STAY_DISTINCT"
-  | "WALK_DISTINCT"
-  | "AGE20_DISTINCT"
-  | "AGE30_DISTINCT"
-  | "TIME_PEAK";
 /** Recommendation evidence belongs to the response that selected the place. */
 export type RecommendationAnalysis = {
   provenance: "preview" | "model";

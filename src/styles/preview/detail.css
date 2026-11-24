@@ -180,13 +180,6 @@
   flex: none;
 }
 
-.local-visit-evidence {
-  margin: 10px 0 0;
-  padding-inline-start: 18px;
-  color: var(--refresh-muted);
-  font-size: 0.8125rem;
-}
-
 .local-live-photo {
   position: relative;
   display: grid;

@@ -12,6 +12,7 @@ export type PlaceBusiness = {
 export type PlaceMedia = {
   photoList: PlacePhoto[];
   address?: string;
+  displayName?: string;
   business?: PlaceBusiness;
 };
 type Variant = "thumbnail" | "gallery";

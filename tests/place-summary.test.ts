@@ -68,3 +68,28 @@ test("missing permit data does not cause a model call", async (t) => {
   );
   assert.equal(provider.mock.callCount(), 1);
 });
+
+test("a Korean sentence is rejected when the detail is in Japanese", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url: URL) =>
+    new URL(url).hostname === "generativelanguage.googleapis.com"
+      ? Response.json({
+          candidates: [
+            {
+              finishReason: "STOP",
+              content: {
+                parts: [{ text: "소살리토는 1994년에 영업 허가를 받았어요." }],
+              },
+            },
+          ],
+        })
+      : Response.json({
+          success: true,
+          data: { name: "소살리토", sinceDate: "1994-09-07" },
+        }),
+  );
+  const result = await handlePlaceSummary(
+    new Request("http://localhost/api/place-summary?id=1006&lang=ja"),
+    key,
+  );
+  assert.equal(result.status, 502);
+});

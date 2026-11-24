@@ -142,18 +142,6 @@ const copy: Record<string, readonly [string, string]> = {
   Phone: ["電話", "电话"],
   Website: ["ウェブサイト", "网站"],
   "Opening hours": ["営業時間", "营业时间"],
-  "No distinct peak time for this day.": [
-    "この曜日に目立つ混雑時間帯はありません。",
-    "这一天没有明显的到访高峰。",
-  ],
-  "Visit data is unavailable for this day.": [
-    "この曜日の来訪データは表示できません。",
-    "无法显示这一天的到访数据。",
-  ],
-  "Loading visit patterns…": [
-    "来訪傾向を読み込んでいます…",
-    "正在加载到访趋势…",
-  ],
   "LG U+ · Relative visits by time of day in the surrounding 50 m cell": [
     "LG U+ · 周辺50m区画の時間帯別相対来訪指標",
     "LG U+ · 周边50米网格的分时相对到访指标",

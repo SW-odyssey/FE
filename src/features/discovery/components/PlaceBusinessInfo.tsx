@@ -1,3 +1,4 @@
+import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { PlaceBusiness } from "../data/place-media";
 import { dateLocales, localText } from "../localization";
 import type { DiscoveryLanguage } from "../model";
@@ -10,14 +11,17 @@ export function PlaceBusinessInfo({
   business: PlaceBusiness;
   language: DiscoveryLanguage;
 }) {
-  const { rating, ratingCount, phone, website, hours, mapsUrl } = business;
+  const { rating, ratingCount, phone, website, hours } = business;
   if (rating === undefined && !phone && !website && !hours?.length) return null;
   const t = (en: string, ko: string) => localText(language, en, ko);
   const number = new Intl.NumberFormat(dateLocales[language]);
 
   return (
     <section className="local-detail-section">
-      <h2>{t("Business info", "가게 정보")}</h2>
+      <div className="local-business-heading">
+        <h2>{t("Business info", "가게 정보")}</h2>
+        <small className="local-place-source">Google Maps</small>
+      </div>
       <dl className="local-business-info">
         {rating !== undefined && (
           <div>
@@ -49,7 +53,10 @@ export function PlaceBusinessInfo({
       </dl>
       {hours && hours.length > 0 && (
         <details className="local-business-hours">
-          <summary>{t("Opening hours", "영업시간")}</summary>
+          <summary>
+            {t("Opening hours", "영업시간")}
+            <LocalIcon name="chevron-right" size={16} />
+          </summary>
           <ul>
             {hours.map((line, index) => (
               <li key={index}>{line}</li>
@@ -57,15 +64,6 @@ export function PlaceBusinessInfo({
           </ul>
         </details>
       )}
-      <small className="local-place-source">
-        {mapsUrl ? (
-          <a href={mapsUrl} target="_blank" rel="noreferrer">
-            Google Maps ↗
-          </a>
-        ) : (
-          "Google Maps"
-        )}
-      </small>
     </section>
   );
 }

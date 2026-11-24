@@ -119,6 +119,7 @@ test("the gallery keeps localized business data when a photo fails", async (t) =
       return Response.json({
         photos: [{ name: "places/ChIJtest/photos/photoTest" }],
         formattedAddress: "ソウル",
+        displayName: { text: "テスト店" },
         regularOpeningHours: { weekdayDescriptions: ["月曜日: 12:00～20:00"] },
         rating: 4.5,
         userRatingCount: 18,
@@ -136,6 +137,7 @@ test("the gallery keeps localized business data when a photo fails", async (t) =
   assert.deepEqual(await result.json(), {
     photoList: [],
     address: "ソウル",
+    displayName: "テスト店",
     business: { hours: ["月曜日: 12:00～20:00"], rating: 4.5, ratingCount: 18 },
   });
 });

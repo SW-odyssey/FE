@@ -682,10 +682,6 @@ export function useDiscoveryController(
     activity,
     analysisFor,
     liveRecommendations,
-    cellReasons:
-      !inCourse && selected?.cellId
-        ? data.cellReasons?.[selected.cellId]
-        : undefined,
     featuredId,
     setFeaturedId,
     area,

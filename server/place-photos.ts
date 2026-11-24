@@ -16,6 +16,7 @@ type GooglePhoto = {
 type GooglePlace = {
   photos?: GooglePhoto[];
   formattedAddress?: string;
+  displayName?: { text?: string };
   editorialSummary?: { text?: string };
   rating?: number;
   userRatingCount?: number;
@@ -31,6 +32,7 @@ const sizes = { thumbnail: [640, 1], gallery: [1000, 3] } as const;
 const galleryFields = [
   "photos",
   "formattedAddress",
+  "displayName",
   "editorialSummary",
   "rating",
   "userRatingCount",
@@ -148,7 +150,12 @@ export async function handlePlacePhotos(
         }
       : undefined;
     return Response.json(
-      { photoList, address: formattedAddress, business },
+      {
+        photoList,
+        address: formattedAddress,
+        displayName: google.displayName?.text,
+        business,
+      },
       { headers },
     );
   } catch (error) {

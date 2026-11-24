@@ -32,31 +32,22 @@ test("the live source keeps backend order and shares the published dataset acros
       ? { datasets: [{ id: "public-latest" }] }
       : url.pathname.endsWith("/recommendations")
         ? { total: 2, items: [place, { ...place, id: 141 }] }
-        : url.pathname.endsWith("/reasons")
-          ? {
-              reasonsByCellId: {
-                "81655936": {
-                  status: "AVAILABLE",
-                  reasons: [{ code: "TIME_PEAK" }],
+        : url.pathname.endsWith("/visit-pattern") &&
+            url.searchParams.get("weekday") === "sat"
+          ? { status: "NO_DISTINCT_PEAK", graph: null }
+          : url.pathname.endsWith("/visit-pattern")
+            ? {
+                status: "AVAILABLE",
+                graph: {
+                  bars: [
+                    { slot: "lunch", relativeHeight: 60 },
+                    { slot: "afternoon", relativeHeight: 80 },
+                    { slot: "dinner", relativeHeight: 100 },
+                    { slot: "late_night", relativeHeight: 20 },
+                  ],
                 },
-              },
-            }
-          : url.pathname.endsWith("/visit-pattern") &&
-              url.searchParams.get("weekday") === "sat"
-            ? { status: "NO_DISTINCT_PEAK", graph: null }
-            : url.pathname.endsWith("/visit-pattern")
-              ? {
-                  status: "AVAILABLE",
-                  graph: {
-                    bars: [
-                      { slot: "lunch", relativeHeight: 60 },
-                      { slot: "afternoon", relativeHeight: 80 },
-                      { slot: "dinner", relativeHeight: 100 },
-                      { slot: "late_night", relativeHeight: 20 },
-                    ],
-                  },
-                }
-              : place;
+              }
+            : place;
     return Response.json({ success: true, data });
   });
   const source = createLiveDiscoveryDataSource();
@@ -65,10 +56,9 @@ test("the live source keeps backend order and shares the published dataset acros
     found.items.map(({ id }) => id),
     ["1557", "141"],
   );
-  assert.deepEqual(found.cellReasons, { "81655936": ["TIME_PEAK"] });
   assert.equal(calls[1]?.searchParams.get("weekday"), "fri");
   assert.equal(calls[1]?.searchParams.get("slot"), "dinner");
-  assert.equal(calls[2]?.searchParams.get("cellIds"), "81655936");
+  assert.equal(calls.length, 2);
   for (const url of calls.slice(1))
     assert.equal(url.searchParams.get("datasetId"), "public-latest");
   const detail = await source.getPlace("1557", { query });
@@ -81,19 +71,14 @@ test("the live source keeps backend order and shares the published dataset acros
   });
   assert.ok(pattern?.provenance === "live");
   assert.deepEqual(await getLiveVisitPattern(pattern), {
-    status: "available",
-    values: {
-      lunch: 60,
-      afternoon: 80,
-      evening: 100,
-      late: 20,
-    },
+    lunch: 60,
+    afternoon: 80,
+    evening: 100,
+    late: 20,
   });
   assert.equal(calls.filter((url) => url.pathname.endsWith("/meta")).length, 1);
   assert.equal(calls.at(-1)?.searchParams.get("datasetId"), "public-latest");
-  assert.deepEqual(await getLiveVisitPattern({ ...pattern, weekday: "sat" }), {
-    status: "no-peak",
-  });
+  assert.equal(await getLiveVisitPattern({ ...pattern, weekday: "sat" }), null);
   assert.equal(calls.at(-1)?.searchParams.get("weekday"), "sat");
 });
 

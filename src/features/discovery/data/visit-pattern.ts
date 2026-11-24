@@ -16,18 +16,14 @@ export async function getLiveVisitPattern(
     weekday,
   }: { datasetId: string; cellId: string; weekday: ApiWeekday },
   signal?: AbortSignal,
-): Promise<
-  | { status: "available"; values: Record<VisitSlot, number> }
-  | { status: "no-peak" | "unavailable" }
-> {
+): Promise<Record<VisitSlot, number> | null> {
   const pattern = await getV2Data<ApiVisitPattern>(
     `cells/${encodeURIComponent(cellId)}/visit-pattern`,
     signal,
     new URLSearchParams({ datasetId, weekday }),
   );
-  if (pattern.status === "NO_DISTINCT_PEAK") return { status: "no-peak" };
   if (pattern.status !== "AVAILABLE" || pattern.graph?.bars.length !== 4)
-    return { status: "unavailable" };
+    return null;
   const values = Object.fromEntries(
     pattern.graph.bars.map(({ slot, relativeHeight }) => [
       screenSlots[slot],
@@ -41,6 +37,6 @@ export async function getLiveVisitPattern(
     ) ||
     heights.filter((height) => height === 100).length !== 1
   )
-    return { status: "unavailable" };
-  return { status: "available", values };
+    return null;
+  return values;
 }

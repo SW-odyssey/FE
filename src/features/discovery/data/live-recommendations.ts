@@ -11,18 +11,7 @@ import {
   V2RequestError,
 } from "./v2-client.ts";
 import { previewDataSource } from "./preview.ts";
-import type {
-  CellReasonCode,
-  DiscoveryDataSource,
-  DiscoveryQuery,
-} from "./types.ts";
-
-type CellEvidence = {
-  reasonsByCellId: Record<
-    string,
-    { status: string; reasons: { code: CellReasonCode }[] }
-  >;
-};
+import type { DiscoveryDataSource, DiscoveryQuery } from "./types.ts";
 
 /** Create the v2 source for the normal discovery screens. */
 export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
@@ -69,21 +58,7 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
           published = undefined;
         throw error;
       }
-      const items = data.items.map(v2Place);
-      const cellIds = [...new Set(data.items.map(({ cellId }) => cellId))];
-      if (!cellIds.length) return { items, total: data.total };
-      const reasons = await getV2Data<CellEvidence>(
-        "cells/reasons",
-        signal,
-        new URLSearchParams({ ...scope, cellIds: cellIds.join(",") }),
-      ).catch(() => undefined);
-      signal?.throwIfAborted();
-      const cellReasons = Object.fromEntries(
-        Object.entries(reasons?.reasonsByCellId ?? {})
-          .filter(([, entry]) => entry.status === "AVAILABLE")
-          .map(([id, { reasons }]) => [id, reasons.map(({ code }) => code)]),
-      );
-      return { items, total: data.total, cellReasons };
+      return { items: data.items.map(v2Place), total: data.total };
     },
     async getPlace(id, { signal, query } = {}) {
       if (!/^[1-9]\d{0,15}$/.test(id) || !Number.isSafeInteger(Number(id)))
