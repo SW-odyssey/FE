@@ -47,7 +47,9 @@ export function MapDiagram({
           ? 4
           : map.scale < 1.6
             ? 3
-            : 2;
+            : map.scale < 3
+              ? 2
+              : 1;
   const bounds = {
     left: 12,
     right: map.width - 12,

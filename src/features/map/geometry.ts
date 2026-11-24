@@ -119,7 +119,7 @@ export function groupMapMarkers(
     const point = project(group);
     return point ? [{ ...point, id: group.id }] : [];
   });
-  const radius = mode === "places" ? 34 : level > 5 ? 76 : level > 4 ? 64 : 49;
+  const radius = [34, 52, 80, 90][Math.max(0, Math.floor(level) - 1)] ?? 105;
   return clusterScreenPlaces(points, {
     radius,
     selectedId: selectedId ? `place:${selectedId}` : undefined,
@@ -140,6 +140,7 @@ export function groupMapMarkers(
 /** Cap visible names at a density appropriate to the zoom and available width. */
 export function mapCaptionLimit(level: number, width: number) {
   if (level > 4) return 1;
-  if (level > 2) return width >= 640 ? 3 : 2;
+  if (level > 2) return width >= 640 ? 2 : 1;
+  if (level > 1) return width >= 640 ? 5 : 3;
   return width >= 640 ? 8 : 5;
 }

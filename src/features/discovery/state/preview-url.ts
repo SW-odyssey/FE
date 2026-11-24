@@ -4,6 +4,7 @@ import { readSpacePreferences } from "../filters.ts";
 import { languages } from "../localization.ts";
 import type {
   AreaActivity,
+  Coordinate,
   DiscoveryArea,
   DiscoveryCategory,
   DiscoveryLanguage,
@@ -25,6 +26,7 @@ export type PreviewUrlState = {
   view: DiscoveryView;
   area: DiscoveryArea;
   currentArea: boolean;
+  mapSearchOrigin?: Coordinate;
   place: string | null;
   modal: Modal;
   sheet?: SheetState;
@@ -61,6 +63,7 @@ export type PreviewUrlSelection = Pick<
   courseOptions?: CourseOptions;
   courseLink?: CourseLink;
   spaces: readonly SpacePreference[];
+  mapSearchOrigin?: Coordinate | null;
 };
 
 function isPreviewFilterCategory(
@@ -96,6 +99,17 @@ export function readPreviewUrl(
   const day = Math.max(0, Math.min(6, Number(params.get("day")) || 0));
   const linkedActivity = params.get("activity");
   const linkedCategory = params.get("category");
+  const mapLat = params.get("mapLat");
+  const mapLng = params.get("mapLng");
+  const lat = Number(mapLat);
+  const lng = Number(mapLng);
+  const mapSearchOrigin =
+    mapLat?.trim() &&
+    mapLng?.trim() &&
+    Math.abs(lat) <= 90 &&
+    Math.abs(lng) <= 180
+      ? { lat, lng }
+      : undefined;
 
   return {
     view: state.view,
@@ -111,6 +125,7 @@ export function readPreviewUrl(
     }),
     area: params.has("area") ? state.area : "jongno",
     currentArea: !params.has("area") || state.area === "jongno",
+    ...(mapSearchOrigin && { mapSearchOrigin }),
     place: state.place,
     modal:
       inCourse && panel === "filters"
@@ -153,6 +168,10 @@ export function serializePreviewUrl(
   if (state.place) params.set("place", state.place);
   params.set("lang", state.language);
   if (state.query) params.set("q", state.query);
+  if (state.mapSearchOrigin) {
+    params.set("mapLat", String(state.mapSearchOrigin.lat));
+    params.set("mapLng", String(state.mapSearchOrigin.lng));
+  }
   if (isPreviewFilterCategory(state.category))
     params.set("category", state.category);
   if (!state.autoTime) {

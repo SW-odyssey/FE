@@ -420,3 +420,26 @@
     width: var(--local-sidebar-width);
   }
 }
+.local-map-search-area {
+  position: absolute;
+  z-index: 2;
+  inset-inline-start: 50%;
+  inset-block-end: 10px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 42px;
+  max-width: calc(100% - 112px);
+  padding: 7px 14px;
+  border-radius: var(--r-pill);
+  background: var(--local-plum);
+  color: white;
+  box-shadow: var(--refresh-shadow);
+  font-size: 14px;
+  font-weight: 650;
+  pointer-events: auto;
+}
+.local-map-search-area > .local-icon {
+  flex: none;
+}

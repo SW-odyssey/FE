@@ -212,6 +212,27 @@ test("every course chip selection round-trips on the itinerary and map layer", (
   }
 });
 
+test("a map search center survives navigation and invalid or partial coordinates are ignored", () => {
+  const mapSearchOrigin = { lat: 37.5673, lng: 126.9911 };
+  const params = serializePreviewUrl({
+    ...defaults,
+    view: "map",
+    mapSearchOrigin,
+  });
+  assert.deepEqual(
+    readPreviewUrl(params.toString(), now, null).mapSearchOrigin,
+    mapSearchOrigin,
+  );
+  assert.equal(
+    readPreviewUrl("?mapLat=37.5673", now, null).mapSearchOrigin,
+    undefined,
+  );
+  assert.equal(
+    readPreviewUrl("?mapLat=91&mapLng=126", now, null).mapSearchOrigin,
+    undefined,
+  );
+});
+
 test("older course links keep their selection and open the chips directly", () => {
   for (const panel of ["course-options", "filters"]) {
     const course = readPreviewUrl(

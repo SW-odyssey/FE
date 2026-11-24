@@ -20,6 +20,8 @@ export type ExploreMapProps = {
   language: DiscoveryLanguage;
   currentLocation: Coordinate | null;
   onLocate: (point: Coordinate) => void;
+  searchOrigin?: Coordinate | null;
+  onSearchArea?: (point: Coordinate) => void;
   onSelect: (place: LocalPlace) => void;
   focusSelected?: boolean;
   focusRequest?: number;
@@ -35,6 +37,7 @@ export type ExploreMapProps = {
 export type ExploreMapOptions = ExploreMapProps & {
   sheetInset: number;
   viewportScale: number;
+  onViewportDrag?: () => void;
 };
 export type DisposableMapSession = { dispose: () => void };
 export type ExploreMapSession = DisposableMapSession & {
@@ -44,6 +47,7 @@ export type ExploreMapSession = DisposableMapSession & {
   zoomBy: (delta: number) => void;
   setCurrentLocation: (point: Coordinate) => void;
   centerOn: (point: Coordinate) => void;
+  getCenter: () => Coordinate | null;
 };
 
 /** Restore a camera only for the same ordered recommendation collection.

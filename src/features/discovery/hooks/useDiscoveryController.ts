@@ -58,6 +58,9 @@ export function useDiscoveryController(
   const [placeOnMap, setPlaceOnMap] = useState<LocalPlace | null>(null);
   const [featuredId, setFeaturedId] = useState<string | null>(null);
   const [mapScope, setMapScope] = useState<string | null>(null);
+  const [mapSearchOrigin, setMapSearchOrigin] = useState<Coordinate | null>(
+    null,
+  );
   const readingPositions = useRef({ discover: 0, course: 0, map: 0 });
   const mapCamera = useRef<MapCamera | null>(null);
   const shell = useRef<HTMLElement>(null);
@@ -136,6 +139,7 @@ export function useDiscoveryController(
       if (state.courseOptions) setCourseOptions(state.courseOptions);
       setArea(state.area);
       setCurrentArea(state.currentArea);
+      setMapSearchOrigin(state.mapSearchOrigin ?? null);
       const place = sourceRef.current.snapshot?.getPlace(
         state.place ?? "",
       )?.place;
@@ -263,6 +267,7 @@ export function useDiscoveryController(
       place: selectedId,
       language,
       query,
+      mapSearchOrigin,
       category,
       autoTime,
       slot,
@@ -287,6 +292,7 @@ export function useDiscoveryController(
     selectedId,
     language,
     query,
+    mapSearchOrigin,
     category,
     autoTime,
     slot,
@@ -310,7 +316,9 @@ export function useDiscoveryController(
     query: inCourse ? "" : query,
     slot: inCourse ? courseStartSlot : currentSlot,
     activity,
-    origin: liveRecommendations && currentArea ? currentLocation : null,
+    origin: liveRecommendations
+      ? (mapSearchOrigin ?? (currentArea ? currentLocation : null))
+      : null,
     spaces,
     visitDate: inCourse ? courseDate : selectedVisitDate,
     datasetId: inCourse ? activeCourseLink?.datasetId : undefined,
@@ -381,7 +389,7 @@ export function useDiscoveryController(
   });
   function visitTimeLabel(choice: VisitTimeChoice) {
     if (choice.autoTime)
-      return `${t("Now", "지금")} ${slotLabels[language][slotAt(seoulHour(clock))]}`;
+      return `${t("Now", "지금")} · ${slotLabels[language][slotAt(seoulHour(clock))]}`;
     const date = new Date(`${visitDate(clock, choice.day)}T00:00:00+09:00`);
     const label =
       choice.day === 0
@@ -426,6 +434,7 @@ export function useDiscoveryController(
       place: nextPlace,
       language: nextLang,
       query,
+      mapSearchOrigin,
       category,
       autoTime,
       slot,
@@ -530,6 +539,7 @@ export function useDiscoveryController(
   function chooseArea(next: DiscoveryArea) {
     setCourseLink(undefined);
     setCurrentArea(false);
+    setMapSearchOrigin(null);
     setMapId(null);
     setArea(next);
     if (modal) closeModal();
@@ -588,6 +598,7 @@ export function useDiscoveryController(
     setDay(0);
     setArea("all");
     setCurrentArea(false);
+    setMapSearchOrigin(null);
   }
   /** 핀 선택은 목록 강조와 스크롤을 함께 갱신합니다. */
   function selectMapPlace(place: LocalPlace) {
@@ -620,6 +631,15 @@ export function useDiscoveryController(
     setMapScope(null);
     setMapId(null);
   }
+  function searchMapArea({ lat, lng }: Coordinate) {
+    setMapSearchOrigin({
+      lat: Number(lat.toFixed(5)),
+      lng: Number(lng.toFixed(5)),
+    });
+    setMapScope(null);
+    setMapId(null);
+    setPlaceOnMap(null);
+  }
   function showPlaceOnMap(place: LocalPlace) {
     setMapId(place.id);
     setPlaceOnMap(place);
@@ -639,11 +659,13 @@ export function useDiscoveryController(
     }
   }
   const contextAreaLabel =
-    area === "ikseon" && language === "en"
-      ? "Ikseon"
-      : area === "all" && language === "ja"
-        ? "全エリア"
-        : areaLabels[language][area];
+    mapSearchOrigin && !inCourse
+      ? t("Map area", "지도에서 선택")
+      : area === "ikseon" && language === "en"
+        ? "Ikseon"
+        : area === "all" && language === "ja"
+          ? "全エリア"
+          : areaLabels[language][area];
   function returnToFilters() {
     setTimeReturn(null);
     setModal("filters");
@@ -737,6 +759,8 @@ export function useDiscoveryController(
     mapId,
     mapPlaces,
     mapScope,
+    mapSearchOrigin,
+    searchMapArea,
     mapSelected,
     mapVisible,
     modal,

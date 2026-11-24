@@ -23,6 +23,8 @@ type Props = Pick<
   | "mapId"
   | "mapPlaces"
   | "mapScope"
+  | "mapSearchOrigin"
+  | "searchMapArea"
   | "mapSelected"
   | "selected"
   | "autoCourse"
@@ -173,6 +175,15 @@ export function MapScreen(props: Props) {
       <ExploreMap
         memory={mapCamera}
         scope={mapScope}
+        searchOrigin={showCourse ? null : props.mapSearchOrigin}
+        onSearchArea={
+          props.liveRecommendations &&
+          !showCourse &&
+          !selected &&
+          (desktop || sheet !== "expanded")
+            ? props.searchMapArea
+            : undefined
+        }
         onGroupSelect={selectMapGroup}
         places={visible}
         selected={highlighted}
