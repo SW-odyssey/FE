@@ -13,11 +13,21 @@ export type CourseStop = Pick<
   | "lng"
 > & { position?: number };
 
+type AfternoonChoice = "cafe" | "shop";
 export type CourseOptions = {
-  afternoon: "cafe" | "shop";
+  afternoon: AfternoonChoice | "mixed";
   lateNight: boolean;
   walk: "default" | "short";
 };
+
+/** Toggle a requested afternoon kind while keeping one selection for the itinerary. */
+export function toggleAfternoonChoice(
+  current: CourseOptions["afternoon"],
+  choice: AfternoonChoice,
+): CourseOptions["afternoon"] {
+  if (current === "mixed") return choice === "cafe" ? "shop" : "cafe";
+  return current === choice ? current : "mixed";
+}
 
 export const defaultCourseOptions: CourseOptions = {
   afternoon: "cafe",

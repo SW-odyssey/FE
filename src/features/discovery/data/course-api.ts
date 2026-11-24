@@ -118,7 +118,8 @@ export function courseSearchParams(request: CourseRequest): URLSearchParams {
   if (request.seed !== undefined) params.set("seed", String(request.seed));
   if (request.excludeIds?.length)
     params.set("excludeIds", request.excludeIds.join(","));
-  if (request.options?.afternoon === "shop") params.set("afternoon", "shop");
+  if (request.options && request.options.afternoon !== "cafe")
+    params.set("afternoon", request.options.afternoon);
   if (request.options?.walk === "short") params.set("walk", "short");
   if (request.options?.lateNight || request.slot === "late")
     params.set("lateNight", "true");

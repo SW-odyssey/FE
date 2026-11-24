@@ -183,6 +183,7 @@ test("every course chip selection round-trips on the itinerary and map layer", (
     { afternoon: "cafe", lateNight: false, walk: "default" },
     { afternoon: "shop", lateNight: true, walk: "short" },
     { afternoon: "cafe", lateNight: true, walk: "short" },
+    { afternoon: "mixed", lateNight: true, walk: "short" },
   ] as const;
   for (const view of ["course", "map"] as const) {
     for (const courseOptions of combinations) {
@@ -196,7 +197,7 @@ test("every course chip selection round-trips on the itinerary and map layer", (
       });
       assert.equal(
         params.get("afternoon"),
-        courseOptions.afternoon === "shop" ? "shop" : null,
+        courseOptions.afternoon === "cafe" ? null : courseOptions.afternoon,
       );
       assert.equal(params.get("late"), courseOptions.lateNight ? "1" : null);
       assert.equal(

@@ -118,7 +118,11 @@ export function readPreviewUrl(
     ...(inCourse && {
       courseOptions: {
         afternoon:
-          afternoon === "shop" || afternoon === "browse" ? "shop" : "cafe",
+          afternoon === "mixed"
+            ? "mixed"
+            : afternoon === "shop" || afternoon === "browse"
+              ? "shop"
+              : "cafe",
         lateNight: params.get("late") === "1",
         walk: params.get("walk") === "short" ? "short" : "default",
       },
@@ -186,7 +190,8 @@ export function serializePreviewUrl(
   if (state.view === "course" || (state.view === "map" && state.courseMap)) {
     const options = state.courseOptions;
     if (state.courseLink) writeCourseLink(params, state.courseLink);
-    if (options?.afternoon === "shop") params.set("afternoon", "shop");
+    if (options && options.afternoon !== "cafe")
+      params.set("afternoon", options.afternoon);
     if (options?.lateNight) params.set("late", "1");
     if (options?.walk === "short") params.set("walk", "short");
   }

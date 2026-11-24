@@ -2,7 +2,11 @@
 
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { useDeviceLocation } from "../../map/useDeviceLocation";
-import { googleMapsCourseLink, googleMapsPlaceUrl } from "../course";
+import {
+  googleMapsCourseLink,
+  googleMapsPlaceUrl,
+  toggleAfternoonChoice,
+} from "../course";
 import type { CourseGap } from "../data/course-api";
 import { slotLabels } from "../presentation";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
@@ -107,30 +111,41 @@ export function CourseScreen({
           aria-label={t("Course options", "일정 구성")}
         >
           {showAfternoon &&
-            (["cafe", "shop"] as const).map((afternoon) => (
-              <button
-                key={afternoon}
-                type="button"
-                className={
-                  courseOptions.afternoon === afternoon ? "is-active" : ""
-                }
-                aria-pressed={courseOptions.afternoon === afternoon}
-                aria-label={
-                  afternoon === "cafe"
-                    ? t("Café as first afternoon stop", "오후 첫 방문 카페")
-                    : t("Shop as first afternoon stop", "오후 첫 방문 구경")
-                }
-                onClick={() =>
-                  changeCourseOptions({ ...courseOptions, afternoon })
-                }
-              >
-                <LocalIcon
-                  name={afternoon === "cafe" ? "coffee" : "compass"}
-                  size={16}
-                />
-                {afternoon === "cafe" ? t("Café", "카페") : t("Browse", "구경")}
-              </button>
-            ))}
+            (["cafe", "shop"] as const).map((afternoon) => {
+              const active =
+                courseOptions.afternoon === "mixed" ||
+                courseOptions.afternoon === afternoon;
+              return (
+                <button
+                  key={afternoon}
+                  type="button"
+                  className={active ? "is-active" : ""}
+                  aria-pressed={active}
+                  aria-label={
+                    afternoon === "cafe"
+                      ? t("Include a café", "카페 포함")
+                      : t("Include shopping", "구경 포함")
+                  }
+                  onClick={() =>
+                    changeCourseOptions({
+                      ...courseOptions,
+                      afternoon: toggleAfternoonChoice(
+                        courseOptions.afternoon,
+                        afternoon,
+                      ),
+                    })
+                  }
+                >
+                  <LocalIcon
+                    name={afternoon === "cafe" ? "coffee" : "compass"}
+                    size={16}
+                  />
+                  {afternoon === "cafe"
+                    ? t("Café", "카페")
+                    : t("Browse", "구경")}
+                </button>
+              );
+            })}
           {courseStartSlot !== "late" && (
             <button
               type="button"
@@ -232,7 +247,11 @@ export function CourseScreen({
                 <li key={gap.position}>
                   {gap.position}. {slotLabels[language][gap.slot]} ·{" "}
                   {t("Stop skipped", "방문지 건너뜀")} ·{" "}
-                  {courseGapMessage(gap, t)}
+                  {courseOptions.afternoon === "mixed" &&
+                  gap.position === 3 &&
+                  gap.reason === "NO_NEARBY_MATCH"
+                    ? t("No shops nearby", "근처에 구경할 곳이 없어요")
+                    : courseGapMessage(gap, t)}
                 </li>
               ))}
             </ul>
