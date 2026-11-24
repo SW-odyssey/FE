@@ -31,6 +31,26 @@ type Interaction = {
   }[];
 };
 
+async function providerFailure(response: Response) {
+  const payload = (await response.json().catch(() => null)) as {
+    error?: { status?: string; message?: string };
+  } | null;
+  const code = payload?.error?.status;
+  const message = payload?.error?.message;
+  return {
+    providerStatus: response.status,
+    providerCode:
+      typeof code === "string" && /^[A-Z_]{1,48}$/.test(code)
+        ? code
+        : undefined,
+    regionRestricted:
+      typeof message === "string" &&
+      /(?:location|country|region) (?:is )?not (?:supported|allowed)/i.test(
+        message,
+      ),
+  };
+}
+
 function validSource(
   citation: MapsCitation,
 ): citation is MapsCitation & { name: string; url: string } {
@@ -99,6 +119,8 @@ export async function handlePlaceSummary(
     return new Response(null, { status: 400, headers: noStore });
 
   const signal = AbortSignal.any([request.signal, AbortSignal.timeout(40_000)]);
+  const ray = request.headers.get("cf-ray");
+  let stage: "place" | "gemini" = "place";
   try {
     const lookupStarted = performance.now();
     const place = await lookupPlaceRow(id, signal);
@@ -118,6 +140,7 @@ export async function handlePlaceSummary(
       return new Response(null, { status: 204, headers: noStore });
 
     const output = outputLanguage[language];
+    stage = "gemini";
     const geminiStarted = performance.now();
     const result = await fetch(interactionsUrl, {
       method: "POST",
@@ -149,7 +172,10 @@ export async function handlePlaceSummary(
       "Server-Timing": `place;dur=${lookupMs}, gemini;dur=${geminiMs}`,
     };
     if (!result.ok) {
-      console.warn("Gemini Maps Grounding request failed", result.status);
+      console.warn("Gemini Maps Grounding request failed", {
+        ray,
+        ...(await providerFailure(result)),
+      });
       return new Response(null, { status: 502, headers });
     }
     const summary = groundedSummary(await result.json(), googlePlaceId);
@@ -157,7 +183,11 @@ export async function handlePlaceSummary(
       return new Response(null, { status: 204, headers });
     return Response.json(summary, { headers });
   } catch {
-    console.warn("Place Maps Grounding request failed");
+    console.warn("Place Maps Grounding request failed", {
+      ray,
+      stage,
+      timeout: signal.reason?.name === "TimeoutError",
+    });
     return new Response(null, { status: 502, headers: noStore });
   }
 }

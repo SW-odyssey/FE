@@ -123,6 +123,39 @@ test("an answer in the wrong language is suppressed even with a matched citation
   assert.equal((await handlePlaceSummary(request("ja"), key)).status, 204);
 });
 
+test("a Gemini region rejection logs the request reference without exposing the error body", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url: URL) =>
+    new URL(url).hostname === "generativelanguage.googleapis.com"
+      ? Response.json(
+          {
+            error: {
+              status: "FAILED_PRECONDITION",
+              message: "User location is not supported for the API use.",
+            },
+          },
+          { status: 400 },
+        )
+      : Response.json({ success: true, data: place }),
+  );
+  const warning = t.mock.method(console, "warn", () => {});
+  const ray = "a000000000000000-HKG";
+  const result = await handlePlaceSummary(
+    new Request(endpoint, { method: "POST", headers: { "CF-Ray": ray } }),
+    key,
+  );
+  assert.equal(result.status, 502);
+  assert.equal(await result.text(), "");
+  assert.deepEqual(warning.mock.calls[0]?.arguments, [
+    "Gemini Maps Grounding request failed",
+    {
+      ray,
+      providerStatus: 400,
+      providerCode: "FAILED_PRECONDITION",
+      regionRestricted: true,
+    },
+  ]);
+});
+
 test("a legacy GET and a cross-site POST never call Gemini", async (t) => {
   const fetch = t.mock.method(globalThis, "fetch");
   const legacy = await handlePlaceSummary(new Request(endpoint), key);

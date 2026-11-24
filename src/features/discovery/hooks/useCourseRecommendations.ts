@@ -36,6 +36,7 @@ type CourseState = {
   contextKey: string;
   loaded: LoadedCourse | null;
   pending: boolean;
+  rebuildVersion?: number;
   error?: "load" | "replace" | "no-replacement";
 };
 
@@ -215,6 +216,8 @@ export function useCourseRecommendations({
             contextKey,
             loaded: replacement ?? loaded,
             pending: false,
+            rebuildVersion:
+              (current?.rebuildVersion ?? 0) + (replacement && !slot ? 1 : 0),
             error: replacement ? undefined : ("no-replacement" as const),
           };
           latest.current = next;
@@ -222,6 +225,7 @@ export function useCourseRecommendations({
         },
         reject: () => {
           const next = {
+            ...current,
             key,
             contextKey,
             loaded,
@@ -240,6 +244,7 @@ export function useCourseRecommendations({
     skipped: result?.skipped ?? emptySkipped,
     interruption: result?.interruption ?? null,
     pending: current?.pending ?? Boolean(previous),
+    rebuildVersion: state?.rebuildVersion ?? 0,
     error: current?.error,
     link: loaded?.link,
     canRegenerate: Boolean(loaded),

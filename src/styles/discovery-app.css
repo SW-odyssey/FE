@@ -187,6 +187,16 @@
   height: var(--local-safe-bottom);
 }
 
+@media (width < 960px) {
+  .local-shell.local-responsive-web > .local-detail,
+  .local-responsive-web > .local-mobile-sidebar-content > .local-content,
+  .local-responsive-web .local-sheet-scroll {
+    min-width: 0;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+}
+
 .local-web > .local-toast {
   bottom: calc(24px + var(--local-safe-bottom));
 }
