@@ -240,6 +240,7 @@ export function CourseScreen({
             changeSlot={autoCourse.regenerate}
             pending={autoCourse.pending}
             route={route}
+            rebuildVersion={autoCourse.rebuildVersion}
             formatDistance={formatDistance}
             language={language}
             name={name}

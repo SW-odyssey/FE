@@ -67,37 +67,44 @@ export function PlaceAiSummary({
           >
             {summary}
           </p>
-          {grounded && !curatedSummary && grounded.sources.length > 0 && (
-            <div className="local-place-source local-place-grounded-sources">
-              <span translate="no">Google Maps</span>
-              <ul>
-                {grounded.sources.map(({ name, url }) => (
-                  <li key={JSON.stringify([name, url])}>
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noreferrer"
-                      translate="no"
-                    >
-                      {name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <small className="local-place-ai-note">
-            {t("Generated with Gemini", "Gemini로 자동 생성")}
-          </small>
+          <footer className="local-place-ai-credits">
+            {grounded && !curatedSummary && grounded.sources.length > 0 && (
+              <div className="local-place-source local-place-grounded-sources">
+                <span translate="no">Google Maps</span>
+                <ul>
+                  {grounded.sources.map(({ name, url }) => (
+                    <li key={JSON.stringify([name, url])}>
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noreferrer"
+                        translate="no"
+                      >
+                        {name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <small className="local-place-ai-note">
+              {t("Generated with Gemini", "Gemini로 자동 생성")}
+            </small>
+          </footer>
         </>
       ) : pending ? (
-        <p className="local-place-ai-pending" role="status">
-          <span aria-hidden="true" />
-          {t(
-            "Gemini is checking this place…",
-            "Gemini가 매장 정보를 확인하는 중…",
-          )}
-        </p>
+        <div className="local-place-ai-loading">
+          <div className="local-place-ai-skeleton" aria-hidden="true">
+            <span className="local-skeleton" />
+            <span className="local-skeleton" />
+          </div>
+          <small className="local-place-ai-note" role="status">
+            {t(
+              "Gemini is checking this place…",
+              "Gemini가 매장 정보를 확인하는 중…",
+            )}
+          </small>
+        </div>
       ) : (
         <p className="local-place-ai-unavailable" role="status">
           {t("AI summary is unavailable.", "AI 요약 정보가 없어요.")}

@@ -131,16 +131,12 @@
       .local-map-mobile-tools
     ),
   .local-web .local-scope-row,
-  .local-web .local-place-ai > :is(p, .local-place-grounded-sources) {
+  .local-web .local-place-ai > :is(p, .local-place-ai-credits) {
     animation: local-view-in 200ms var(--local-ease-out);
   }
 
   .local-web .local-map-diagram polyline {
     animation: local-photo-in 180ms ease-out;
-  }
-
-  .local-web .local-place-ai-pending > span {
-    animation: local-progress-pulse 1.6s ease-in-out infinite alternate;
   }
 
   .local-web .local-map-course-list {
@@ -158,15 +154,6 @@
   }
   to {
     background-position: -40% 0;
-  }
-}
-
-@keyframes local-progress-pulse {
-  from {
-    opacity: 0.38;
-  }
-  to {
-    opacity: 1;
   }
 }
 

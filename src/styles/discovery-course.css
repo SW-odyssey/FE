@@ -250,9 +250,14 @@
 }
 
 .local-course-timeline-item {
+  position: relative;
   min-height: 0;
   overflow: clip;
   overflow-clip-margin: 6px;
+}
+
+.local-course-row-content[data-rebuild-motion="outgoing"] {
+  display: none;
 }
 
 .local-course-timeline > li[data-exiting] {
@@ -262,6 +267,30 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .local-course-row-content[data-rebuild-motion] {
+    animation-duration: var(--local-course-rebuild-duration);
+    animation-delay: var(--local-course-rebuild-delay);
+    animation-timing-function: var(--local-ease-out);
+    animation-fill-mode: both;
+  }
+
+  .local-course-row-content[data-rebuild-motion="incoming"] {
+    position: relative;
+    animation-name: local-course-card-in;
+  }
+
+  .local-course-row-content[data-rebuild-motion="settling"] {
+    animation-name: local-course-card-settle;
+  }
+
+  .local-course-row-content[data-rebuild-motion="outgoing"] {
+    position: absolute;
+    inset: 0 0 auto;
+    display: block;
+    pointer-events: none;
+    animation-name: local-course-card-out;
+  }
+
   .local-course-timeline > li {
     transition:
       grid-template-rows var(--local-course-row-duration) var(--local-ease-out),
@@ -279,6 +308,33 @@
       opacity: 0;
       transform: translateY(7px);
     }
+  }
+}
+
+@keyframes local-course-card-in {
+  from {
+    opacity: 0;
+    translate: 0 9px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes local-course-card-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    translate: 0 -4px;
+  }
+}
+
+@keyframes local-course-card-settle {
+  50% {
+    translate: 0 3px;
   }
 }
 
