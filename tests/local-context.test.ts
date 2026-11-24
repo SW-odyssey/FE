@@ -9,6 +9,7 @@ import { readSpacePreferences } from "../src/features/discovery/filters.ts";
 import { slotAt } from "../src/features/discovery/visit-time.ts";
 import {
   distanceMeters,
+  groupedMarkerCells,
   groupMapPlaces,
   inMapScope,
   previewCell,
@@ -123,6 +124,17 @@ test("a selected cell keeps the same member venues when changing between group a
     places.filter((p) => inMapScope(p, "cell:unknown")),
     [],
   );
+});
+test("count markers represent multiple venues and leave selected venues as pins", () => {
+  const first = localPlaces[0];
+  const same = { ...first, id: "same-cell" };
+  const distant = { ...first, id: "other-cell", lat: first.lat + 0.005 };
+  const places = [first, same, distant];
+  const markers = groupedMarkerCells(places);
+  assert.equal(markers.length, 1);
+  assert.deepEqual(markers[0].places, [first, same]);
+  assert.ok(markers[0].places.every((place) => inMapScope(place, markers[0].id)));
+  assert.deepEqual(groupedMarkerCells(places, same.id), []);
 });
 test("the recommendation collection excludes shopping and alley aggregates", () => {
   const ids = recommendPlaces(localPlaces, "afternoon", "any", null).map(

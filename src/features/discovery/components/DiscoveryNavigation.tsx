@@ -28,7 +28,11 @@ export function DiscoveryNavigation(props: Props) {
       className={`local-bottom-nav ${compact ? "is-compact" : ""}`}
       label={t("Main navigation", "주요 메뉴")}
       value={
-        desktop && view === "map" ? (courseMap ? "course" : "discover") : view
+        view === "map" && courseMap
+          ? "course"
+          : desktop && view === "map"
+            ? "discover"
+            : view
       }
       onChange={navigate}
       options={(desktop ? [places, course] : [places, course, map]).map(

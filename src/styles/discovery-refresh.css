@@ -86,6 +86,12 @@ body {
   font-size: 14px;
   font-weight: 500;
   box-shadow: var(--refresh-shadow);
+  transition:
+    scale 160ms ease-out,
+    background-color 160ms ease-out,
+    color 160ms ease-out,
+    border-color 160ms ease-out,
+    filter 160ms ease-out;
 }
 .local-shell.local-refined
   .local-discovery-controls
@@ -95,6 +101,23 @@ body {
   border-color: var(--local-plum);
   color: #fff;
 }
+@media (hover: hover) {
+  .local-shell.local-refined
+    .local-discovery-controls
+    .local-category-tabs
+    > button:hover {
+    filter: brightness(0.97);
+  }
+}
+
+.local-shell.local-refined
+  .local-discovery-controls
+  .local-category-tabs
+  > button:active {
+  filter: brightness(0.93);
+  transition-duration: 80ms;
+}
+
 .local-shell.local-refined .local-category-tabs button::after {
   display: none;
 }
@@ -167,7 +190,7 @@ body {
 .local-shell.local-refined .local-detail-hero {
   aspect-ratio: 393 / 220;
 }
-/* Back: a white circular button. No padding, so the 36px chevron centres in the 44px circle. */
+/* Back: a white circular button with an optically centred chevron. */
 .local-shell.local-refined .local-detail-back {
   padding: 0;
   background: #fffffff2;
@@ -176,6 +199,9 @@ body {
   box-shadow: 0 2px 10px #1b1b1f26;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+}
+.local-shell.local-refined .local-detail-back > .local-icon {
+  translate: -1.5px 0;
 }
 .local-shell.local-refined .local-detail-back:active {
   background: #f0efec;
@@ -406,12 +432,9 @@ body {
   color: var(--refresh-ink);
   box-shadow: var(--refresh-shadow);
 }
-.local-shell.local-refined .local-map-pin {
+.local-shell.local-refined .local-map-pin.is-cluster {
   background: #fff;
   box-shadow: 0 2px 8px #1b1b1f2e;
-}
-.local-shell.local-refined .local-map-pin.is-selected {
-  background: var(--local-plum);
 }
 
 /* Map sheet list: tighter sides so rows use the card width. */

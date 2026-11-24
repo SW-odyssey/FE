@@ -6,6 +6,7 @@
 }
 
 .local-web .local-map-page.is-course-map {
+  --local-map-sheet-gap: 4px;
   --local-map-chrome-top: var(
     --local-map-measured-top,
     calc(76px + var(--local-safe-top))
@@ -18,7 +19,8 @@
   pointer-events: none;
 }
 
-.local-map-mobile-tools > * {
+.local-map-mobile-tools > *,
+.local-course-map-header > * {
   pointer-events: auto;
 }
 
@@ -28,37 +30,34 @@
   padding: 0;
 }
 
-.local-map-layers {
-  --local-segment-track-padding: 3px;
-  --local-segment-item-inset: 0px;
-  --local-segment-lens-radius: var(--r-pill);
-  --local-segment-lens-fill: var(--local-pale);
-  --local-segment-reduced-fill: var(--local-pale);
-  position: relative;
-  display: inline-grid;
-  grid-template-columns: repeat(2, minmax(68px, 1fr));
-  isolation: isolate;
-  justify-self: start;
-  padding: 3px;
+.local-course-map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.local-course-map-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding-inline: 11px 15px;
   border: 1px solid var(--refresh-line);
   border-radius: var(--r-pill);
   background: var(--refresh-card);
   box-shadow: var(--refresh-shadow);
+  font-size: 14px;
+  font-weight: 700;
 }
 
-.local-map-layers > button {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  min-height: 44px;
-  min-width: 58px;
-  padding-inline: 10px;
-  border-radius: var(--r-pill);
-  font-size: 13px;
-  font-weight: 600;
+.local-course-map-back .local-icon {
+  color: var(--local-plum);
+}
+
+.local-shell.local-web.local-refined .is-course-map .local-sheet-list-layer {
+  inset: 44px 18px 20px;
 }
 
 .local-map-course-list {
@@ -165,31 +164,13 @@
   transform: translate(-50%, -50%);
 }
 
-.local-shell.local-refined .local-map-diagram .local-map-pin {
+.local-shell.local-refined .local-map-diagram .local-map-pin:not(.is-cluster) {
   width: 44px;
   height: 44px;
   padding: 0;
   border: 0;
   background: transparent;
   box-shadow: none;
-}
-
-.local-map-diagram .local-diagram-cell {
-  fill: #202b4008;
-  stroke: #4a1db052;
-  stroke-width: 0.8;
-  vector-effect: non-scaling-stroke;
-}
-
-.local-map-diagram .local-diagram-cell.is-cell-overview {
-  fill: #202b4010;
-  stroke: #4a1db080;
-}
-
-.local-map-diagram .local-diagram-cell.is-selected {
-  fill: #202b4024;
-  stroke: var(--local-plum);
-  stroke-width: 1.5;
 }
 
 .local-map-attribution {
@@ -209,8 +190,30 @@
 
 .local-map-diagram > button[aria-current] {
   z-index: 1;
+}
+
+.local-map-diagram > .local-course-map-pin[aria-current] {
   outline: 2px solid var(--local-plum);
   outline-offset: 2px;
+}
+
+.local-google-pins {
+  position: absolute;
+  inset: 0 auto auto 0;
+}
+
+.local-google-pins > button {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.local-google-pins > button[aria-current="true"] {
+  z-index: 1;
+}
+
+[data-map-provider="google"] .local-mini-map-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
 }
 
 .local-diagram-pin-label {
@@ -263,6 +266,12 @@
   }
 }
 
+@media (max-width: 959px) and (max-height: 480px) {
+  .local-shell.local-web.local-refined .is-course-map .local-sheet-list-layer {
+    inset-block: 38px 14px;
+  }
+}
+
 @media (max-width: 959px) {
   .local-course-map-pin {
     position: relative;
@@ -290,15 +299,23 @@
     --local-content-gutter: 24px;
     display: grid;
     grid-template-columns: var(--local-sidebar-width) minmax(0, 1fr);
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
     max-width: none;
     box-shadow: none;
   }
 
-  .is-desktop-map-layout > .local-search-header {
+  .local-desktop-sidebar-content {
     grid-column: 1;
     grid-row: 2;
+    display: flex;
+    flex-direction: column;
     min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .local-web .local-desktop-sidebar-content > .local-search-header {
+    padding-inline: var(--local-content-gutter);
   }
 
   .local-shell.local-refined.is-desktop-map-layout > .local-bottom-nav {
@@ -322,10 +339,9 @@
     max-height: none;
   }
 
-  .is-desktop-map-layout > .local-places,
-  .is-desktop-map-layout > .local-course {
-    grid-column: 1;
-    grid-row: 3;
+  .local-web
+    .local-desktop-sidebar-content
+    > :is(.local-places, .local-course) {
     min-width: 0;
     padding-bottom: 24px;
     scroll-padding-bottom: 12px;

@@ -1,219 +1,275 @@
 "use client";
 
-import { useState } from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import { distanceMeters } from "../../map/geometry";
-import { courseCandidates } from "../course";
-import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import type { useDeviceLocation } from "../../map/useDeviceLocation";
-import { dateLocales, placeCount } from "../localization";
-import { areaLabels } from "../presentation";
-import { AutoCourse } from "./AutoCourse";
-import { Photo } from "./PlacePhoto";
-import { renderPlaceRow } from "./PlaceRow";
+import { googleMapsCourseLink, googleMapsPlaceUrl } from "../course";
+import type { DiscoveryController } from "../hooks/useDiscoveryController";
+import { dateLocales } from "../localization";
+import { visitDate } from "../visit-date";
+import { CourseTimeline } from "./CourseTimeline";
+import { DiscoveryContextBar } from "./DiscoveryContextBar";
+import { LanguageButton } from "./LanguageButton";
 import { ResourceNotice } from "./ResourceNotice";
-import { SegmentedChoice } from "./SegmentedChoice";
 
 type Props = Pick<
   DiscoveryController,
-  | "course"
-  | "kind"
+  | "autoCourse"
+  | "clock"
+  | "contextAreaLabel"
+  | "courseDate"
+  | "courseLocation"
+  | "courseOptions"
+  | "courseTimeLabel"
+  | "currentArea"
   | "language"
-  | "mapId"
   | "name"
-  | "navigate"
   | "openPlace"
-  | "retry"
+  | "openTime"
   | "scroll"
-  | "status"
+  | "setModal"
+  | "showCourseOnMap"
+  | "toggleCourseOption"
   | "t"
-  | "view"
-  | "visible"
-> &
-  React.ComponentProps<typeof AutoCourse> &
-  Pick<DiscoveryController, "courseMode" | "setCourseMode"> & {
-    location: ReturnType<typeof useDeviceLocation>;
-  };
+> & { location: ReturnType<typeof useDeviceLocation>; desktop: boolean };
 
-export function CourseScreen(props: Props) {
-  const { courseMode, setCourseMode, scroll, t } = props;
-  return (
-    <div className="local-content local-course" ref={scroll}>
-      <SegmentedChoice
-        className="local-course-modes"
-        label={t("Course", "코스")}
-        value={courseMode}
-        onChange={setCourseMode}
-        options={[
-          { value: "auto", label: t("Recommended course", "추천 코스") },
-          { value: "saved", label: t("My course", "내 코스") },
-        ]}
-      />
-      {courseMode === "auto" ? (
-        <AutoCourse {...props} />
-      ) : (
-        <SavedCourse {...props} />
-      )}
-    </div>
-  );
-}
-
-function SavedCourse(props: Props) {
-  const {
-    course: { stops, move, remove },
-    kind,
-    language,
-    name,
-    navigate,
-    openPlace,
-    retry,
-    status,
-    desktop,
-    showCourseOnMap,
-    t,
-    visible,
-  } = props;
-  const [editing, setEditing] = useState(false);
-  const candidates = courseCandidates(visible, stops);
-  const last = stops.at(-1);
-  const active = stops.length > 0;
+export function CourseScreen({
+  autoCourse,
+  clock,
+  contextAreaLabel,
+  courseDate,
+  courseLocation,
+  courseOptions,
+  courseTimeLabel,
+  currentArea,
+  desktop,
+  language,
+  location,
+  name,
+  openPlace,
+  openTime,
+  scroll,
+  setModal,
+  showCourseOnMap,
+  toggleCourseOption,
+  t,
+}: Props) {
+  const { route } = autoCourse;
+  const stops = route.map(({ place }) => place);
+  const mapsLink = googleMapsCourseLink(stops);
+  const totalDistance = stops
+    .slice(1)
+    .reduce((sum, stop, index) => sum + distanceMeters(stops[index], stop), 0);
+  const title =
+    courseDate === visitDate(clock, 0)
+      ? t("Today's course", "오늘의 코스")
+      : t("Recommended course", "추천 코스");
   const formatDistance = new Intl.NumberFormat(dateLocales[language], {
     style: "unit",
     unit: "meter",
     maximumFractionDigits: 0,
   });
+  const formatNumber = new Intl.NumberFormat(dateLocales[language], {
+    maximumFractionDigits: 0,
+  });
+  const courseChips = [
+    {
+      option: "includeCafe",
+      available: autoCourse.canIncludeCafe,
+      icon: "coffee",
+      label: t("Café", "카페"),
+    },
+    {
+      option: "includeBrowse",
+      available: autoCourse.canIncludeBrowse,
+      icon: "compass",
+      label: t("Browse", "구경"),
+    },
+    {
+      option: "includeLate",
+      available: autoCourse.canIncludeLate,
+      icon: "clock",
+      label: t("Late night", "심야"),
+    },
+  ] as const;
+  const availableChips = courseChips.filter(({ available }) => available);
 
   return (
-    <>
+    <div className="local-content local-course" ref={scroll}>
       <header className="local-course-heading">
-        <h1>{t("My course", "내 코스")}</h1>
-        {active && <p>{placeCount(language, stops.length)}</p>}
+        <h1>{title}</h1>
+        <LanguageButton
+          className="local-course-language"
+          label={t("Choose language", "언어 선택")}
+          onClick={() => setModal("menu")}
+        />
       </header>
 
-      {active && (
-        <section className="local-course-itinerary">
-          <div className="local-course-section-heading">
-            <h2>{t("Visit order", "방문 순서")}</h2>
-            <button
-              className="local-course-text-action"
-              onClick={() => setEditing(!editing)}
-            >
-              {editing ? t("Done", "완료") : t("Edit order", "순서 편집")}
-            </button>
+      <div className="local-discovery-controls local-course-controls">
+        <DiscoveryContextBar
+          currentArea={currentArea}
+          setModal={setModal}
+          t={t}
+          contextAreaLabel={
+            courseLocation ? t("My location", "내 위치") : contextAreaLabel
+          }
+          openTime={openTime}
+          timeLabel={courseTimeLabel}
+        />
+        {availableChips.length > 0 && (
+          <div
+            className="local-category-tabs local-course-option-chips"
+            role="group"
+            aria-label={t("Course options", "일정 구성")}
+          >
+            {availableChips.map(({ option, icon, label }) => (
+              <button
+                key={option}
+                type="button"
+                className={courseOptions[option] ? "is-active" : ""}
+                aria-pressed={courseOptions[option]}
+                onClick={() => toggleCourseOption(option)}
+              >
+                <LocalIcon name={icon} size={16} />
+                {label}
+              </button>
+            ))}
           </div>
-          <ol className="local-course-timeline">
-            {stops.map((stop, index) => {
-              const previous = stops[index - 1];
-              const label = name(stop);
-              return (
-                <li key={stop.id}>
-                  {previous && (
-                    <p className="local-course-distance">
-                      {t("Straight line", "직선")}{" "}
-                      {formatDistance.format(distanceMeters(previous, stop))}
-                    </p>
-                  )}
-                  <div className="local-course-stop">
-                    <span className="local-course-pin" aria-hidden="true">
-                      {index + 1}
-                    </span>
-                    <button
-                      className="local-course-stop-detail"
-                      onClick={() => openPlace(stop)}
-                    >
-                      <Photo place={stop} />
-                      <span className="local-place-info">
-                        <strong>{label}</strong>
-                        <span>
-                          {kind(stop)}, {areaLabels[language][stop.area]}
-                        </span>
-                      </span>
-                      <LocalIcon name="chevron-right" size={16} />
-                    </button>
+        )}
+        {currentArea &&
+          (location.status === "denied" ||
+            location.status === "unavailable") && (
+            <p className="local-course-location-note" role="status">
+              {t("Using the selected area", "선택한 지역을 기준으로 추천해요")}
+            </p>
+          )}
+      </div>
+
+      {autoCourse.status !== "success" ? (
+        <ResourceNotice
+          status={autoCourse.status}
+          retry={autoCourse.retry}
+          t={t}
+        />
+      ) : (
+        <section className="local-course-itinerary">
+          {route.length > 0 && (
+            <div className="local-course-overview">
+              <h2>{t("Visit order", "방문 순서")}</h2>
+              <dl
+                className="local-course-summary"
+                aria-label={t("Course summary", "코스 요약")}
+              >
+                <div>
+                  <dt>{t("Stops", "장소")}</dt>
+                  <dd>
+                    {formatNumber.format(stops.length)}
+                    {language === "ko" && "곳"}
+                  </dd>
+                </div>
+                {stops.length > 1 && (
+                  <div>
+                    <dt>{t("Straight line", "직선 거리")}</dt>
+                    <dd>{formatDistance.format(totalDistance)}</dd>
                   </div>
-                  {editing && (
-                    <div
-                      className="local-course-edit"
-                      role="group"
-                      aria-label={label}
+                )}
+              </dl>
+            </div>
+          )}
+          <CourseTimeline
+            route={route}
+            formatDistance={formatDistance}
+            language={language}
+            name={name}
+            openPlace={openPlace}
+            t={t}
+          />
+          {route.length === 0 ? (
+            <div className="local-empty">
+              <LocalIcon name="route" size={28} />
+              <h2>
+                {t(
+                  "No course for these conditions",
+                  "이 조건에 맞는 코스가 없어요",
+                )}
+              </h2>
+              <button className="local-secondary" onClick={() => openTime()}>
+                {t("Choose visit time", "방문 시간 선택")}
+              </button>
+            </div>
+          ) : (
+            <div className="local-course-footer">
+              {(!desktop || autoCourse.canSuggestAnother) && (
+                <div className="local-course-actions">
+                  {autoCourse.canSuggestAnother && (
+                    <button
+                      type="button"
+                      className="local-course-resuggest"
+                      onClick={autoCourse.suggestAnother}
                     >
-                      <button
-                        disabled={index === 0}
-                        onClick={() => move(stop.id, -1)}
-                        aria-label={`${label} · ${t("Move up", "위로 이동")}`}
-                      >
-                        <LocalIcon name="chevron-right" size={16} />
-                      </button>
-                      <button
-                        disabled={index === stops.length - 1}
-                        onClick={() => move(stop.id, 1)}
-                        aria-label={`${label} · ${t("Move down", "아래로 이동")}`}
-                      >
-                        <LocalIcon name="chevron-right" size={16} />
-                      </button>
-                      <button
-                        onClick={() => {
-                          remove(stop.id);
-                          if (stops.length === 1) {
-                            setEditing(false);
-                          }
-                        }}
-                        aria-label={`${label} · ${t("Remove", "삭제")}`}
-                      >
-                        <LocalIcon name="x" size={16} />
-                      </button>
-                    </div>
+                      <LocalIcon name="refresh" size={15} />
+                      {t("Rebuild course", "코스 다시 만들기")}
+                    </button>
                   )}
-                </li>
-              );
-            })}
-          </ol>
-          {!desktop && (
-            <button
-              className="local-course-map-toggle"
-              onClick={showCourseOnMap}
-            >
-              <LocalIcon name="map" size={18} />
-              {t("Course map", "코스 지도")}
-              <LocalIcon name="chevron-right" size={16} />
-            </button>
+                  {!desktop && (
+                    <button
+                      type="button"
+                      className="local-primary local-course-map-toggle"
+                      onClick={showCourseOnMap}
+                    >
+                      <LocalIcon name="map" size={17} />
+                      {t("View map", "지도 보기")}
+                    </button>
+                  )}
+                </div>
+              )}
+              {mapsLink ? (
+                <a
+                  className="local-course-google"
+                  href={mapsLink}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {stops.length > 1
+                    ? t(
+                        "View places in Google Maps",
+                        "구글맵에서 장소 목록 보기",
+                      )
+                    : t("Open in Google Maps", "구글맵에서 열기")}
+                  <LocalIcon name="external-link" size={16} />
+                </a>
+              ) : (
+                <details className="local-course-google-options">
+                  <summary className="local-course-google">
+                    {t(
+                      "Open each place in Google Maps",
+                      "구글맵에서 장소별로 보기",
+                    )}
+                    <LocalIcon name="chevron-right" size={16} />
+                  </summary>
+                  <ol>
+                    {stops.map((place) => (
+                      <li key={place.id}>
+                        <a
+                          href={googleMapsPlaceUrl(place)}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <span>{name(place)}</span>
+                          <LocalIcon name="external-link" size={15} />
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </details>
+              )}
+            </div>
           )}
         </section>
       )}
-
-      <section className="local-course-candidates">
-        <div className="local-course-section-heading">
-          <h2>
-            {active
-              ? t("Pick your next stop", "다음 장소 고르기")
-              : t("Pick your first stop", "첫 장소 고르기")}
-          </h2>
-        </div>
-        {last && (
-          <p className="local-course-origin">
-            <LocalIcon name="map-pin" size={14} />
-            {t("Near {place}", "{place} 주변").replace("{place}", name(last))}
-          </p>
-        )}
-        {status === "loading" || status === "error" ? (
-          <ResourceNotice status={status} retry={retry} t={t} />
-        ) : candidates.length ? (
-          <div className="local-place-list">
-            {candidates.map((p) => renderPlaceRow(props, p))}
-          </div>
-        ) : (
-          <p className="local-course-empty">
-            {t("No more recommendations", "추천할 다른 장소가 없어요")}
-          </p>
-        )}
-        <button
-          className="local-secondary"
-          onClick={() => navigate("discover")}
-        >
-          <LocalIcon name="search" size={17} />
-          {t("Browse places", "장소 둘러보기")}
-        </button>
-      </section>
-    </>
+      <p className="local-sr-only" role="status">
+        {route.map(({ place }) => name(place)).join(", ")}
+      </p>
+    </div>
   );
 }

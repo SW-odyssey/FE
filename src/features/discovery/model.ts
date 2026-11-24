@@ -17,6 +17,7 @@ export type LocalPlace = {
   sourceUrl: string;
   imageCredit?: string;
   imageSourceUrl?: string;
+  googlePlaceId?: string;
 };
 export type DiscoveryView = "discover" | "course" | "map";
 export type DiscoveryLanguage = "en" | "ko" | "ja" | "zh";

@@ -326,7 +326,7 @@
     filter 0.16s ease-out,
     scale 0.18s ease-out;
 }
-.local-featured:active > .local-photo {
+.local-featured-track:not([data-dragging]) > .local-featured:active > .local-photo {
   filter: brightness(0.9);
 }
 .local-refined .local-filter-choice-set.is-space > button > span {
@@ -338,7 +338,7 @@
   background-color: #e3e8ef;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .local-featured:active > .local-photo {
+  .local-featured-track:not([data-dragging]) > .local-featured:active > .local-photo {
     scale: 1.02;
   }
 }

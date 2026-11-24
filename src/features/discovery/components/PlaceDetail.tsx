@@ -8,14 +8,11 @@ import PhotoGallery from "./PhotoGallery";
 type Props = Pick<
   DiscoveryController,
   | "aiSummary"
-  | "addPlaceToCourse"
-  | "course"
   | "copyAddress"
   | "description"
   | "kind"
   | "language"
   | "name"
-  | "openCourseFromDetail"
   | "photosFor"
   | "scroll"
   | "selected"
@@ -27,14 +24,11 @@ type Props = Pick<
 export function PlaceDetail(props: Props) {
   const {
     aiSummary,
-    addPlaceToCourse,
-    course,
     copyAddress,
     description,
     kind,
     language,
     name,
-    openCourseFromDetail,
     photosFor,
     scroll,
     selected,
@@ -44,7 +38,6 @@ export function PlaceDetail(props: Props) {
     t,
   } = props;
   const area = areaLabels[language][selected.area];
-  const inCourse = course.stops.some((stop) => stop.id === selected.id);
   const photoCredits = [
     ...new Set(
       photosFor(selected)
@@ -122,25 +115,13 @@ export function PlaceDetail(props: Props) {
           </button>
         </section>
       </div>
-      <div className="local-detail-action local-course-detail-actions">
-        <button
-          className="local-secondary local-course-detail-map"
-          onClick={() => showPlaceOnMap(selected)}
-          aria-label={t("View on map", "지도에서 보기")}
-          title={t("View on map", "지도에서 보기")}
-        >
-          <LocalIcon name="map" size={21} />
-        </button>
+      <div className="local-detail-action">
         <button
           className="local-primary"
-          onClick={() =>
-            inCourse ? openCourseFromDetail() : addPlaceToCourse(selected)
-          }
+          onClick={() => showPlaceOnMap(selected)}
         >
-          <LocalIcon name={inCourse ? "check" : "route"} size={20} />
-          {inCourse
-            ? t("View my course", "내 코스 보기")
-            : t("Add to course", "코스에 담기")}
+          {t("View on map", "지도에서 보기")}
+          <LocalIcon name="arrow-right" size={18} />
         </button>
       </div>
     </div>

@@ -1,21 +1,26 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { courseSlots, rankAutoCourses, type CoursePools } from "../auto-course";
+import {
+  courseSlots,
+  recommendCourses,
+  type CourseLeg,
+  type CoursePools,
+} from "../auto-course";
+import type { CourseOptions } from "../course";
 import {
   discoveryQueryKey,
   type DiscoveryDataSource,
   type DiscoveryQuery,
 } from "../data";
-import type { LocalPlace, VisitSlot } from "../model";
-
 const emptyPools: CoursePools = {};
-const emptyReplacements: Partial<Record<VisitSlot, LocalPlace>> = {};
+const emptyRoute: CourseLeg[] = [];
 
 /** Load the remaining course slots from the active place source. */
 export function useAutoCourse(
   source: DiscoveryDataSource,
   query: DiscoveryQuery,
+  options: CourseOptions,
   enabled: boolean,
 ) {
   const key = discoveryQueryKey(query);
@@ -27,23 +32,7 @@ export function useAutoCourse(
     source: DiscoveryDataSource;
     pools: CoursePools | null;
   }>();
-  const [selection, setSelection] = useState<{
-    key: string;
-    round: number;
-    browse: boolean;
-    late: boolean;
-    replacements: Partial<Record<VisitSlot, LocalPlace>>;
-  }>();
-  const picked =
-    selection?.key === key
-      ? selection
-      : {
-          key,
-          round: 0,
-          browse: false,
-          late: false,
-          replacements: emptyReplacements,
-        };
+  const { includeCafe, includeBrowse } = options;
   const browsePlace = source.snapshot?.browseCourse?.(input.area) ?? null;
   const lateAvailable = useMemo(
     () =>
@@ -54,28 +43,34 @@ export function useAutoCourse(
           .items.some((place) => place.category === "food")),
     [source, input, enabled],
   );
-  const includeLate = picked.late || input.slot === "late";
+  const includeLate =
+    input.slot === "late" || (options.includeLate && lateAvailable);
   const slots = useMemo(
     () => courseSlots(input.slot, includeLate),
     [input.slot, includeLate],
   );
-  const requestKey = `${key}:${slots.join(",")}:${attempt}`;
+  const hasAfternoon = slots.includes("afternoon");
+  const querySlots = useMemo(
+    () => (includeCafe ? slots : slots.filter((slot) => slot !== "afternoon")),
+    [slots, includeCafe],
+  );
+  const requestKey = `${key}:${querySlots.join(",")}:${attempt}`;
   const synchronous = useMemo(() => {
     if (!enabled || !source.snapshot) return undefined;
     return Object.fromEntries(
-      slots.map((slot) => [
+      querySlots.map((slot) => [
         slot,
         source.snapshot!.query({ ...input, slot }).items,
       ]),
     );
-  }, [enabled, source, input, slots]);
+  }, [enabled, source, input, querySlots]);
 
   useEffect(() => {
-    if (!enabled || source.snapshot || !slots.length) return;
+    if (!enabled || source.snapshot || !querySlots.length) return;
     const controller = new AbortController();
     const options = { signal: controller.signal };
     void Promise.all(
-      slots.map(async (slot) => [
+      querySlots.map(async (slot) => [
         slot,
         (await source.query({ ...input, slot }, options)).items,
       ]),
@@ -94,47 +89,64 @@ export function useAutoCourse(
       },
     );
     return () => controller.abort();
-  }, [enabled, source, input, slots, requestKey]);
+  }, [enabled, source, input, querySlots, requestKey]);
 
   const matched =
     response?.key === requestKey && response.source === source
       ? response
       : undefined;
   const pools = synchronous ?? matched?.pools ?? emptyPools;
-  const options = useMemo(
+  const routes = useMemo(
     () =>
-      rankAutoCourses(
-        pools,
-        slots,
-        input.origin,
-        picked.browse ? browsePlace : null,
-      ),
-    [pools, slots, input.origin, picked.browse, browsePlace],
+      recommendCourses(pools, slots, input.origin, {
+        includeCafe,
+        browsePlace: includeBrowse ? browsePlace : null,
+      }),
+    [pools, slots, input.origin, includeCafe, includeBrowse, browsePlace],
   );
-  const route = useMemo(() => {
-    const base = options[picked.round % options.length] ?? [];
-    return base.map((leg) => ({
-      ...leg,
-      place: picked.replacements[leg.slot] ?? leg.place,
-    }));
-  }, [options, picked.round, picked.replacements]);
+  const selectionKey = `${requestKey}:${includeBrowse ? (browsePlace?.id ?? "") : ""}`;
+  const [selection, setSelection] = useState<{
+    key: string;
+    source: DiscoveryDataSource;
+    index: number;
+  }>();
+  const index =
+    selection?.key === selectionKey && selection.source === source
+      ? selection.index % Math.max(1, routes.length)
+      : 0;
+  const route = routes[index] ?? emptyRoute;
+  function suggestAnother() {
+    if (routes.length < 2) return;
+    setSelection((previous) => {
+      const currentIndex =
+        previous?.key === selectionKey && previous.source === source
+          ? previous.index % routes.length
+          : 0;
+      const current = routes[currentIndex];
+      const visited = new Set(current.map(({ place }) => place.id));
+      // Prefer a different mix of places before falling back to a different order.
+      for (let step = 1; step < routes.length; step++) {
+        const next = (currentIndex + step) % routes.length;
+        if (routes[next].some(({ place }) => !visited.has(place.id)))
+          return { key: selectionKey, source, index: next };
+      }
+      return {
+        key: selectionKey,
+        source,
+        index: (currentIndex + 1) % routes.length,
+      };
+    });
+  }
 
   return {
     route,
-    isPreview: Boolean(source.snapshot),
-    pools,
-    origin: input.origin,
-    hasOther: options.length > 1,
-    canBrowse: Boolean(
-      browsePlace &&
-      slots.includes("afternoon") &&
-      (pools.afternoon?.length || picked.browse),
-    ),
+    canSuggestAnother: routes.length > 1,
+    suggestAnother,
+    canIncludeCafe: hasAfternoon,
+    canIncludeBrowse: Boolean(browsePlace && hasAfternoon),
     canIncludeLate: input.slot !== "late" && lateAvailable,
-    includeLate,
-    browse: picked.browse,
     status:
-      source.snapshot || !slots.length
+      source.snapshot || !querySlots.length
         ? ("success" as const)
         : matched
           ? matched.pools
@@ -142,21 +154,5 @@ export function useAutoCourse(
             : ("error" as const)
           : ("loading" as const),
     retry: () => setAttempt((value) => value + 1),
-    changeAfternoon: (browse: boolean) =>
-      setSelection({ ...picked, browse, replacements: {}, round: 0 }),
-    toggleLate: () =>
-      setSelection({
-        ...picked,
-        late: !picked.late,
-        replacements: {},
-        round: 0,
-      }),
-    reroll: () =>
-      setSelection({ ...picked, round: picked.round + 1, replacements: {} }),
-    replace: (slot: VisitSlot, place: LocalPlace) =>
-      setSelection({
-        ...picked,
-        replacements: { ...picked.replacements, [slot]: place },
-      }),
   };
 }

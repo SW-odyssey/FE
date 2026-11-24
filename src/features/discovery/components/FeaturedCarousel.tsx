@@ -1,5 +1,6 @@
 "use client";
 import {
+  type PointerEvent,
   type TouchEvent,
   useEffect,
   useLayoutEffect,
@@ -23,6 +24,16 @@ type Props = Pick<
   | "setFeaturedId"
   | "modal"
 > & { places: LocalPlace[] };
+
+type MouseDrag = {
+  pointerId: number;
+  x: number;
+  y: number;
+  scale: number;
+  startScroll: number;
+  startSlide: number;
+  axis: "pending" | "horizontal" | "vertical";
+};
 
 function slideOffset(node: HTMLDivElement, index: number) {
   return (
@@ -65,6 +76,8 @@ export function FeaturedCarousel({
 }: Props) {
   const track = useRef<HTMLDivElement>(null);
   const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mouseDrag = useRef<MouseDrag | null>(null);
+  const ignorePointerClick = useRef(false);
   const count = places.length;
   const loopOffset = count > 1 ? 1 : 0;
   const [initialIndex] = useState(() =>
@@ -90,6 +103,9 @@ export function FeaturedCarousel({
       const width = node.clientWidth;
       if (!width || width === position.current.width) return;
       position.current.width = width;
+      mouseDrag.current = null;
+      delete node.dataset.dragging;
+      delete node.dataset.mouseSettling;
       scrollToSlide(node, position.current.index + loopOffset, "instant");
     };
     align();
@@ -104,8 +120,10 @@ export function FeaturedCarousel({
     const media = matchMedia("(prefers-reduced-motion: reduce)");
     const changed = () => {
       const node = track.current;
-      if (media.matches && loopOffset && node?.clientWidth)
+      if (media.matches && loopOffset && node?.clientWidth && !mouseDrag.current) {
+        delete node.dataset.mouseSettling;
         scrollToSlide(node, position.current.index + loopOffset, "instant");
+      }
       setReduceMotion(media.matches);
     };
     const visibility = () => setHidden(document.hidden);
@@ -119,14 +137,19 @@ export function FeaturedCarousel({
     };
   }, [loopOffset]);
   function settleLoop(node: HTMLDivElement) {
-    if (!loopOffset) return;
+    if (!loopOffset || node.dataset.dragging) return;
+    const target = node.dataset.mouseSettling;
+    if (target !== undefined) {
+      if (Math.abs(node.scrollLeft - Number(target)) > 1) return;
+      delete node.dataset.mouseSettling;
+    }
     // At either end the copy and the real card fill the same viewport.
     if (node.scrollLeft <= 1) scrollToSlide(node, count, "instant");
     if (node.scrollLeft >= node.scrollWidth - node.clientWidth - 1)
       scrollToSlide(node, 1, "instant");
   }
   function scheduleLoopReset(node: HTMLDivElement) {
-    if (!loopOffset || "onscrollend" in node) return;
+    if (!loopOffset || node.dataset.dragging || "onscrollend" in node) return;
     if (settleTimer.current) clearTimeout(settleTimer.current);
     settleTimer.current = setTimeout(() => settleLoop(node), 140);
   }
@@ -135,9 +158,77 @@ export function FeaturedCarousel({
     setTouching(active);
     if (!active) scheduleLoopReset(event.currentTarget);
   }
+  function startMouseDrag(event: PointerEvent<HTMLDivElement>) {
+    ignorePointerClick.current = false;
+    if (!loopOffset || event.pointerType !== "mouse" || event.button !== 0)
+      return;
+    const node = event.currentTarget;
+    const width = node.getBoundingClientRect().width;
+    if (!width) return;
+    // Keep mouse drags from leaving keyboard focus on a card that scrolled away.
+    event.preventDefault();
+    if (settleTimer.current) clearTimeout(settleTimer.current);
+    mouseDrag.current = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      scale: node.clientWidth / width,
+      startScroll: node.scrollLeft,
+      startSlide: slideAtScroll(node),
+      axis: "pending",
+    };
+    // Capture on the pressed card so an ordinary click still opens it.
+    const card = (event.target as Element).closest("button.local-featured");
+    (card ?? node).setPointerCapture(event.pointerId);
+  }
+  function moveMouseDrag(event: PointerEvent<HTMLDivElement>) {
+    const drag = mouseDrag.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    const node = event.currentTarget;
+    const delta = drag.x - event.clientX;
+    if (drag.axis === "pending") {
+      const vertical = Math.abs(event.clientY - drag.y);
+      if (Math.max(Math.abs(delta), vertical) < 6) return;
+      drag.axis = Math.abs(delta) > vertical ? "horizontal" : "vertical";
+      ignorePointerClick.current = true;
+      if (drag.axis === "horizontal") {
+        drag.startScroll = node.scrollLeft;
+        drag.startSlide = slideAtScroll(node);
+        node.dataset.dragging = "true";
+        delete node.dataset.mouseSettling;
+      }
+    }
+    if (drag.axis === "horizontal") {
+      const stride = slideOffset(node, 1);
+      const offset = Math.max(-stride, Math.min(stride, delta * drag.scale));
+      node.scrollLeft = drag.startScroll + offset;
+    }
+  }
+  function finishMouseDrag(event: PointerEvent<HTMLDivElement>, commit = false) {
+    const drag = mouseDrag.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    mouseDrag.current = null;
+    if (drag.axis !== "horizontal") return;
+    const node = event.currentTarget;
+    const distance = (drag.x - event.clientX) * drag.scale;
+    const threshold = Math.min(72, node.clientWidth * 0.22);
+    const step =
+      commit && Math.abs(distance) >= threshold ? Math.sign(distance) : 0;
+    const next = Math.max(0, Math.min(count + 1, drag.startSlide + step));
+    const target = slideOffset(node, next);
+    const instant = reduceMotion || Math.abs(node.scrollLeft - target) <= 1;
+    // Keep snap disabled until the animation reaches the destination.
+    // Otherwise the browser first snaps back to the previous card.
+    node.dataset.mouseSettling = String(target);
+    delete node.dataset.dragging;
+    node.scrollTo({ left: target, behavior: instant ? "instant" : "smooth" });
+    if (instant) settleLoop(node);
+    else scheduleLoopReset(node);
+  }
   function go(next: number, from = index, direction?: -1 | 1) {
     const node = track.current;
     if (!node || !loopOffset) return;
+    delete node.dataset.mouseSettling;
     if (reduceMotion) {
       scrollToSlide(node, next + loopOffset, "instant");
       return;
@@ -170,7 +261,7 @@ export function FeaturedCarousel({
       return;
     const timer = setTimeout(() => {
       const node = track.current;
-      if (!node?.clientWidth) return;
+      if (!node?.clientWidth || mouseDrag.current) return;
       scrollToSlide(node, index + loopOffset + 1, "smooth");
     }, 6000);
     return () => clearTimeout(timer);
@@ -217,7 +308,24 @@ export function FeaturedCarousel({
       <div
         className="local-featured-track"
         ref={track}
-        onTouchStart={() => {
+        data-mouse-scroll={loopOffset > 0 || undefined}
+        onDragStart={(event) => event.preventDefault()}
+        onPointerDown={startMouseDrag}
+        onPointerMove={moveMouseDrag}
+        onPointerUp={(event) => finishMouseDrag(event, true)}
+        onPointerCancel={(event) => finishMouseDrag(event)}
+        onLostPointerCapture={(event) => finishMouseDrag(event)}
+        onWheel={(event) => {
+          delete event.currentTarget.dataset.mouseSettling;
+        }}
+        onClickCapture={(event) => {
+          if (event.detail === 0 || !ignorePointerClick.current) return;
+          ignorePointerClick.current = false;
+          event.preventDefault();
+          event.stopPropagation();
+        }}
+        onTouchStart={(event) => {
+          delete event.currentTarget.dataset.mouseSettling;
           if (settleTimer.current) clearTimeout(settleTimer.current);
           setTouching(true);
         }}

@@ -1,4 +1,5 @@
 import type { SheetState } from "../../map/sheet-motion.ts";
+import type { CourseOptions } from "../course.ts";
 import { readSpacePreferences } from "../filters.ts";
 import { languages } from "../localization.ts";
 import type {
@@ -23,7 +24,7 @@ export type PreviewUrlState = {
   modal: Modal;
   sheet?: SheetState;
   courseMap?: true;
-  savedCourse?: true;
+  courseOptions?: CourseOptions;
   query: string;
   autoTime: boolean;
   slot?: VisitSlot;
@@ -51,7 +52,7 @@ export type PreviewUrlSelection = Pick<
   slot: VisitSlot;
   sheet: SheetState;
   courseMap?: boolean;
-  savedCourse?: boolean;
+  courseOptions?: CourseOptions;
   spaces: readonly SpacePreference[];
 };
 
@@ -75,6 +76,9 @@ export function readPreviewUrl(
   const state = readDiscoveryUrl(search);
   const params = new URLSearchParams(search);
   const panel = params.get("panel");
+  const courseMap = state.view === "map" && params.get("layer") === "course";
+  const inCourse = state.view === "course" || courseMap;
+  const afternoon = params.get("afternoon");
   const stop = params.get("sheet");
   const linkedSlot = params.get("slot");
   const slot = visitSlots.includes(linkedSlot as VisitSlot)
@@ -87,17 +91,23 @@ export function readPreviewUrl(
 
   return {
     view: state.view,
-    ...(state.view === "map" &&
-      params.get("layer") === "course" && { courseMap: true as const }),
-    ...((state.view === "course" ||
-      (state.view === "map" && params.get("layer") === "course")) &&
-      params.get("course") === "saved" && { savedCourse: true as const }),
+    ...(courseMap && { courseMap: true as const }),
+    ...(inCourse && {
+      courseOptions: {
+        includeCafe: afternoon !== "browse" && afternoon !== "none",
+        includeBrowse: afternoon === "browse" || afternoon === "both",
+        includeLate: params.get("late") === "1",
+      },
+    }),
     area: params.has("area") ? state.area : "jongno",
     currentArea: !params.has("area") || state.area === "jongno",
     place: state.place,
-    modal: ["area", "filters", "time", "menu"].includes(panel ?? "")
-      ? (panel as Modal)
-      : null,
+    modal:
+      inCourse && panel === "filters"
+        ? null
+        : ["area", "filters", "time", "menu"].includes(panel ?? "")
+          ? (panel as Modal)
+          : null,
     sheet: ["collapsed", "half", "expanded"].includes(stop ?? "")
       ? (stop as SheetState)
       : undefined,
@@ -144,10 +154,12 @@ export function serializePreviewUrl(
   if (state.modal) params.set("panel", state.modal);
   if (state.view === "map") params.set("sheet", state.sheet);
   if (state.view === "map" && state.courseMap) params.set("layer", "course");
-  if (
-    (state.view === "course" || (state.view === "map" && state.courseMap)) &&
-    state.savedCourse
-  )
-    params.set("course", "saved");
+  if (state.view === "course" || (state.view === "map" && state.courseMap)) {
+    const options = state.courseOptions;
+    if (options?.includeBrowse)
+      params.set("afternoon", options.includeCafe ? "both" : "browse");
+    else if (options && !options.includeCafe) params.set("afternoon", "none");
+    if (options?.includeLate) params.set("late", "1");
+  }
   return params;
 }

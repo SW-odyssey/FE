@@ -7,6 +7,24 @@ export function LocalIcon({
   name: string;
   size?: number;
 }) {
+  if (name === "refresh")
+    return (
+      <svg
+        className="local-icon"
+        width={size}
+        height={size}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M20 4v5h-5M4 20v-5h5" />
+        <path d="M19.7 9a8 8 0 0 0-13.2-3M4.3 15a8 8 0 0 0 13.2 3" />
+      </svg>
+    );
   if (name === "route")
     return (
       <svg

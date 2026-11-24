@@ -52,6 +52,11 @@ test("a short course opens to its content height and retains a collapsed stop", 
   });
   assert.equal(sheetSnapTarget(230, 0, 88, 500, 244), 244);
   assert.equal(sheetHeightsForSpace(300, 244).half, 244);
+  assert.deepEqual(sheetHeightsForSpace(500, 322), {
+    collapsed: 88,
+    half: 322,
+    expanded: 322,
+  });
   assert.equal(sheetHeightsForSpace(210, 244).expanded, 210);
 });
 

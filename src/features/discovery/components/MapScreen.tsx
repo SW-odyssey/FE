@@ -10,11 +10,11 @@ import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { placeCount } from "../localization";
 import type { Coordinate } from "../model";
 import { DiscoveryControls } from "./DiscoveryControls";
+import { LanguageButton } from "./LanguageButton";
 import { Photo } from "./PlacePhoto";
 import { renderPlaceRow } from "./PlaceRow";
 import { ResourceNotice } from "./ResourceNotice";
 import { SearchHeader } from "./SearchHeader";
-import { SegmentedChoice } from "./SegmentedChoice";
 type Props = Pick<
   DiscoveryController,
   | "language"
@@ -26,7 +26,6 @@ type Props = Pick<
   | "mapSelected"
   | "selected"
   | "courseMapStops"
-  | "changeMapLayer"
   | "navigate"
   | "openFilters"
   | "openPlace"
@@ -77,7 +76,6 @@ export function MapScreen(props: Props) {
     desktop,
     showCourse,
     courseMapStops,
-    changeMapLayer,
     selected,
     navigate,
     name,
@@ -197,40 +195,27 @@ export function MapScreen(props: Props) {
                 : t("Map of nearby places", "주변 장소 지도")}
             </span>
           </div>
+        ) : showCourse ? (
+          <div className="local-course-map-header">
+            <button
+              type="button"
+              className="local-course-map-back"
+              aria-label={t("Back to course", "코스로 돌아가기")}
+              onClick={() => navigate("course")}
+            >
+              <LocalIcon name="chevron-left" size={19} />
+              <span>{t("Course map", "코스 지도")}</span>
+            </button>
+            <LanguageButton
+              className="local-course-language"
+              label={t("Choose language", "언어 선택")}
+              onClick={() => props.setModal("menu")}
+            />
+          </div>
         ) : (
           <div className="local-map-mobile-tools">
-            <SegmentedChoice
-              className="local-map-layers"
-              label={t("Map layer", "지도 표시")}
-              value={showCourse ? "course" : "places"}
-              onChange={(layer) => changeMapLayer(layer === "course")}
-              options={[
-                {
-                  value: "places",
-                  label: (
-                    <>
-                      <LocalIcon name="places" size={16} />
-                      {t("Places", "장소")}
-                    </>
-                  ),
-                },
-                {
-                  value: "course",
-                  label: (
-                    <>
-                      <LocalIcon name="route" size={16} />
-                      {t("Course", "코스")}
-                    </>
-                  ),
-                },
-              ]}
-            />
-            {!showCourse && (
-              <>
-                <SearchHeader {...props} />
-                <DiscoveryControls {...props} />
-              </>
-            )}
+            <SearchHeader {...props} />
+            <DiscoveryControls {...props} />
           </div>
         )}
       </div>

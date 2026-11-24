@@ -23,7 +23,9 @@ export function sheetHeightsForSpace(
   const middle =
     (sheetHeights.half - collapsed) / (sheetHeights.expanded - collapsed);
   const contentCap = Math.max(collapsed, contentHeight);
-  const shortListFits = contentCap <= Math.min(sheetHeights.half, expanded);
+  // Let short course lists use their padding without adding a nearly identical snap.
+  const shortListFits =
+    contentCap <= Math.min(sheetHeights.half + 12, expanded);
   return {
     collapsed,
     half: shortListFits

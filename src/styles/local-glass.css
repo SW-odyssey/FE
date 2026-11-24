@@ -339,12 +339,6 @@ body {
     0 0 0 1px #ffffff,
     0 4px 12px #2e40703d;
 }
-.is-cell-preview .local-map-pin:before {
-  background: #f7fbffed;
-}
-.is-cell-preview .local-map-pin.is-selected:before {
-  background: var(--local-plum);
-}
 .local-primary,
 .local-secondary {
   border-radius: var(--r-md);

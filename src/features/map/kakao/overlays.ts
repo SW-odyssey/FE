@@ -5,7 +5,11 @@ import {
   layoutMapCaptions,
 } from "../clusters.ts";
 import { previewMapInsets, type ExploreMapOptions } from "../controller.ts";
-import { groupMapPlaces, inMapScope, type MapPlaceGroup } from "../geometry.ts";
+import {
+  groupedMarkerCells,
+  inMapScope,
+  type MapPlaceGroup,
+} from "../geometry.ts";
 
 type MapLabel = {
   id: string;
@@ -114,12 +118,16 @@ export function createMapOverlays(
       onSelect,
       onGroupSelect,
     } = options;
-    const cellGroups = groupMapPlaces(displayPlaces, true);
     const ko = language === "ko";
     const t = (en: string, kr: string) => localText(language, en, kr);
     const projection = current.getProjection();
     const level = current.getLevel();
     const mode = level > 4 ? "areas" : level > 3 ? "cells" : "places";
+    const cells =
+      mode === "cells" ? groupedMarkerCells(displayPlaces, selected?.id) : [];
+    const grouped = new Set(
+      cells.flatMap(({ places: members }) => members.map(({ id }) => id)),
+    );
     const projectedPlaces = displayPlaces.map((place) => {
       const point = projection.containerPointFromCoords(
         new kakao.maps.LatLng(place.lat, place.lng),
@@ -153,15 +161,18 @@ export function createMapOverlays(
               kind: members.length > 1 ? "cluster" : "place",
             };
           })
-        : mode === "cells"
-          ? cellGroups.map((group) => ({ ...group, kind: "cell" }))
-          : displayPlaces.map((place) => ({
-              id: `place:${place.id}`,
-              lat: place.lat,
-              lng: place.lng,
-              places: [place],
-              kind: "place",
-            }));
+        : [
+            ...cells.map((group) => ({ ...group, kind: "cell" as const })),
+            ...displayPlaces
+              .filter(({ id }) => !grouped.has(id))
+              .map((place) => ({
+                id: `place:${place.id}`,
+                lat: place.lat,
+                lng: place.lng,
+                places: [place],
+                kind: "place" as const,
+              })),
+          ];
     const wanted = new Set(groups.map((group) => group.id));
     for (const [id, node] of pool) {
       if (wanted.has(id)) continue;
@@ -236,7 +247,7 @@ export function createMapOverlays(
             : 10,
       );
       const entering = node.button.classList.contains("is-entering");
-      node.button.className = `local-map-pin ${group.kind === "cluster" ? "is-cluster" : group.kind === "cell" ? "is-cells-label" : "is-anchored-place"} ${active ? "is-selected" : ""} ${entering ? "is-entering" : ""}`;
+      node.button.className = `local-map-pin ${group.kind === "place" ? "is-anchored-place" : "is-cluster"} ${active ? "is-selected" : ""} ${entering ? "is-entering" : ""}`;
       node.button.style.width = "44px";
       node.button.style.height = "44px";
       node.button.dataset.mapKind = group.kind;
@@ -255,11 +266,7 @@ export function createMapOverlays(
               : place.name,
       );
       node.symbol.className =
-        group.kind === "cluster"
-          ? "local-cluster-count"
-          : group.kind === "cell"
-            ? "local-cell-count"
-            : "local-location-dot";
+        group.kind === "place" ? "local-location-dot" : "local-cluster-count";
       node.symbol.textContent =
         group.kind === "place" ? "" : String(group.places.length);
       node.caption!.textContent =

@@ -1,4 +1,5 @@
 import { distanceMeters } from "../map/geometry.ts";
+import { defaultCourseOptions } from "./course.ts";
 import type { Coordinate, LocalPlace, VisitSlot } from "./model.ts";
 import { visitSlots } from "./visit-time.ts";
 
@@ -21,21 +22,34 @@ export function courseSlots(
     .filter((slot) => slot !== "late" || includeLate);
 }
 
-/** Compare short itineraries from ranked candidates while avoiding repeat visits. */
-export function rankAutoCourses(
+/** Rank distinct itineraries for the requested slots, keeping each venue unique within a course. */
+export function recommendCourses(
   pools: CoursePools,
   slots: VisitSlot[],
   origin: Coordinate | null,
-  browse: LocalPlace | null = null,
+  afternoon: {
+    includeCafe: boolean;
+    browsePlace: LocalPlace | null;
+  } = { includeCafe: defaultCourseOptions.includeCafe, browsePlace: null },
 ): CourseLeg[][] {
   let options: { legs: CourseLeg[]; cost: number }[] = [{ legs: [], cost: 0 }];
-  for (const slot of slots) {
-    const places =
-      slot === "afternoon" && browse
-        ? [browse]
-        : (pools[slot] ?? [])
-            .filter((place) => place.category === preferredType[slot])
-            .slice(0, 8);
+  const steps = slots.flatMap((slot) => {
+    const candidates = new Map<string, LocalPlace>();
+    for (const place of pools[slot] ?? []) {
+      if (place.category === preferredType[slot] && !candidates.has(place.id))
+        candidates.set(place.id, place);
+    }
+    const primary = { slot, places: [...candidates.values()].slice(0, 8) };
+    if (slot !== "afternoon") return [primary];
+    return [
+      ...(afternoon.includeCafe ? [primary] : []),
+      ...(afternoon.browsePlace
+        ? [{ slot, places: [afternoon.browsePlace] }]
+        : []),
+    ];
+  });
+
+  for (const { slot, places } of steps) {
     if (!places.length) continue;
     const next = options.flatMap(({ legs, cost }) =>
       places.flatMap((place, rank) => {
@@ -53,33 +67,5 @@ export function rankAutoCourses(
     if (next.length)
       options = next.sort((a, b) => a.cost - b.cost).slice(0, 24);
   }
-  return options.filter(({ legs }) => legs.length).map(({ legs }) => legs);
-}
-
-/** Find unused alternatives for one leg, ordered by distance to its neighbors. */
-export function autoCourseAlternatives(
-  route: CourseLeg[],
-  target: VisitSlot,
-  pool: LocalPlace[],
-  origin: Coordinate | null,
-): LocalPlace[] {
-  const index = route.findIndex((leg) => leg.slot === target);
-  if (index < 0 || route[index].place.category === "culture") return [];
-  const before = route[index - 1]?.place ?? origin;
-  const after = route[index + 1]?.place;
-  return pool
-    .filter(
-      (place) =>
-        place.category === preferredType[target] &&
-        !route.some((leg) => leg.place.id === place.id),
-    )
-    .map((place) => ({
-      place,
-      distance:
-        (before ? distanceMeters(before, place) : 0) +
-        (after ? distanceMeters(place, after) : 0),
-    }))
-    .sort((a, b) => a.distance - b.distance)
-    .slice(0, 3)
-    .map(({ place }) => place);
+  return options.map(({ legs }) => legs).filter((legs) => legs.length > 0);
 }

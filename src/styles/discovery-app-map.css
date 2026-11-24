@@ -11,7 +11,8 @@
 .local-web .local-map-page {
   --local-map-sheet-clearance: 0px;
   --local-map-sheet-bottom: calc(
-    var(--local-nav-bottom) + var(--local-nav-height) + 10px
+    var(--local-nav-bottom) + var(--local-nav-height) + 10px +
+      var(--local-map-sheet-gap, 0px)
   );
   --local-map-chrome-top: calc(184px + var(--local-safe-top));
   --local-map-chrome-bottom: calc(
@@ -43,6 +44,23 @@
 
 .local-web .local-map-canvas div:has(> div > a[href="http://map.kakao.com/"]) {
   translate: 0 calc(-1 * var(--local-map-chrome-bottom));
+}
+
+/* Keep Google's own attribution above the floating mobile sheet and dock. */
+.local-web.is-map-mode
+  [data-map-provider="google"]
+  .gm-style
+  > div
+  > div:has(> a[href^="https://maps.google.com/maps"]),
+.local-web.is-map-mode
+  [data-map-provider="google"]
+  .gm-style
+  div:has(> .gm-style-cc a[href*="terms_maps.html"]) {
+  translate: 0 calc(-1 * var(--local-map-chrome-bottom));
+}
+
+.local-web.is-map-mode [data-map-provider="google"] .local-map-route-legend {
+  inset-block-end: 32px;
 }
 
 /* Keep the floating controls in the gap above the moving sheet. */
@@ -99,7 +117,9 @@
   border: 2px solid white;
   border-radius: 50%;
   background: #2971df;
-  box-shadow: 0 0 0 4px #2971df38, 0 1px 4px #173c6b55;
+  box-shadow:
+    0 0 0 4px #2971df38,
+    0 1px 4px #173c6b55;
   pointer-events: none;
 }
 
@@ -217,7 +237,9 @@
 
   .local-web .local-map-page {
     /* Keep clear of the dock during the tall-to-compact height transition. */
-    --local-map-sheet-bottom: calc(var(--local-nav-bottom) + 64px + 4px);
+    --local-map-sheet-bottom: calc(
+      var(--local-nav-bottom) + 64px + 4px + var(--local-map-sheet-gap, 0px)
+    );
     --local-map-chrome-top: calc(152px + var(--local-safe-top));
   }
 

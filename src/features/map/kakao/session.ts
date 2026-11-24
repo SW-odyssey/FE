@@ -7,7 +7,6 @@ import {
   type ExploreMapSession,
 } from "../controller.ts";
 import { inMapScope } from "../geometry.ts";
-import { createMapCells } from "./cells.ts";
 import { loadKakaoSdk } from "./load-sdk.ts";
 import { createMapOverlays } from "./overlays.ts";
 import type { CourseStop } from "../../discovery/course.ts";
@@ -63,7 +62,6 @@ export function createExploreMapSession(
   map.setMinLevel(1);
   map.setMaxLevel(10);
   const overlays = createMapOverlays(map, element);
-  const cells = createMapCells(map);
   const course = createCourseOverlays(map, element, readOptions);
   function placeOptions() {
     const options = readOptions();
@@ -175,7 +173,6 @@ export function createExploreMapSession(
     render() {
       cancelAnimationFrame(frame);
       overlays.render(placeOptions());
-      cells.render(placeOptions());
       course.render();
       frame = requestAnimationFrame(() => overlays.render(placeOptions()));
     },
@@ -215,7 +212,6 @@ export function createExploreMapSession(
       kakao.maps.event.removeListener(map, "idle", idle);
       locationOverlay?.setMap(null);
       overlays.dispose();
-      cells.dispose();
       course.dispose();
     },
   };

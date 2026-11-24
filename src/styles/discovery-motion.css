@@ -17,6 +17,7 @@
 
 .local-shell.local-web.is-desktop-map-layout > .local-bottom-nav {
   --local-segment-track-padding: 4px;
+  --local-segment-slide: transform 190ms var(--local-ease-out);
 }
 
 .local-web > .local-bottom-nav > button {
@@ -72,6 +73,15 @@
   }
 }
 
+/* The desktop sidebar enters as one piece without a second fade on its results. */
+.local-web .local-desktop-sidebar-content > .local-course,
+.local-web
+  .local-desktop-sidebar-content
+  .local-places
+  > :is(.local-featured-carousel, .local-place-list, .local-empty) {
+  animation: none;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .local-web > :is(.local-places, .local-course) {
     animation: local-view-in 190ms var(--local-ease-out);
@@ -85,23 +95,21 @@
     animation-name: local-sidebar-in;
   }
 
-  .local-web .local-auto-alternatives {
-    animation: local-view-in 170ms var(--local-ease-out);
+  .local-web .local-desktop-sidebar-content {
+    animation: local-sidebar-tab-in 180ms var(--local-ease-out);
   }
 
-  .local-web :is(.local-auto-cover, .local-auto-stop-photo) {
-    animation: local-photo-in 210ms ease-out;
-  }
-
-  .local-web .local-auto-hero {
-    transition: min-height 230ms var(--local-ease-out);
+  .local-web .local-course-map-header {
+    animation: local-sidebar-tab-in 180ms var(--local-ease-out);
   }
 
   .local-web .local-map-diagram polyline {
     animation: local-photo-in 180ms ease-out;
   }
 
-  .local-web .local-map-mobile-tools > :is(.local-search-header, .local-discovery-controls),
+  .local-web
+    .local-map-mobile-tools
+    > :is(.local-search-header, .local-discovery-controls),
   .local-web .local-map-course-list {
     animation: local-photo-in 160ms ease-out;
   }
@@ -148,6 +156,12 @@
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes local-sidebar-tab-in {
+  from {
+    opacity: 0.58;
   }
 }
 

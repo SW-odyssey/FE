@@ -88,7 +88,7 @@ export function usePreviewMap({
       numbered ? 4.5 : 2,
     ),
   };
-  const camera = manual?.collection === collection ? manual : fit;
+  const target = manual?.collection === collection ? manual : fit;
   const focusKey =
     enabled && focus
       ? `${layer}|${collection}|${focus.lat},${focus.lng}|${focusRequest}`
@@ -99,11 +99,62 @@ export function usePreviewMap({
     if (focusKey && focus) {
       setManualViews({
         ...manualViews,
-        [layer]: { collection, center: project(focus), scale: camera.scale },
+        [layer]: { collection, center: project(focus), scale: target.scale },
       });
     }
   }
-  const minScale = Math.min(fit.scale, 0.35, camera.scale);
+  const minScale = Math.min(fit.scale, 0.35, target.scale);
+  const { x: targetX, y: targetY } = target.center;
+  const targetScale = target.scale;
+  const viewport = `${width}:${height}:${visibleTop}:${visibleBottom}:${viewportScale}`;
+  const [camera, setCamera] = useState<Camera>(target);
+  const painted = useRef({ camera: target, viewport });
+
+  useLayoutEffect(() => {
+    const next = { center: { x: targetX, y: targetY }, scale: targetScale };
+    const start = painted.current.camera;
+    const resized = painted.current.viewport !== viewport;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const paint = (camera: Camera) => {
+      painted.current = { camera, viewport };
+      setCamera(camera);
+    };
+    if (resized || moving || motion.matches || !enabled) {
+      paint(next);
+      return;
+    }
+    if (
+      start.scale === next.scale &&
+      start.center.x === next.center.x &&
+      start.center.y === next.center.y
+    )
+      return;
+
+    const began = performance.now();
+    let request = requestAnimationFrame(tick);
+    function tick(now: number) {
+      const progress = Math.min(1, (now - began) / 210);
+      if (progress === 1 || motion.matches) {
+        paint(next);
+        return;
+      }
+      const amount = 1 - (1 - progress) ** 3;
+      const before = start.scale * (1 - amount);
+      const after = next.scale * amount;
+      const scale = before + after;
+      // Blend projected offsets so the pointer anchor stays fixed throughout a wheel zoom.
+      paint({
+        scale,
+        center: {
+          x: (start.center.x * before + next.center.x * after) / scale,
+          y: (start.center.y * before + next.center.y * after) / scale,
+        },
+      });
+      request = requestAnimationFrame(tick);
+    }
+    return () => cancelAnimationFrame(request);
+  }, [enabled, moving, targetX, targetY, targetScale, viewport]);
+
   const offset = {
     x: origin.x - camera.center.x * camera.scale,
     y: origin.y - camera.center.y * camera.scale,
@@ -220,16 +271,20 @@ export function usePreviewMap({
     const point = pointFromClient(event);
     const dx = point.x - active.x;
     const dy = point.y - active.y;
-    if (!active.moved) {
+    const firstMovement = !active.moved;
+    if (firstMovement) {
       if (Math.hypot(dx, dy) < 4) return;
       event.currentTarget.setPointerCapture(event.pointerId);
       setMoving(true);
     }
     Object.assign(active, point, { moved: true });
-    changeCamera(({ center, scale }) => ({
-      center: { x: center.x - dx / scale, y: center.y - dy / scale },
-      scale,
-    }));
+    changeCamera((previous) => {
+      const { center, scale } = firstMovement ? camera : previous;
+      return {
+        center: { x: center.x - dx / scale, y: center.y - dy / scale },
+        scale,
+      };
+    });
   }
 
   function endDrag(event: PointerEvent<HTMLDivElement>) {
@@ -248,11 +303,10 @@ export function usePreviewMap({
     visibleBottom,
     worldPoints: points,
     screenPoints: points.map(screenPoint),
-    worldPoint: project,
     screenPointFor: (point: Coordinate) => screenPoint(project(point)),
     projection: `translate(${offset.x} ${offset.y}) scale(${camera.scale})`,
-    canZoomIn: camera.scale < maxScale,
-    canZoomOut: camera.scale > minScale,
+    canZoomIn: targetScale < maxScale,
+    canZoomOut: targetScale > minScale,
     zoomBy: (direction: -1 | 1) => zoomAt(zoomStep ** -direction),
     zoomInto: (point: Point) => {
       changeCamera(({ center, scale }) => ({

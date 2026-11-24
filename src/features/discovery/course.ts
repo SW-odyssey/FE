@@ -1,4 +1,3 @@
-import { distanceMeters } from "../map/geometry.ts";
 import type { LocalPlace } from "./model.ts";
 
 export type CourseStop = Pick<
@@ -6,68 +5,46 @@ export type CourseStop = Pick<
   "id" | "name" | "koreanName" | "area" | "category" | "image" | "lat" | "lng"
 >;
 
-export const COURSE_STORAGE_KEY = "local.course.v1";
+export type CourseOptions = {
+  includeCafe: boolean;
+  includeBrowse: boolean;
+  includeLate: boolean;
+};
 
-/** Read locally stored stops, ignoring invalid and duplicate entries. */
-export function readCourse(value: string | null): CourseStop[] {
-  try {
-    const parsed: unknown = JSON.parse(value ?? "[]");
-    if (!Array.isArray(parsed)) return [];
-    const stops: CourseStop[] = [];
-    for (const stop of parsed) {
-      if (
-        stop &&
-        typeof stop === "object" &&
-        typeof stop.id === "string" &&
-        stop.id &&
-        typeof stop.name === "string" &&
-        typeof stop.koreanName === "string" &&
-        typeof stop.image === "string" &&
-        ["jongno", "ikseon", "insa", "eulji", "bukchon"].includes(stop.area) &&
-        ["cafe", "food", "culture"].includes(stop.category) &&
-        Number.isFinite(stop.lat) &&
-        Number.isFinite(stop.lng) &&
-        Math.abs(stop.lat) <= 90 &&
-        Math.abs(stop.lng) <= 180 &&
-        !stops.some(({ id }) => id === stop.id)
-      ) {
-        stops.push(stop);
-      }
-    }
-    return stops;
-  } catch {
-    return [];
+export const defaultCourseOptions: CourseOptions = {
+  includeCafe: true,
+  includeBrowse: false,
+  includeLate: false,
+};
+
+type GoogleMapsPlace = Pick<
+  LocalPlace,
+  "koreanName" | "address" | "googlePlaceId"
+>;
+
+/**
+ * Open the recommended stops as a Google Maps shortlist when they all have Place IDs.
+ * @param stops Places in the recommended visit order
+ * @returns The shortlist link, a single place link, or null when a complete list cannot be opened
+ */
+export function googleMapsCourseLink(stops: readonly GoogleMapsPlace[]) {
+  const placeIds = stops.map(({ googlePlaceId }) => googlePlaceId);
+  if (placeIds.length > 1 && placeIds.every(Boolean)) {
+    const url = new URL("https://www.google.com/maps/@");
+    url.searchParams.set("api", "1");
+    url.searchParams.set("map_action", "shortlist");
+    url.searchParams.set("place_ids", placeIds.join(","));
+    return url.href;
   }
+  return stops.length === 1 ? googleMapsPlaceUrl(stops[0]) : null;
 }
 
-/** Move a stop one position in visit order. */
-export function moveCourseStop(
-  stops: CourseStop[],
-  id: string,
-  offset: -1 | 1,
-): CourseStop[] {
-  const from = stops.findIndex((stop) => stop.id === id);
-  const to = from + offset;
-  if (from < 0 || to < 0 || to >= stops.length) return stops;
-  const next = stops.slice();
-  [next[from], next[to]] = [next[to], next[from]];
-  return next;
-}
-
-/** Rank up to four unselected recommendations around the last stop. */
-export function courseCandidates(
-  places: LocalPlace[],
-  stops: readonly CourseStop[],
-): LocalPlace[] {
-  const taken = new Set(stops.map(({ id }) => id));
-  const candidates = places.filter((place) => !taken.has(place.id));
-  const last = stops.at(-1);
-  return (
-    last
-      ? candidates
-          .map((place) => ({ place, meters: distanceMeters(last, place) }))
-          .sort((a, b) => a.meters - b.meters)
-          .map(({ place }) => place)
-      : candidates
-  ).slice(0, 4);
+/** Build the Google Maps search link for one stop by name, address and optional Place ID. */
+export function googleMapsPlaceUrl(place: GoogleMapsPlace): string {
+  const url = new URL("https://www.google.com/maps/search/");
+  url.searchParams.set("api", "1");
+  url.searchParams.set("query", `${place.koreanName} ${place.address}`);
+  if (place.googlePlaceId)
+    url.searchParams.set("query_place_id", place.googlePlaceId);
+  return url.href;
 }

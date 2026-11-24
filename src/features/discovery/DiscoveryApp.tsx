@@ -66,6 +66,30 @@ export default function DiscoveryApp({
   const mapVisible = desktop || isMap;
   const navigation = useCompactNavigation(view);
 
+  const sidebar =
+    !isDetail && (desktop || !isMap) ? (
+      <>
+        {!isCourse && <SearchHeader {...controller} />}
+        {isCourse ? (
+          <CourseScreen
+            {...controller}
+            location={courseLocation}
+            desktop={desktop}
+          />
+        ) : (
+          <DiscoverScreen
+            {...controller}
+            visible={
+              desktop && controller.mapScope
+                ? controller.mapPlaces
+                : controller.visible
+            }
+            mapScopeActive={desktop && Boolean(controller.mapScope)}
+          />
+        )}
+      </>
+    ) : null;
+
   return (
     <main
       ref={shell}
@@ -103,8 +127,6 @@ export default function DiscoveryApp({
         >
           <LocalIcon name="chevron-left" size={36} />
         </button>
-      ) : !isCourse && !mapShowsCourse && (desktop || !isMap) ? (
-        <SearchHeader {...controller} />
       ) : null}
       {selected ? (
         <PlaceDetail {...controller} selected={selected} key={selected.id} />
@@ -112,23 +134,17 @@ export default function DiscoveryApp({
         <div className="local-content local-detail" ref={scroll}>
           <ResourceNotice status={detailStatus} retry={retry} t={t} missing />
         </div>
-      ) : isCourse ? (
-        <CourseScreen
-          {...controller}
-          location={courseLocation}
-          desktop={desktop}
-        />
-      ) : desktop || !isMap ? (
-        <DiscoverScreen
-          {...controller}
-          visible={
-            desktop && controller.mapScope
-              ? controller.mapPlaces
-              : controller.visible
-          }
-          mapScopeActive={desktop && Boolean(controller.mapScope)}
-        />
       ) : null}
+      {desktop && sidebar ? (
+        <div
+          className="local-desktop-sidebar-content"
+          key={isCourse ? "course" : "places"}
+        >
+          {sidebar}
+        </div>
+      ) : (
+        sidebar
+      )}
       {mapVisible && (
         <MapScreen
           {...controller}
@@ -149,7 +165,15 @@ export default function DiscoveryApp({
           compact={!desktop && navigation.compact}
         />
       ) : null}
-      {modal && <DiscoveryOverlay {...controller} />}
+      {modal && (
+        <DiscoveryOverlay
+          {...controller}
+          selectPreviewLocation={() => {
+            controller.selectPreviewLocation();
+            if (mapShowsCourse) courseLocation.locate();
+          }}
+        />
+      )}
       {toast && (
         <div className="local-toast" role="status">
           {toast}

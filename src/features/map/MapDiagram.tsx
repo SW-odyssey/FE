@@ -4,12 +4,7 @@ import type { CourseStop } from "../discovery/course";
 import { localText, placeCount } from "../discovery/localization";
 import type { DiscoveryLanguage, LocalPlace } from "../discovery/model";
 import { clusterScreenPlaces, layoutMapCaptions } from "./clusters";
-import {
-  groupMapPlaces,
-  inMapScope,
-  previewCell,
-  type MapPlaceGroup,
-} from "./geometry";
+import { groupedMarkerCells, type MapPlaceGroup } from "./geometry";
 import type { usePreviewMap } from "./usePreviewMap";
 
 type PreviewMap = Omit<ReturnType<typeof usePreviewMap>, "attachFrame">;
@@ -40,7 +35,8 @@ export function MapDiagram({
 }) {
   const mode =
     map.scale < 0.48 ? "overview" : map.scale < 1.18 ? "cells" : "places";
-  const cells = mode === "overview" ? [] : groupMapPlaces(places, true);
+  const cells =
+    !numbered && mode === "cells" ? groupedMarkerCells(places, selectedId) : [];
   const bounds = {
     left: 12,
     right: map.width - 12,
@@ -63,11 +59,14 @@ export function MapDiagram({
           ({ count }) => count > 1,
         )
       : [];
-  const grouped = new Set(clusters.flatMap(({ memberIds }) => memberIds));
-  const showCell = mode === "cells" && !numbered;
-  const pinPoints = visiblePoints.filter(
-    ({ id }) => !grouped.has(id) && (!showCell || id === selectedId),
-  );
+  const cellMarkers = cells
+    .map((group) => ({ id: group.id, group, ...map.screenPointFor(group) }))
+    .filter(fits);
+  const grouped = new Set([
+    ...clusters.flatMap(({ memberIds }) => memberIds),
+    ...cellMarkers.flatMap(({ group }) => group.places.map(({ id }) => id)),
+  ]);
+  const pinPoints = visiblePoints.filter(({ id }) => !grouped.has(id));
   const pinIds = new Set(pinPoints.map(({ id }) => id));
   const names = new Map(
     stops.map(({ id, name, koreanName }) => [
@@ -91,7 +90,7 @@ export function MapDiagram({
           ...bounds,
           right: Math.max(bounds.left, map.width - 72),
           selectedId,
-          obstacles: [...pinPoints, ...clusters],
+          obstacles: [...pinPoints, ...clusters, ...cellMarkers],
         },
       );
 
@@ -109,18 +108,6 @@ export function MapDiagram({
             width={1800}
             height={3050}
           />
-          {cells.map((group) => (
-            <polygon
-              key={group.id}
-              className={`local-diagram-cell ${scope === group.id ? "is-selected" : ""} ${showCell ? "is-cell-overview" : ""}`}
-              points={previewCell(group.places[0])
-                .polygon.map(([lng, lat]) => {
-                  const { x, y } = map.worldPoint({ lat, lng });
-                  return `${x},${y}`;
-                })
-                .join(" ")}
-            />
-          ))}
           {numbered && map.worldPoints.length > 1 && (
             <polyline
               points={map.worldPoints.map(({ x, y }) => `${x},${y}`).join(" ")}
@@ -140,28 +127,23 @@ export function MapDiagram({
           <span className="local-cluster-count">{count}</span>
         </button>
       ))}
-      {showCell &&
-        cells.map((group) => {
-          const point = map.screenPointFor(group);
-          if (!fits(point)) return null;
-          const active = Boolean(
-            scope && group.places.some((place) => inMapScope(place, scope)),
-          );
-          return (
-            <button
-              key={group.id}
-              type="button"
-              className={`local-map-pin is-cells-label ${active ? "is-selected" : ""}`}
-              data-map-kind="cell"
-              style={{ left: point.x, top: point.y }}
-              aria-label={`${localText(language, "Choose a cell", "구역 선택")} ${placeCount(language, group.places.length)}`}
-              aria-pressed={active}
-              onClick={() => onGroupSelect?.(group)}
-            >
-              <span className="local-cell-count">{group.places.length}</span>
-            </button>
-          );
-        })}
+      {cellMarkers.map(({ group, x, y }) => {
+        const active = scope === group.id;
+        return (
+          <button
+            key={group.id}
+            type="button"
+            className={`local-map-pin is-cluster${active ? " is-selected" : ""}`}
+            data-map-kind="cell"
+            style={{ left: x, top: y }}
+            aria-label={`${localText(language, "Choose a cell", "구역 선택")} ${placeCount(language, group.places.length)}`}
+            aria-pressed={active}
+            onClick={() => onGroupSelect?.(group)}
+          >
+            <span className="local-cluster-count">{group.places.length}</span>
+          </button>
+        );
+      })}
       {stops.map((stop, index) => {
         if (numbered ? !fits(points[index]) : !pinIds.has(stop.id)) return null;
         const selected = stop.id === selectedId;

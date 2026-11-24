@@ -169,26 +169,6 @@
     0 0 0 1px #76528a55,
     0 3px 12px #27122e30;
 }
-.is-cell-preview .local-map-pin {
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-  font-size: 13px;
-}
-.is-cell-preview .local-map-pin:before {
-  content: "";
-  position: absolute;
-  inset: 6px;
-  z-index: -1;
-  border: 2px solid var(--local-plum);
-  border-radius: 50%;
-  background: white;
-  box-shadow: 0 2px 8px #27122e22;
-}
-.is-cell-preview .local-map-pin.is-selected:before {
-  border-color: white;
-  background: var(--local-plum);
-}
 .local-pin-line {
   height: 1px;
   display: block;

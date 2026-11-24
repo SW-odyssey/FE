@@ -239,45 +239,48 @@
   background: var(--local-plum-strong);
   box-shadow: 0 2px 8px #1d41644d;
 }
-/* All hit targets stay centered on the SDK's geographic coordinate. */
-.local-refined .local-map-pin.is-anchored-place {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+/* Keep the hit area independent from the pin artwork. */
+.local-shell.local-refined .local-map-pin.is-anchored-place {
+  width: 44px;
+  height: 44px;
   border: 0;
   background: transparent;
   box-shadow: none;
 }
+
 .local-refined .is-anchored-place > .local-location-dot {
   position: relative;
   display: block;
-  width: 24px;
-  height: 24px;
-  border-radius: 50% 50% 50% 0;
-  border: 2px solid #fff;
-  background: var(--local-plum);
-  mask: none;
-  transform: translateY(-4px) rotate(-45deg);
-  box-shadow: 0 0 0 1px var(--local-plum);
-  transition:
-    background-color 140ms ease,
-    box-shadow 140ms ease;
+  width: 30px;
+  height: 30px;
+  transform: translateY(-12px);
+  filter: drop-shadow(0 2px 2px #241d3938);
 }
-.local-refined .is-anchored-place > .local-location-dot:after {
-  content: "";
+
+.local-refined .is-anchored-place > .local-location-dot::before {
   position: absolute;
-  width: 7px;
-  height: 7px;
+  top: 12.5px;
   left: 50%;
-  top: 50%;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #fff;
+  background: white;
   transform: translate(-50%, -50%);
+  content: "";
 }
-.local-refined .is-anchored-place.is-selected > .local-location-dot {
+
+.local-refined .is-anchored-place > .local-location-dot::after {
+  position: absolute;
+  inset: 0;
+  background: var(--local-plum);
+  mask: url("/assets/icons/local/map-pin-current.svg") center / contain no-repeat;
+  content: "";
+}
+
+.local-refined .is-anchored-place.is-selected > .local-location-dot::after {
   background: var(--local-plum-strong);
-  box-shadow: 0 2px 8px #1d41644d;
 }
+
 .local-refined .local-map-caption {
   position: absolute;
   left: 50%;
@@ -342,34 +345,6 @@
     animation: none !important;
     transition: none !important;
   }
-}
-.local-refined .local-map-pin.is-cells-label,
-.local-refined .local-map-pin.is-cells-label.is-selected {
-  width: 32px;
-  height: 32px;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-  color: var(--local-plum);
-}
-.local-refined .local-cell-count {
-  display: grid;
-  place-items: center;
-  min-width: 22px;
-  height: 22px;
-  padding-inline: 3px;
-  border: 1.5px solid #fff;
-  border-radius: 50%;
-  background: var(--local-plum);
-  color: #fff;
-  box-shadow: 0 0 0 1px var(--local-plum);
-  font-size: 11px;
-  font-weight: 700;
-  line-height: 16px;
-}
-.local-refined .is-selected > .local-cell-count {
-  background: var(--local-plum-strong);
 }
 .local-refined .local-cell-mark {
   width: 4px;

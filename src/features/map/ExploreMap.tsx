@@ -5,6 +5,7 @@ import { localText } from "../discovery/localization";
 import type { ExploreMapProps } from "./controller";
 import { inMapScope } from "./geometry";
 import { MapDiagram } from "./MapDiagram";
+import { hasLiveMapKey } from "./provider";
 import { useDeviceLocation } from "./useDeviceLocation";
 import { useExploreMap } from "./useExploreMap";
 import { usePreviewMap } from "./usePreviewMap";
@@ -23,6 +24,7 @@ export default function ExploreMap(props: ExploreMapProps) {
   } = props;
   const {
     element,
+    provider,
     ready,
     error,
     zoom,
@@ -51,7 +53,6 @@ export default function ExploreMap(props: ExploreMapProps) {
     onLocate(point);
     centerOn(point);
   });
-  const grid = zoom <= 4;
   const t = (en: string, kr: string) => localText(language, en, kr);
   const locationMessage = {
     idle: "",
@@ -67,7 +68,8 @@ export default function ExploreMap(props: ExploreMapProps) {
   }[status];
   return (
     <div
-      className={`local-explore-map ${grid ? "is-cell-preview" : ""} ${!ready ? "is-map-fallback" : ""}`}
+      data-map-provider={provider ?? "preview"}
+      className={`local-explore-map${!ready ? " is-map-fallback" : ""}`}
       style={
         {
           "--local-map-viewport-scale": viewportScale,
@@ -201,7 +203,7 @@ export default function ExploreMap(props: ExploreMapProps) {
               </svg>
             </button>
           </div>
-          {error && process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY && (
+          {error && hasLiveMapKey && (
             <button
               type="button"
               aria-label={t("Retry live map", "지도 다시 연결")}
