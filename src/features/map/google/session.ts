@@ -1,16 +1,12 @@
 import type { Coordinate } from "../../discovery/model.ts";
 import { localText, placeCount } from "../../discovery/localization.ts";
-import {
-  clusterScreenPlaces,
-  layoutMapCaptions,
-  mapFocusCentrePoint,
-} from "../clusters.ts";
+import { layoutMapCaptions, mapFocusCentrePoint } from "../clusters.ts";
 import {
   restorableMapCamera,
   type ExploreMapOptions,
   type ExploreMapSession,
 } from "../controller.ts";
-import { groupedMarkerCells, inMapScope } from "../geometry.ts";
+import { groupMapMarkers, inMapScope, mapCaptionLimit } from "../geometry.ts";
 
 const levelOffset = 21;
 const minZoom = 11;
@@ -289,48 +285,13 @@ export function createGoogleExploreMapSession(
       return;
     }
     if (!projection) return;
-    const nearby = new Map(places.map((place) => [place.id, place]));
-    const mode = zoom < 17 ? "cluster" : zoom < 18 ? "cell" : "place";
+    const level = levelOffset - zoom;
     const project = (point: Coordinate) =>
       projection.fromLatLngToContainerPixel(point);
-    const projected = places.flatMap((place) => {
-      const xy = project(place);
-      return xy ? [{ id: place.id, x: xy.x, y: xy.y }] : [];
-    });
-    const cells =
-      mode === "cell" ? groupedMarkerCells(places, selected?.id) : [];
-    const grouped = new Set(
-      cells.flatMap(({ places: members }) => members.map(({ id }) => id)),
-    );
-    const markers = [
-      ...cells.map((group) => ({ group, kind: "cell" as const })),
-      ...(mode === "cluster"
-        ? clusterScreenPlaces(projected, {
-            radius: 52,
-            selectedId: selected?.id,
-          })
-        : places.flatMap(({ id }) =>
-            grouped.has(id) ? [] : [{ id: `place:${id}`, memberIds: [id] }],
-          )
-      ).map(({ id, memberIds }) => {
-        const members = memberIds.map((member) => nearby.get(member)!);
-        const lat = members.reduce(
-          (sum, place) => sum + place.lat / members.length,
-          0,
-        );
-        const lng = members.reduce(
-          (sum, place) => sum + place.lng / members.length,
-          0,
-        );
-        return {
-          group: { id, places: members, lat, lng },
-          kind:
-            members.length === 1 ? ("place" as const) : ("cluster" as const),
-        };
-      }),
-    ];
+    const markers = groupMapMarkers(places, project, level, selected?.id);
+    const selectedMarker = selected ? `place:${selected.id}` : null;
     const safe = padding();
-    const points = markers.flatMap(({ group, kind }) => {
+    const points = markers.flatMap((group) => {
       const xy = project(group);
       return xy
         ? [
@@ -338,7 +299,7 @@ export function createGoogleExploreMapSession(
               id: group.id,
               x: xy.x,
               y: xy.y,
-              kind,
+              kind: group.kind,
               label: name(group.places[0]),
             },
           ]
@@ -346,7 +307,10 @@ export function createGoogleExploreMapSession(
     });
     const captions = layoutMapCaptions(
       points
-        .filter(({ kind }) => kind === "place")
+        .filter(
+          ({ id, kind }) =>
+            kind === "place" && (level <= 4 || id === selectedMarker),
+        )
         .map((point) => ({
           ...point,
           width: Math.max(
@@ -360,20 +324,23 @@ export function createGoogleExploreMapSession(
         right: element.clientWidth - 60,
         top: safe.top,
         bottom: element.clientHeight - safe.bottom,
-        selectedId: selected ? `place:${selected.id}` : null,
+        selectedId: selectedMarker,
         obstacles: points,
+        maxLabels: mapCaptionLimit(level, element.clientWidth),
       },
     );
-    for (const { group, kind } of markers) {
+    for (const group of markers) {
+      const { kind } = group;
       const place = group.places[0];
       const count = group.places.length;
       const label =
         kind === "place"
           ? name(place)
           : `${kind === "cell" ? t("Choose a cell", "구역 선택") : t("Zoom in", "확대")} ${placeCount(language, count)}`;
-      const active =
-        group.id === scope ||
-        group.places.some(({ id }) => id === selected?.id);
+      const active = group.places.some(
+        (member) =>
+          member.id === selected?.id || (scope && inMapScope(member, scope)),
+      );
       const variant = kind === "place" ? "is-anchored-place" : "is-cluster";
       const pin = pins.upsert(
         group.id,
@@ -384,6 +351,7 @@ export function createGoogleExploreMapSession(
       pin.symbol.className =
         kind === "place" ? "local-location-dot" : "local-cluster-count";
       pin.symbol.textContent = kind === "place" ? "" : String(count);
+      pin.button.dataset.mapKind = kind;
       const caption = captions.get(group.id);
       pin.caption.className = `local-map-caption is-${caption?.side === "bottom" ? "below" : "above"}`;
       pin.caption.textContent = kind === "place" ? label : "";
@@ -394,7 +362,8 @@ export function createGoogleExploreMapSession(
         else if (kind === "cell") read().onGroupSelect?.(group);
         else {
           autoFit = false;
-          fit(group.places);
+          map.setZoom(Math.min(maxZoom, zoom + 1));
+          centerOn(group);
         }
       };
       activeIds.add(group.id);

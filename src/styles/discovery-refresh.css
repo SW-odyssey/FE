@@ -280,6 +280,7 @@ body {
   gap: 8px;
 }
 .local-detail-section > h2,
+.local-business-heading > h2,
 .local-visit-pattern-heading > h2 {
   color: var(--refresh-ink);
   font-size: 17px;
@@ -305,6 +306,87 @@ body {
 .local-place-source a {
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+.local-business-info {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 16px;
+  margin: 0;
+  font-size: 14px;
+}
+.local-business-heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+.local-business-info > div {
+  display: contents;
+}
+.local-business-info dt {
+  color: var(--refresh-muted);
+}
+.local-business-info dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.local-business-info:empty {
+  display: none;
+}
+.local-business-info a {
+  color: var(--local-plum);
+}
+.local-business-hours {
+  border-top: 1px solid var(--refresh-line);
+  font-size: 14px;
+}
+.local-business-hours summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+  color: var(--refresh-ink);
+  cursor: pointer;
+  list-style: none;
+  font-weight: 550;
+}
+.local-business-hours summary::-webkit-details-marker {
+  display: none;
+}
+.local-business-hours summary > .local-icon {
+  color: var(--refresh-muted);
+  transform: rotate(90deg);
+}
+.local-business-hours[open] summary > .local-icon {
+  transform: rotate(-90deg);
+}
+.local-business-hours ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--refresh-muted);
+}
+.local-detail-maps-link {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--local-plum);
+  font-size: 13px;
+  font-weight: 550;
+}
+.local-detail-maps-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.local-place-ai {
+  padding: 14px 16px;
+  background: var(--refresh-ground);
+  border-radius: var(--r-md);
 }
 .local-shell.local-refined .local-address {
   color: #45454c;

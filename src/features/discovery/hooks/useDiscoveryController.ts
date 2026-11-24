@@ -308,11 +308,12 @@ export function useDiscoveryController(
     area,
     category: inCourse ? ("all" as const) : category,
     query: inCourse ? "" : query,
-    slot: currentSlot,
+    slot: inCourse ? courseStartSlot : currentSlot,
     activity,
     origin: liveRecommendations && currentArea ? currentLocation : null,
     spaces,
-    visitDate: selectedVisitDate,
+    visitDate: inCourse ? courseDate : selectedVisitDate,
+    datasetId: inCourse ? activeCourseLink?.datasetId : undefined,
   };
   const data = useDiscoveryData({
     source,
@@ -330,7 +331,10 @@ export function useDiscoveryController(
         },
     selectedId,
     getPlace:
-      inCourse && selectedId && /^[1-9]\d*$/.test(selectedId)
+      !liveRecommendations &&
+      inCourse &&
+      selectedId &&
+      /^[1-9]\d*$/.test(selectedId)
         ? getCoursePlaceDetail
         : undefined,
   });
@@ -678,10 +682,6 @@ export function useDiscoveryController(
     activity,
     analysisFor,
     liveRecommendations,
-    cellReasons:
-      !inCourse && selected?.cellId
-        ? data.cellReasons?.[selected.cellId]
-        : undefined,
     featuredId,
     setFeaturedId,
     area,

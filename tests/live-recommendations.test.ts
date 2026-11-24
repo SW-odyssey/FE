@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { createLiveDiscoveryDataSource } from "../src/features/discovery/data/live-recommendations.ts";
 import type { DiscoveryQuery } from "../src/features/discovery/data/types.ts";
+import { getLiveVisitPattern } from "../src/features/discovery/data/visit-pattern.ts";
 
 const query: DiscoveryQuery = {
   area: "eulji",
@@ -31,15 +32,9 @@ test("the live source keeps backend order and shares the published dataset acros
       ? { datasets: [{ id: "public-latest" }] }
       : url.pathname.endsWith("/recommendations")
         ? { total: 2, items: [place, { ...place, id: 141 }] }
-        : url.pathname.endsWith("/reasons")
-          ? {
-              reasonsByCellId: {
-                "81655936": {
-                  status: "AVAILABLE",
-                  reasons: [{ code: "TIME_PEAK" }],
-                },
-              },
-            }
+        : url.pathname.endsWith("/visit-pattern") &&
+            url.searchParams.get("weekday") === "sat"
+          ? { status: "NO_DISTINCT_PEAK", graph: null }
           : url.pathname.endsWith("/visit-pattern")
             ? {
                 status: "AVAILABLE",
@@ -61,24 +56,30 @@ test("the live source keeps backend order and shares the published dataset acros
     found.items.map(({ id }) => id),
     ["1557", "141"],
   );
-  assert.deepEqual(found.cellReasons, { "81655936": ["TIME_PEAK"] });
   assert.equal(calls[1]?.searchParams.get("weekday"), "fri");
   assert.equal(calls[1]?.searchParams.get("slot"), "dinner");
-  assert.equal(calls[2]?.searchParams.get("cellIds"), "81655936");
+  assert.equal(calls.length, 2);
   for (const url of calls.slice(1))
     assert.equal(url.searchParams.get("datasetId"), "public-latest");
   const detail = await source.getPlace("1557", { query });
-  assert.deepEqual(detail?.visitPattern, {
+  const pattern = detail?.visitPattern;
+  assert.deepEqual(pattern, {
     provenance: "live",
-    values: {
-      lunch: 60,
-      afternoon: 80,
-      evening: 100,
-      late: 20,
-    },
+    cellId: "81655936",
+    datasetId: "public-latest",
+    weekday: "fri",
+  });
+  assert.ok(pattern?.provenance === "live");
+  assert.deepEqual(await getLiveVisitPattern(pattern), {
+    lunch: 60,
+    afternoon: 80,
+    evening: 100,
+    late: 20,
   });
   assert.equal(calls.filter((url) => url.pathname.endsWith("/meta")).length, 1);
   assert.equal(calls.at(-1)?.searchParams.get("datasetId"), "public-latest");
+  assert.equal(await getLiveVisitPattern({ ...pattern, weekday: "sat" }), null);
+  assert.equal(calls.at(-1)?.searchParams.get("weekday"), "sat");
 });
 
 test("empty recommendations and missing place links are handled without demo data", async (t) => {

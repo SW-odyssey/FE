@@ -1,13 +1,10 @@
-import { useId, useState } from "react";
-import type {
-  AreaVisitPattern,
-  CellReasonCode,
-  VisitDayGroup,
-} from "../data/types";
+import { useEffect, useId, useState } from "react";
+import type { AreaVisitPattern, VisitDayGroup } from "../data/types";
 import type { DiscoveryLanguage } from "../model";
-import { localText } from "../localization";
+import { dateLocales, localText } from "../localization";
+import { getLiveVisitPattern } from "../data/visit-pattern";
+import type { ApiWeekday } from "../data/v2-client";
 import { slotLabels } from "../presentation";
-import { cellEvidenceText } from "./cell-evidence-copy";
 import { visitSlots } from "../visit-time";
 
 const dayGroupByWeekday: readonly VisitDayGroup[] = [
@@ -20,6 +17,15 @@ const dayGroupByWeekday: readonly VisitDayGroup[] = [
   "sat",
 ];
 const dayGroups: VisitDayGroup[] = ["monThu", "fri", "sat", "sun"];
+const weekdays: ApiWeekday[] = [
+  "mon",
+  "tue",
+  "wed",
+  "thu",
+  "fri",
+  "sat",
+  "sun",
+];
 const copy = {
   ko: {
     title: "주변 방문 패턴",
@@ -49,12 +55,10 @@ const copy = {
  */
 export function AreaVisitPatternCard({
   pattern,
-  reasons,
   visitDate,
   language,
 }: {
-  pattern?: AreaVisitPattern;
-  reasons?: readonly CellReasonCode[];
+  pattern: AreaVisitPattern;
   visitDate: string;
   language: DiscoveryLanguage;
 }) {
@@ -62,70 +66,105 @@ export function AreaVisitPatternCard({
   const [day, setDay] = useState(
     () => dayGroupByWeekday[new Date(`${visitDate}T00:00:00Z`).getUTCDay()],
   );
+  const live = pattern.provenance === "live" ? pattern : undefined;
+  const [weekday, setWeekday] = useState(() => live?.weekday ?? "mon");
+  const [result, setResult] = useState<{
+    key: string;
+    data: Awaited<ReturnType<typeof getLiveVisitPattern>>;
+  }>();
+  const cellId = live?.cellId;
+  const datasetId = live?.datasetId;
+  const key = `${datasetId}/${cellId}/${weekday}`;
+  useEffect(() => {
+    if (!cellId || !datasetId) return;
+    const controller = new AbortController();
+    getLiveVisitPattern({ datasetId, cellId, weekday }, controller.signal)
+      .then((data) => {
+        if (!controller.signal.aborted) setResult({ key, data });
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setResult({ key, data: null });
+      });
+    return () => controller.abort();
+  }, [cellId, datasetId, key, weekday]);
   const values =
-    pattern?.provenance === "live" ? pattern.values : pattern?.byDay[day];
-  const heights = values ? visitSlots.map((slot) => values[slot]) : [];
+    pattern.provenance === "live" ? result?.data : pattern.byDay[day];
+  if (!values) return null;
+  const heights = visitSlots.map((slot) => values[slot]);
   const highest = Math.max(...heights);
   const hasPeak =
     heights.every(
       (value) => Number.isFinite(value) && value >= 0 && value <= 100,
     ) && highest > Math.min(...heights);
+  if (!hasPeak) return null;
   const labels = copy[language];
+  const weekdayLabel = new Intl.DateTimeFormat(dateLocales[language], {
+    weekday: "long",
+    timeZone: "UTC",
+  });
 
   return (
     <section
       className="local-detail-section local-visit-pattern"
       aria-labelledby={titleId}
+      aria-busy={Boolean(live && result?.key !== key)}
     >
       <div className="local-visit-pattern-heading">
         <h2 id={titleId}>
           {labels.title}
-          {pattern?.provenance === "preview" && (
+          {pattern.provenance === "preview" && (
             <small className="local-place-ai-note">
               {" "}
               · {localText(language, "Sample data", "예시 데이터")}
             </small>
           )}
         </h2>
-        {pattern && pattern.provenance !== "live" && (
-          <label className="local-visit-pattern-day">
-            <span className="local-sr-only">{labels.dayLabel}</span>
-            <select
-              value={day}
-              onChange={(event) =>
-                setDay(event.currentTarget.value as VisitDayGroup)
-              }
-            >
-              {dayGroups.map((group) => (
-                <option key={group} value={group}>
-                  {labels.days[group]}
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
+        <label className="local-visit-pattern-day">
+          <span className="local-sr-only">{labels.dayLabel}</span>
+          <select
+            value={live ? weekday : day}
+            onChange={(event) => {
+              if (live) setWeekday(event.currentTarget.value as ApiWeekday);
+              else setDay(event.currentTarget.value as VisitDayGroup);
+            }}
+          >
+            {live
+              ? weekdays.map((day, index) => (
+                  <option key={day} value={day}>
+                    {weekdayLabel.format(Date.UTC(2024, 0, index + 1))}
+                  </option>
+                ))
+              : dayGroups.map((group) => (
+                  <option key={group} value={group}>
+                    {labels.days[group]}
+                  </option>
+                ))}
+          </select>
+        </label>
       </div>
-      {values && hasPeak && (
-        <ul className="local-visit-pattern-chart" role="list">
-          {visitSlots.map((slot) => (
-            <li key={slot} data-peak={hasPeak && values[slot] === highest}>
-              <div className="local-visit-pattern-track" aria-hidden="true">
-                <span style={{ height: `${values[slot]}%` }} />
-              </div>
-              <span>{slotLabels[language][slot]}</span>
-              <span className="local-sr-only">{values[slot]} / 100</span>
-            </li>
-          ))}
-        </ul>
-      )}
-      {reasons && reasons.length > 0 && (
-        <ul className="local-visit-evidence">
-          {reasons.map((reason) => {
-            const text = cellEvidenceText(language, reason);
-            return text && <li key={reason}>{text}</li>;
-          })}
-        </ul>
-      )}
+      <ul
+        className="local-visit-pattern-chart"
+        role="list"
+        aria-label={
+          (live &&
+            localText(
+              language,
+              "LG U+ · Relative visits by time of day in the surrounding 50 m cell",
+              "LG U+ · 주변 50m 구역의 시간대별 상대 방문 지표",
+            )) ||
+          undefined
+        }
+      >
+        {visitSlots.map((slot) => (
+          <li key={slot} data-peak={values[slot] === highest}>
+            <div className="local-visit-pattern-track" aria-hidden="true">
+              <span style={{ height: `${values[slot]}%` }} />
+            </div>
+            <span>{slotLabels[language][slot]}</span>
+            <span className="local-sr-only">{values[slot]} / 100</span>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

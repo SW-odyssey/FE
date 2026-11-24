@@ -7,30 +7,11 @@ import {
 import {
   getPublishedDataset,
   getV2Data,
-  screenSlots,
   v2Time,
   V2RequestError,
 } from "./v2-client.ts";
 import { previewDataSource } from "./preview.ts";
-import type { ApiSlot } from "./api-mapping.ts";
-import type {
-  CellReasonCode,
-  DiscoveryDataSource,
-  DiscoveryQuery,
-} from "./types.ts";
-import type { VisitSlot } from "../model.ts";
-import { visitSlots } from "../visit-time.ts";
-
-type CellEvidence = {
-  reasonsByCellId: Record<
-    string,
-    { status: string; reasons: { code: CellReasonCode }[] }
-  >;
-};
-type Pattern = {
-  status: string;
-  graph: { bars: { slot: ApiSlot; relativeHeight: number }[] } | null;
-};
+import type { DiscoveryDataSource, DiscoveryQuery } from "./types.ts";
 
 /** Create the v2 source for the normal discovery screens. */
 export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
@@ -49,7 +30,7 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
 
   async function context(input: DiscoveryQuery, signal?: AbortSignal) {
     if (!input.visitDate) throw new Error("Missing Seoul visit date");
-    const datasetId = await dataset(signal);
+    const datasetId = input.datasetId ?? (await dataset(signal));
     signal?.throwIfAborted();
     return { datasetId, ...v2Time(input.visitDate, input.slot) };
   }
@@ -77,21 +58,7 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
           published = undefined;
         throw error;
       }
-      const items = data.items.map(v2Place);
-      const cellIds = [...new Set(data.items.map(({ cellId }) => cellId))];
-      if (!cellIds.length) return { items, total: data.total };
-      const reasons = await getV2Data<CellEvidence>(
-        "cells/reasons",
-        signal,
-        new URLSearchParams({ ...scope, cellIds: cellIds.join(",") }),
-      ).catch(() => undefined);
-      signal?.throwIfAborted();
-      const cellReasons = Object.fromEntries(
-        Object.entries(reasons?.reasonsByCellId ?? {})
-          .filter(([, entry]) => entry.status === "AVAILABLE")
-          .map(([id, { reasons }]) => [id, reasons.map(({ code }) => code)]),
-      );
-      return { items, total: data.total, cellReasons };
+      return { items: data.items.map(v2Place), total: data.total };
     },
     async getPlace(id, { signal, query } = {}) {
       if (!/^[1-9]\d{0,15}$/.test(id) || !Number.isSafeInteger(Number(id)))
@@ -102,37 +69,18 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
         throw error;
       });
       if (!detail?.place.cellId || !query?.visitDate) return detail;
-      const pattern = await context(query, signal)
-        .then(({ datasetId, weekday }) =>
-          getV2Data<Pattern>(
-            `cells/${detail.place.cellId}/visit-pattern`,
-            signal,
-            new URLSearchParams({ datasetId, weekday }),
-          ),
-        )
-        .catch(() => undefined);
+      const scope = await context(query, signal).catch(() => undefined);
       signal?.throwIfAborted();
-      if (pattern?.status !== "AVAILABLE" || !pattern.graph) return detail;
-      const heights = new Map(
-        pattern.graph.bars.map(({ slot, relativeHeight }) => [
-          screenSlots[slot],
-          relativeHeight,
-        ]),
-      );
-      if (
-        visitSlots.some((slot) => {
-          const height = heights.get(slot);
-          return (
-            height === undefined ||
-            !Number.isFinite(height) ||
-            height < 0 ||
-            height > 100
-          );
-        })
-      )
-        return detail;
-      const values = Object.fromEntries(heights) as Record<VisitSlot, number>;
-      return { ...detail, visitPattern: { provenance: "live", values } };
+      if (!scope) return detail;
+      return {
+        ...detail,
+        visitPattern: {
+          provenance: "live",
+          cellId: detail.place.cellId,
+          datasetId: scope.datasetId,
+          weekday: scope.weekday,
+        },
+      };
     },
   };
 }

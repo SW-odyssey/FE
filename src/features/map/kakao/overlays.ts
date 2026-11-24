@@ -1,15 +1,7 @@
 import { localText, placeCount } from "../../discovery/localization.ts";
-import {
-  clusterScreenPlaces,
-  layoutClusterNodes,
-  layoutMapCaptions,
-} from "../clusters.ts";
+import { layoutClusterNodes, layoutMapCaptions } from "../clusters.ts";
 import { previewMapInsets, type ExploreMapOptions } from "../controller.ts";
-import {
-  groupedMarkerCells,
-  inMapScope,
-  type MapPlaceGroup,
-} from "../geometry.ts";
+import { groupMapMarkers, inMapScope, mapCaptionLimit } from "../geometry.ts";
 
 type MapLabel = {
   id: string;
@@ -21,7 +13,6 @@ type PooledMapNode = MapLabel & {
   map: kakao.maps.Map;
   button: HTMLButtonElement;
   symbol: HTMLSpanElement;
-  line: HTMLSpanElement;
   entryTimer: ReturnType<typeof setTimeout>;
 };
 
@@ -31,6 +22,7 @@ type PooledMapNode = MapLabel & {
  * @param offsets Offsets used to keep map hit targets separate
  * @param bounds Uncovered map size, excluding the bottom sheet and navigation
  * @param selectedId Place node whose caption has priority
+ * @param maxLabels Name limit for the current zoom
  * @returns Updates caption visibility and position without changing map state
  */
 function paintMapCaptions(
@@ -39,6 +31,7 @@ function paintMapCaptions(
   offsets: Map<string, { x: number; y: number }>,
   bounds: { width: number; height: number; top: number },
   selectedId: string | null,
+  maxLabels: number,
 ) {
   const drawn = points.flatMap((point) => {
     const offset = offsets.get(point.id);
@@ -74,7 +67,7 @@ function paintMapCaptions(
     bottom: bounds.height - 8,
     selectedId,
     obstacles: drawn,
-    maxLabels: 3,
+    maxLabels,
   });
   for (const label of labels) {
     if (!label.caption) continue;
@@ -122,57 +115,20 @@ export function createMapOverlays(
     const t = (en: string, kr: string) => localText(language, en, kr);
     const projection = current.getProjection();
     const level = current.getLevel();
-    const mode = level > 4 ? "areas" : level > 3 ? "cells" : "places";
-    const cells =
-      mode === "cells" ? groupedMarkerCells(displayPlaces, selected?.id) : [];
-    const grouped = new Set(
-      cells.flatMap(({ places: members }) => members.map(({ id }) => id)),
+    const groups = groupMapMarkers(
+      displayPlaces,
+      (place) => {
+        const point = projection.containerPointFromCoords(
+          new kakao.maps.LatLng(place.lat, place.lng),
+        );
+        return {
+          x: point.x / viewportScale,
+          y: point.y / viewportScale,
+        };
+      },
+      level,
+      selected?.id,
     );
-    const projectedPlaces = displayPlaces.map((place) => {
-      const point = projection.containerPointFromCoords(
-        new kakao.maps.LatLng(place.lat, place.lng),
-      );
-      return {
-        id: place.id,
-        x: point.x / viewportScale,
-        y: point.y / viewportScale,
-      };
-    });
-    const groups: (MapPlaceGroup & {
-      kind: "cluster" | "cell" | "place";
-    })[] =
-      mode === "areas"
-        ? clusterScreenPlaces(projectedPlaces, {
-            radius: 52,
-            selectedId: selected?.id,
-          }).map((cluster) => {
-            const members = cluster.memberIds.map((id) =>
-              displayPlaces.find((place) => place.id === id)!,
-            );
-            return {
-              id: cluster.id,
-              places: members,
-              lat:
-                members.reduce((sum, place) => sum + place.lat, 0) /
-                members.length,
-              lng:
-                members.reduce((sum, place) => sum + place.lng, 0) /
-                members.length,
-              kind: members.length > 1 ? "cluster" : "place",
-            };
-          })
-        : [
-            ...cells.map((group) => ({ ...group, kind: "cell" as const })),
-            ...displayPlaces
-              .filter(({ id }) => !grouped.has(id))
-              .map((place) => ({
-                id: `place:${place.id}`,
-                lat: place.lat,
-                lng: place.lng,
-                places: [place],
-                kind: "place" as const,
-              })),
-          ];
     const wanted = new Set(groups.map((group) => group.id));
     for (const [id, node] of pool) {
       if (wanted.has(id)) continue;
@@ -197,12 +153,8 @@ export function createMapOverlays(
         const symbol = document.createElement("span");
         const caption = document.createElement("span");
         caption.className = "local-map-caption";
-        const line = document.createElement("span");
-        line.className = "local-pin-line";
-        line.style.left = "22px";
-        line.style.top = "22px";
         button.append(symbol, caption);
-        content.append(line, button);
+        content.append(button);
         wrap.append(content);
         const overlay = new kakao.maps.CustomOverlay({
           map: current,
@@ -223,7 +175,6 @@ export function createMapOverlays(
           button,
           symbol,
           caption,
-          line,
           entryTimer,
         };
         pool.set(group.id, node);
@@ -337,7 +288,7 @@ export function createMapOverlays(
       right: width - 64,
       bottom: height - 8,
       pinnedId: pinned,
-      maxDisplacement: mode === "places" ? 48 : 80,
+      maxDisplacement: 24,
     });
     const selectedPoint = points.find((point) => point.id === pinned);
     if (
@@ -354,22 +305,24 @@ export function createMapOverlays(
       node.button.style.transform = offset
         ? `translate(${offset.x}px,${offset.y}px)`
         : "none";
-      node.line.hidden = !offset || Math.hypot(offset.x, offset.y) < 1;
-      node.line.style.display = node.line.hidden ? "none" : "block";
-      if (offset) {
-        node.line.style.width = `${Math.hypot(offset.x, offset.y)}px`;
-        node.line.style.transform = `rotate(${Math.atan2(offset.y, offset.x)}rad)`;
-      }
     }
     paintMapCaptions(
-      nodes.filter((node) => Boolean(node.caption?.textContent)),
+      nodes.filter(
+        (node) =>
+          Boolean(node.caption?.textContent) &&
+          (level <= 4 || node.id === pinned),
+      ),
       points,
       offsets,
       { width, height, top },
       pinned ?? null,
+      mapCaptionLimit(level, width),
     );
     for (const node of nodes)
-      if (!node.caption?.textContent && node.caption)
+      if (
+        node.caption &&
+        (!node.caption.textContent || (level > 4 && node.id !== pinned))
+      )
         node.caption.hidden = true;
   }
   function dispose() {

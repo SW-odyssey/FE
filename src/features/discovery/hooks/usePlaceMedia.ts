@@ -6,30 +6,31 @@ import {
   hasPlaceMedia,
   type PlaceMedia,
 } from "../data/place-media";
-import type { LocalPlace } from "../model";
+import type { DiscoveryLanguage, LocalPlace } from "../model";
 
-/** Load the photo gallery only for the place whose detail is open. */
-export function usePlaceMedia(place: LocalPlace) {
+/** Load the localized gallery and business details for the opened place. */
+export function usePlaceMedia(place: LocalPlace, language: DiscoveryLanguage) {
   const { id } = place;
   const enabled = hasPlaceMedia(place);
-  const [response, setResponse] = useState<{ id: string; data: PlaceMedia }>();
+  const key = `${id}:${language}`;
+  const [response, setResponse] = useState<{ key: string; data: PlaceMedia }>();
   useEffect(() => {
     if (!enabled) return;
     let active = true;
-    void getPlaceMedia(id, "gallery").then(
+    void getPlaceMedia(id, "gallery", language).then(
       (data) => {
-        if (active) setResponse({ id, data });
+        if (active) setResponse({ key, data });
       },
       () => {
-        if (active) setResponse({ id, data: { photoList: [] } });
+        if (active) setResponse({ key, data: { photoList: [] } });
       },
     );
     return () => {
       active = false;
     };
-  }, [enabled, id]);
+  }, [enabled, id, key, language]);
   return {
-    media: response?.id === id ? response.data : undefined,
-    pending: enabled && response?.id !== id,
+    media: response?.key === key ? response.data : undefined,
+    pending: enabled && response?.key !== key,
   };
 }

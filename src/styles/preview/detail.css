@@ -180,13 +180,6 @@
   flex: none;
 }
 
-.local-visit-evidence {
-  margin: 10px 0 0;
-  padding-inline-start: 18px;
-  color: var(--refresh-muted);
-  font-size: 0.8125rem;
-}
-
 .local-live-photo {
   position: relative;
   display: grid;
@@ -202,13 +195,27 @@
   object-fit: cover;
 }
 
-.local-shell.local-refined
-  :is(.local-place-info, .local-featured-copy)
-  > .local-photo-credit {
+.local-shell.local-refined .local-place-info > .local-photo-credit {
   display: block;
   font-size: 10px;
   line-height: 1.3;
   overflow-wrap: anywhere;
+}
+
+.local-featured > .local-photo-credit {
+  position: absolute;
+  z-index: 2;
+  inset-block-start: 12px;
+  inset-inline-end: 12px;
+  max-width: calc(100% - 24px);
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: rgb(29 25 35 / 83%);
+  color: white;
+  font-size: 11px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-align: right;
 }
 
 .local-gallery-credit {

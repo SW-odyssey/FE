@@ -1,6 +1,20 @@
-import type { LocalPlace, PlacePhoto } from "../model";
+import type { DiscoveryLanguage, LocalPlace, PlacePhoto } from "../model";
 
-export type PlaceMedia = { photoList: PlacePhoto[]; address?: string };
+export type PlaceBusiness = {
+  about?: string;
+  rating?: number;
+  ratingCount?: number;
+  phone?: string;
+  website?: string;
+  hours?: string[];
+  mapsUrl?: string;
+};
+export type PlaceMedia = {
+  photoList: PlacePhoto[];
+  address?: string;
+  displayName?: string;
+  business?: PlaceBusiness;
+};
 type Variant = "thumbnail" | "gallery";
 const requests = new Map<string, Promise<PlaceMedia>>();
 
@@ -13,11 +27,13 @@ export function hasPlaceMedia(place: Pick<LocalPlace, "id" | "googlePlaceId">) {
 export function getPlaceMedia(
   id: string,
   variant: Variant,
+  language?: DiscoveryLanguage,
 ): Promise<PlaceMedia> {
-  const key = `${id}:${variant}`;
+  const key = `${id}:${variant}:${language ?? ""}`;
   const active = requests.get(key);
   if (active) return active;
   const params = new URLSearchParams({ id, variant });
+  if (language) params.set("lang", language);
   const lookup = fetch(`/api/place-photos?${params}`, { cache: "no-store" })
     .then((response) =>
       response.ok

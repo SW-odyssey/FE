@@ -1,5 +1,11 @@
 import type { PlacePhoto } from "../src/features/discovery/model.ts";
-import { odysseyApiOrigin } from "../src/features/discovery/data/odyssey-api-origin.ts";
+import type { PlaceBusiness } from "../src/features/discovery/data/place-media.ts";
+import {
+  isLocalPlaceRequest,
+  isOdysseyPlaceId,
+  lookupPlaceRow,
+  placeLanguage,
+} from "./place-request.ts";
 
 type GooglePhoto = {
   name: string;
@@ -7,9 +13,34 @@ type GooglePhoto = {
   authorAttributions?: { displayName?: string; uri?: string }[];
 };
 
+type GooglePlace = {
+  photos?: GooglePhoto[];
+  formattedAddress?: string;
+  displayName?: { text?: string };
+  editorialSummary?: { text?: string };
+  rating?: number;
+  userRatingCount?: number;
+  nationalPhoneNumber?: string;
+  websiteUri?: string;
+  regularOpeningHours?: { weekdayDescriptions?: string[] };
+  googleMapsUri?: string;
+};
+
 const placesApi = "https://places.googleapis.com/v1/";
 const headers = { "Cache-Control": "no-store" };
 const sizes = { thumbnail: [640, 1], gallery: [1000, 3] } as const;
+const galleryFields = [
+  "photos",
+  "formattedAddress",
+  "displayName",
+  "editorialSummary",
+  "rating",
+  "userRatingCount",
+  "nationalPhoneNumber",
+  "websiteUri",
+  "regularOpeningHours.weekdayDescriptions",
+  "googleMapsUri",
+].join(",");
 
 function httpsUrl(value: string | undefined) {
   if (!value) return undefined;
@@ -21,27 +52,21 @@ function httpsUrl(value: string | undefined) {
   }
 }
 
-/** Return attributed photos for a place in the Odyssey dataset using the server key. */
+/** Return attributed photos and, for a gallery, localized store information. */
 export async function handlePlacePhotos(
   request: Request,
   key: string | undefined,
 ): Promise<Response> {
   const url = new URL(request.url);
-  const fetchSite = request.headers.get("Sec-Fetch-Site");
-  if (
-    !key ||
-    !["local.hrxlou.com", "localhost", "127.0.0.1", "[::1]"].includes(
-      url.hostname,
-    ) ||
-    (fetchSite !== null && fetchSite !== "same-origin")
-  )
+  if (!key || !isLocalPlaceRequest(request, url))
     return new Response(null, { status: 404, headers });
 
   const id = url.searchParams.get("id") ?? "";
   const variant = url.searchParams.get("variant");
+  const language = placeLanguage(url.searchParams.get("lang"));
   if (
-    !/^[1-9]\d{0,15}$/.test(id) ||
-    !Number.isSafeInteger(Number(id)) ||
+    !isOdysseyPlaceId(id) ||
+    !language ||
     (variant !== "thumbnail" && variant !== "gallery")
   )
     return new Response(null, { status: 400, headers });
@@ -63,28 +88,19 @@ export async function handlePlacePhotos(
   }
 
   try {
-    const lookup = await fetch(
-      new URL(`/api/v2/places/${id}`, odysseyApiOrigin),
-      { signal },
-    );
-    if (lookup.status === 404)
-      return new Response(null, { status: 404, headers });
-    if (!lookup.ok) return new Response(null, { status: 502, headers });
-    const row = (await lookup.json()) as {
-      success: boolean;
-      data?: { googlePlaceId?: string };
-    };
-    const googleId = row.data?.googlePlaceId;
-    if (!row.success || !googleId || !/^[\w-]{1,256}$/.test(googleId))
+    const row = await lookupPlaceRow(id, signal);
+    if (!row) return new Response(null, { status: 404, headers });
+    const googleId = row.googlePlaceId;
+    if (!googleId || !/^[\w-]{1,256}$/.test(googleId))
       return Response.json({ photoList: [] }, { headers });
 
-    const { photos = [], formattedAddress } = await googleJson<{
-      photos?: GooglePhoto[];
-      formattedAddress?: string;
-    }>(
-      `places/${googleId}`,
-      variant === "gallery" ? "photos,formattedAddress" : "photos",
+    const isGallery = variant === "gallery";
+    const lang = language === "zh" ? "zh-CN" : language;
+    const google = await googleJson<GooglePlace>(
+      `places/${googleId}${isGallery ? `?languageCode=${lang}` : ""}`,
+      isGallery ? galleryFields : "photos",
     );
+    const { photos = [], formattedAddress } = google;
     const prefix = `places/${googleId}/photos/`;
     const settled = await Promise.allSettled(
       photos.slice(0, limit).map(async (photo): Promise<PlacePhoto | null> => {
@@ -121,8 +137,27 @@ export async function handlePlacePhotos(
       item.status === "fulfilled" && item.value ? [item.value] : [],
     );
     const failed = settled.find((item) => item.status === "rejected");
-    if (!photoList.length && failed) throw failed.reason;
-    return Response.json({ photoList, address: formattedAddress }, { headers });
+    if (!isGallery && !photoList.length && failed) throw failed.reason;
+    const business: PlaceBusiness | undefined = isGallery
+      ? {
+          about: google.editorialSummary?.text,
+          rating: google.rating,
+          ratingCount: google.userRatingCount,
+          phone: google.nationalPhoneNumber,
+          website: httpsUrl(google.websiteUri)?.href,
+          hours: google.regularOpeningHours?.weekdayDescriptions,
+          mapsUrl: httpsUrl(google.googleMapsUri)?.href,
+        }
+      : undefined;
+    return Response.json(
+      {
+        photoList,
+        address: formattedAddress,
+        displayName: google.displayName?.text,
+        business,
+      },
+      { headers },
+    );
   } catch (error) {
     console.warn(
       "Places photo lookup unavailable",

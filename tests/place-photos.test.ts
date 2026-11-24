@@ -95,3 +95,49 @@ test("rejects unsupported and cross-site requests before contacting Places", asy
   assert.equal((await handlePlacePhotos(invalid, key)).status, 400);
   assert.equal(upstream.mock.callCount(), 0);
 });
+
+test("the gallery keeps localized business data when a photo fails", async (t) => {
+  t.mock.method(
+    globalThis,
+    "fetch",
+    async (url: string | URL, init: RequestInit) => {
+      const href = new URL(url);
+      if (href.pathname.endsWith("/api/v2/places/1557")) {
+        return Response.json({
+          success: true,
+          data: { googlePlaceId: "ChIJtest" },
+        });
+      }
+      if (href.pathname.endsWith("/media"))
+        return new Response(null, { status: 404 });
+      assert.equal(href.searchParams.get("languageCode"), "ja");
+      assert.ok(
+        new Headers(init.headers)
+          .get("X-Goog-FieldMask")
+          ?.includes("regularOpeningHours.weekdayDescriptions"),
+      );
+      return Response.json({
+        photos: [{ name: "places/ChIJtest/photos/photoTest" }],
+        formattedAddress: "ソウル",
+        displayName: { text: "テスト店" },
+        regularOpeningHours: { weekdayDescriptions: ["月曜日: 12:00～20:00"] },
+        rating: 4.5,
+        userRatingCount: 18,
+        websiteUri: "javascript:alert(1)",
+      });
+    },
+  );
+  const result = await handlePlacePhotos(
+    new Request(
+      "http://localhost/api/place-photos?id=1557&variant=gallery&lang=ja",
+    ),
+    key,
+  );
+  assert.equal(result.status, 200);
+  assert.deepEqual(await result.json(), {
+    photoList: [],
+    address: "ソウル",
+    displayName: "テスト店",
+    business: { hours: ["月曜日: 12:00～20:00"], rating: 4.5, ratingCount: 18 },
+  });
+});

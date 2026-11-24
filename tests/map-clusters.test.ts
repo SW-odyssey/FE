@@ -7,6 +7,11 @@ import {
   mapFocusCentrePoint,
   type ScreenCluster,
 } from "../src/features/map/clusters.ts";
+import {
+  groupMapMarkers,
+  mapCaptionLimit,
+} from "../src/features/map/geometry.ts";
+import { localPlaces } from "../src/features/discovery/data/preview/places.ts";
 
 const singleton = (id: string, x: number, y: number): ScreenCluster => ({
   id: `place:${id}`,
@@ -16,6 +21,34 @@ const singleton = (id: string, x: number, y: number): ScreenCluster => ({
   count: 1,
 });
 const safe = { left: 0, top: 200, right: 393, bottom: 500 };
+
+test("zoom levels show cell counts and nearby clusters without swallowing a selected pin", () => {
+  const places = [
+    { ...localPlaces[0], id: "a", lat: 0, lng: 0, cellId: "one" },
+    { ...localPlaces[0], id: "b", lat: 50, lng: 0, cellId: "one" },
+    { ...localPlaces[0], id: "c", lat: 85, lng: 0, cellId: "two" },
+  ];
+  const project = ({ lat, lng }: { lat: number; lng: number }) => ({
+    x: lat,
+    y: lng,
+  });
+  const wide = groupMapMarkers(places, project, 5);
+  assert.equal(wide.length, 1);
+  assert.equal(wide[0].kind, "cluster");
+  assert.equal(wide[0].places.length, 3);
+  const middle = groupMapMarkers(places, project, 3);
+  assert.equal(middle.find(({ kind }) => kind === "cell")?.places.length, 2);
+  assert.equal(
+    groupMapMarkers(places, project, 2).every(({ kind }) => kind === "place"),
+    true,
+  );
+  assert.equal(
+    groupMapMarkers(places, project, 5, "b").find(({ id }) => id === "place:b")
+      ?.kind,
+    "place",
+  );
+  assert.ok(mapCaptionLimit(5, 1000) < mapCaptionLimit(2, 1000));
+});
 
 test("selected places focus inside the uncovered map at every preview scale and sheet height", () => {
   for (const viewportScale of [0.5, 0.9, 1]) {

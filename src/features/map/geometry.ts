@@ -1,4 +1,5 @@
 import type { Coordinate, LocalPlace } from "../discovery/model.ts";
+import { clusterScreenPlaces } from "./clusters.ts";
 
 export type MapPresentation = "areas" | "cells" | "places";
 
@@ -37,6 +38,9 @@ export function previewCell(p: Coordinate) {
 export type MapPlaceGroup = Coordinate & {
   id: string;
   places: LocalPlace[];
+};
+export type MapMarkerGroup = MapPlaceGroup & {
+  kind: "cluster" | "cell" | "place";
 };
 
 export function inMapScope(
@@ -84,4 +88,58 @@ export function groupedMarkerCells(places: LocalPlace[], selectedId?: string) {
     ({ places: members }) =>
       members.length > 1 && !members.some(({ id }) => id === selectedId),
   );
+}
+
+/** Project named pin and cell anchors, combining counts where markers would crowd. */
+export function groupMapMarkers(
+  places: LocalPlace[],
+  project: (point: Coordinate) => { x: number; y: number } | null,
+  level: number,
+  selectedId?: string,
+): MapMarkerGroup[] {
+  const mode = mapPresentation(level);
+  const cells = mode === "cells" ? groupedMarkerCells(places, selectedId) : [];
+  const groupedIds = new Set(
+    cells.flatMap((cell) => cell.places.map(({ id }) => id)),
+  );
+  const anchors = new Map<string, MapMarkerGroup>();
+  for (const cell of cells) anchors.set(cell.id, { ...cell, kind: "cell" });
+  for (const place of places) {
+    if (groupedIds.has(place.id)) continue;
+    const id = `place:${place.id}`;
+    anchors.set(id, {
+      id,
+      lat: place.lat,
+      lng: place.lng,
+      places: [place],
+      kind: "place",
+    });
+  }
+  const points = [...anchors.values()].flatMap((group) => {
+    const point = project(group);
+    return point ? [{ ...point, id: group.id }] : [];
+  });
+  const radius = mode === "places" ? 34 : level > 5 ? 76 : level > 4 ? 64 : 49;
+  return clusterScreenPlaces(points, {
+    radius,
+    selectedId: selectedId ? `place:${selectedId}` : undefined,
+  }).map(({ memberIds }) => {
+    if (memberIds.length === 1) return anchors.get(memberIds[0])!;
+    const members = memberIds.flatMap((id) => anchors.get(id)!.places);
+    const ids = members.map(({ id }) => encodeURIComponent(id)).sort();
+    return {
+      id: `cluster:${ids.join("|")}`,
+      lat: members.reduce((sum, place) => sum + place.lat, 0) / members.length,
+      lng: members.reduce((sum, place) => sum + place.lng, 0) / members.length,
+      places: members,
+      kind: "cluster",
+    };
+  });
+}
+
+/** Cap visible names at a density appropriate to the zoom and available width. */
+export function mapCaptionLimit(level: number, width: number) {
+  if (level > 4) return 1;
+  if (level > 2) return width >= 640 ? 3 : 2;
+  return width >= 640 ? 8 : 5;
 }

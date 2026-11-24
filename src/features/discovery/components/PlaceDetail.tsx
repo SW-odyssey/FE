@@ -7,6 +7,8 @@ import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { areaLabels } from "../presentation";
 import { AreaVisitPatternCard } from "./AreaVisitPatternCard";
 import PhotoGallery from "./PhotoGallery";
+import { PlaceAiSummary } from "./PlaceAiSummary";
+import { PlaceBusinessInfo } from "./PlaceBusinessInfo";
 type Props = Pick<
   DiscoveryController,
   | "aiSummary"
@@ -21,7 +23,6 @@ type Props = Pick<
   | "showPlaceOnMap"
   | "selectedVisitDate"
   | "visitPattern"
-  | "cellReasons"
   | "t"
 > & { selected: NonNullable<DiscoveryController["selected"]> };
 export function PlaceDetail(props: Props) {
@@ -38,16 +39,18 @@ export function PlaceDetail(props: Props) {
     showPlaceOnMap,
     selectedVisitDate,
     visitPattern,
-    cellReasons,
     t,
   } = props;
-  const { media, pending } = usePlaceMedia(selected);
+  const { media, pending } = usePlaceMedia(selected, language);
   const photos = media?.photoList.length
     ? media.photoList
     : photosFor(selected);
   const address = media?.address || selected.address;
+  const displayName =
+    language === "ko" ? name(selected) : media?.displayName || name(selected);
   const area = selected.area && areaLabels[language][selected.area];
-  const about = description(selected);
+  const editorial = description(selected);
+  const about = editorial || media?.business?.about;
   const photoCredits = [
     ...new Set(
       photosFor(selected)
@@ -70,7 +73,7 @@ export function PlaceDetail(props: Props) {
       />
       <div className="local-detail-body">
         <header className="local-detail-heading">
-          <h1>{name(selected)}</h1>
+          <h1>{displayName}</h1>
           <p className="local-detail-meta">
             <LocalIcon name="map-pin" size={15} />
             {area ? `${area} · ` : ""}
@@ -87,6 +90,7 @@ export function PlaceDetail(props: Props) {
                   {t("Original source", "원문 보기")} ↗
                 </a>
               )}
+              {!editorial && media?.business?.about && <span>Google Maps</span>}
               {photoCredits.length > 0 && (
                 <span>
                   {t("Photo", "사진")} {photoCredits.join(" / ")}
@@ -95,27 +99,30 @@ export function PlaceDetail(props: Props) {
             </small>
           </section>
         )}
-        {(visitPattern || Boolean(cellReasons?.length)) && (
+        {media?.business && (
+          <PlaceBusinessInfo business={media.business} language={language} />
+        )}
+        {visitPattern && (
           <AreaVisitPatternCard
-            key={selectedVisitDate}
+            key={
+              visitPattern?.provenance === "live"
+                ? `${visitPattern.datasetId}/${selectedVisitDate}`
+                : selectedVisitDate
+            }
             language={language}
             pattern={visitPattern}
-            reasons={cellReasons}
             visitDate={selectedVisitDate}
           />
         )}
-        {aiSummary && (
-          <section className="local-detail-section">
-            <h2>{t("AI place summary", "AI 매장 요약")}</h2>
-            <p>{aiSummary}</p>
-            <small className="local-place-ai-note">
-              {t("Generated with Gemini", "Gemini로 자동 생성")}
-            </small>
-          </section>
-        )}
+        <PlaceAiSummary
+          id={selected.id}
+          sinceDate={selected.sinceDate}
+          editorialSummary={aiSummary}
+          language={language}
+        />
         <section className="local-detail-section">
           <h2>{t("Getting there", "위치")}</h2>
-          {address ? (
+          {address && (
             <button
               className="local-address"
               onClick={() => copyAddress({ ...selected, address })}
@@ -124,16 +131,6 @@ export function PlaceDetail(props: Props) {
               <span>{address}</span>
               <LocalIcon name="copy" size={17} />
             </button>
-          ) : (
-            <a
-              className="local-course-google"
-              href={googleMapsPlaceUrl(selected)}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {t("Open in Google Maps", "구글맵에서 열기")}
-              <LocalIcon name="external-link" size={16} />
-            </a>
           )}
           <button
             className="local-map-preview"
@@ -142,6 +139,15 @@ export function PlaceDetail(props: Props) {
           >
             <MiniMap place={selected} />
           </button>
+          <a
+            className="local-detail-maps-link"
+            href={media?.business?.mapsUrl ?? googleMapsPlaceUrl(selected)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {t("Open in Google Maps", "구글맵에서 열기")}
+            <LocalIcon name="external-link" size={16} />
+          </a>
         </section>
       </div>
       <div className="local-detail-action">

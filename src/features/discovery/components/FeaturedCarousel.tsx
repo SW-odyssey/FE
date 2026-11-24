@@ -292,15 +292,17 @@ export function FeaturedCarousel({
         place={place}
         eager={eager}
         caption={(attribution) => (
-          <span className="local-featured-copy">
-            <strong>{name(place)}</strong>
-            <span>
-              <LocalIcon name="map-pin" size={13} />
-              {place.area && `${areaLabels[language][place.area]} · `}
-              {kind(place)}
+          <>
+            <span className="local-featured-copy">
+              <strong>{name(place)}</strong>
+              <span>
+                <LocalIcon name="map-pin" size={13} />
+                {place.area && `${areaLabels[language][place.area]} · `}
+                {kind(place)}
+              </span>
             </span>
             {attribution}
-          </span>
+          </>
         )}
       />
     );

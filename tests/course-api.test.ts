@@ -5,6 +5,7 @@ import {
   courseSearchParams,
   getCourse,
   getCourseDataset,
+  getCoursePlaceDetail,
 } from "../src/features/discovery/data/course-api.ts";
 
 const request = {
@@ -146,4 +147,28 @@ test("course filters and an explicit late-night start match server parameters", 
   assert.equal(query.get("lateNight"), "true");
   assert.equal(query.get("walk"), "short");
   assert.equal(query.get("seed"), "12");
+});
+
+test("live place detail restores sourced promo copy only for the matching Google ID", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url: URL) =>
+    Response.json({
+      success: true,
+      data: {
+        id: 41,
+        name: "온천집 익선",
+        kind: "korean",
+        googlePlaceId: url.pathname.endsWith("/41")
+          ? "ChIJ-53H9-mjfDURpOg-_9us6qo"
+          : "different-place",
+      },
+    }),
+  );
+  const match = await getCoursePlaceDetail("41");
+  assert.ok(match.aiSummary?.ko.includes("샤부샤부"));
+  assert.ok(match.place.sourceUrl.includes("visitkorea.or.kr"));
+  assert.equal(match.visitPattern, undefined);
+  assert.equal(match.photos.length, 0);
+  const nonMatch = await getCoursePlaceDetail("42");
+  assert.equal(nonMatch.aiSummary, undefined);
+  assert.equal(nonMatch.place.sourceUrl, "");
 });
