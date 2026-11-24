@@ -1,7 +1,7 @@
 import { handlePlaceSummary } from "../../server/place-summary";
 
 /** Bind Gemini's server key in the Cloudflare Pages runtime. */
-export function onRequestGet({
+export function onRequestPost({
   request,
   env,
 }: {

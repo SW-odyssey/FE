@@ -88,7 +88,9 @@ export function PlaceDetail(props: Props) {
                   {t("Original source", "원문 보기")} ↗
                 </a>
               )}
-              {!editorial && media?.business?.about && <span>Google Maps</span>}
+              {!editorial && media?.business?.about && (
+                <span translate="no">Google Maps</span>
+              )}
               {photoCredits.length > 0 && (
                 <span>
                   {t("Photo", "사진")} {photoCredits.join(" / ")}
@@ -114,8 +116,8 @@ export function PlaceDetail(props: Props) {
         )}
         <PlaceAiSummary
           id={selected.id}
-          sinceDate={selected.sinceDate}
-          editorialSummary={aiSummary}
+          googlePlaceId={selected.googlePlaceId}
+          curatedSummary={aiSummary}
           language={language}
         />
         <section className="local-detail-section">

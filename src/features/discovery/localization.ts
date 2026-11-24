@@ -146,7 +146,6 @@ const copy: Record<string, readonly [string, string]> = {
     "Gemini が概要を作成中…",
     "Gemini 正在生成简介…",
   ],
-  "Business permits": ["営業許可の記録", "经营许可记录"],
   "Business info": ["店舗情報", "商家信息"],
   Rating: ["評価", "评分"],
   Phone: ["電話", "电话"],
