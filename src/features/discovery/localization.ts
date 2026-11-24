@@ -173,6 +173,7 @@ const copy: Record<string, readonly [string, string]> = {
   "AI summary": ["AIによる要約", "AI 摘要"],
   "Open menu": ["言語を選択", "选择语言"],
   "Search places": ["お店を検索", "搜索店铺"],
+  "Suggested places": ["検索候補", "搜索建议"],
   "Clear search": ["検索をクリア", "清除搜索"],
   "Back to places": ["一覧に戻る", "返回列表"],
   "Address copied": ["住所をコピーしました", "地址已复制"],
