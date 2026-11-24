@@ -586,7 +586,11 @@ export function useDiscoveryController(
     )
       return;
     if (activeCourseLink)
-      setCourseLink({ ...activeCourseLink, replacements: [] });
+      setCourseLink({
+        ...activeCourseLink,
+        previousStopIds: undefined,
+        replacements: [],
+      });
     setCourseOptions(next);
   }
   function chooseArea(next: DiscoveryArea) {

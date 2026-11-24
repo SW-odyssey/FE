@@ -11,6 +11,7 @@ export type CourseLink = {
   datasetId?: string;
   visitDate?: string;
   startSlot?: VisitSlot;
+  previousStopIds?: string[];
   replacements: CourseReplacement[];
 };
 
@@ -25,6 +26,13 @@ export function readCourseLink(
   const dataset = params.get("courseDataset");
   const date = params.get("courseDate");
   const slot = params.get("courseStart") as VisitSlot;
+  const previousStopIds = params.get("previousStopIds")?.split(",");
+  const validPreviousStops =
+    previousStopIds &&
+    previousStopIds.length <= 6 &&
+    previousStopIds.every(
+      (id) => numericId.test(id) && Number.isSafeInteger(Number(id)),
+    );
   const replacements: CourseReplacement[] = [];
   for (const entry of (params.get("courseChanges") ?? "")
     .split(";")
@@ -57,6 +65,7 @@ export function readCourseLink(
         ? date
         : undefined,
     startSlot: visitSlots.includes(slot) ? slot : undefined,
+    ...(validPreviousStops && { previousStopIds }),
     replacements,
   };
 }
@@ -66,6 +75,8 @@ export function writeCourseLink(params: URLSearchParams, link: CourseLink) {
   if (link.datasetId) params.set("courseDataset", link.datasetId);
   if (link.visitDate) params.set("courseDate", link.visitDate);
   if (link.startSlot) params.set("courseStart", link.startSlot);
+  if (link.previousStopIds?.length)
+    params.set("previousStopIds", link.previousStopIds.join(","));
   if (link.replacements.length)
     params.set(
       "courseChanges",
