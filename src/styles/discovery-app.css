@@ -64,6 +64,44 @@
   }
 }
 
+.local-search-anchor {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.local-search-suggestions {
+  position: absolute;
+  z-index: 1;
+  inset: calc(100% + 6px) 0 auto;
+  max-height: min(280px, 45dvh);
+  margin: 0;
+  padding: 4px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  border: 1px solid var(--local-border);
+  border-radius: var(--r-md);
+  background: #fff;
+  box-shadow: 0 6px 20px #30203726;
+}
+
+.local-search-suggestions [role="option"] {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  color: var(--local-ink);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.local-search-suggestions [role="option"]:is(:hover, [aria-selected="true"]) {
+  background: var(--local-pale);
+  color: var(--local-plum);
+}
+
 .local-web .local-search:focus-within {
   border-color: var(--local-plum);
   box-shadow: 0 0 0 1px var(--local-plum);
