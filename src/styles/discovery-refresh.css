@@ -384,11 +384,6 @@ body {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.local-place-ai {
-  padding: 14px 16px;
-  background: var(--refresh-ground);
-  border-radius: var(--r-md);
-}
 .local-place-ai > .local-place-ai-unavailable {
   color: var(--refresh-muted);
 }
@@ -419,11 +414,7 @@ body {
 .local-place-ai-icon {
   display: grid;
   flex: none;
-  width: 28px;
-  height: 28px;
   place-items: center;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--local-plum) 11%, white);
   color: var(--local-plum);
 }
 .local-place-ai-placeholder {
