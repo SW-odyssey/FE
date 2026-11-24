@@ -116,7 +116,7 @@ export function CourseTimeline({
             <div className="local-course-timeline-item">
               <div className="local-course-stop-controls">
                 <p className="local-course-distance">
-                  {`${t("Est. walk", "예상 도보")} ${walkMinutes}${t(" min", "분")} · ${t("Straight line", "직선 거리")} ${formatDistance.format(distanceMeters)}`}
+                  {`${t("Est. walk", "예상 도보")} ${walkMinutes}${t(" min", "분")} (${t("Straight line", "직선 거리")} ${formatDistance.format(distanceMeters)})`}
                 </p>
                 {route[index - 1]?.slot !== slot && (
                   <button
