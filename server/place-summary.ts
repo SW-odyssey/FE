@@ -129,8 +129,9 @@ export async function handlePlaceSummary(
       redirect: "manual",
       signal,
       body: JSON.stringify({
-        model: "gemini-3.8-flash",
+        model: "gemini-3.5-flash-lite",
         store: false,
+        generation_config: { thinking_level: "minimal" },
         input: [
           "Use Google Maps to write a short visitor-facing summary of this exact venue in Seoul, South Korea.",
           "Use only verified details about this venue, such as menu highlights or atmosphere.",
