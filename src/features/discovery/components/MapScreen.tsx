@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { MapViewportInsets } from "../../map/controller";
 import ExploreMap from "../../map/ExploreMap";
+import { isOverlapScope } from "../../map/geometry";
 import PlaceSheet from "../../map/PlaceSheet";
 import { sheetHeights, sheetHeightsForSpace } from "../../map/sheet-motion";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
@@ -269,7 +270,10 @@ export function MapScreen(props: Props) {
           {mapScope && !showCourse && (
             <div className="local-scope-row">
               <span>
-                {t("Selected area", "선택한 구역")} {mapPlaces.length}
+                {isOverlapScope(mapScope)
+                  ? t("Overlapping places", "겹친 장소")
+                  : t("Selected area", "선택한 구역")}{" "}
+                · {mapPlaces.length}
               </span>
               <button onClick={clearMapScope}>
                 {t("Show all", "전체 보기")}

@@ -9,6 +9,7 @@ import {
 } from "../src/features/map/clusters.ts";
 import {
   groupMapMarkers,
+  inMapScope,
   mapCaptionLimit,
 } from "../src/features/map/geometry.ts";
 import { localPlaces } from "../src/features/discovery/data/preview/places.ts";
@@ -48,6 +49,30 @@ test("zoom levels show cell counts and nearby clusters without swallowing a sele
     "place",
   );
   assert.ok(mapCaptionLimit(5, 1000) < mapCaptionLimit(2, 1000));
+});
+
+test("at maximum zoom only overlapping pins group and their scope lists exactly those places", () => {
+  const places = [
+    { ...localPlaces[0], id: "store|one", lat: 0, lng: 0 },
+    { ...localPlaces[0], id: "store:two", lat: 0, lng: 0 },
+    { ...localPlaces[0], id: "store-three", lat: 30, lng: 0 },
+  ];
+  const project = ({ lat, lng }: { lat: number; lng: number }) => ({
+    x: lat,
+    y: lng,
+  });
+  assert.equal(groupMapMarkers(places, project, 2)[0].kind, "cluster");
+  const near = groupMapMarkers(places, project, 1);
+  const overlap = near.find(({ kind }) => kind === "overlap");
+  assert.ok(overlap);
+  assert.deepEqual(
+    places.filter((place) => inMapScope(place, overlap.id)).map(({ id }) => id),
+    ["store|one", "store:two"],
+  );
+  assert.equal(
+    near.find(({ kind }) => kind === "place")?.places[0].id,
+    "store-three",
+  );
 });
 
 test("selected places focus inside the uncovered map at every preview scale and sheet height", () => {

@@ -336,7 +336,7 @@ export function createGoogleExploreMapSession(
       const label =
         kind === "place"
           ? name(place)
-          : `${kind === "cell" ? t("Choose a cell", "구역 선택") : t("Zoom in", "확대")} ${placeCount(language, count)}`;
+          : `${kind === "cell" ? t("Choose a cell", "구역 선택") : kind === "overlap" ? t("Show grouped places", "겹친 장소 보기") : t("Zoom in", "확대")} ${placeCount(language, count)}`;
       const active = group.places.some(
         (member) =>
           member.id === selected?.id || (scope && inMapScope(member, scope)),
@@ -359,7 +359,8 @@ export function createGoogleExploreMapSession(
       pin.caption.style.maxWidth = caption ? `${caption.maxWidth}px` : "";
       pin.button.onclick = () => {
         if (kind === "place") read().onSelect(place);
-        else if (kind === "cell") read().onGroupSelect?.(group);
+        else if (kind === "cell" || kind === "overlap")
+          read().onGroupSelect?.(group);
         else {
           autoFit = false;
           map.setZoom(Math.min(maxZoom, zoom + 1));
