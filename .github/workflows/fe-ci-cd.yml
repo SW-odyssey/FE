@@ -34,6 +34,7 @@ jobs:
         env:
           LOCAL_PAGES_BUILD: "1"
           NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY: ${{ vars.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY }}
+          NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
       - run: npm run typecheck
       - name: Verify Pages output
         run: test -s out/index.html && test -s out/manifest.webmanifest
