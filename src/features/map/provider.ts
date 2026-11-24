@@ -1,3 +1,4 @@
+import type { DiscoveryLanguage } from "../discovery/model.ts";
 import { attachMapSession, type DisposableMapSession } from "./controller.ts";
 import {
   hasGoogleMapsKey,
@@ -13,6 +14,7 @@ export const hasLiveMapKey =
 
 /** Attach the configured map and fall back to Kakao if Google cannot load. */
 export function attachPreferredMapSession<T extends DisposableMapSession>(
+  language: DiscoveryLanguage,
   create: Record<MapProvider, () => T>,
   ready: (session: T, provider: MapProvider) => void,
   unavailable: (failed: boolean) => void,
@@ -35,7 +37,7 @@ export function attachPreferredMapSession<T extends DisposableMapSession>(
   if (hasGoogleMapsKey) {
     unsubscribe = subscribeGoogleAuthFailure(startKakao);
     detach = attachMapSession(
-      prepareGoogleMap,
+      () => prepareGoogleMap(language),
       create.google,
       (session) => ready(session, "google"),
       startKakao,

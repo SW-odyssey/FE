@@ -10,6 +10,7 @@ export type MapCamera = Coordinate & {
   level: number;
   collection: string;
   selectedId: string | null;
+  restoreAfterLanguageChange?: true;
 };
 export type MapViewportInsets = { top: number; bottom: number };
 export const previewMapInsets: MapViewportInsets = { top: 240, bottom: 86 };
@@ -32,6 +33,7 @@ export function canSearchMapViewport(
 }
 
 export type ExploreMapProps = {
+  sdkEnabled?: boolean;
   places: LocalPlace[];
   selected: LocalPlace | null;
   language: DiscoveryLanguage;

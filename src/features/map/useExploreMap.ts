@@ -52,7 +52,9 @@ export function useExploreMap(props: ExploreMapProps) {
         props.selected.lng,
       ])
     : null;
+  const sdkEnabled = props.sdkEnabled ?? true;
   useEffect(() => {
+    if (!sdkEnabled) return;
     const canSearch = () => {
       const { onSearchArea, places } = options.current;
       const viewport = session.current?.getSearchViewport();
@@ -82,6 +84,7 @@ export function useExploreMap(props: ExploreMapProps) {
       },
     });
     return attachPreferredMapSession(
+      options.current.language,
       {
         google: () =>
           createGoogleExploreMapSession(element.current!, read, setZoom),
@@ -97,7 +100,7 @@ export function useExploreMap(props: ExploreMapProps) {
         setError(failed);
       },
     );
-  }, [retry]);
+  }, [retry, sdkEnabled]);
   useEffect(() => {
     if (!ready) return;
     session.current?.render();

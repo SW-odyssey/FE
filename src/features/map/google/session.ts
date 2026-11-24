@@ -113,8 +113,16 @@ export function createGoogleExploreMapSession(
     const { courseStops, places } = read();
     return `google:${courseStops ? "course:" : ""}${(courseStops ?? places).map(({ id }) => id).join(",")}`;
   };
-  const cached = restorableMapCamera(read().memory?.current, collection());
+  const remembered = read().memory?.current;
+  const cached =
+    remembered?.restoreAfterLanguageChange &&
+    remembered.collection.startsWith("google:")
+      ? remembered
+      : restorableMapCamera(remembered, collection());
   let restoreFit = Boolean(cached);
+  let restoreFocus = cached?.restoreAfterLanguageChange
+    ? cached.selectedId
+    : null;
   const map = new google.maps.Map(element, {
     ...mapOptions(),
     center: cached ?? read().searchOrigin ?? initialCenter,
@@ -434,6 +442,10 @@ export function createGoogleExploreMapSession(
     focusSelected: () => {
       const { selected, focusSelected } = read();
       if (!selected || !focusSelected) return;
+      if (restoreFocus === selected.id) {
+        restoreFocus = null;
+        return;
+      }
       markManual();
       if (fitPending || fitCentre) pendingFocus = selected;
       else centerOn(selected);

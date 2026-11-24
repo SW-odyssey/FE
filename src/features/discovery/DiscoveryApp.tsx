@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useSyncExternalStore } from "react";
 import { LocalIcon } from "../../components/ui/LocalIcon";
 import { useDeviceLocation } from "../map/useDeviceLocation";
 import { CourseScreen } from "./components/CourseScreen";
@@ -16,7 +16,6 @@ import type { DiscoveryDataSource } from "./data";
 import { liveDiscoveryDataSource } from "./data/live-recommendations";
 import { useCompactNavigation } from "./hooks/useCompactNavigation";
 import { useDiscoveryController } from "./hooks/useDiscoveryController";
-import type { Coordinate } from "./model";
 
 const desktopQuery = "(min-width: 960px)";
 function subscribeToDesktop(notify: () => void) {
@@ -34,9 +33,6 @@ export default function DiscoveryApp({
   source?: DiscoveryDataSource;
   previewScale?: number;
 }) {
-  const [currentLocation, setCurrentLocation] = useState<Coordinate | null>(
-    null,
-  );
   const wide = useSyncExternalStore(
     subscribeToDesktop,
     desktopSnapshot,
@@ -46,12 +42,8 @@ export default function DiscoveryApp({
   const activeSource =
     source ??
     (previewScale === undefined ? liveDiscoveryDataSource : undefined);
-  const controller = useDiscoveryController(
-    activeSource,
-    currentLocation,
-    desktop,
-  );
-  const courseLocation = useDeviceLocation(setCurrentLocation);
+  const controller = useDiscoveryController(activeSource, desktop);
+  const courseLocation = useDeviceLocation(controller.setCurrentLocation);
   const {
     shell,
     scroll,
@@ -161,8 +153,8 @@ export default function DiscoveryApp({
           visible={controller.mapVisible}
           desktop={desktop}
           showCourse={mapShowsCourse}
-          currentLocation={currentLocation}
-          onLocate={setCurrentLocation}
+          currentLocation={controller.currentLocation}
+          onLocate={controller.setCurrentLocation}
           viewportScale={previewScale ?? 1}
         />
       )}
