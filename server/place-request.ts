@@ -4,8 +4,8 @@ import type { DiscoveryLanguage } from "../src/features/discovery/model.ts";
 
 type PlaceRow = {
   name?: string;
-  kind?: string;
-  sinceDate?: string | null;
+  lat?: number;
+  lng?: number;
   googlePlaceId?: string | null;
 };
 

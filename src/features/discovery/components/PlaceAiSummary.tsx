@@ -1,42 +1,49 @@
 import { useEffect, useState } from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
+import type { PlaceSummary } from "../data/place-summary";
 import { localText } from "../localization";
 import type { DiscoveryLanguage } from "../model";
 
-/** Show the sourced summary or request one for a place with a permit record. */
+/** Show the curated summary or request Google Maps context for this visit. */
 export function PlaceAiSummary({
   id,
-  sinceDate,
-  editorialSummary,
+  googlePlaceId,
+  curatedSummary,
   language,
 }: {
   id: string;
-  sinceDate?: string;
-  editorialSummary?: string;
+  googlePlaceId?: string;
+  curatedSummary?: string;
   language: DiscoveryLanguage;
 }) {
-  const [response, setResponse] = useState<{ key: string; summary: string }>();
-  const enabled = Boolean(sinceDate) && !editorialSummary;
+  const [response, setResponse] = useState<{
+    key: string;
+    result: PlaceSummary | null;
+  }>();
+  const enabled = Boolean(googlePlaceId) && /^\d+$/.test(id) && !curatedSummary;
   const key = new URLSearchParams({ id, lang: language }).toString();
   useEffect(() => {
     if (!enabled) return;
     const controller = new AbortController();
-    fetch(`/api/place-summary?${key}`, { signal: controller.signal })
+    fetch(`/api/place-summary?${key}`, {
+      method: "POST",
+      cache: "no-store",
+      signal: controller.signal,
+    })
       .then(async (response) => {
         const payload =
           response.status === 200
-            ? ((await response.json()) as { summary: string })
-            : undefined;
-        if (!controller.signal.aborted)
-          setResponse({ key, summary: payload?.summary ?? "" });
+            ? ((await response.json()) as PlaceSummary)
+            : null;
+        if (!controller.signal.aborted) setResponse({ key, result: payload });
       })
       .catch(() => {
-        if (!controller.signal.aborted) setResponse({ key, summary: "" });
+        if (!controller.signal.aborted) setResponse({ key, result: null });
       });
     return () => controller.abort();
   }, [enabled, key]);
-  const summary =
-    editorialSummary || (response?.key === key ? response.summary : "");
+  const grounded = response?.key === key ? response.result : null;
+  const summary = curatedSummary || grounded?.summary;
   const pending = enabled && response?.key !== key;
   if (!summary && !pending) return null;
   const t = (en: string, ko: string) => localText(language, en, ko);
@@ -50,10 +57,36 @@ export function PlaceAiSummary({
       </div>
       {summary ? (
         <>
-          <p>{summary}</p>
+          <p
+            className={
+              grounded && !curatedSummary
+                ? "local-place-grounded-text"
+                : undefined
+            }
+          >
+            {summary}
+          </p>
+          {grounded && !curatedSummary && grounded.sources.length > 0 && (
+            <div className="local-place-source local-place-grounded-sources">
+              <span translate="no">Google Maps</span>
+              <ul>
+                {grounded.sources.map(({ name, url }) => (
+                  <li key={JSON.stringify([name, url])}>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noreferrer"
+                      translate="no"
+                    >
+                      {name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <small className="local-place-ai-note">
             {t("Generated with Gemini", "Gemini로 자동 생성")}
-            {!editorialSummary && ` · ${t("Business permits", "인허가 이력")}`}
           </small>
         </>
       ) : (

@@ -389,6 +389,25 @@ body {
   background: var(--refresh-ground);
   border-radius: var(--r-md);
 }
+.local-place-grounded-text {
+  white-space: pre-wrap;
+}
+.local-place-grounded-sources {
+  flex-direction: column;
+  gap: 3px;
+}
+.local-place-grounded-sources > span {
+  white-space: nowrap;
+  font-weight: 650;
+}
+.local-place-grounded-sources ul {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-wrap: anywhere;
+}
 .local-place-ai-heading {
   display: flex;
   align-items: center;
