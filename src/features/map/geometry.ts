@@ -46,7 +46,7 @@ export function inMapScope(
   return (
     !scope ||
     scope === `area:${place.area}` ||
-    scope === `cell:${previewCell(place).id}`
+    scope === `cell:${place.cellId ?? previewCell(place).id}`
   );
 }
 
@@ -57,11 +57,14 @@ export function groupMapPlaces(
 ): MapPlaceGroup[] {
   const groups = new Map<string, LocalPlace[]>();
   for (const p of places) {
-    const id = close ? `cell:${previewCell(p).id}` : `area:${p.area}`;
+    const id = close
+      ? `cell:${p.cellId ?? previewCell(p).id}`
+      : `area:${p.area}`;
     groups.set(id, [...(groups.get(id) ?? []), p]);
   }
   return [...groups].map(([id, members]) => {
-    const cell = close ? previewCell(members[0]).polygon : null;
+    const cell =
+      close && !members[0].cellId ? previewCell(members[0]).polygon : null;
     return {
       id,
       lat: cell

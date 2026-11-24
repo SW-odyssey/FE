@@ -7,6 +7,7 @@ import { type SheetState } from "../../map/sheet-motion";
 import { defaultCourseOptions, type CourseOptions } from "../course";
 import { previewDataSource, type DiscoveryDataSource } from "../data";
 import { getCoursePlaceDetail } from "../data/course-api";
+import { liveDiscoveryDataSource } from "../data/live-recommendations";
 import { spacePreferences } from "../filters";
 import { dateLocales, localText } from "../localization";
 import type { LocalPlace } from "../model";
@@ -40,6 +41,7 @@ export function useDiscoveryController(
   currentLocation: Coordinate | null = null,
   desktop = false,
 ) {
+  const liveRecommendations = source === liveDiscoveryDataSource;
   const [restored, setRestored] = useState(false);
   const [view, setView] = useState<DiscoveryView>("discover");
   const [courseMap, setCourseMap] = useState(false);
@@ -152,7 +154,12 @@ export function useDiscoveryController(
               : null
             : state.place,
       );
-      setModal(state.modal);
+      setModal(
+        sourceRef.current === liveDiscoveryDataSource &&
+          state.modal === "filters"
+          ? null
+          : state.modal,
+      );
       if (state.sheet) setSheet(state.sheet);
       setQuery(state.query);
       setAutoTime(state.autoTime);
@@ -161,15 +168,19 @@ export function useDiscoveryController(
       setDraftDay(state.day);
       setDraftSlot(state.draftTime.slot);
       setDraftTime(state.draftTime);
-      setActivity(state.activity);
-      setDraftActivity(state.activity);
+      const visitActivity =
+        sourceRef.current === liveDiscoveryDataSource ? "any" : state.activity;
+      setActivity(visitActivity);
+      setDraftActivity(visitActivity);
+      const visitSpaces =
+        sourceRef.current === liveDiscoveryDataSource ? [] : state.spaces;
       setSpaces((current) =>
-        current.length === state.spaces.length &&
-        current.every((space, index) => space === state.spaces[index])
+        current.length === visitSpaces.length &&
+        current.every((space, index) => space === visitSpaces[index])
           ? current
-          : state.spaces,
+          : visitSpaces,
       );
-      setDraftSpaces(state.spaces);
+      setDraftSpaces(visitSpaces);
       setCategory(state.category);
       setLanguage(state.language);
     };
@@ -299,12 +310,14 @@ export function useDiscoveryController(
     query: inCourse ? "" : query,
     slot: currentSlot,
     activity,
-    origin: null,
+    origin: liveRecommendations && currentArea ? currentLocation : null,
     spaces,
     visitDate: selectedVisitDate,
   };
   const data = useDiscoveryData({
     source,
+    queryEnabled: !liveRecommendations || (restored && !inCourse),
+    draftEnabled: !liveRecommendations || modal === "filters",
     query: appliedQuery,
     draftQuery: inCourse
       ? appliedQuery
@@ -664,6 +677,11 @@ export function useDiscoveryController(
   return {
     activity,
     analysisFor,
+    liveRecommendations,
+    cellReasons:
+      !inCourse && selected?.cellId
+        ? data.cellReasons?.[selected.cellId]
+        : undefined,
     featuredId,
     setFeaturedId,
     area,

@@ -11,8 +11,8 @@ import { placeCount } from "../localization";
 import type { Coordinate } from "../model";
 import { DiscoveryControls } from "./DiscoveryControls";
 import { LanguageButton } from "./LanguageButton";
-import { Photo } from "./PlacePhoto";
 import { renderPlaceRow } from "./PlaceRow";
+import { Photo } from "./PlacePhoto";
 import { ResourceNotice } from "./ResourceNotice";
 import { SearchHeader } from "./SearchHeader";
 type Props = Pick<
@@ -29,6 +29,7 @@ type Props = Pick<
   | "courseMapStops"
   | "navigate"
   | "openFilters"
+  | "liveRecommendations"
   | "openPlace"
   | "selectMapGroup"
   | "selectMapPlace"
@@ -280,12 +281,7 @@ export function MapScreen(props: Props) {
                         <span className="local-course-pin" aria-hidden="true">
                           {place.position}
                         </span>
-                        <span
-                          className="local-photo local-course-stop-placeholder"
-                          aria-hidden="true"
-                        >
-                          <LocalIcon name="map-pin" size={18} />
-                        </span>
+                        <Photo place={place} decorative />
                         <span className="local-place-info">
                           <strong>{name(place)}</strong>
                           <span>{kind(place)}</span>
@@ -327,8 +323,17 @@ export function MapScreen(props: Props) {
             ) : (
               <div className="local-empty-map">
                 {t("No places found", "장소가 없어요")}
-                <button className="local-secondary" onClick={openFilters}>
-                  {t("Edit filters", "필터 변경")}
+                <button
+                  className="local-secondary"
+                  onClick={
+                    props.liveRecommendations
+                      ? () => props.setModal("area")
+                      : openFilters
+                  }
+                >
+                  {props.liveRecommendations
+                    ? t("Choose area", "지역 선택")
+                    : t("Edit filters", "필터 변경")}
                 </button>
               </div>
             )}

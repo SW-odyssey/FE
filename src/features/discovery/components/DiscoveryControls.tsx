@@ -13,6 +13,7 @@ type Props = Pick<
   | "activity"
   | "spaces"
   | "openFilters"
+  | "liveRecommendations"
   | "category"
   | "chooseCategory"
 >;
@@ -48,14 +49,16 @@ export function DiscoveryControls(props: Props) {
   return (
     <div className="local-discovery-controls">
       <DiscoveryContextBar {...props}>
-        <button
-          className={`local-icon-button local-filter-button ${activity !== "any" || spaces.length ? "has-filter" : ""}`}
-          onClick={openFilters}
-          aria-label={t("Filters", "필터")}
-          aria-pressed={activity !== "any" || spaces.length > 0}
-        >
-          <LocalIcon name="filter" />
-        </button>
+        {!props.liveRecommendations && (
+          <button
+            className={`local-icon-button local-filter-button ${activity !== "any" || spaces.length ? "has-filter" : ""}`}
+            onClick={openFilters}
+            aria-label={t("Filters", "필터")}
+            aria-pressed={activity !== "any" || spaces.length > 0}
+          >
+            <LocalIcon name="filter" />
+          </button>
+        )}
       </DiscoveryContextBar>
       {categoryTabs}
     </div>

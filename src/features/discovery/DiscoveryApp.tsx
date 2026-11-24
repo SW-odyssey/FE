@@ -13,6 +13,7 @@ import { PlaceDetail } from "./components/PlaceDetail";
 import { ResourceNotice } from "./components/ResourceNotice";
 import { SearchHeader } from "./components/SearchHeader";
 import type { DiscoveryDataSource } from "./data";
+import { liveDiscoveryDataSource } from "./data/live-recommendations";
 import { useCompactNavigation } from "./hooks/useCompactNavigation";
 import { useDiscoveryController } from "./hooks/useDiscoveryController";
 import type { Coordinate } from "./model";
@@ -42,7 +43,14 @@ export default function DiscoveryApp({
     serverSnapshot,
   );
   const desktop = previewScale === undefined && wide;
-  const controller = useDiscoveryController(source, currentLocation, desktop);
+  const activeSource =
+    source ??
+    (previewScale === undefined ? liveDiscoveryDataSource : undefined);
+  const controller = useDiscoveryController(
+    activeSource,
+    currentLocation,
+    desktop,
+  );
   const courseLocation = useDeviceLocation(setCurrentLocation);
   const {
     shell,
@@ -170,7 +178,8 @@ export default function DiscoveryApp({
           {...controller}
           selectPreviewLocation={() => {
             controller.selectPreviewLocation();
-            if (mapShowsCourse) courseLocation.locate();
+            if (mapShowsCourse || controller.liveRecommendations)
+              courseLocation.locate();
           }}
         />
       )}

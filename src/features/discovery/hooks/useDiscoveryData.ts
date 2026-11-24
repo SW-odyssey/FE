@@ -99,7 +99,12 @@ function useSourceResource<T>({
   if (!enabled) return { value: empty, status: "idle", error: null };
   if (synchronous)
     return { value: snapshot ?? empty, status: "success", error: null };
-  if (state.source === source && state.key === key && state.attempt === attempt)
+  if (
+    state.source === source &&
+    state.key === key &&
+    state.attempt === attempt &&
+    state.status !== "idle"
+  )
     return state;
   return {
     value: keepPrevious && state.source === source ? state.value : empty,
@@ -118,11 +123,15 @@ export function useDiscoveryData({
   selectedId,
   source = previewDataSource,
   getPlace,
+  queryEnabled = true,
+  draftEnabled = true,
 }: {
   query: DiscoveryQuery;
   draftQuery?: DiscoveryQuery;
   selectedId: string | null;
   source?: DiscoveryDataSource;
+  queryEnabled?: boolean;
+  draftEnabled?: boolean;
   getPlace?: (id: string, signal: AbortSignal) => Promise<DiscoveryPlaceDetail>;
 }) {
   const [attempt, setAttempt] = useState(0);
@@ -159,8 +168,8 @@ export function useDiscoveryData({
     (signal: AbortSignal) =>
       getPlace
         ? getPlace(selectedId!, signal)
-        : source.getPlace(selectedId!, { signal }),
-    [getPlace, source, selectedId],
+        : source.getPlace(selectedId!, { signal, query: appliedInput }),
+    [getPlace, source, selectedId, appliedInput],
   );
   const result = useSourceResource({
     source,
@@ -170,6 +179,7 @@ export function useDiscoveryData({
     empty: emptyQuery,
     keepPrevious: true,
     load: loadApplied,
+    enabled: queryEnabled,
   });
   const draft = useSourceResource({
     source,
@@ -178,7 +188,7 @@ export function useDiscoveryData({
     snapshot: draftSnapshot,
     empty: emptyQuery,
     keepPrevious: true,
-    enabled: draftKey !== key,
+    enabled: queryEnabled && draftEnabled && draftKey !== key,
     load: loadDraft,
   });
   const detail = useSourceResource<DiscoveryPlaceDetail | null>({
@@ -225,6 +235,8 @@ export function useDiscoveryData({
   );
   return {
     visible: result.value.items,
+    cellReasons:
+      result.status === "success" ? result.value.cellReasons : undefined,
     analyses: result.status === "success" ? (result.value.analyses ?? {}) : {},
     total: result.value.total,
     draftCount: activeDraft.value.total,

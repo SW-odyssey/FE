@@ -1,8 +1,13 @@
 import { useId, useState } from "react";
-import type { AreaVisitPattern, VisitDayGroup } from "../data/types";
+import type {
+  AreaVisitPattern,
+  CellReasonCode,
+  VisitDayGroup,
+} from "../data/types";
 import type { DiscoveryLanguage } from "../model";
 import { localText } from "../localization";
 import { slotLabels } from "../presentation";
+import { cellEvidenceText } from "./cell-evidence-copy";
 import { visitSlots } from "../visit-time";
 
 const dayGroupByWeekday: readonly VisitDayGroup[] = [
@@ -44,10 +49,12 @@ const copy = {
  */
 export function AreaVisitPatternCard({
   pattern,
+  reasons,
   visitDate,
   language,
 }: {
-  pattern: AreaVisitPattern;
+  pattern?: AreaVisitPattern;
+  reasons?: readonly CellReasonCode[];
   visitDate: string;
   language: DiscoveryLanguage;
 }) {
@@ -55,8 +62,9 @@ export function AreaVisitPatternCard({
   const [day, setDay] = useState(
     () => dayGroupByWeekday[new Date(`${visitDate}T00:00:00Z`).getUTCDay()],
   );
-  const values = pattern.byDay[day];
-  const heights = visitSlots.map((slot) => values[slot]);
+  const values =
+    pattern?.provenance === "live" ? pattern.values : pattern?.byDay[day];
+  const heights = values ? visitSlots.map((slot) => values[slot]) : [];
   const highest = Math.max(...heights);
   const hasPeak =
     heights.every(
@@ -72,30 +80,32 @@ export function AreaVisitPatternCard({
       <div className="local-visit-pattern-heading">
         <h2 id={titleId}>
           {labels.title}
-          {pattern.provenance === "preview" && (
+          {pattern?.provenance === "preview" && (
             <small className="local-place-ai-note">
               {" "}
               · {localText(language, "Sample data", "예시 데이터")}
             </small>
           )}
         </h2>
-        <label className="local-visit-pattern-day">
-          <span className="local-sr-only">{labels.dayLabel}</span>
-          <select
-            value={day}
-            onChange={(event) =>
-              setDay(event.currentTarget.value as VisitDayGroup)
-            }
-          >
-            {dayGroups.map((group) => (
-              <option key={group} value={group}>
-                {labels.days[group]}
-              </option>
-            ))}
-          </select>
-        </label>
+        {pattern && pattern.provenance !== "live" && (
+          <label className="local-visit-pattern-day">
+            <span className="local-sr-only">{labels.dayLabel}</span>
+            <select
+              value={day}
+              onChange={(event) =>
+                setDay(event.currentTarget.value as VisitDayGroup)
+              }
+            >
+              {dayGroups.map((group) => (
+                <option key={group} value={group}>
+                  {labels.days[group]}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
-      {hasPeak && (
+      {values && hasPeak && (
         <ul className="local-visit-pattern-chart" role="list">
           {visitSlots.map((slot) => (
             <li key={slot} data-peak={hasPeak && values[slot] === highest}>
@@ -106,6 +116,14 @@ export function AreaVisitPatternCard({
               <span className="local-sr-only">{values[slot]} / 100</span>
             </li>
           ))}
+        </ul>
+      )}
+      {reasons && reasons.length > 0 && (
+        <ul className="local-visit-evidence">
+          {reasons.map((reason) => {
+            const text = cellEvidenceText(language, reason);
+            return text && <li key={reason}>{text}</li>;
+          })}
         </ul>
       )}
     </section>
