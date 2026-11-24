@@ -104,7 +104,7 @@ BE 구현 상태는 2026년 11월 7일 main 기준이다. 같은 날 [BE 배포 
 
 셀과 군집에 표시할 수는 추천 장소 수다. 상세의 방문 그래프는 `/api/v2/cells/{id}/visit-pattern`의 공개 데이터셋과 선택 요일을 사용한다. LG U+ 수치는 50m 구역의 시간대별 상대 방문 지표다. 서버가 그래프를 제공하는 요일에만 방문 패턴 영역을 표시한다.
 
-원문 소개와 사전 생성한 Gemini 요약은 동일한 Google 장소 ID에 연결한다. 사전 요약이 없는 매장 상세를 열면 `POST /api/place-summary?id=…&lang=…`가 Google Maps Grounding을 호출한다. 원래 한국어 상호와 좌표는 서버에서 조회하고, 해당 Google 장소 ID를 인용한 결과만 원문 및 출처 링크와 함께 표시한다. Grounding 응답은 저장하거나 캐시하지 않는다. 인용을 확인할 수 없거나 요청에 실패하면 AI 요약 영역을 숨긴다.
+원문 소개와 사전 생성한 Gemini 요약은 동일한 Google 장소 ID에 연결한다. 사전 요약이 없는 매장 상세를 열면 `POST /api/place-summary?id=…&lang=…`가 Google Maps Grounding을 호출한다. 원래 한국어 상호와 좌표는 서버에서 조회하고, 해당 Google 장소 ID를 인용한 결과만 원문 및 출처 링크와 함께 표시한다. Grounding 응답은 저장하거나 캐시하지 않는다. 인용을 확인할 수 없거나 요청에 실패하면 선택 언어로 요약 정보가 없음을 안내한다.
 
 추천, 코스, 상세 요청에는 선택 언어를 `lang=ko|en|ja|zh`로 보내며 목록과 지도 핀에도 서버가 반환한 `name`을 표시한다. BE에 해당 언어의 상호가 없으면 BE가 원래 상호를 반환한다. `GOOGLE_PLACES_API_KEY`와 Maps Grounding을 사용할 수 있는 유료 프로젝트의 `GEMINIAI_API_KEY`는 로컬 서버 및 Cloudflare Pages 서버 환경변수에 설정한다.
 

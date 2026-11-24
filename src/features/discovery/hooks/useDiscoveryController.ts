@@ -208,12 +208,26 @@ export function useDiscoveryController(
     const timeout = setTimeout(() => setToast(""), 3200);
     return () => clearTimeout(timeout);
   }, [toast]);
+  const lastScrollTarget = useRef<{
+    node: HTMLElement;
+    view: DiscoveryView;
+    selectedId: string | null;
+  }>(null);
   useLayoutEffect(() => {
     const node =
       selectedId || view !== "map" || desktop
         ? scroll.current
         : shell.current?.querySelector<HTMLElement>(".local-sheet-scroll");
-    node?.scrollTo({
+    if (!node) return;
+    const previous = lastScrollTarget.current;
+    if (
+      previous?.view === view &&
+      previous.selectedId === selectedId &&
+      (previous.node === node || selectedId)
+    )
+      return;
+    lastScrollTarget.current = { node, view, selectedId };
+    node.scrollTo({
       top: selectedId ? 0 : readingPositions.current[view],
       behavior: "instant",
     });

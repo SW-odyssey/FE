@@ -384,10 +384,20 @@ body {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.local-place-ai {
-  padding: 14px 16px;
-  background: var(--refresh-ground);
-  border-radius: var(--r-md);
+.local-place-ai > :is(.local-place-ai-unavailable, .local-place-ai-pending) {
+  color: var(--refresh-muted);
+}
+.local-place-ai-pending {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.local-place-ai-pending > span {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--local-plum);
 }
 .local-place-grounded-text {
   white-space: pre-wrap;
@@ -416,25 +426,8 @@ body {
 .local-place-ai-icon {
   display: grid;
   flex: none;
-  width: 28px;
-  height: 28px;
   place-items: center;
-  border-radius: 8px;
-  background: color-mix(in srgb, var(--local-plum) 11%, white);
   color: var(--local-plum);
-}
-.local-place-ai-placeholder {
-  display: grid;
-  gap: 8px;
-  padding-block: 4px;
-}
-.local-place-ai-placeholder > span {
-  width: 94%;
-  height: 12px;
-  border-radius: 8px;
-}
-.local-place-ai-placeholder > span:last-child {
-  width: 66%;
 }
 .local-shell.local-refined .local-address {
   color: #45454c;
