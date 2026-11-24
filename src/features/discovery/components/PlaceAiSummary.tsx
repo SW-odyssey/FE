@@ -91,15 +91,13 @@ export function PlaceAiSummary({
           </small>
         </>
       ) : pending ? (
-        <>
-          <div className="local-place-ai-placeholder" aria-hidden="true">
-            <span className="local-skeleton" />
-            <span className="local-skeleton" />
-          </div>
-          <small className="local-place-ai-note" role="status">
-            {t("Gemini is writing the summary…", "Gemini가 요약하는 중…")}
-          </small>
-        </>
+        <p className="local-place-ai-pending" role="status">
+          <span aria-hidden="true" />
+          {t(
+            "Gemini is checking this place…",
+            "Gemini가 매장 정보를 확인하는 중…",
+          )}
+        </p>
       ) : (
         <p className="local-place-ai-unavailable" role="status">
           {t("AI summary is unavailable.", "AI 요약 정보가 없어요.")}

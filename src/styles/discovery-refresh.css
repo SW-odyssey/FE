@@ -384,8 +384,20 @@ body {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.local-place-ai > .local-place-ai-unavailable {
+.local-place-ai > :is(.local-place-ai-unavailable, .local-place-ai-pending) {
   color: var(--refresh-muted);
+}
+.local-place-ai-pending {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.local-place-ai-pending > span {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--local-plum);
 }
 .local-place-grounded-text {
   white-space: pre-wrap;
@@ -416,19 +428,6 @@ body {
   flex: none;
   place-items: center;
   color: var(--local-plum);
-}
-.local-place-ai-placeholder {
-  display: grid;
-  gap: 8px;
-  padding-block: 4px;
-}
-.local-place-ai-placeholder > span {
-  width: 94%;
-  height: 12px;
-  border-radius: 8px;
-}
-.local-place-ai-placeholder > span:last-child {
-  width: 66%;
 }
 .local-shell.local-refined .local-address {
   color: #45454c;

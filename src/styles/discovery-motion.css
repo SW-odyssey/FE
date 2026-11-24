@@ -139,6 +139,10 @@
     animation: local-photo-in 180ms ease-out;
   }
 
+  .local-web .local-place-ai-pending > span {
+    animation: local-progress-pulse 1.6s ease-in-out infinite alternate;
+  }
+
   .local-web .local-map-course-list {
     animation: local-photo-in 160ms ease-out;
   }
@@ -154,6 +158,15 @@
   }
   to {
     background-position: -40% 0;
+  }
+}
+
+@keyframes local-progress-pulse {
+  from {
+    opacity: 0.38;
+  }
+  to {
+    opacity: 1;
   }
 }
 
