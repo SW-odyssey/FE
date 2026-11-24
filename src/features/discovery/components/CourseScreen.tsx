@@ -141,7 +141,7 @@ export function CourseScreen({
                 >
                   <LocalIcon
                     name={afternoon === "cafe" ? "coffee" : "compass"}
-                    size={16}
+                    size={14}
                   />
                   {afternoon === "cafe"
                     ? t("Café", "카페")
@@ -161,7 +161,7 @@ export function CourseScreen({
                 })
               }
             >
-              <LocalIcon name="clock" size={16} />
+              <LocalIcon name="clock" size={14} />
               {t("Late night", "심야")}
             </button>
           )}

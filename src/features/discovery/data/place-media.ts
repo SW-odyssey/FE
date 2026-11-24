@@ -35,11 +35,11 @@ export function getPlaceMedia(
   const params = new URLSearchParams({ id, variant });
   if (language) params.set("lang", language);
   const lookup = fetch(`/api/place-photos?${params}`, { cache: "no-store" })
-    .then((response) =>
-      response.ok
-        ? (response.json() as Promise<PlaceMedia>)
-        : { photoList: [] },
-    )
+    .then((response) => {
+      if (!response.ok)
+        throw new Error(`Place photos returned HTTP ${response.status}`);
+      return response.json() as Promise<PlaceMedia>;
+    })
     .finally(() => requests.delete(key));
   requests.set(key, lookup);
   return lookup;

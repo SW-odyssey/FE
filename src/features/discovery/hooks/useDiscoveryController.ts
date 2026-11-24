@@ -96,8 +96,16 @@ export function useDiscoveryController(
   const [timeReturn, setTimeReturn] = useState<"filters" | null>(null);
   const [toast, setToast] = useState("");
 
-  const scroll = useRef<HTMLDivElement>(null),
-    dialog = useRef<HTMLElement>(null);
+  const placesScroll = useRef<HTMLDivElement>(null);
+  const courseScroll = useRef<HTMLDivElement>(null);
+  const detailScroll = useRef<HTMLDivElement>(null);
+  const inCourse = view === "course" || (view === "map" && courseMap);
+  const scroll = selectedId
+    ? detailScroll
+    : inCourse
+      ? courseScroll
+      : placesScroll;
+  const dialog = useRef<HTMLElement>(null);
   const { closingModal, dismissSheet } = useDialogLifecycle({
     modal,
     timeReturn,
@@ -263,7 +271,7 @@ export function useDiscoveryController(
       top: selectedId ? 0 : readingPositions.current[view],
       behavior: "instant",
     });
-  }, [view, selectedId, desktop]);
+  }, [view, selectedId, desktop, scroll]);
   /* eslint-disable react-hooks/exhaustive-deps -- 상세 복귀의 selectedId 변경은 바로 위 복원 효과가 처리하고, 필터 변경 때만 읽던 위치를 초기화합니다. */
   useLayoutEffect(() => {
     readingPositions.current = { discover: 0, course: 0, map: 0 };
@@ -280,7 +288,6 @@ export function useDiscoveryController(
   }, [area, category, query, activity, spaces, currentSlot]);
 
   const selectedVisitDate = visitDate(clock, autoTime ? 0 : day);
-  const inCourse = view === "course" || (view === "map" && courseMap);
   const courseAfterHours = autoTime && currentSlot === "late";
   const courseDay = courseAfterHours && seoulHour(clock) >= 22 ? 1 : 0;
   const courseFallbackTime: VisitTimeChoice = {
@@ -359,16 +366,15 @@ export function useDiscoveryController(
   );
   const appliedQuery = {
     area,
-    category: inCourse ? ("all" as const) : category,
-    query: inCourse ? "" : query,
-    slot: inCourse ? courseStartSlot : currentSlot,
+    category,
+    query,
+    slot: currentSlot,
     activity,
     origin: liveRecommendations
       ? (mapSearchOrigin ?? (currentArea ? currentLocation : null))
       : null,
     spaces,
-    visitDate: inCourse ? courseDate : selectedVisitDate,
-    datasetId: inCourse ? activeCourseLink?.datasetId : undefined,
+    visitDate: selectedVisitDate,
     language,
   };
   const data = useDiscoveryData({
@@ -376,6 +382,16 @@ export function useDiscoveryController(
     queryEnabled: !liveRecommendations || (restored && !inCourse),
     draftEnabled: !liveRecommendations || modal === "filters",
     query: appliedQuery,
+    detailQuery: inCourse
+      ? {
+          ...appliedQuery,
+          category: "all",
+          query: "",
+          slot: courseStartSlot,
+          visitDate: courseDate,
+          datasetId: activeCourseLink?.datasetId,
+        }
+      : appliedQuery,
     draftQuery: inCourse
       ? appliedQuery
       : {
@@ -805,6 +821,7 @@ export function useDiscoveryController(
     courseMap,
     courseMapStops,
     courseOptions,
+    courseScroll,
     changeCourseOptions,
     courseStartSlot,
     showCourseOnMap,
@@ -844,6 +861,7 @@ export function useDiscoveryController(
     openPlace,
     openTime,
     photosFor,
+    placesScroll,
     query,
     scroll,
     selectPreviewLocation,

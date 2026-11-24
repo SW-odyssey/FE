@@ -33,12 +33,17 @@ type LoadedCourse = {
 
 type CourseState = {
   key: string;
+  resolvedKey?: string;
   contextKey: string;
   loaded: LoadedCourse | null;
   pending: boolean;
   rebuildVersion?: number;
   error?: "load" | "replace" | "no-replacement";
 };
+
+function matchesCourse(state: CourseState | undefined, key: string) {
+  return state?.key === key || state?.resolvedKey === key;
+}
 
 /** Load, replay, or replace the selected itinerary while ignoring obsolete requests. */
 export function useCourseRecommendations({
@@ -65,13 +70,8 @@ export function useCourseRecommendations({
   const date = initialLink?.visitDate ?? visitDate;
   const [attempt, setAttempt] = useState(0);
   const contextKey = JSON.stringify([lat, lng, start, date]);
-  const key = JSON.stringify([
-    contextKey,
-    initialLink,
-    options,
-    language,
-    attempt,
-  ]);
+  const settingsKey = JSON.stringify([contextKey, options, language, attempt]);
+  const key = JSON.stringify([settingsKey, initialLink]);
   const [state, setState] = useState<CourseState>();
   const latest = useRef<CourseState>(undefined);
   const lane = useMemo(() => createLatestRequest<LoadedCourse | null>(), []);
@@ -79,7 +79,7 @@ export function useCourseRecommendations({
 
   useEffect(() => {
     if (!enabled) return;
-    if (latest.current?.key === key && !latest.current.pending) return;
+    if (matchesCourse(latest.current, key) && !latest.current?.pending) return;
     return lane.run(
       async (signal) => {
         const datasetId =
@@ -123,7 +123,15 @@ export function useCourseRecommendations({
       },
       {
         resolve: (loaded) => {
-          const next = { key, contextKey, loaded, pending: false };
+          const next = {
+            key,
+            contextKey,
+            loaded,
+            resolvedKey: loaded
+              ? JSON.stringify([settingsKey, loaded.link])
+              : undefined,
+            pending: false,
+          };
           latest.current = next;
           setState(next);
         },
@@ -144,6 +152,7 @@ export function useCourseRecommendations({
   }, [
     enabled,
     key,
+    settingsKey,
     contextKey,
     lane,
     lat,
@@ -157,7 +166,7 @@ export function useCourseRecommendations({
 
   useEffect(() => lane.cancel, [enabled, key, lane]);
 
-  const current = state?.key === key ? state : undefined;
+  const current = matchesCourse(state, key) ? state : undefined;
   const loaded = current?.loaded;
   const previous =
     !current && state?.contextKey === contextKey ? state.loaded : null;
@@ -211,10 +220,12 @@ export function useCourseRecommendations({
       },
       {
         resolve: (replacement) => {
+          const nextCourse = replacement ?? loaded;
           const next = {
             key,
             contextKey,
-            loaded: replacement ?? loaded,
+            loaded: nextCourse,
+            resolvedKey: JSON.stringify([settingsKey, nextCourse.link]),
             pending: false,
             rebuildVersion:
               (current?.rebuildVersion ?? 0) + (replacement && !slot ? 1 : 0),

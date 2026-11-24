@@ -1,5 +1,11 @@
 "use client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useState,
+} from "react";
 import { createLatestRequest } from "../data/latest-request.ts";
 import { previewDataSource } from "../data/preview.ts";
 import { copyDiscoveryQuery, discoveryQueryKey } from "../data/query.ts";
@@ -25,6 +31,7 @@ function useSourceResource<T>({
   empty,
   enabled = true,
   keepPrevious = false,
+  reuseSuccess = false,
   attempt,
   synchronous = Boolean(source.snapshot),
 }: {
@@ -35,6 +42,7 @@ function useSourceResource<T>({
   empty: T;
   enabled?: boolean;
   keepPrevious?: boolean;
+  reuseSuccess?: boolean;
   attempt: number;
   synchronous?: boolean;
 }): DiscoveryResource<T> {
@@ -47,11 +55,16 @@ function useSourceResource<T>({
     error: null,
   }));
   const lane = useMemo(() => createLatestRequest<T>(), []);
+  const matches =
+    state.source === source && state.key === key && state.attempt === attempt;
+  const canReuse = reuseSuccess && matches && state.status === "success";
+  const hasSuccessfulResult = useEffectEvent(() => canReuse);
   useEffect(() => {
     if (!enabled || synchronous) {
       lane.cancel();
       return;
     }
+    if (hasSuccessfulResult()) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- 외부 요청이 시작될 때 해당 요청의 로딩 상태를 노출합니다.
     setState((previous) => ({
       source,
@@ -95,17 +108,13 @@ function useSourceResource<T>({
     empty,
     lane,
     load,
+    reuseSuccess,
   ]);
+  if (canReuse) return state;
   if (!enabled) return { value: empty, status: "idle", error: null };
   if (synchronous)
     return { value: snapshot ?? empty, status: "success", error: null };
-  if (
-    state.source === source &&
-    state.key === key &&
-    state.attempt === attempt &&
-    state.status !== "idle"
-  )
-    return state;
+  if (matches && state.status !== "idle") return state;
   return {
     value: keepPrevious && state.source === source ? state.value : empty,
     status: "loading",
@@ -120,6 +129,7 @@ function useSourceResource<T>({
 export function useDiscoveryData({
   query,
   draftQuery = query,
+  detailQuery = query,
   selectedId,
   source = previewDataSource,
   getPlace,
@@ -128,6 +138,7 @@ export function useDiscoveryData({
 }: {
   query: DiscoveryQuery;
   draftQuery?: DiscoveryQuery;
+  detailQuery?: DiscoveryQuery;
   selectedId: string | null;
   source?: DiscoveryDataSource;
   queryEnabled?: boolean;
@@ -144,10 +155,16 @@ export function useDiscoveryData({
   }, [getPlace, source]);
   const key = discoveryQueryKey(query);
   const draftKey = discoveryQueryKey(draftQuery);
+  const detailQueryKey = discoveryQueryKey(detailQuery);
   // eslint-disable-next-line react-hooks/exhaustive-deps -- key는 query 전체 필드의 직렬화 값이며 같은 조건의 요청 참조를 유지합니다.
   const appliedInput = useMemo(() => copyDiscoveryQuery(query), [key]);
   // eslint-disable-next-line react-hooks/exhaustive-deps -- draftKey도 임시 query 전체 필드를 포함합니다.
   const draftInput = useMemo(() => copyDiscoveryQuery(draftQuery), [draftKey]);
+  const detailInput = useMemo(
+    () => copyDiscoveryQuery(detailQuery),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- The key contains the full detail query.
+    [detailQueryKey],
+  );
   const snapshot = useMemo(
     () => source.snapshot?.query(appliedInput),
     [source, appliedInput],
@@ -171,9 +188,9 @@ export function useDiscoveryData({
   const loadDetail = useCallback(
     (signal: AbortSignal) =>
       getPlace
-        ? getPlace(selectedId!, signal, appliedInput.language)
-        : source.getPlace(selectedId!, { signal, query: appliedInput }),
-    [getPlace, source, selectedId, appliedInput],
+        ? getPlace(selectedId!, signal, detailInput.language)
+        : source.getPlace(selectedId!, { signal, query: detailInput }),
+    [getPlace, source, selectedId, detailInput],
   );
   const result = useSourceResource({
     source,
@@ -182,6 +199,7 @@ export function useDiscoveryData({
     snapshot,
     empty: emptyQuery,
     keepPrevious: true,
+    reuseSuccess: true,
     load: loadApplied,
     enabled: queryEnabled,
   });

@@ -34,7 +34,7 @@
 
 .local-shell.local-refined .local-course-controls > .local-course-option-chips {
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 5px;
 }
 
 .local-shell.local-refined
@@ -42,8 +42,11 @@
   .local-course-option-chips
   > button {
   min-height: 44px;
-  padding-inline: 12px;
+  gap: 4px;
+  padding-inline: 6px;
+  font-size: 13px;
 }
+
 
 .local-course-location-note {
   margin: 8px 12px 0;
@@ -196,15 +199,7 @@
   .local-shell.local-refined
     .local-course-controls
     > .local-course-option-chips {
-    gap: 6px;
-  }
-
-  .local-shell.local-refined
-    .local-course-controls
-    .local-course-option-chips
-    > button {
-    gap: 5px;
-    padding-inline: 8px;
+    gap: 4px;
   }
 
   .local-course-summary {
