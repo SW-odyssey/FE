@@ -43,6 +43,16 @@ const copy: Record<string, readonly [string, string]> = {
   Course: ["コース", "路线"],
   "Back to map": ["地図に戻る", "返回地图"],
   "Map preview": ["地図プレビュー", "地图预览"],
+  "Choose language": ["言語を選択", "选择语言"],
+  "Map controls": ["地図の操作", "地图操作"],
+  "Fit course": ["コース全体を表示", "显示完整路线"],
+  "Fit places": ["おすすめの場所をすべて表示", "显示所有推荐地点"],
+  "Drag to resize · use up and down arrow keys": [
+    "ドラッグするか上下の矢印キーで高さを変更",
+    "拖动或使用上下方向键调整高度",
+  ],
+  "Search this area": ["このエリアで再検索", "在此区域重新搜索"],
+  "Map area": ["地図で選択", "地图选区"],
   "Apply filters": ["条件を適用", "应用条件"],
   "Caf\u00e9 as first afternoon stop": [
     "午後最初の立ち寄り先をカフェにする",
@@ -286,7 +296,7 @@ export function placeCount(
   if (language === "ko") return `장소 ${count}곳${action ? " 보기" : ""}`;
   if (language === "ja") return `${count}件のお店${action ? "を表示" : ""}`;
   if (language === "zh") return `${action ? "查看" : ""}${count}家店铺`;
-  return `${action ? "Show " : ""}${count} places`;
+  return `${action ? "Show " : ""}${count} ${count === 1 ? "place" : "places"}`;
 }
 // Based on the existing venue descriptions; venue names and Korean street addresses stay in their source form.
 const placeCopy: Record<string, readonly [string, string]> = {

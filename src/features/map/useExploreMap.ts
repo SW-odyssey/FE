@@ -34,12 +34,18 @@ export function useExploreMap(props: ExploreMapProps) {
   const [error, setError] = useState(false);
   const [zoom, setZoom] = useState(5);
   const [retry, setRetry] = useState(0);
+  const [draggedPlaces, setDraggedPlaces] =
+    useState<ExploreMapProps["places"]>();
   const displayed = props.courseStops ?? props.places;
   useEffect(() => {
     const read = (): ExploreMapOptions => ({
       ...options.current,
       onSelect: (place) => options.current.onSelect(place),
       onGroupSelect: (group) => options.current.onGroupSelect?.(group),
+      onViewportDrag: () => {
+        if (options.current.onSearchArea)
+          setDraggedPlaces(options.current.places);
+      },
     });
     return attachPreferredMapSession(
       {
@@ -74,8 +80,8 @@ export function useExploreMap(props: ExploreMapProps) {
     zoom,
   ]);
   useEffect(() => {
-    if (ready) session.current?.fitRecommendations(true);
-  }, [displayed, ready]);
+    if (ready && !props.searchOrigin) session.current?.fitRecommendations(true);
+  }, [displayed, ready, props.searchOrigin]);
   useEffect(() => {
     if (ready) session.current?.focusSelected();
   }, [props.selected, ready, props.focusSelected, props.focusRequest]);
@@ -95,7 +101,21 @@ export function useExploreMap(props: ExploreMapProps) {
       setRetry((value) => value + 1);
     },
     zoomBy: (delta: number) => session.current?.zoomBy(delta),
-    fitRecommendations: () => session.current?.fitRecommendations(),
-    centerOn: (point: Coordinate) => session.current?.centerOn(point),
+    fitRecommendations: () => {
+      setDraggedPlaces(undefined);
+      session.current?.fitRecommendations();
+    },
+    centerOn: (point: Coordinate) => {
+      setDraggedPlaces(undefined);
+      session.current?.centerOn(point);
+    },
+    canSearchArea:
+      ready && Boolean(props.onSearchArea) && draggedPlaces === props.places,
+    searchArea: () => {
+      const point = session.current?.getCenter();
+      if (!point) return;
+      setDraggedPlaces(undefined);
+      props.onSearchArea?.(point);
+    },
   };
 }

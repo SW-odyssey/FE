@@ -117,7 +117,7 @@ export function createGoogleExploreMapSession(
   let restoreFit = Boolean(cached);
   const map = new google.maps.Map(element, {
     ...mapOptions(),
-    center: cached ?? initialCenter,
+    center: cached ?? read().searchOrigin ?? initialCenter,
     zoom: cached ? levelOffset - cached.level : 16,
   });
   const pins = createPinLayer(map, element);
@@ -158,7 +158,7 @@ export function createGoogleExploreMapSession(
   let initialized = false;
   let fitCentre: Coordinate | null = null;
   let fittedArea = "";
-  let autoFit = !cached;
+  let autoFit = !cached && !read().searchOrigin;
   let shownZoom: number | undefined;
 
   function padding() {
@@ -397,6 +397,7 @@ export function createGoogleExploreMapSession(
     autoFit = false;
   }
   const dragStart = map.addListener("dragstart", markManual);
+  const dragEnd = map.addListener("dragend", () => read().onViewportDrag?.());
   element.addEventListener("wheel", markManual, { passive: true });
   element.addEventListener("dblclick", markManual);
   const pinch = (event: TouchEvent) => {
@@ -412,6 +413,7 @@ export function createGoogleExploreMapSession(
 
   return {
     render,
+    getCenter: () => map.getCenter()?.toJSON() ?? null,
     fitRecommendations,
     focusSelected: () => {
       const { selected, focusSelected } = read();
@@ -438,6 +440,7 @@ export function createGoogleExploreMapSession(
       resize.disconnect();
       onIdle.remove();
       dragStart.remove();
+      dragEnd.remove();
       element.removeEventListener("wheel", markManual);
       element.removeEventListener("dblclick", markManual);
       element.removeEventListener("touchstart", pinch);

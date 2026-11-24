@@ -32,6 +32,8 @@ export default function ExploreMap(props: ExploreMapProps) {
     zoomBy,
     fitRecommendations,
     centerOn,
+    canSearchArea,
+    searchArea,
   } = useExploreMap(props);
   const displayed =
     courseStops ?? places.filter((place) => inMapScope(place, props.scope));
@@ -109,6 +111,16 @@ export default function ExploreMap(props: ExploreMapProps) {
         />
       )}
       <div className="local-map-chrome">
+        {canSearchArea && (
+          <button
+            type="button"
+            className="local-map-search-area"
+            onClick={searchArea}
+          >
+            <LocalIcon name="refresh" size={17} />
+            {t("Search this area", "이 지도에서 다시 검색")}
+          </button>
+        )}
         <div className="local-map-notes">
           {Boolean(courseStops && courseStops.length > 1) && (
             <span className="local-map-route-legend">

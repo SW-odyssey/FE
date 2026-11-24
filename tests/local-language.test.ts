@@ -34,6 +34,12 @@ test("Japanese and Chinese localize controls, counts and every launch venue summ
       "AI summary",
       "View on map",
       "Next photo",
+      "Choose language",
+      "Map controls",
+      "Fit course",
+      "Fit places",
+      "Drag to resize · use up and down arrow keys",
+      "Search this area",
     ]) {
       assert.notEqual(localText(lang, key, "한국어"), key);
     }

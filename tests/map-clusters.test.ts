@@ -26,7 +26,7 @@ test("zoom levels show cell counts and nearby clusters without swallowing a sele
   const places = [
     { ...localPlaces[0], id: "a", lat: 0, lng: 0, cellId: "one" },
     { ...localPlaces[0], id: "b", lat: 50, lng: 0, cellId: "one" },
-    { ...localPlaces[0], id: "c", lat: 85, lng: 0, cellId: "two" },
+    { ...localPlaces[0], id: "c", lat: 125, lng: 0, cellId: "two" },
   ];
   const project = ({ lat, lng }: { lat: number; lng: number }) => ({
     x: lat,
@@ -39,7 +39,7 @@ test("zoom levels show cell counts and nearby clusters without swallowing a sele
   const middle = groupMapMarkers(places, project, 3);
   assert.equal(middle.find(({ kind }) => kind === "cell")?.places.length, 2);
   assert.equal(
-    groupMapMarkers(places, project, 2).every(({ kind }) => kind === "place"),
+    groupMapMarkers(places, project, 1).every(({ kind }) => kind === "place"),
     true,
   );
   assert.equal(

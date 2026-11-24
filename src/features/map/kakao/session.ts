@@ -49,8 +49,8 @@ export function createExploreMapSession(
   let frame = 0;
   const map = new kakao.maps.Map(element, {
     center: new kakao.maps.LatLng(
-      cached?.lat ?? 37.574,
-      cached?.lng ?? 126.9897,
+      cached?.lat ?? initial.searchOrigin?.lat ?? 37.574,
+      cached?.lng ?? initial.searchOrigin?.lng ?? 126.9897,
     ),
     level: cached?.level ?? 5,
     draggable: true,
@@ -89,6 +89,8 @@ export function createExploreMapSession(
   };
   kakao.maps.event.addListener(map, "zoom_changed", zoomChanged);
   kakao.maps.event.addListener(map, "idle", idle);
+  const dragEnd = () => readOptions().onViewportDrag?.();
+  kakao.maps.event.addListener(map, "dragend", dragEnd);
   const observer = new ResizeObserver(() => {
     if (!element.clientWidth || !element.clientHeight) return;
     const center = map.getCenter();
@@ -170,6 +172,10 @@ export function createExploreMapSession(
     else map.panTo(point);
   }
   return {
+    getCenter() {
+      const center = map.getCenter();
+      return { lat: center.getLat(), lng: center.getLng() };
+    },
     render() {
       cancelAnimationFrame(frame);
       overlays.render(placeOptions());
@@ -209,6 +215,7 @@ export function createExploreMapSession(
       remember();
       observer.disconnect();
       kakao.maps.event.removeListener(map, "zoom_changed", zoomChanged);
+      kakao.maps.event.removeListener(map, "dragend", dragEnd);
       kakao.maps.event.removeListener(map, "idle", idle);
       locationOverlay?.setMap(null);
       overlays.dispose();
