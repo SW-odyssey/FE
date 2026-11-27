@@ -7,7 +7,7 @@ import { googleMapsNeedsReload } from "../../map/google/load-sdk";
 import { type SheetState } from "../../map/sheet-motion";
 import { defaultCourseOptions, type CourseOptions } from "../course";
 import { previewDataSource, type DiscoveryDataSource } from "../data";
-import { getCoursePlaceDetail } from "../data/course-api";
+import { getPreviewCoursePlaceDetail } from "../data/preview";
 import { liveDiscoveryDataSource } from "../data/live-recommendations";
 import { placeSearchDelay, placeSearchTerm } from "../data/place-search";
 import { isServiceArea, selectDataset } from "../data/service-meta";
@@ -458,7 +458,7 @@ export function useDiscoveryController(
       inCourse &&
       selectedId &&
       /^[1-9]\d*$/.test(selectedId)
-        ? getCoursePlaceDetail
+        ? getPreviewCoursePlaceDetail
         : undefined,
   });
   const {

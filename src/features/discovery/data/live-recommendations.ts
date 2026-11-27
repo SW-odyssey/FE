@@ -10,7 +10,6 @@ import {
   selectDataset,
 } from "./service-meta.ts";
 import { getV2Data, v2Time, V2RequestError } from "./v2-client.ts";
-import { previewDataSource } from "./preview.ts";
 import type {
   DiscoveryDataSource,
   DiscoveryQuery,
@@ -153,8 +152,10 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
       };
     },
     async getPlace(id, { signal, query } = {}) {
+      // Server places have numeric IDs. Sample slugs from old links are not
+      // real places, so the live app shows "place unavailable" (#80).
       if (!/^[1-9]\d{0,15}$/.test(id) || !Number.isSafeInteger(Number(id)))
-        return previewDataSource.snapshot?.getPlace(id) ?? null;
+        return null;
       const detail = await getCoursePlaceDetail(
         id,
         signal,

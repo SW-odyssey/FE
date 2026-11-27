@@ -10,8 +10,6 @@ import type {
 import { parseCourseReasons, type CourseReason } from "../course-reasons.ts";
 import { mapApiIdToDiscovery, type ApiSlot } from "./api-mapping.ts";
 import type { DiscoveryPlaceDetail } from "./types.ts";
-import { previewPlaceDetail } from "./preview.ts";
-import { localPlaces } from "./preview/places.ts";
 
 import { getV2Data, screenSlots, v2Time } from "./v2-client.ts";
 
@@ -175,7 +173,13 @@ export async function getCourse(
   };
 }
 
-/** Fetch the basic detail for a numeric course result ID. */
+/**
+ * Fetch the basic detail for a numeric server place ID.
+ *
+ * @returns Only server fields. Sample copy, photos and sources from the
+ * preview never enter this live path (#80); Google media and the AI summary
+ * load separately with their own attribution.
+ */
 export async function getCoursePlaceDetail(
   id: string,
   signal?: AbortSignal,
@@ -188,20 +192,13 @@ export async function getCoursePlaceDetail(
       language ? new URLSearchParams({ lang: language }) : undefined,
     ),
   );
-  const matched = place.googlePlaceId
-    ? localPlaces.find(
-        (candidate) => candidate.googlePlaceId === place.googlePlaceId,
-      )
-    : undefined;
-  const editorial = matched && previewPlaceDetail(matched);
   const empty = { ko: "", en: "", ja: "", zh: "" };
   return {
-    place: { ...place, sourceUrl: editorial?.sourceUrl ?? place.sourceUrl },
+    place,
     photos: [],
     summaries: empty,
-    descriptions: editorial?.descriptions ?? empty,
-    aiSummary: editorial?.aiSummary,
-    sourceUrl: editorial?.sourceUrl ?? place.sourceUrl,
+    descriptions: empty,
+    sourceUrl: place.sourceUrl,
     photoCredits: [],
   };
 }
