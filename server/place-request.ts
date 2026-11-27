@@ -119,18 +119,104 @@ export function placeLanguage(
   return languages.find((language) => language === lang);
 }
 
-/** Read the place row from this environment's API, with null for missing places. */
-export async function lookupPlaceRow(
+type Lookup = { expires: number; row: Promise<PlaceRow | null> };
+/** Short enough for store edits to show up quickly, long enough for one visit. */
+export const placeLookupTtlMs = 60_000;
+const maxLookups = 500;
+const lookups = new Map<string, Lookup>();
+
+function abortable<T>(promise: Promise<T>, signal: AbortSignal): Promise<T> {
+  signal.throwIfAborted();
+  return new Promise((resolve, reject) => {
+    const abort = () => reject(signal.reason);
+    signal.addEventListener("abort", abort, { once: true });
+    promise.then(
+      (value) => {
+        signal.removeEventListener("abort", abort);
+        resolve(value);
+      },
+      (error: unknown) => {
+        signal.removeEventListener("abort", abort);
+        reject(error);
+      },
+    );
+  });
+}
+
+type EdgeCache = {
+  match(request: Request): Promise<Response | undefined>;
+  put(request: Request, response: Response): Promise<void>;
+};
+
+function edgeCache(): EdgeCache | undefined {
+  // Cloudflare's per-location cache, shared by Pages Function instances.
+  // Node (the Next dev server) has no `caches.default`.
+  return (globalThis as { caches?: { default?: EdgeCache } }).caches?.default;
+}
+
+async function fetchPlaceRow(url: URL): Promise<PlaceRow | null> {
+  const cache = edgeCache();
+  const key = new Request(url.href);
+  let response = await cache?.match(key).catch(() => undefined);
+  if (!response) {
+    const upstream = await fetch(url, {
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (upstream.status === 404) return null;
+    if (!upstream.ok)
+      throw new Error(`Place lookup returned HTTP ${upstream.status}`);
+    response = new Response(await upstream.text(), {
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": `max-age=${placeLookupTtlMs / 1000}`,
+      },
+    });
+    await cache?.put(key, response.clone()).catch(() => undefined);
+  }
+  const row = (await response.json()) as { success: boolean; data?: PlaceRow };
+  return row.success ? (row.data ?? null) : null;
+}
+
+/**
+ * Read the basic place row (name, coordinates, Google Place ID) from this
+ * environment's API, with null for a missing place.
+ *
+ * Concurrent and repeated lookups of the same API origin and ID within
+ * {@link placeLookupTtlMs} share one request in this instance, and the
+ * Cloudflare cache shares it across instances in a location (#86). The row
+ * has no language, so photos and summaries in any language share it. Google
+ * and Gemini responses are never cached here.
+ *
+ * @param signal Cancels only this caller's wait; the shared lookup keeps its
+ * own timeout for the other caller
+ */
+export function lookupPlaceRow(
   id: string,
   signal: AbortSignal,
   apiOrigin: string = odysseyApiOrigin,
-) {
-  const response = await fetch(new URL(`/api/v2/places/${id}`, apiOrigin), {
-    signal,
-  });
-  if (response.status === 404) return null;
-  if (!response.ok)
-    throw new Error(`Place lookup returned HTTP ${response.status}`);
-  const row = (await response.json()) as { success: boolean; data?: PlaceRow };
-  return row.success ? (row.data ?? null) : null;
+  now = Date.now(),
+): Promise<PlaceRow | null> {
+  const key = `${apiOrigin}|${id}`;
+  let lookup = lookups.get(key);
+  if (!lookup || lookup.expires <= now) {
+    lookups.delete(key);
+    if (lookups.size >= maxLookups) {
+      const oldest = lookups.keys().next().value;
+      if (oldest !== undefined) lookups.delete(oldest);
+    }
+    const row = fetchPlaceRow(new URL(`/api/v2/places/${id}`, apiOrigin));
+    const entry = { expires: now + placeLookupTtlMs, row };
+    // A failure is not reused; the next caller asks again.
+    row.catch(() => {
+      if (lookups.get(key) === entry) lookups.delete(key);
+    });
+    lookups.set(key, entry);
+    lookup = entry;
+  }
+  return abortable(lookup.row, signal);
+}
+
+/** Clear the instance lookups; tests only. */
+export function resetPlaceLookups(): void {
+  lookups.clear();
 }

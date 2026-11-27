@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
-import { test } from "node:test";
+import { beforeEach, test } from "node:test";
 import { handlePlacePhotos } from "../server/place-photos.ts";
+import { resetPlaceLookups } from "../server/place-request.ts";
+
+beforeEach(resetPlaceLookups);
 
 const key = "server-only-test-key";
 const endpoint = "/api/place-photos?id=1557&variant=thumbnail";
