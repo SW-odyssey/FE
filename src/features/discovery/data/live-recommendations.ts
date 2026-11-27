@@ -1,4 +1,5 @@
 import { getCoursePlaceDetail, v2Place, type ApiPlace } from "./course-api.ts";
+import { placeSearchTerm, searchPlaces } from "./place-search.ts";
 import type { LocalPlace } from "../model.ts";
 import {
   areaCenter,
@@ -81,8 +82,6 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
       lng: String(center.lng),
       category: input.category === "culture" ? "all" : input.category,
     });
-    const q = input.query.trim().slice(0, 80);
-    if (q) params.set("q", q);
     if (input.language) params.set("lang", input.language);
     const data = await request<{ items: ApiPlace[] }>(
       "recommendations",
@@ -92,13 +91,7 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
     // The nearby route has no area paging; shopping and activities are
     // removed here, while the area route excludes them on the server.
     const items = data.items
-      .filter(
-        ({ kind }) =>
-          kind === "cafe" ||
-          kind === "korean" ||
-          kind === "other" ||
-          (!q && kind === "bar"),
-      )
+      .filter(({ kind }) => kind !== "shop" && kind !== "play")
       .map(v2Place);
     return { items, total: items.length };
   }
@@ -125,9 +118,19 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
 
   return {
     async query(input, { signal } = {}) {
-      // Map searches, the device location and the interim name search use
-      // the coordinate route; browsing an area uses area paging.
-      if (input.origin || input.query.trim())
+      const q = placeSearchTerm(input.query);
+      if (q) {
+        // Name search ignores area, time and score; only the Café and
+        // Restaurant tabs narrow the server's ordered matches.
+        const found = await searchPlaces(q, input.language, 30, signal);
+        const items =
+          input.category === "cafe" || input.category === "food"
+            ? found.filter(({ category }) => category === input.category)
+            : found;
+        return { items, total: items.length };
+      }
+      // A map search or the device location uses the coordinate route.
+      if (input.origin)
         return nearby(input, await context(input, signal), signal);
       const data = await areaPage(input, 0, signal);
       const items = uniquePlaces([], data.items);

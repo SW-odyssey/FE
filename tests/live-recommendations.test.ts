@@ -117,11 +117,10 @@ test("nearby recommendations include bars and share the published dataset", asyn
   assert.equal(calls.at(-1)?.searchParams.get("datasetId"), "public-latest");
   assert.equal(await getLiveVisitPattern({ ...pattern, weekday: "sat" }), null);
   assert.equal(calls.at(-1)?.searchParams.get("weekday"), "sat");
-  const search = await source.query({ ...query, query: "Recommended Place" });
-  assert.equal(calls.at(-1)?.searchParams.get("q"), "Recommended Place");
-  assert.deepEqual(
-    search.items.map(({ id }) => id),
-    ["1557", "141", "142"],
+  assert.equal(
+    calls.some((url) => url.searchParams.has("q")),
+    false,
+    "names are no longer searched through nearby recommendations",
   );
 });
 

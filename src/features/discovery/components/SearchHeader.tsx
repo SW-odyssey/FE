@@ -1,57 +1,49 @@
-﻿"use client";
+"use client";
 
-import { useId, useMemo, useState, type KeyboardEvent } from "react";
+import { useId, useState, type KeyboardEvent } from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
-import {
-  loadPlaceSearch,
-  suggestPlaces,
-  type PlaceSearchEntry,
-} from "../data/place-search";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { LanguageButton } from "./LanguageButton";
 
 type Props = Pick<
   DiscoveryController,
-  | "language"
   | "liveRecommendations"
+  | "name"
   | "openPlace"
   | "query"
+  | "searchSuggestions"
   | "setModal"
   | "setQuery"
+  | "setSearchComposing"
   | "t"
 >;
 
 export function SearchHeader(props: Props) {
   const {
-    language,
     liveRecommendations,
+    name,
     openPlace,
     query,
+    searchSuggestions: suggestions,
     setModal,
     setQuery,
+    setSearchComposing,
     t,
   } = props;
   const listId = useId();
-  const [entries, setEntries] = useState<PlaceSearchEntry[]>([]);
   const [focused, setFocused] = useState(false);
-  const [composing, setComposing] = useState(false);
+  const [composing, setComposingState] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const suggestions = useMemo(
-    () => suggestPlaces(entries, query, language),
-    [entries, query, language],
-  );
+  function setComposing(value: boolean) {
+    setComposingState(value);
+    setSearchComposing(value);
+  }
   const expanded =
     liveRecommendations && focused && !composing && suggestions.length > 0;
   const active = expanded ? suggestions[activeIndex] : undefined;
 
   function focusSearch() {
     setFocused(true);
-    if (liveRecommendations && !entries.length)
-      void loadPlaceSearch()
-        .then(setEntries)
-        .catch(() => {
-          // 사전을 가져오지 못해도 현재 입력으로 기존 검색을 계속합니다.
-        });
   }
 
   function changeQuery(value: string) {
@@ -60,10 +52,10 @@ export function SearchHeader(props: Props) {
     setQuery(value);
   }
 
-  function selectPlace(id: number) {
+  function selectPlace(id: string) {
     setFocused(false);
     setActiveIndex(-1);
-    openPlace({ id: String(id) });
+    openPlace({ id });
   }
 
   function handleKey(event: KeyboardEvent<HTMLInputElement>) {
@@ -141,16 +133,16 @@ export function SearchHeader(props: Props) {
             aria-label={t("Suggested places", "장소 추천 검색어")}
             className="local-search-suggestions"
           >
-            {suggestions.map(({ id, name }, index) => (
+            {suggestions.map((place, index) => (
               <li
-                key={id}
-                id={`${listId}-${id}`}
+                key={place.id}
+                id={`${listId}-${place.id}`}
                 role="option"
                 aria-selected={index === activeIndex}
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={() => selectPlace(id)}
+                onClick={() => selectPlace(place.id)}
               >
-                {name}
+                {name(place)}
               </li>
             ))}
           </ul>

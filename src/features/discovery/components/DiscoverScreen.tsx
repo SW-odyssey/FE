@@ -15,7 +15,7 @@ type Props = Pick<
   | "language"
   | "name"
   | "openPlace"
-  | "query"
+  | "searchTerm"
   | "scroll"
   | "resetFilters"
   | "t"
@@ -38,8 +38,8 @@ type Props = Pick<
 > &
   React.ComponentProps<typeof DiscoveryControls> & { mapScopeActive?: boolean };
 export function DiscoverScreen(props: Props) {
-  const { query, scroll, resetFilters, t, visible, status, retry, language } =
-    props;
+  const { scroll, resetFilters, t, visible, status, retry, language } = props;
+  const query = props.searchTerm;
   return (
     <div key="places" className="local-content local-places" ref={scroll}>
       <DiscoveryControls {...props} />
@@ -47,7 +47,8 @@ export function DiscoverScreen(props: Props) {
         <p className="local-data-month" aria-live="polite">
           {[
             formatLoadedCount(visible.length, props.total, language),
-            props.dataMonthLabel,
+            // Name search is not tied to a dataset month.
+            !query && props.dataMonthLabel,
           ]
             .filter(Boolean)
             .join(" · ")}

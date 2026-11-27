@@ -1,89 +1,147 @@
-﻿import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { test } from "node:test";
+import assert from "node:assert/strict";
+import { beforeEach, test } from "node:test";
+import { createLiveDiscoveryDataSource } from "../src/features/discovery/data/live-recommendations.ts";
 import {
-  suggestPlaces,
-  type PlaceSearchEntry,
+  placeSearchTerm,
+  searchPlaces,
 } from "../src/features/discovery/data/place-search.ts";
+import { invalidateServiceMeta } from "../src/features/discovery/data/service-meta.ts";
+import type { DiscoveryQuery } from "../src/features/discovery/data/types.ts";
 
-const places: PlaceSearchEntry[] = [
-  { id: 1, ko: "숯불 감자탕", en: "Charcoal stew", zh: null, ja: null },
+beforeEach(invalidateServiceMeta);
+
+// Server order from GET /api/v2/place-search (BE #98): exact, prefix, contains.
+const items = [
   {
-    id: 2,
-    ko: "감자탕 본점",
-    en: "Gamjatang Main",
-    zh: "土豆汤总店",
-    ja: null,
+    id: 129,
+    name: "原糖ポテト",
+    kind: "korean",
+    lat: 37.56,
+    lng: 126.98,
+    cellId: "1",
+    sinceDate: null,
+    googlePlaceId: null,
+    areaId: "myeongdong",
   },
-  { id: 3, ko: "감자탕", en: "Gamjatang", zh: "土豆汤", ja: "カムジャタン" },
+  {
+    id: 2537,
+    name: "サポートゲームゾーン",
+    kind: "play",
+    lat: 37.57,
+    lng: 126.99,
+    cellId: "2",
+    sinceDate: null,
+    googlePlaceId: null,
+    areaId: "jongno",
+  },
+  {
+    id: 41,
+    name: "カフェ",
+    kind: "cafe",
+    lat: 37.57,
+    lng: 126.99,
+    cellId: "3",
+    sinceDate: null,
+    googlePlaceId: "g",
+    areaId: "ikseon",
+  },
+  {
+    id: 7,
+    name: "居酒屋",
+    kind: "bar",
+    lat: 37.57,
+    lng: 126.99,
+    cellId: "4",
+    sinceDate: null,
+    googlePlaceId: null,
+    areaId: "euljiro",
+  },
 ];
+const query: DiscoveryQuery = {
+  area: "euljiro",
+  category: "all",
+  query: "  감자탕  ",
+  slot: "evening",
+  visitDate: "2026-11-27",
+  activity: "any",
+  spaces: [],
+  origin: { lat: 37.5, lng: 126.9 },
+  language: "ja",
+};
 
-test("다른 언어로 검색해도 선택 언어의 상호를 보여준다", () => {
-  const result = suggestPlaces(places, " Ｇａｍｊａｔａｎｇ ", "ja");
+test("search terms are trimmed, capped at 80 characters and blank input sends nothing", () => {
+  assert.equal(placeSearchTerm("  coffee  "), "coffee");
+  assert.equal(placeSearchTerm(" \n "), "");
+  assert.equal(placeSearchTerm("가".repeat(90)).length, 80);
+});
+
+test("the server search keeps its order and IDs and passes q, lang and limit", async (t) => {
+  const calls: URL[] = [];
+  t.mock.method(globalThis, "fetch", async (url: URL) => {
+    calls.push(url);
+    return Response.json({ success: true, data: { items } });
+  });
+  const found = await searchPlaces("감자탕", "ja", 6);
+  assert.equal(calls[0]?.pathname, "/api/v2/place-search");
+  assert.deepEqual(Object.fromEntries(calls[0]!.searchParams), {
+    q: "감자탕",
+    limit: "6",
+    lang: "ja",
+  });
   assert.deepEqual(
-    result.map(({ id, name }) => [id, name]),
+    found.map(({ id, area }) => [id, area]),
     [
-      [3, "カムジャタン"],
-      [2, "감자탕 본점"],
+      ["129", "myeongdong"],
+      ["2537", "jongno"],
+      ["41", "ikseon"],
+      ["7", "euljiro"],
     ],
   );
 });
 
-test("공백을 무시하고 전체 일치, 시작 부분 일치, 포함 순으로 보여준다", () => {
+test("the list search ignores area, time and location and only the tabs narrow it", async (t) => {
+  const calls: URL[] = [];
+  t.mock.method(globalThis, "fetch", async (url: URL) => {
+    calls.push(url);
+    return Response.json({ success: true, data: { items } });
+  });
+  const source = createLiveDiscoveryDataSource();
+  const all = await source.query(query);
+  assert.equal(
+    calls.length,
+    1,
+    "no meta, nearby or area request for a name search",
+  );
+  assert.deepEqual(Object.fromEntries(calls[0]!.searchParams), {
+    q: "감자탕",
+    limit: "30",
+    lang: "ja",
+  });
   assert.deepEqual(
-    suggestPlaces(places, "감자 탕", "ko").map(({ id }) => id),
-    [3, 2, 1],
+    all.items.map(({ id }) => id),
+    ["129", "2537", "41", "7"],
   );
-  assert.deepEqual(suggestPlaces(places, "  ", "ko"), []);
-});
-
-test("여러 언어가 일치해도 매장마다 한 번씩 최대 여섯 개를 보여준다", () => {
-  const entries = Array.from({ length: 8 }, (_, i) => ({
-    id: i + 1,
-    ko: "Coffee",
-    en: "Coffee",
-    ja: null,
-    zh: null,
-  }));
+  assert.equal(all.total, 4);
+  const cafes = await source.query({ ...query, category: "cafe" });
   assert.deepEqual(
-    suggestPlaces(entries, "coffee", "en").map(({ id }) => id),
-    [1, 2, 3, 4, 5, 6],
+    cafes.items.map(({ id }) => id),
+    ["41"],
+  );
+  const food = await source.query({ ...query, category: "food" });
+  assert.deepEqual(
+    food.items.map(({ id }) => id),
+    ["129", "7"],
   );
 });
 
-test("공개 사전에서 반미를 Banh Mi로 찾고 죽 상호를 일본어로 표시한다", () => {
-  const dictionary = JSON.parse(
-    readFileSync(
-      new URL("../public/data/place-search.json", import.meta.url),
-      "utf8",
-    ),
-  ) as PlaceSearchEntry[];
-
-  for (const [language, expected] of [
-    ["en", "Be Kind Banh Mi"],
-    ["zh", "Be Kind 越南法棍三明治"],
-    ["ja", "ビー・カインド バインミー"],
-  ] as const) {
-    const match = suggestPlaces(dictionary, "Banh Mi", language).find(
-      ({ id }) => id === 1935,
-    );
-    assert.equal(match?.name, expected);
-  }
-
-  const porridge = suggestPlaces(dictionary, "죽이 최고야", "ja").find(
-    ({ id }) => id === 2250,
-  );
-  assert.equal(porridge?.name, "お粥が一番");
-});
-
-test("공개 사전에 상점과 놀거리의 상호가 포함되지 않는다", () => {
-  const dictionary = JSON.parse(
-    readFileSync(
-      new URL("../public/data/place-search.json", import.meta.url),
-      "utf8",
-    ),
-  ) as PlaceSearchEntry[];
-
-  assert.deepEqual(suggestPlaces(dictionary, "연화정주", "ko"), []);
-  assert.deepEqual(suggestPlaces(dictionary, "지지게임존", "ko"), []);
+test("an aborted search rejects so a late response cannot replace newer results", async (t) => {
+  t.mock.method(globalThis, "fetch", async (_url: URL, init?: RequestInit) => {
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    init?.signal?.throwIfAborted();
+    return Response.json({ success: true, data: { items } });
+  });
+  const controller = new AbortController();
+  const pending = searchPlaces("감자", "ko", 6, controller.signal);
+  controller.abort();
+  await assert.rejects(pending);
 });

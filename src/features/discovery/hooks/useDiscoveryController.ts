@@ -9,6 +9,7 @@ import { defaultCourseOptions, type CourseOptions } from "../course";
 import { previewDataSource, type DiscoveryDataSource } from "../data";
 import { getCoursePlaceDetail } from "../data/course-api";
 import { liveDiscoveryDataSource } from "../data/live-recommendations";
+import { placeSearchDelay, placeSearchTerm } from "../data/place-search";
 import { isServiceArea, selectDataset } from "../data/service-meta";
 import { spacePreferences } from "../filters";
 import { dateLocales, localText } from "../localization";
@@ -70,6 +71,9 @@ export function useDiscoveryController(
   const [currentArea, setCurrentArea] = useState(true);
   const [category, setCategory] = useState<DiscoveryCategory>("all");
   const [query, setQuery] = useState("");
+  // The field updates on every keystroke; the search runs for the settled term.
+  const [searchComposing, setSearchComposing] = useState(false);
+  const [settledSearch, setSettledSearch] = useState("");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mapId, setMapId] = useState<string | null>(null);
   const [mapFocusRequest, setMapFocusRequest] = useState(0);
@@ -128,6 +132,18 @@ export function useDiscoveryController(
     setArea("all");
     setCurrentArea(false);
   }
+  const typedSearch = placeSearchTerm(query);
+  useEffect(() => {
+    // Korean, Japanese and Chinese input methods emit partial syllables;
+    // wait for composition to end, then for the typing pause.
+    if (searchComposing || !typedSearch) return;
+    const timer = setTimeout(
+      () => setSettledSearch(typedSearch),
+      placeSearchDelay,
+    );
+    return () => clearTimeout(timer);
+  }, [typedSearch, searchComposing]);
+  const searchTerm = typedSearch ? settledSearch : "";
   const ko = language === "ko";
   const t = (en: string, kr: string) => localText(language, en, kr);
   const currentSlot = autoTime ? slotAt(seoulHour(clock)) : slot;
@@ -290,13 +306,13 @@ export function useDiscoveryController(
       scroll.current?.scrollTo({ top: 0 });
       shell.current?.querySelector(".local-sheet-scroll")?.scrollTo({ top: 0 });
     }
-  }, [area, category, query, activity, spaces, currentSlot, mapScope]);
+  }, [area, category, searchTerm, activity, spaces, currentSlot, mapScope]);
   /* eslint-enable react-hooks/exhaustive-deps */
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- 적용 조건이 바뀌면 이전 셀 선택 범위를 해제합니다.
     setMapScope(null);
     setPlaceOnMap(null);
-  }, [area, category, query, activity, spaces, currentSlot]);
+  }, [area, category, searchTerm, activity, spaces, currentSlot]);
 
   const selectedVisitDate = visitDate(clock, autoTime ? 0 : day);
   const courseAfterHours = autoTime && currentSlot === "late";
@@ -383,7 +399,7 @@ export function useDiscoveryController(
   const appliedQuery = {
     area,
     category,
-    query,
+    query: searchTerm,
     slot: currentSlot,
     activity,
     origin: liveRecommendations
@@ -884,6 +900,15 @@ export function useDiscoveryController(
     courseStartSlot,
     showCourseOnMap,
     autoCourse: course,
+    searchSuggestions:
+      liveRecommendations &&
+      searchTerm &&
+      searchTerm === typedSearch &&
+      status === "success"
+        ? visible.slice(0, 6)
+        : [],
+    setSearchComposing,
+    searchTerm,
     total: data.total,
     hasMore: data.hasMore,
     moreStatus: data.moreStatus,
