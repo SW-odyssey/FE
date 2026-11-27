@@ -1,4 +1,5 @@
 import type { PlacePhoto } from "../src/features/discovery/model.ts";
+import { limitPlaceRequest, type RateLimitBinding } from "./place-quota.ts";
 import type { PlaceBusiness } from "../src/features/discovery/data/place-media.ts";
 import {
   isLocalPlaceRequest,
@@ -56,6 +57,7 @@ function httpsUrl(value: string | undefined) {
 export async function handlePlacePhotos(
   request: Request,
   key: string | undefined,
+  limiter?: RateLimitBinding,
 ): Promise<Response> {
   const url = new URL(request.url);
   if (!key || !isLocalPlaceRequest(request, url))
@@ -70,6 +72,9 @@ export async function handlePlacePhotos(
     (variant !== "thumbnail" && variant !== "gallery")
   )
     return new Response(null, { status: 400, headers });
+
+  const limited = await limitPlaceRequest(request, "photos", limiter);
+  if (limited) return limited;
 
   const [width, limit] = sizes[variant];
   const signal = AbortSignal.any([request.signal, AbortSignal.timeout(12_000)]);

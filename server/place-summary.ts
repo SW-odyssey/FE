@@ -1,4 +1,5 @@
 import type { PlaceSummary } from "../src/features/discovery/data/place-summary.ts";
+import { limitPlaceRequest, type RateLimitBinding } from "./place-quota.ts";
 import {
   isLocalPlaceRequest,
   isOdysseyPlaceId,
@@ -104,6 +105,7 @@ function groundedSummary(
 export async function handlePlaceSummary(
   request: Request,
   key: string | undefined,
+  limiter?: RateLimitBinding,
 ): Promise<Response> {
   const url = new URL(request.url);
   if (!key || !isLocalPlaceRequest(request, url))
@@ -117,6 +119,8 @@ export async function handlePlaceSummary(
   const language = placeLanguage(url.searchParams.get("lang"));
   if (!isOdysseyPlaceId(id) || !language)
     return new Response(null, { status: 400, headers: noStore });
+  const limited = await limitPlaceRequest(request, "summary", limiter);
+  if (limited) return limited;
 
   const signal = AbortSignal.any([request.signal, AbortSignal.timeout(40_000)]);
   const ray = request.headers.get("cf-ray");
