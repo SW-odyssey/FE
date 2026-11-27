@@ -75,3 +75,15 @@
   word-break: keep-all;
   overflow-wrap: anywhere;
 }
+
+/* Reference month of the U+ dataset behind the current list, course or graph. */
+.local-data-month {
+  margin: 6px 12px 0;
+  color: var(--refresh-muted, #6b7280);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.local-visit-pattern .local-data-month {
+  margin: 8px 0 0;
+}

@@ -28,6 +28,8 @@ type Props = Pick<
   | "modal"
   | "clearMapScope"
   | "mapScope"
+  | "dataMonthLabel"
+  | "areaName"
 > &
   React.ComponentProps<typeof DiscoveryControls> & { mapScopeActive?: boolean };
 export function DiscoverScreen(props: Props) {
@@ -36,6 +38,9 @@ export function DiscoverScreen(props: Props) {
   return (
     <div key="places" className="local-content local-places" ref={scroll}>
       <DiscoveryControls {...props} />
+      {props.dataMonthLabel && status === "success" && (
+        <p className="local-data-month">{props.dataMonthLabel}</p>
+      )}
       {props.mapScopeActive && (
         <div className="local-scope-row">
           <span>

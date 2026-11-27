@@ -9,6 +9,7 @@ import { defaultCourseOptions, type CourseOptions } from "../course";
 import { previewDataSource, type DiscoveryDataSource } from "../data";
 import { getCoursePlaceDetail } from "../data/course-api";
 import { liveDiscoveryDataSource } from "../data/live-recommendations";
+import { isServiceArea, selectDataset } from "../data/service-meta";
 import { spacePreferences } from "../filters";
 import { dateLocales, localText } from "../localization";
 import type { LocalPlace } from "../model";
@@ -23,7 +24,9 @@ import {
   type VisitSlot,
 } from "../model";
 import {
-  areaLabels,
+  areaLabel,
+  fallbackAreaIds,
+  formatReferenceMonth,
   LANGUAGE_KEY,
   slotLabels,
   type Modal,
@@ -36,6 +39,7 @@ import { slotAt } from "../visit-time";
 import { useCourseRecommendations } from "./useCourseRecommendations";
 import { useDialogLifecycle } from "./useDialogLifecycle";
 import { useDiscoveryData } from "./useDiscoveryData";
+import { useServiceMeta } from "./useServiceMeta";
 
 type MapLanguageRestore = {
   language: DiscoveryLanguage;
@@ -50,6 +54,8 @@ export function useDiscoveryController(
   desktop = false,
 ) {
   const liveRecommendations = source === liveDiscoveryDataSource;
+  const serviceMeta = useServiceMeta(liveRecommendations);
+  const meta = serviceMeta.meta;
   const [restored, setRestored] = useState(false);
   const [restoringMap, setRestoringMap] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<Coordinate | null>(
@@ -117,6 +123,11 @@ export function useDiscoveryController(
   useLayoutEffect(() => {
     sourceRef.current = source;
   }, [source]);
+  // Links can carry an area the server no longer publishes; open all areas.
+  if (meta && !isServiceArea(meta, area)) {
+    setArea("all");
+    setCurrentArea(false);
+  }
   const ko = language === "ko";
   const t = (en: string, kr: string) => localText(language, en, kr);
   const currentSlot = autoTime ? slotAt(seoulHour(clock)) : slot;
@@ -309,8 +320,13 @@ export function useDiscoveryController(
     initialLink: courseLink,
     options: courseOptions,
     language,
+    meta,
     enabled: restored && inCourse,
   });
+  const course =
+    liveRecommendations && !meta && serviceMeta.status === "error"
+      ? { ...autoCourse, status: "error" as const, retry: serviceMeta.retry }
+      : autoCourse;
   const activeCourseLink = autoCourse.link ?? courseLink;
   const courseDate = activeCourseLink?.visitDate ?? automaticCourseDate;
   useEffect(() => {
@@ -379,7 +395,8 @@ export function useDiscoveryController(
   };
   const data = useDiscoveryData({
     source,
-    queryEnabled: !liveRecommendations || (restored && !inCourse),
+    queryEnabled:
+      !liveRecommendations || (restored && !inCourse && Boolean(meta)),
     draftEnabled: !liveRecommendations || modal === "filters",
     query: appliedQuery,
     detailQuery: inCourse
@@ -415,11 +432,43 @@ export function useDiscoveryController(
     draftCount,
     selected,
     photosFor,
-    status,
     draftStatus,
     detailStatus,
-    retry,
   } = data;
+  const status =
+    liveRecommendations && !meta
+      ? serviceMeta.status === "error"
+        ? ("error" as const)
+        : ("loading" as const)
+      : data.status;
+  const retry = () => {
+    if (liveRecommendations) serviceMeta.retry();
+    data.retry();
+  };
+  const areaOptions: { id: DiscoveryArea; label: string }[] = [
+    { id: "all", label: areaLabel("all", language) },
+    ...(liveRecommendations
+      ? (meta?.areas ?? []).map(({ id, name }) => ({
+          id,
+          label: areaLabel(id, language, name),
+        }))
+      : fallbackAreaIds.map((id) => ({ id, label: areaLabel(id, language) }))),
+  ];
+  /** @returns The localized name of a place's server area, or an empty string. */
+  const areaName = (id: string | null | undefined) =>
+    id
+      ? areaLabel(id, language, meta?.areas.find((a) => a.id === id)?.name)
+      : "";
+  const monthOf = (datasetId?: string) => {
+    if (!meta) return undefined;
+    try {
+      return selectDataset(meta, datasetId).referenceMonth;
+    } catch {
+      return undefined;
+    }
+  };
+  const listReferenceMonth = monthOf();
+  const courseReferenceMonth = monthOf(activeCourseLink?.datasetId);
   const mapDataPending = inCourse
     ? autoCourse.status === "loading"
     : status === "loading";
@@ -762,7 +811,7 @@ export function useDiscoveryController(
         ? "Ikseon"
         : area === "all" && language === "ja"
           ? "全エリア"
-          : areaLabels[language][area];
+          : areaName(area) || areaLabel(area, language);
   function returnToFilters() {
     setTimeReturn(null);
     setModal("filters");
@@ -834,7 +883,16 @@ export function useDiscoveryController(
     changeCourseOptions,
     courseStartSlot,
     showCourseOnMap,
-    autoCourse,
+    autoCourse: course,
+    areaName,
+    areaOptions,
+    dataMonthLabel: listReferenceMonth
+      ? formatReferenceMonth(listReferenceMonth, language)
+      : "",
+    courseDataMonthLabel:
+      courseReferenceMonth && course.route.length
+        ? formatReferenceMonth(courseReferenceMonth, language)
+        : "",
     courseDate,
     courseTimeLabel,
     courseLocation,

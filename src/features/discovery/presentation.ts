@@ -1,39 +1,92 @@
-import type { VisitSlot } from "./model";
+import type {
+  AreaId,
+  DiscoveryArea,
+  DiscoveryLanguage,
+  VisitSlot,
+} from "./model";
 export const LANGUAGE_KEY = "local-seoul-language-v1";
-export const areaLabels = {
+/** FE translations for server area IDs. Unknown IDs fall back to the server name. */
+export const areaLabels: Record<
+  DiscoveryLanguage,
+  Record<
+    "all" | "jongno" | "ikseon" | "insadong" | "euljiro" | "myeongdong",
+    string
+  >
+> = {
   en: {
     all: "All areas",
     jongno: "Jongno",
     ikseon: "Ikseon-dong",
-    insa: "Insadong",
-    eulji: "Euljiro",
-    bukchon: "Bukchon",
+    insadong: "Insadong",
+    euljiro: "Euljiro",
+    myeongdong: "Myeongdong",
   },
   ko: {
     all: "전체 지역",
     jongno: "종로",
     ikseon: "익선동",
-    insa: "인사동",
-    eulji: "을지로",
-    bukchon: "북촌",
+    insadong: "인사동",
+    euljiro: "을지로",
+    myeongdong: "명동",
   },
   ja: {
     all: "すべてのエリア",
     jongno: "鍾路",
     ikseon: "益善洞",
-    insa: "仁寺洞",
-    eulji: "乙支路",
-    bukchon: "北村",
+    insadong: "仁寺洞",
+    euljiro: "乙支路",
+    myeongdong: "明洞",
   },
   zh: {
     all: "全部区域",
     jongno: "钟路",
     ikseon: "益善洞",
-    insa: "仁寺洞",
-    eulji: "乙支路",
-    bukchon: "北村",
+    insadong: "仁寺洞",
+    euljiro: "乙支路",
+    myeongdong: "明洞",
   },
 };
+/** Area IDs offered when no server metadata is used, such as the /guide preview. */
+export const fallbackAreaIds: readonly AreaId[] = [
+  "jongno",
+  "ikseon",
+  "insadong",
+  "euljiro",
+  "myeongdong",
+];
+/**
+ * @param area A server area ID or `all`
+ * @param language UI language
+ * @param serverName The Korean `areas[].name` from metadata, used for new IDs
+ * @returns A display name; never an empty string for a known or named area
+ */
+export function areaLabel(
+  area: DiscoveryArea,
+  language: DiscoveryLanguage,
+  serverName?: string,
+): string {
+  return (
+    (areaLabels[language] as Record<string, string>)[area] ?? serverName ?? area
+  );
+}
+/** Legacy URL area values from before the server area IDs (#77). */
+const legacyAreas: Record<string, DiscoveryArea> = {
+  insa: "insadong",
+  eulji: "euljiro",
+  bukchon: "all",
+};
+/**
+ * @param value The `area` URL value
+ * @returns A known server area ID. Old `insa`/`eulji` links move to the server
+ * IDs; Bukchon, which the service does not cover, and unknown values open all
+ * areas. Whether the ID is still published is checked against the metadata.
+ */
+export function readAreaParam(value: string | null): DiscoveryArea {
+  if (!value) return "all";
+  const legacy = legacyAreas[value];
+  if (legacy) return legacy;
+  return fallbackAreaIds.includes(value) ? value : "all";
+}
 export const slotLabels = {
   en: {
     lunch: "Lunch",
@@ -51,3 +104,32 @@ export type VisitTimeChoice = {
   day: number;
   slot: VisitSlot;
 };
+const monthLocales: Record<DiscoveryLanguage, string> = {
+  ko: "ko-KR",
+  en: "en-GB",
+  ja: "ja-JP",
+  zh: "zh-CN",
+};
+/**
+ * @param month Dataset `referenceMonth` as YYYY-MM
+ * @param language UI language
+ * @returns The data reference month line, e.g. "LG U+ data as of Dec 2025"
+ */
+export function formatReferenceMonth(
+  month: string,
+  language: DiscoveryLanguage,
+): string {
+  const [year, value] = month.split("-").map(Number);
+  if (!year || !value) return "";
+  const label = new Intl.DateTimeFormat(monthLocales[language], {
+    year: "numeric",
+    month: language === "en" ? "short" : "long",
+    timeZone: "UTC",
+  }).format(Date.UTC(year, value - 1, 1));
+  return {
+    en: `LG U+ data as of ${label}`,
+    ko: `LG U+ ${label} 데이터 기준`,
+    ja: `LG U+ ${label}時点のデータ`,
+    zh: `LG U+ ${label}数据`,
+  }[language];
+}

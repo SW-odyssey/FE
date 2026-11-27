@@ -1,4 +1,6 @@
-export type LocalArea = "jongno" | "ikseon" | "insa" | "eulji" | "bukchon";
+/** A server area ID from GET /api/v2/meta `areas[].id`, such as `euljiro`. */
+export type AreaId = string;
+export type LocalArea = AreaId;
 export type CoursePlaceKind =
   "korean" | "cafe" | "shop" | "play" | "bar" | "other";
 export type LocalCategory = "food" | "cafe" | "culture";

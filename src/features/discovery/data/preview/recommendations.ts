@@ -19,7 +19,7 @@ export function filterLocalPlaces(
     (place) =>
       (area === "all" ||
         place.area === area ||
-        (area === "jongno" && place.area !== "eulji")) &&
+        (area === "jongno" && place.area !== "euljiro")) &&
       (category === "all" || place.category === category) &&
       (!normalized ||
         `${place.name} ${place.koreanName} ${place.address} ${place.descriptionEn} ${place.descriptionKo}`

@@ -4,7 +4,7 @@ import type { DiscoveryLanguage } from "../model";
 import { dateLocales, localText } from "../localization";
 import { getLiveVisitPattern } from "../data/visit-pattern";
 import type { ApiWeekday } from "../data/v2-client";
-import { slotLabels } from "../presentation";
+import { formatReferenceMonth, slotLabels } from "../presentation";
 import { visitSlots } from "../visit-time";
 
 const dayGroupByWeekday: readonly VisitDayGroup[] = [
@@ -208,6 +208,11 @@ export function AreaVisitPatternCard({
       ) : (
         <p className="local-visit-pattern-message" role="status">
           {pending ? labels.loading : labels.unavailable}
+        </p>
+      )}
+      {live?.referenceMonth && (
+        <p className="local-data-month">
+          {formatReferenceMonth(live.referenceMonth, language)}
         </p>
       )}
     </section>

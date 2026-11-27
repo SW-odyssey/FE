@@ -1,19 +1,19 @@
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import type { LocalPlace } from "../model";
-import { areaLabels } from "../presentation";
 import { Photo, type SheetThumbnail } from "./PlacePhoto";
 export function renderPlaceRow(
   model: Pick<
     DiscoveryController,
-    "openPlace" | "view" | "mapId" | "name" | "kind" | "language"
+    "openPlace" | "view" | "mapId" | "name" | "kind" | "areaName"
   >,
   p: LocalPlace,
   onClick = () => model.openPlace(p),
   small = false,
   thumbnail?: SheetThumbnail,
 ) {
-  const { view, mapId, name, kind, language } = model;
+  const { view, mapId, name, kind, areaName } = model;
+  const area = areaName(p.area);
   return (
     <button
       key={p.id}
@@ -29,7 +29,7 @@ export function renderPlaceRow(
             <strong>{name(p)}</strong>
             <span>
               {kind(p)}
-              {p.area && `, ${areaLabels[language][p.area]}`}
+              {area && `, ${area}`}
             </span>
             {attribution}
           </span>

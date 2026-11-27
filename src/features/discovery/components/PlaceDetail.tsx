@@ -4,7 +4,6 @@ import { googleMapsPlaceUrl } from "../course";
 import MiniMap from "../../map/MiniMap";
 import { usePlaceMedia } from "../hooks/usePlaceMedia";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
-import { areaLabels } from "../presentation";
 import { AreaVisitPatternCard } from "./AreaVisitPatternCard";
 import PhotoGallery from "./PhotoGallery";
 import { PlaceAiSummary } from "./PlaceAiSummary";
@@ -12,6 +11,7 @@ import { PlaceBusinessInfo } from "./PlaceBusinessInfo";
 type Props = Pick<
   DiscoveryController,
   | "aiSummary"
+  | "areaName"
   | "copyAddress"
   | "description"
   | "kind"
@@ -28,6 +28,7 @@ type Props = Pick<
 export function PlaceDetail(props: Props) {
   const {
     aiSummary,
+    areaName,
     copyAddress,
     description,
     kind,
@@ -46,7 +47,7 @@ export function PlaceDetail(props: Props) {
     ? media.photoList
     : photosFor(selected);
   const address = media?.address || selected.address;
-  const area = selected.area && areaLabels[language][selected.area];
+  const area = areaName(selected.area);
   const editorial = description(selected);
   const about = editorial || media?.business?.about;
   const photoCredits = [

@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
-import { test } from "node:test";
+import { beforeEach, test } from "node:test";
 import { createLiveDiscoveryDataSource } from "../src/features/discovery/data/live-recommendations.ts";
+import { invalidateServiceMeta } from "../src/features/discovery/data/service-meta.ts";
 import type { DiscoveryQuery } from "../src/features/discovery/data/types.ts";
 import { getLiveVisitPattern } from "../src/features/discovery/data/visit-pattern.ts";
 
 const query: DiscoveryQuery = {
-  area: "eulji",
+  area: "euljiro",
   language: "en",
   category: "all",
   query: "",
@@ -15,6 +16,22 @@ const query: DiscoveryQuery = {
   spaces: [],
   origin: null,
 };
+const meta = {
+  defaultDatasetId: "public-latest",
+  datasets: [
+    { id: "older", referenceMonth: "2025-11" },
+    { id: "public-latest", referenceMonth: "2025-12" },
+  ],
+  areas: [
+    {
+      id: "euljiro",
+      name: "을지로",
+      centerLat: 37.565748,
+      centerLng: 126.99013,
+    },
+  ],
+};
+beforeEach(invalidateServiceMeta);
 const place = {
   id: 1557,
   name: "Recommended Place",
@@ -30,7 +47,7 @@ test("the live source includes bars in recommendations and shares the published 
   t.mock.method(globalThis, "fetch", async (url: URL) => {
     calls.push(url);
     const data = url.pathname.endsWith("/meta")
-      ? { datasets: [{ id: "public-latest" }] }
+      ? meta
       : url.pathname.endsWith("/recommendations")
         ? {
             total: 6,
@@ -72,6 +89,8 @@ test("the live source includes bars in recommendations and shares the published 
   assert.equal(calls[1]?.searchParams.get("weekday"), "fri");
   assert.equal(calls[1]?.searchParams.get("slot"), "dinner");
   assert.equal(calls[1]?.searchParams.get("lang"), "en");
+  assert.equal(calls[1]?.searchParams.get("lat"), "37.565748");
+  assert.equal(calls[1]?.searchParams.get("lng"), "126.99013");
   assert.equal(found.items[0]?.name, "Recommended Place");
   assert.equal(calls.length, 2);
   for (const url of calls.slice(1))
@@ -84,6 +103,7 @@ test("the live source includes bars in recommendations and shares the published 
     provenance: "live",
     cellId: "81655936",
     datasetId: "public-latest",
+    referenceMonth: "2025-12",
     weekday: "fri",
   });
   assert.ok(pattern?.provenance === "live");
@@ -109,9 +129,7 @@ test("empty recommendations and missing place links are handled without demo dat
       ? new Response(null, { status: 404 })
       : Response.json({
           success: true,
-          data: url.pathname.endsWith("/meta")
-            ? { datasets: [{ id: "public-latest" }] }
-            : { items: [], total: 0 },
+          data: url.pathname.endsWith("/meta") ? meta : { items: [], total: 0 },
         }),
   );
   const source = createLiveDiscoveryDataSource();
