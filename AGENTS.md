@@ -13,29 +13,31 @@
 | 상태와 이동        | `src/features/discovery/hooks/useDiscoveryController.ts`            |
 | URL 복원           | `src/features/discovery/state/preview-url.ts`                       |
 | 데이터 경계        | `src/features/discovery/data/types.ts`                              |
-| 샘플 공급부        | `src/features/discovery/data/preview.ts`                            |
-| API 변환           | `src/features/discovery/data/api-mapping.ts`                        |
-| 서울 날짜와 슬롯   | `src/features/discovery/visit-date.ts`                              |
+| 운영 공급부        | `src/features/discovery/data/live-recommendations.ts`               |
+| 서비스 메타        | `src/features/discovery/data/service-meta.ts`                       |
+| 샘플 공급부        | `src/features/discovery/data/preview.ts` (`/guide` 전용)            |
+| API 연결 현황      | `docs/API_INTEGRATION.md`                                           |
+| 서울 날짜와 슬롯   | `src/features/discovery/visit-date.ts`, `visit-time.ts`             |
 | 지도와 예시 셀     | `src/features/map/geometry.ts`, `src/features/map/kakao/session.ts` |
 
-현재 화면 동작은 코드와 테스트로 확인하고, API 요청 값은 [BE #28](https://github.com/SW-odyssey/BE/issues/28)과 [#29](https://github.com/SW-odyssey/BE/issues/29), [#30](https://github.com/SW-odyssey/BE/issues/30), [#31](https://github.com/SW-odyssey/BE/issues/31)을 대조한다.
+현재 화면 동작은 코드와 테스트로 확인하고, API 요청 값은 Odyssey v2 계약(BE `docs/recommendation-v2/`, [응답 계약 #104](https://github.com/SW-odyssey/BE/pull/104))을 대조한다.
 
 ## 구현 기준
 
 | 영역        | 유지할 기준                                                         |
 | ----------- | ------------------------------------------------------------------- |
 | UI          | 추천 목록, 필터와 일시, 지역, 상세, 지도와 셀 목록의 연결           |
-| 데이터      | 기본 공급부는 previewDataSource, 실제 HTTP 공급부는 연결 작업       |
+| 데이터      | 운영은 liveDiscoveryDataSource(v2), 샘플은 /guide의 preview 공급부  |
 | API 경계    | query와 응답 변환은 데이터 공급부에 배치, 컴포넌트는 화면 모델 사용 |
 | 적용 상태   | 필터 임시값과 확정값 분리, 최종 적용 때 목록과 지도 함께 갱신       |
 | 복귀        | URL, 읽던 위치, 선택 셀과 지도 카메라 상태 대조                     |
-| 언어와 시간 | UI 사전 4언어, 서버 한국어 응답, Asia/Seoul 날짜와 자동 슬롯        |
+| 언어와 시간 | UI 사전 4언어, 서버 lang 상호, Asia/Seoul 날짜와 메타 slotWindows   |
 | 지도 숫자   | 추천 장소 수, 50m 예시 셀과 실제 제공 격자의 출처 구분              |
 | 자료 해석   | LG U+ 지역 단위 지표, 장소별 정보는 해당 출처로 연결                |
 | 공용 함수   | 목적, 인자와 반환을 JSDoc `/** */`로 기록                           |
 | 변경 범위   | 화면, 데이터, 지도와 스타일의 기존 모듈 경계 사용                   |
 
-북촌과 명동, 컨셉과 음식점 전용 조건, slug와 숫자 ID의 차이는 `docs/DECISIONS.md`의 연결 작업에 반영한다. 샘플 추천 조건은 샘플 공급부 안에서 관리하고 실제 추천 기준은 BE 계약과 데이터 근거에 연결한다.
+지역·시간대·배치는 서버 메타를 따르고, 결정과 확인 중인 항목은 `docs/DECISIONS.md`에 둔다. 샘플 추천 조건과 소개는 샘플 공급부 안에서만 쓰고 운영 경로에 섞지 않는다.
 
 ## 설정과 출처
 

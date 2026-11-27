@@ -125,7 +125,9 @@ test("count markers represent multiple venues and leave selected venues as pins"
   const markers = groupedMarkerCells(places);
   assert.equal(markers.length, 1);
   assert.deepEqual(markers[0].places, [first, same]);
-  assert.ok(markers[0].places.every((place) => inMapScope(place, markers[0].id)));
+  assert.ok(
+    markers[0].places.every((place) => inMapScope(place, markers[0].id)),
+  );
   assert.deepEqual(groupedMarkerCells(places, same.id), []);
 });
 test("the recommendation collection excludes shopping and alley aggregates", () => {

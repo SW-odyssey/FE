@@ -7,10 +7,10 @@
 | 확인할 내용 | 기준                                                               |
 | ----------- | ------------------------------------------------------------------ |
 | 실행 화면   | `src/app/page.tsx`와 `src/features/discovery/DiscoveryPreview.tsx` |
-| 기본 데이터 | `src/features/discovery/data/preview.ts`의 샘플 공급부             |
-| 실제 API    | BE #29~31의 세 GET, HTTP 공급부 연결 작업                          |
+| 운영 데이터 | `src/features/discovery/data/live-recommendations.ts`의 v2 공급부  |
+| 실제 API    | Odyssey v2, 연결 현황은 `docs/API_INTEGRATION.md`                  |
 | 상태와 복귀 | 적용값과 임시값, URL, 읽던 위치와 지도 상태                        |
-| 시간과 언어 | Asia/Seoul 날짜와 자동 슬롯, FE UI 사전 4언어                      |
+| 시간과 언어 | Asia/Seoul 날짜와 메타 slotWindows, FE UI 사전 4언어               |
 | 데이터 해석 | 지역 단위 인구 지표, 화면의 숫자는 추천 장소 수                    |
 | 키와 출처   | 기존 환경 설정과 공개 자료 출처 보존, 비밀 값은 서버에서 관리      |
 
