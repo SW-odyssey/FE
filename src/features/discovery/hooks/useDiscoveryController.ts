@@ -38,7 +38,10 @@ import type { CourseLink } from "../state/course-url";
 import { readPreviewUrl, serializePreviewUrl } from "../state/preview-url";
 import { seoulMinutes, visitDate } from "../visit-date";
 import { autoVisit, defaultSlotWindows, slotHoursFrom } from "../visit-time";
-import { useCourseRecommendations } from "./useCourseRecommendations";
+import {
+  useCourseRecommendations,
+  type CourseSnapshot,
+} from "./useCourseRecommendations";
 import { useDialogLifecycle } from "./useDialogLifecycle";
 import { useDiscoveryData } from "./useDiscoveryData";
 import { useServiceMeta } from "./useServiceMeta";
@@ -48,6 +51,8 @@ type MapLanguageRestore = {
   camera: MapCamera | null;
   currentLocation: Coordinate | null;
   mapId: string | null;
+  /** The loaded course, so the reload only refreshes its names (#85). */
+  course?: CourseSnapshot;
 };
 
 /** Owns applied/draft state, navigation and restoration for discovery. */
@@ -66,6 +71,7 @@ export function useDiscoveryController(
   const [view, setView] = useState<DiscoveryView>("discover");
   const [courseMap, setCourseMap] = useState(false);
   const [courseLink, setCourseLink] = useState<CourseLink>();
+  const [restoredCourse, setRestoredCourse] = useState<CourseSnapshot>();
   const [courseOptions, setCourseOptions] = useState(defaultCourseOptions);
   const [language, setLanguage] = useState<DiscoveryLanguage>("en");
   const [area, setArea] = useState<DiscoveryArea>("jongno");
@@ -197,6 +203,7 @@ export function useDiscoveryController(
         window.history.replaceState(historyState, "");
         setCurrentLocation(resume.currentLocation);
         setMapId(resume.mapId);
+        setRestoredCourse(resume.course);
         if (resume.camera) {
           mapCamera.current = {
             ...resume.camera,
@@ -345,6 +352,7 @@ export function useDiscoveryController(
     options: courseOptions,
     language,
     meta,
+    restored: restoredCourse,
     enabled: restored && inCourse,
   });
   const course =
@@ -723,6 +731,7 @@ export function useDiscoveryController(
         camera: mapCamera.current,
         currentLocation,
         mapId,
+        course: inCourse ? autoCourse.snapshot : undefined,
       };
       url(view, selectedId, area, next);
       window.history.replaceState(
