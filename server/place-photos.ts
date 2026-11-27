@@ -3,6 +3,8 @@ import { limitPlaceRequest, type RateLimitBinding } from "./place-quota.ts";
 import type { PlaceBusiness } from "../src/features/discovery/data/place-media.ts";
 import {
   isLocalPlaceRequest,
+  readPlaceConfig,
+  type PlaceServerEnv,
   isOdysseyPlaceId,
   lookupPlaceRow,
   placeLanguage,
@@ -58,9 +60,12 @@ export async function handlePlacePhotos(
   request: Request,
   key: string | undefined,
   limiter?: RateLimitBinding,
+  env?: PlaceServerEnv,
 ): Promise<Response> {
   const url = new URL(request.url);
-  if (!key || !isLocalPlaceRequest(request, url))
+  const config = readPlaceConfig(env);
+  if (!config) return new Response(null, { status: 500, headers: headers });
+  if (!key || !isLocalPlaceRequest(request, url, config.allowedHosts))
     return new Response(null, { status: 404, headers });
 
   const id = url.searchParams.get("id") ?? "";
@@ -93,7 +98,7 @@ export async function handlePlacePhotos(
   }
 
   try {
-    const row = await lookupPlaceRow(id, signal);
+    const row = await lookupPlaceRow(id, signal, config.apiOrigin);
     if (!row) return new Response(null, { status: 404, headers });
     const googleId = row.googlePlaceId;
     if (!googleId || !/^[\w-]{1,256}$/.test(googleId))
