@@ -822,7 +822,7 @@ export function useDiscoveryController(
   }
   const contextAreaLabel =
     mapSearchOrigin && !inCourse
-      ? t("Map area", "지도에서 선택")
+      ? t("Map · 300 m", "지도 · 300m")
       : area === "ikseon" && language === "en"
         ? "Ikseon"
         : area === "all" && language === "ja"
@@ -910,6 +910,14 @@ export function useDiscoveryController(
     setSearchComposing,
     searchTerm,
     total: data.total,
+    // The nearby route returns up to 30 places within 300 m of one point.
+    nearbyScope: !liveRecommendations
+      ? null
+      : mapSearchOrigin
+        ? ("map" as const)
+        : currentArea && currentLocation
+          ? ("location" as const)
+          : null,
     hasMore: data.hasMore,
     moreStatus: data.moreStatus,
     loadMore: data.loadMore,

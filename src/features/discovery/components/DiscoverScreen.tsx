@@ -3,7 +3,7 @@ import type * as React from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import { isOverlapScope } from "../../map/geometry";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
-import { formatLoadedCount } from "../presentation";
+import { formatLoadedCount, formatNearbyCount } from "../presentation";
 import { discoveryCopy } from "../recommendation-analysis";
 import { DiscoveryControls } from "./DiscoveryControls";
 import { FeaturedCarousel } from "./FeaturedCarousel";
@@ -31,6 +31,7 @@ type Props = Pick<
   | "mapScope"
   | "dataMonthLabel"
   | "total"
+  | "nearbyScope"
   | "hasMore"
   | "moreStatus"
   | "loadMore"
@@ -46,7 +47,9 @@ export function DiscoverScreen(props: Props) {
       {status === "success" && !props.mapScopeActive && visible.length > 0 && (
         <p className="local-data-month" aria-live="polite">
           {[
-            formatLoadedCount(visible.length, props.total, language),
+            !query && props.nearbyScope
+              ? formatNearbyCount(props.nearbyScope, visible.length, language)
+              : formatLoadedCount(visible.length, props.total, language),
             // Name search is not tied to a dataset month.
             !query && props.dataMonthLabel,
           ]
@@ -128,9 +131,26 @@ export function DiscoverScreen(props: Props) {
       ) : (
         <div className="local-empty">
           <LocalIcon name="search" size={28} />
-          <h2>{t("No places found", "찾는 장소가 없어요")}</h2>
+          <h2>
+            {!query && props.nearbyScope === "map"
+              ? t(
+                  "No places within 300 m of the map centre",
+                  "지도 중심 300m 안에 추천 장소가 없어요",
+                )
+              : !query && props.nearbyScope === "location"
+                ? t(
+                    "No places within 300 m of you",
+                    "내 위치 300m 안에 추천 장소가 없어요",
+                  )
+                : t("No places found", "찾는 장소가 없어요")}
+          </h2>
           <p>
-            {t("Try another area or filter.", "지역이나 필터를 바꿔보세요.")}
+            {!query && props.nearbyScope
+              ? t(
+                  "Move the map and search again, or choose an area.",
+                  "지도를 옮겨 다시 검색하거나 지역을 선택해 보세요.",
+                )
+              : t("Try another area or filter.", "지역이나 필터를 바꿔보세요.")}
           </p>
           <button className="local-secondary" onClick={resetFilters}>
             {t("Reset filters", "필터 초기화")}
