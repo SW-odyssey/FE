@@ -7,6 +7,7 @@ import type {
   LocalPlace,
   VisitSlot,
 } from "../model.ts";
+import { parseCourseReasons, type CourseReason } from "../course-reasons.ts";
 import { mapApiIdToDiscovery, type ApiSlot } from "./api-mapping.ts";
 import type { DiscoveryPlaceDetail } from "./types.ts";
 import { previewPlaceDetail } from "./preview.ts";
@@ -48,12 +49,15 @@ type ApiCourseStop = {
   walkMinutes: number;
   hoursUnknown: boolean;
   place: ApiPlace & { distanceMeters: number };
+  reasons?: unknown;
 };
 
-export type CourseLeg = Omit<ApiCourseStop, "slot" | "place"> & {
+export type CourseLeg = Omit<ApiCourseStop, "slot" | "place" | "reasons"> & {
   slot: VisitSlot;
   place: LocalPlace;
   distanceMeters: number;
+  /** Known reasons in server order; empty when none or all unknown. */
+  reasons: CourseReason[];
 };
 
 export type CourseGap = { slot: VisitSlot; reason: StopReason };
@@ -150,10 +154,11 @@ export async function getCourse(
     datasetId: data.context.datasetId,
     seed: data.seed,
     route: data.stops.map(
-      ({ slot, place, position, walkMinutes, hoursUnknown }) => ({
+      ({ slot, place, position, walkMinutes, hoursUnknown, reasons }) => ({
         position,
         walkMinutes,
         hoursUnknown,
+        reasons: parseCourseReasons(reasons),
         slot: screenSlots[slot],
         place: v2Place(place),
         distanceMeters: place.distanceMeters,
