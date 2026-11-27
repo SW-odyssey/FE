@@ -42,7 +42,7 @@ const place = {
   googlePlaceId: "ChIJtest",
 };
 
-test("the live source includes bars in recommendations and shares the published dataset", async (t) => {
+test("nearby recommendations include bars and share the published dataset", async (t) => {
   const calls: URL[] = [];
   t.mock.method(globalThis, "fetch", async (url: URL) => {
     calls.push(url);
@@ -80,7 +80,9 @@ test("the live source includes bars in recommendations and shares the published 
     return Response.json({ success: true, data });
   });
   const source = createLiveDiscoveryDataSource();
-  const found = await source.query(query);
+  // A map search or device location sends coordinates to the nearby route.
+  const nearby = { ...query, origin: { lat: 37.565748, lng: 126.99013 } };
+  const found = await source.query(nearby);
   assert.deepEqual(
     found.items.map(({ id }) => id),
     ["1557", "102", "141", "142"],
@@ -129,11 +131,18 @@ test("empty recommendations and missing place links are handled without demo dat
       ? new Response(null, { status: 404 })
       : Response.json({
           success: true,
-          data: url.pathname.endsWith("/meta") ? meta : { items: [], total: 0 },
+          data: url.pathname.endsWith("/meta")
+            ? meta
+            : { items: [], total: 0, page: 0, hasNext: false },
         }),
   );
   const source = createLiveDiscoveryDataSource();
-  assert.deepEqual(await source.query(query), { items: [], total: 0 });
+  assert.deepEqual(await source.query(query), {
+    items: [],
+    total: 0,
+    page: 0,
+    hasNext: false,
+  });
   assert.equal(await source.getPlace("1557", { query }), null);
   assert.equal(await source.getPlace("old-preview-slug", { query }), null);
   assert.equal(fetch.mock.callCount(), 3);
@@ -194,4 +203,63 @@ test("관측한 막대가 없는 방문 패턴은 그래프를 만들지 않는�
   } as const;
   assert.equal(await getLiveVisitPattern(input), null);
   assert.equal(await getLiveVisitPattern(input), null);
+});
+
+test("area browsing pages through area-recommendations without duplicate stores", async (t) => {
+  const calls: URL[] = [];
+  const pages = [
+    { total: 3, page: 0, hasNext: true, items: [place, { ...place, id: 2 }] },
+    {
+      total: 3,
+      page: 1,
+      hasNext: false,
+      items: [
+        { ...place, id: 2 },
+        { ...place, id: 3, areaId: "euljiro" },
+      ],
+    },
+  ];
+  t.mock.method(globalThis, "fetch", async (url: URL) => {
+    calls.push(url);
+    const data = url.pathname.endsWith("/meta")
+      ? meta
+      : pages[Number(url.searchParams.get("page"))];
+    return Response.json({ success: true, data });
+  });
+  const source = createLiveDiscoveryDataSource();
+  const first = await source.query(query);
+  const area = calls[1]!;
+  assert.equal(area.pathname, "/api/v2/area-recommendations");
+  assert.deepEqual(Object.fromEntries(area.searchParams), {
+    datasetId: "public-latest",
+    weekday: "fri",
+    slot: "dinner",
+    categories: "food,cafe",
+    page: "0",
+    size: "30",
+    areaId: "euljiro",
+    lang: "en",
+  });
+  assert.equal(first.total, 3);
+  assert.equal(first.items.length, 2);
+  assert.equal(first.hasNext, true);
+  const second = await source.queryNext!(query, first);
+  assert.equal(calls[2]?.searchParams.get("page"), "1");
+  assert.deepEqual(
+    second.items.map(({ id }) => id),
+    ["1557", "2", "3"],
+  );
+  assert.equal(second.items[2]?.area, "euljiro");
+  assert.equal(second.hasNext, false);
+  assert.equal(await source.queryNext!(query, second), second);
+  assert.equal(calls.length, 3);
+
+  await source.query({ ...query, area: "all", category: "cafe" });
+  assert.equal(calls.at(-1)?.searchParams.has("areaId"), false);
+  assert.equal(calls.at(-1)?.searchParams.get("categories"), "cafe");
+  await source.query({ ...query, category: "food" });
+  assert.equal(calls.at(-1)?.searchParams.get("categories"), "food");
+  // An area missing from the metadata is browsed as all areas.
+  await source.query({ ...query, area: "bukchon" });
+  assert.equal(calls.at(-1)?.searchParams.has("areaId"), false);
 });

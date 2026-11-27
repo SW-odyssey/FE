@@ -18,6 +18,12 @@ import type {
 } from "../data/types";
 import type { DiscoveryLanguage, LocalPlace } from "../model";
 const emptyQuery: DiscoveryQueryResult = { items: [], total: 0 };
+type MoreState = {
+  key: string;
+  attempt: number;
+  result?: DiscoveryQueryResult;
+  status: "idle" | "loading" | "error";
+};
 type ResourceState<T> = DiscoveryResource<T> & {
   source: DiscoveryDataSource;
   key: string;
@@ -224,6 +230,57 @@ export function useDiscoveryData({
     load: loadDetail,
   });
   const activeDraft = draftKey === key ? result : draft;
+  // Pages after the first belong to the applied key; a new key or retry drops
+  // them, and the lane ignores a page that arrives after that.
+  const moreLane = useMemo(
+    () => createLatestRequest<DiscoveryQueryResult>(),
+    [],
+  );
+  const [more, setMore] = useState<MoreState>();
+  useEffect(() => moreLane.cancel, [key, attempt, source, moreLane]);
+  const currentMore =
+    more?.key === key && more.attempt === attempt ? more : undefined;
+  const listed =
+    result.status === "success" && currentMore?.result
+      ? currentMore.result
+      : result.value;
+  const moreStatus =
+    result.status === "success" ? (currentMore?.status ?? "idle") : "idle";
+  const loadMore = useCallback(() => {
+    if (
+      !source.queryNext ||
+      result.status !== "success" ||
+      !listed.hasNext ||
+      moreStatus === "loading"
+    )
+      return;
+    const previous = listed;
+    setMore({ key, attempt, result: currentMore?.result, status: "loading" });
+    moreLane.run(
+      (signal) => source.queryNext!(appliedInput, previous, { signal }),
+      {
+        resolve: (next) =>
+          setMore({ key, attempt, result: next, status: "idle" }),
+        reject: () =>
+          setMore({
+            key,
+            attempt,
+            result: currentMore?.result,
+            status: "error",
+          }),
+      },
+    );
+  }, [
+    source,
+    result.status,
+    listed,
+    moreStatus,
+    key,
+    attempt,
+    currentMore?.result,
+    moreLane,
+    appliedInput,
+  ]);
   const readDetail = useCallback(
     (place: LocalPlace) =>
       (detail.value?.place.id === place.id ? detail.value : null) ??
@@ -252,13 +309,16 @@ export function useDiscoveryData({
     (id: string) =>
       source.snapshot?.getPlace(id)?.place ??
       (detail.value?.place.id === id ? detail.value.place : undefined) ??
-      result.value.items.find((place) => place.id === id),
-    [source, detail.value, result.value.items],
+      listed.items.find((place) => place.id === id),
+    [source, detail.value, listed.items],
   );
   return {
-    visible: result.value.items,
+    visible: listed.items,
     analyses: result.status === "success" ? (result.value.analyses ?? {}) : {},
-    total: result.value.total,
+    total: listed.total,
+    hasMore: result.status === "success" && Boolean(listed.hasNext),
+    moreStatus,
+    loadMore,
     draftCount: activeDraft.value.total,
     selected: detail.value?.place,
     selectedDetail: detail.value ?? undefined,
