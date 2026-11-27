@@ -2,14 +2,14 @@
 import { useState } from "react";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import { slotLabels } from "../presentation";
-import { slotAt, slotHours, visitSlots } from "../visit-time";
-import { seoulHour } from "../visit-date";
+import { visitSlots } from "../visit-time";
 import { discoveryCopy } from "../recommendation-analysis";
 import { SegmentedChoice } from "./SegmentedChoice";
 import { SheetHeader } from "./SheetHeader";
 import { VisitCalendar } from "./VisitCalendar";
 type Props = Pick<
   DiscoveryController,
+  | "autoSlot"
   | "clock"
   | "closeModal"
   | "confirmTime"
@@ -18,11 +18,13 @@ type Props = Pick<
   | "language"
   | "setDraftDay"
   | "setDraftSlot"
+  | "slotHours"
   | "t"
   | "timeReturn"
 >;
 export function VisitTimeSheet(props: Props) {
   const {
+    autoSlot,
     clock,
     closeModal,
     confirmTime,
@@ -31,12 +33,13 @@ export function VisitTimeSheet(props: Props) {
     language,
     setDraftDay,
     setDraftSlot,
+    slotHours,
     t,
     timeReturn,
   } = props;
   const [automaticTime, setAutomaticTime] = useState(false);
   const [calendarRevision, setCalendarRevision] = useState(0);
-  const selectedSlot = automaticTime ? slotAt(seoulHour(clock)) : draftSlot;
+  const selectedSlot = automaticTime ? autoSlot : draftSlot;
 
   return (
     <>

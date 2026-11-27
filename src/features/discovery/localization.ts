@@ -168,6 +168,7 @@ const copy: Record<string, readonly [string, string]> = {
   Restaurant: ["レストラン", "餐厅"],
   Today: ["今日", "今天"],
   Now: ["今", "现在"],
+  Next: ["次", "下一时段"],
   "Current location": ["現在地", "当前位置"],
   "Choose area": ["エリアを選択", "选择区域"],
   "Choose visit time": ["訪問時間を選択", "选择到访时间"],

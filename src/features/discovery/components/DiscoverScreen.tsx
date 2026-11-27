@@ -32,6 +32,7 @@ type Props = Pick<
   | "dataMonthLabel"
   | "total"
   | "nearbyScope"
+  | "closedTimeNotice"
   | "hasMore"
   | "moreStatus"
   | "loadMore"
@@ -44,6 +45,11 @@ export function DiscoverScreen(props: Props) {
   return (
     <div key="places" className="local-content local-places" ref={scroll}>
       <DiscoveryControls {...props} />
+      {props.closedTimeNotice && !query && (
+        <p className="local-data-month local-time-notice" role="status">
+          {props.closedTimeNotice}
+        </p>
+      )}
       {status === "success" && !props.mapScopeActive && visible.length > 0 && (
         <p className="local-data-month" aria-live="polite">
           {[

@@ -187,3 +187,30 @@ export function formatLoadedCount(
     zh: `共${all}家，已显示${loaded}家`,
   }[language];
 }
+/**
+ * @param clock Current instant
+ * @param next The next slot window that has data
+ * @param slotName Localized name of that slot
+ * @param language UI language
+ * @returns A notice that the current time has no data and which slot is shown
+ */
+export function formatClosedTime(
+  clock: Date,
+  next: { from: string; toExclusive: string },
+  slotName: string,
+  language: DiscoveryLanguage,
+): string {
+  const time = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Seoul",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).format(clock);
+  const hours = `${next.from}–${next.toExclusive}`;
+  return {
+    en: `No visit data at ${time}. Showing ${slotName.toLowerCase()} (${hours}).`,
+    ko: `지금(${time})은 방문 데이터가 없는 시간이에요. ${slotName}(${hours}) 추천을 보여 드려요.`,
+    ja: `現在（${time}）は来訪データがない時間帯です。${slotName}（${hours}）のおすすめを表示しています。`,
+    zh: `当前（${time}）没有到访数据。正在显示${slotName}（${hours}）的推荐。`,
+  }[language];
+}

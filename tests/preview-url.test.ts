@@ -286,14 +286,15 @@ test("day restoration preserves numeric coercion and clamps only to zero through
 
 test("automatic draft slots use the supplied clock and explicit slots override it", () => {
   for (const [hour, slot] of [
+    // BE slot windows (#87): gaps resolve to the next window with data.
     [0, "late"],
-    [4, "late"],
+    [4, "lunch"],
     [5, "lunch"],
-    [13, "lunch"],
+    [13, "afternoon"],
     [14, "afternoon"],
-    [17, "afternoon"],
+    [17, "evening"],
     [18, "evening"],
-    [21, "evening"],
+    [21, "late"],
     [22, "late"],
   ] as const) {
     const clock = new Date(Date.UTC(2026, 9, 24, hour - 9));
@@ -432,7 +433,7 @@ process.stdout.write(JSON.stringify(times.map(time => readPreviewUrl('?slot=inva
     );
     assert.deepEqual(
       JSON.parse(result),
-      ["lunch", "afternoon", "evening", "late", "late"],
+      ["afternoon", "afternoon", "evening", "late", "late"],
       timezone,
     );
   }
