@@ -65,7 +65,9 @@
 }
 
 @container course-controls (width < 300px) {
-  .local-shell.local-refined .local-course-controls > .local-course-option-chips {
+  .local-shell.local-refined
+    .local-course-controls
+    > .local-course-option-chips {
     gap: 5px;
   }
 
@@ -655,4 +657,22 @@
 .local-course-hours::before {
   content: "·";
   margin-inline-end: 4px;
+}
+
+/* Up to two server reasons per stop (#83). */
+.local-course-reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.local-course-reasons > span {
+  padding: 2px 7px;
+  border-radius: var(--r-pill, 999px);
+  background: color-mix(in srgb, var(--local-plum, #4c2a85) 8%, transparent);
+  color: var(--refresh-text, #1f2937);
+  font-size: 11.5px;
+  font-weight: 550;
+  line-height: 1.45;
 }

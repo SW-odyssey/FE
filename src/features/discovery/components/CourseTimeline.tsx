@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type CSSProperties, type RefObject } from "react";
+import { courseReasonText, shownCourseReasons } from "../course-reasons";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { CourseLeg } from "../data/course-api";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
@@ -182,6 +183,7 @@ export function CourseTimeline({
     walkMinutes,
     hoursUnknown,
     distanceMeters,
+    reasons,
     changeFromHere,
     exiting,
   }: Row) {
@@ -239,6 +241,15 @@ export function CourseTimeline({
                       </span>
                     )}
                   </span>
+                  {reasons.length > 0 && (
+                    <span className="local-course-reasons">
+                      {reasons.slice(0, shownCourseReasons).map((reason) => (
+                        <span key={reason.code}>
+                          {courseReasonText(reason, language)}
+                        </span>
+                      ))}
+                    </span>
+                  )}
                   <span className="local-course-photo-credit">
                     {attribution}
                   </span>
