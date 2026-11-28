@@ -12,6 +12,7 @@ import {
   courseReplacement,
   replaceCourseSuffix,
 } from "../data/course-replacement";
+import { getCourseNames } from "../data/course-names";
 import { createLatestRequest } from "../data/latest-request";
 import {
   areaCenter,
@@ -36,7 +37,36 @@ const emptySkipped: CourseResult["skipped"] = [];
 type LoadedCourse = {
   result: CourseResult;
   link: CourseLink;
+  /** Language the result's names were requested in. */
+  language: DiscoveryLanguage;
 };
+
+/** A loaded course carried across the page reload of a language switch. */
+export type CourseSnapshot = LoadedCourse & { key: string };
+
+type StopNames = {
+  ids: string;
+  language: DiscoveryLanguage;
+  byId: Record<string, string>;
+};
+
+/** Everything that decides the stores of a course, but not its language. */
+function courseKey(
+  context: string,
+  options: CourseOptions,
+  link: CourseLink | undefined,
+) {
+  return JSON.stringify([
+    context,
+    options.afternoon,
+    options.lateNight,
+    options.walk,
+    link?.seed ?? null,
+    link?.datasetId ?? null,
+    link?.previousStopIds ?? [],
+    link?.replacements ?? [],
+  ]);
+}
 
 type CourseState = {
   key: string;
@@ -62,6 +92,7 @@ export function useCourseRecommendations({
   options,
   language,
   meta,
+  restored,
   enabled,
 }: {
   area: DiscoveryArea;
@@ -73,6 +104,8 @@ export function useCourseRecommendations({
   language: DiscoveryLanguage;
   /** Shared metadata; the course waits for it to know the area centre. */
   meta: ServiceMeta | undefined;
+  /** A course loaded before a language reload; used once if it still matches. */
+  restored?: CourseSnapshot;
   enabled: boolean;
 }) {
   const departure = initialLink?.origin ?? origin;
@@ -84,12 +117,22 @@ export function useCourseRecommendations({
   const date = initialLink?.visitDate ?? visitDate;
   const [attempt, setAttempt] = useState(0);
   const contextKey = JSON.stringify([lat, lng, start, date]);
-  const settingsKey = JSON.stringify([contextKey, options, language, attempt]);
+  // Language is not part of the key: switching it keeps the same course and
+  // only refreshes the stop names below.
+  const settingsKey = JSON.stringify([contextKey, options, attempt]);
   const key = JSON.stringify([settingsKey, initialLink]);
   const [state, setState] = useState<CourseState>();
   const latest = useRef<CourseState>(undefined);
   const lane = useMemo(() => createLatestRequest<LoadedCourse | null>(), []);
   const ready = enabled && lat !== null && lng !== null;
+  const languageRef = useRef(language);
+  const restoredRef = useRef(restored);
+  useEffect(() => {
+    languageRef.current = language;
+  }, [language]);
+  useEffect(() => {
+    restoredRef.current = restored;
+  }, [restored]);
 
   useEffect(() => {
     if (!ready || lat === null || lng === null) return;
@@ -105,6 +148,15 @@ export function useCourseRecommendations({
             ? undefined
             : initialLink;
         const datasetId = selectDataset(published, link?.datasetId).id;
+        const requestLanguage = languageRef.current;
+        const carried = restoredRef.current;
+        restoredRef.current = undefined;
+        if (
+          carried &&
+          link &&
+          carried.key === courseKey(contextKey, options, link)
+        )
+          return { result: carried.result, link, language: carried.language };
         const request = {
           datasetId,
           origin: { lat, lng },
@@ -112,7 +164,7 @@ export function useCourseRecommendations({
           visitDate: date,
           seed: link?.seed,
           options,
-          language,
+          language: requestLanguage,
         };
         const previousStopIds = link?.previousStopIds;
         let result = await getCourse({ ...request, previousStopIds }, signal);
@@ -139,6 +191,7 @@ export function useCourseRecommendations({
             previousStopIds,
             replacements,
           },
+          language: requestLanguage,
         };
       },
       {
@@ -182,7 +235,6 @@ export function useCourseRecommendations({
     date,
     initialLink,
     options,
-    language,
   ]);
 
   useEffect(() => lane.cancel, [ready, key, lane]);
@@ -227,6 +279,7 @@ export function useCourseRecommendations({
                   change,
                 ),
               },
+              language,
             }
           );
         }
@@ -249,6 +302,7 @@ export function useCourseRecommendations({
             previousStopIds,
             replacements: [],
           },
+          language,
         };
       },
       {
@@ -283,8 +337,57 @@ export function useCourseRecommendations({
     );
   }
 
+  // Refresh only the names when the language differs from the loaded one.
+  const shown = loaded ?? previous ?? undefined;
+  const routeIds = shown?.result.route.map(({ place }) => place.id).join(",");
+  const namesLane = useMemo(() => createLatestRequest<StopNames>(), []);
+  const [names, setNames] = useState<StopNames>();
+  useEffect(() => {
+    if (!routeIds || !shown || shown.language === language) {
+      namesLane.cancel();
+      return;
+    }
+    return namesLane.run(
+      async (signal) => ({
+        ids: routeIds,
+        language,
+        byId: await getCourseNames(routeIds.split(","), language, signal),
+      }),
+      { resolve: setNames, reject: () => undefined },
+    );
+  }, [routeIds, shown, language, namesLane]);
+  const route = useMemo(() => {
+    const base = result?.route ?? emptyRoute;
+    if (!names || names.ids !== routeIds || names.language !== language)
+      return base;
+    return base.map((stop) => {
+      const name = names.byId[stop.place.id];
+      return name
+        ? {
+            ...stop,
+            place: {
+              ...stop.place,
+              name,
+              ...(language === "ko" && { koreanName: name }),
+            },
+          }
+        : stop;
+    });
+  }, [result?.route, names, routeIds, language]);
+
   return {
-    route: result?.route ?? emptyRoute,
+    route,
+    snapshot: loaded
+      ? {
+          ...loaded,
+          key: courseKey(contextKey, options, loaded.link),
+          result: { ...loaded.result, route },
+          language:
+            names?.ids === routeIds && names?.language === language
+              ? language
+              : loaded.language,
+        }
+      : undefined,
     skipped: result?.skipped ?? emptySkipped,
     interruption: result?.interruption ?? null,
     pending: current?.pending ?? Boolean(previous),
