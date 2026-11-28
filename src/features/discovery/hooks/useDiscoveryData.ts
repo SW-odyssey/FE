@@ -315,6 +315,7 @@ export function useDiscoveryData({
   return {
     visible: listed.items,
     analyses: result.status === "success" ? (result.value.analyses ?? {}) : {},
+    cellReasons: result.status === "success" ? (listed.cellReasons ?? {}) : {},
     total: listed.total,
     hasMore: result.status === "success" && Boolean(listed.hasNext),
     moreStatus,

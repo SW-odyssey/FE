@@ -1,5 +1,6 @@
 import { getCoursePlaceDetail, v2Place, type ApiPlace } from "./course-api.ts";
 import { placeSearchTerm, searchPlaces } from "./place-search.ts";
+import { parseCellReasons, type CellReasonCode } from "../cell-reasons.ts";
 import type { LocalPlace } from "../model.ts";
 import {
   areaCenter,
@@ -56,6 +57,55 @@ async function request<T>(
   }
 }
 
+type Scope = { dataset: { id: string }; weekday: string; slot: string };
+
+/**
+ * Read the reasons of the cells on one list page with one request
+ * (GET /api/v2/cells/reasons accepts up to 30 cells).
+ *
+ * @returns Reasons by cell ID. A failed lookup leaves the cards without
+ * reasons instead of failing the list; an abort still rejects.
+ */
+async function cellReasons(
+  places: readonly LocalPlace[],
+  scope: Scope,
+  signal?: AbortSignal,
+): Promise<Record<string, CellReasonCode[]>> {
+  const ids = [
+    ...new Set(places.flatMap(({ cellId }) => (cellId ? [cellId] : []))),
+  ].filter((id) => /^\d{1,19}$/.test(id));
+  const chunks = [];
+  for (let start = 0; start < ids.length; start += 30)
+    chunks.push(ids.slice(start, start + 30));
+  const found = await Promise.all(
+    chunks.map((chunk) =>
+      getV2Data<{ reasonsByCellId?: unknown }>(
+        "cells/reasons",
+        signal,
+        new URLSearchParams({
+          datasetId: scope.dataset.id,
+          weekday: scope.weekday,
+          slot: scope.slot,
+          cellIds: chunk.join(","),
+        }),
+      ).then(
+        (data) =>
+          // Keep only the cells this lookup asked for.
+          Object.fromEntries(
+            Object.entries(parseCellReasons(data.reasonsByCellId)).filter(
+              ([id]) => chunk.includes(id),
+            ),
+          ),
+        () => {
+          signal?.throwIfAborted();
+          return {};
+        },
+      ),
+    ),
+  );
+  return Object.assign({}, ...found);
+}
+
 /** Create the v2 source for the normal discovery screens. */
 export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
   async function context(input: DiscoveryQuery, signal?: AbortSignal) {
@@ -92,7 +142,11 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
     const items = data.items
       .filter(({ kind }) => kind !== "shop" && kind !== "play")
       .map(v2Place);
-    return { items, total: items.length };
+    return {
+      items,
+      total: items.length,
+      cellReasons: await cellReasons(items, scope, signal),
+    };
   }
 
   async function areaPage(
@@ -100,7 +154,8 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
     page: number,
     signal?: AbortSignal,
   ) {
-    const { meta, dataset, weekday, slot } = await context(input, signal);
+    const scope = await context(input, signal);
+    const { meta, dataset, weekday, slot } = scope;
     const params = new URLSearchParams({
       datasetId: dataset.id,
       weekday,
@@ -112,7 +167,12 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
     if (input.area !== "all" && isServiceArea(meta, input.area))
       params.set("areaId", input.area);
     if (input.language) params.set("lang", input.language);
-    return request<ApiAreaPage>("area-recommendations", params, signal);
+    const data = await request<ApiAreaPage>(
+      "area-recommendations",
+      params,
+      signal,
+    );
+    return { data, scope };
   }
 
   return {
@@ -131,24 +191,35 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
       // A map search or the device location uses the coordinate route.
       if (input.origin)
         return nearby(input, await context(input, signal), signal);
-      const data = await areaPage(input, 0, signal);
+      const { data, scope } = await areaPage(input, 0, signal);
       const items = uniquePlaces([], data.items);
       return {
         items,
         total: data.total,
         page: data.page,
         hasNext: data.hasNext,
+        cellReasons: await cellReasons(items, scope, signal),
       };
     },
     async queryNext(input, previous, { signal } = {}) {
       if (!previous.hasNext) return previous;
       const page = (previous.page ?? 0) + 1;
-      const data = await areaPage(input, page, signal);
+      const { data, scope } = await areaPage(input, page, signal);
+      const items = uniquePlaces(previous.items, data.items);
+      // Only cells that are new on this page need a lookup.
+      const known = previous.cellReasons ?? {};
+      const added = items
+        .slice(previous.items.length)
+        .filter(({ cellId }) => !cellId || !Object.hasOwn(known, cellId));
       return {
-        items: uniquePlaces(previous.items, data.items),
+        items,
         total: data.total,
         page: data.page,
         hasNext: data.hasNext,
+        cellReasons: {
+          ...known,
+          ...(await cellReasons(added, scope, signal)),
+        },
       };
     },
     async getPlace(id, { signal, query } = {}) {

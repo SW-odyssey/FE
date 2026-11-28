@@ -37,6 +37,7 @@ type Props = Pick<
   | "moreStatus"
   | "loadMore"
   | "areaName"
+  | "reasonsFor"
 > &
   React.ComponentProps<typeof DiscoveryControls> & { mapScopeActive?: boolean };
 export function DiscoverScreen(props: Props) {

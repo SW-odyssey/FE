@@ -45,6 +45,9 @@ import {
 import { useDialogLifecycle } from "./useDialogLifecycle";
 import { useDiscoveryData } from "./useDiscoveryData";
 import { useServiceMeta } from "./useServiceMeta";
+import type { CellReasonCode } from "../cell-reasons";
+
+const noReasons: readonly CellReasonCode[] = [];
 
 type MapLanguageRestore = {
   language: DiscoveryLanguage;
@@ -510,6 +513,9 @@ export function useDiscoveryController(
   const mapSdkEnabled = restored && (!restoringMap || !mapDataPending);
   const summary = (place: LocalPlace) => data.summaryFor(place, language);
   const analysisFor = (place: LocalPlace) => data.analyses[place.id];
+  /** @returns The list reasons of the place's 50 m cell; empty outside the live list. */
+  const reasonsFor = (place: Pick<LocalPlace, "cellId">) =>
+    (place.cellId && data.cellReasons[place.cellId]) || noReasons;
   const description = (place: LocalPlace) =>
     data.descriptionFor(place, language);
   const mapVisible = useMemo(
@@ -886,6 +892,7 @@ export function useDiscoveryController(
   return {
     activity,
     analysisFor,
+    reasonsFor,
     liveRecommendations,
     featuredId,
     setFeaturedId,
