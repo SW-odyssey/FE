@@ -46,6 +46,8 @@ type Props = Pick<
   | "name"
   | "kind"
   | "areaName"
+  | "nearbyScope"
+  | "searchTerm"
   | "status"
   | "retry"
 > &
@@ -367,7 +369,12 @@ export function MapScreen(props: Props) {
               )
             ) : (
               <div className="local-empty-map">
-                {t("No places found", "장소가 없어요")}
+                {props.nearbyScope === "map" && !props.searchTerm
+                  ? t(
+                      "No places within 300 m of the map centre",
+                      "지도 중심 300m 안에 추천 장소가 없어요",
+                    )
+                  : t("No places found", "장소가 없어요")}
                 <button
                   className="local-secondary"
                   onClick={

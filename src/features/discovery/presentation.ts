@@ -133,6 +133,34 @@ export function formatReferenceMonth(
     zh: `LG U+ ${label}数据`,
   }[language];
 }
+/** Radius of GET /api/v2/recommendations around the sent point (BE contract). */
+export const nearbyRadiusMeters = 300;
+/**
+ * @param scope Which point the nearby request used
+ * @param count Places returned (the route has no paging)
+ * @param language UI language
+ * @returns e.g. "12 places within 300 m of the map centre"
+ */
+export function formatNearbyCount(
+  scope: "map" | "location",
+  count: number,
+  language: DiscoveryLanguage,
+): string {
+  const r = nearbyRadiusMeters;
+  return scope === "map"
+    ? {
+        en: `${count} places within ${r} m of the map centre`,
+        ko: `지도 중심 ${r}m 안 ${count}곳`,
+        ja: `地図の中心から${r}m以内 ${count}件`,
+        zh: `地图中心${r}米内 共${count}家`,
+      }[language]
+    : {
+        en: `${count} places within ${r} m of you`,
+        ko: `내 위치 ${r}m 안 ${count}곳`,
+        ja: `現在地から${r}m以内 ${count}件`,
+        zh: `您附近${r}米内 共${count}家`,
+      }[language];
+}
 /**
  * @param loaded Places shown so far
  * @param total Server match count before paging

@@ -36,8 +36,23 @@ const copy: Record<string, readonly [string, string]> = {
     "ドラッグするか上下の矢印キーで高さを変更",
     "拖动或使用上下方向键调整高度",
   ],
-  "Search this area": ["このエリアで再検索", "在此区域重新搜索"],
-  "Map area": ["地図で選択", "地图选区"],
+  "Search 300 m around the map centre": [
+    "中心300m以内を再検索",
+    "搜索地图中心300米内",
+  ],
+  "Map · 300 m": ["地図・300m", "地图·300米"],
+  "No places within 300 m of the map centre": [
+    "地図の中心から300m以内におすすめはありません",
+    "地图中心300米内没有推荐地点",
+  ],
+  "No places within 300 m of you": [
+    "現在地から300m以内におすすめはありません",
+    "您附近300米内没有推荐地点",
+  ],
+  "Move the map and search again, or choose an area.": [
+    "地図を動かして再検索するか、エリアを選んでください。",
+    "请移动地图重新搜索，或选择区域。",
+  ],
   "Apply filters": ["条件を適用", "应用条件"],
   "Include a café": ["カフェを含める", "加入咖啡馆"],
   "Include shopping": ["お店巡りを含める", "加入逛店"],

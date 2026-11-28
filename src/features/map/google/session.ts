@@ -433,9 +433,33 @@ export function createGoogleExploreMapSession(
       const center = map.getCenter();
       const bounds = map.getBounds();
       if (!center || !bounds) return null;
+      const projection = pins.overlay.getProjection();
+      if (!projection)
+        return {
+          center: center.toJSON(),
+          contains: (point) => bounds.contains(point),
+        };
+      // The canvas runs under the search bar and the bottom sheet, so its
+      // geometric centre is not what the user sees. Search the centre of
+      // the uncovered area, and judge "no results here" on that area too.
+      const { top, bottom } = padding();
+      const width = element.clientWidth;
+      const visibleBottom = Math.max(top + 1, element.clientHeight - bottom);
+      const visibleCenter = projection.fromContainerPixelToLatLng(
+        new google.maps.Point(width / 2, (top + visibleBottom) / 2),
+      );
       return {
-        center: center.toJSON(),
-        contains: (point) => bounds.contains(point),
+        center: visibleCenter?.toJSON() ?? center.toJSON(),
+        contains: (point) => {
+          const pixel = projection.fromLatLngToContainerPixel(point);
+          return Boolean(
+            pixel &&
+            pixel.x >= 0 &&
+            pixel.x <= width &&
+            pixel.y >= top &&
+            pixel.y <= visibleBottom,
+          );
+        },
       };
     },
     fitRecommendations,

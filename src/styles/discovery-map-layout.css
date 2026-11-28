@@ -411,6 +411,8 @@
   align-items: center;
   gap: 7px;
   min-height: 42px;
+  /* Centred with left: 50%, so shrink-to-fit would only see half the map. */
+  width: max-content;
   max-width: calc(100% - 112px);
   padding: 7px 14px;
   border-radius: var(--r-pill);

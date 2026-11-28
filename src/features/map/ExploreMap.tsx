@@ -120,7 +120,10 @@ export default function ExploreMap(props: ExploreMapProps) {
             onClick={searchArea}
           >
             <LocalIcon name="refresh" size={17} />
-            {t("Search this area", "이 지도에서 다시 검색")}
+            {t(
+              "Search 300 m around the map centre",
+              "지도 중심 300m 안에서 다시 검색",
+            )}
           </button>
         )}
         <div className="local-map-notes">
