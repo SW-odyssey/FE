@@ -1,31 +1,10 @@
-import type {
-  DiscoveryArea,
-  DiscoveryLanguage,
-  SpacePreference,
-} from "./model";
+import type { DiscoveryLanguage, SpacePreference } from "./model";
 export const spaceLabels: Record<SpacePreference, readonly [string, string]> = {
   hanok: ["Hanok", "한옥"],
   courtyard: ["Courtyard", "마당"],
   cozy: ["Cozy", "아늑함"],
   retro: ["Retro", "레트로"],
 };
-export function mapAreaLabel(
-  area: DiscoveryArea,
-  language: DiscoveryLanguage,
-): string {
-  const names: Record<
-    DiscoveryArea,
-    readonly [string, string, string, string]
-  > = {
-    all: ["All areas", "전체 지역", "全エリア", "全部区域"],
-    jongno: ["Jongno", "종로", "鍾路", "钟路"],
-    ikseon: ["Ikseon", "익선동", "益善洞", "益善洞"],
-    insa: ["Insadong", "인사동", "仁寺洞", "仁寺洞"],
-    eulji: ["Euljiro", "을지로", "乙支路", "乙支路"],
-    bukchon: ["Bukchon", "북촌", "北村", "北村"],
-  };
-  return names[area][({ en: 0, ko: 1, ja: 2, zh: 3 } as const)[language]];
-}
 export const languages = ["ko", "en", "ja", "zh"] as const;
 export const languageNames: Record<DiscoveryLanguage, string> = {
   ko: "한국어",

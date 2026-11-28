@@ -3,9 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CourseOptions } from "../course";
 import {
-  courseOrigin,
   getCourse,
-  getCourseDataset,
   type CourseRequest,
   type CourseResult,
 } from "../data/course-api";
@@ -15,6 +13,15 @@ import {
   replaceCourseSuffix,
 } from "../data/course-replacement";
 import { createLatestRequest } from "../data/latest-request";
+import {
+  areaCenter,
+  hasDataset,
+  invalidateServiceMeta,
+  isMissingDatasetResponse,
+  loadServiceMeta,
+  selectDataset,
+  type ServiceMeta,
+} from "../data/service-meta";
 import type {
   Coordinate,
   DiscoveryArea,
@@ -54,6 +61,7 @@ export function useCourseRecommendations({
   initialLink,
   options,
   language,
+  meta,
   enabled,
 }: {
   area: DiscoveryArea;
@@ -63,16 +71,15 @@ export function useCourseRecommendations({
   initialLink?: CourseLink;
   options: CourseOptions;
   language: DiscoveryLanguage;
+  /** Shared metadata; the course waits for it to know the area centre. */
+  meta: ServiceMeta | undefined;
   enabled: boolean;
 }) {
   const departure = initialLink?.origin ?? origin;
   const hasCustomOrigin = Boolean(departure);
-  const { lat, lng } = departure
-    ? {
-        lat: Number(departure.lat.toFixed(5)),
-        lng: Number(departure.lng.toFixed(5)),
-      }
-    : courseOrigin(area);
+  const center = departure ?? (meta ? areaCenter(meta, area) : null);
+  const lat = center ? Number(center.lat.toFixed(5)) : null;
+  const lng = center ? Number(center.lng.toFixed(5)) : null;
   const start = initialLink?.startSlot ?? slot;
   const date = initialLink?.visitDate ?? visitDate;
   const [attempt, setAttempt] = useState(0);
@@ -82,32 +89,35 @@ export function useCourseRecommendations({
   const [state, setState] = useState<CourseState>();
   const latest = useRef<CourseState>(undefined);
   const lane = useMemo(() => createLatestRequest<LoadedCourse | null>(), []);
-  const dataset = useRef<string | null>(null);
+  const ready = enabled && lat !== null && lng !== null;
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!ready || lat === null || lng === null) return;
     if (matchesCourse(latest.current, key) && !latest.current?.pending) return;
     return lane.run(
       async (signal) => {
-        const datasetId =
-          initialLink?.datasetId ??
-          dataset.current ??
-          (await getCourseDataset(signal));
-        signal.throwIfAborted();
-        if (!initialLink?.datasetId) dataset.current = datasetId;
+        const published = await loadServiceMeta(signal);
+        // A link to a retired dataset cannot replay its seed or swaps, so it
+        // starts a new course from the current default dataset instead.
+        const link =
+          initialLink?.datasetId &&
+          !hasDataset(published, initialLink.datasetId)
+            ? undefined
+            : initialLink;
+        const datasetId = selectDataset(published, link?.datasetId).id;
         const request = {
           datasetId,
           origin: { lat, lng },
           slot: start,
           visitDate: date,
-          seed: initialLink?.seed,
+          seed: link?.seed,
           options,
           language,
         };
-        const previousStopIds = initialLink?.previousStopIds;
+        const previousStopIds = link?.previousStopIds;
         let result = await getCourse({ ...request, previousStopIds }, signal);
         const replacements = [];
-        for (const change of initialLink?.replacements ?? []) {
+        for (const change of link?.replacements ?? []) {
           const suffix = await replaceCourseSuffix(
             request,
             result,
@@ -145,8 +155,8 @@ export function useCourseRecommendations({
           latest.current = next;
           setState(next);
         },
-        reject: () => {
-          dataset.current = null;
+        reject: (error) => {
+          if (isMissingDatasetResponse(error)) invalidateServiceMeta();
           const next = {
             key,
             contextKey,
@@ -160,7 +170,7 @@ export function useCourseRecommendations({
       },
     );
   }, [
-    enabled,
+    ready,
     key,
     settingsKey,
     contextKey,
@@ -175,7 +185,7 @@ export function useCourseRecommendations({
     language,
   ]);
 
-  useEffect(() => lane.cancel, [enabled, key, lane]);
+  useEffect(() => lane.cancel, [ready, key, lane]);
 
   const current = matchesCourse(state, key) ? state : undefined;
   const loaded = current?.loaded;
@@ -184,7 +194,8 @@ export function useCourseRecommendations({
   const result = loaded?.result ?? previous?.result;
 
   function regenerate(slot?: VisitSlot) {
-    if (!loaded || latest.current?.pending) return;
+    if (!loaded || latest.current?.pending || lat === null || lng === null)
+      return;
     const request: CourseRequest = {
       datasetId: loaded.result.datasetId,
       origin: { lat, lng },

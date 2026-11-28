@@ -1,46 +1,35 @@
+import { getCoursePlaceDetail, v2Place, type ApiPlace } from "./course-api.ts";
 import {
-  courseOrigin,
-  getCoursePlaceDetail,
-  v2Place,
-  type ApiPlace,
-} from "./course-api.ts";
-import {
-  getPublishedDataset,
-  getV2Data,
-  v2Time,
-  V2RequestError,
-} from "./v2-client.ts";
+  areaCenter,
+  invalidateServiceMeta,
+  isMissingDatasetResponse,
+  loadServiceMeta,
+  selectDataset,
+} from "./service-meta.ts";
+import { getV2Data, v2Time, V2RequestError } from "./v2-client.ts";
 import { previewDataSource } from "./preview.ts";
 import type { DiscoveryDataSource, DiscoveryQuery } from "./types.ts";
 
 /** Create the v2 source for the normal discovery screens. */
 export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
-  let published: Promise<string> | undefined;
-
-  function dataset(signal?: AbortSignal) {
-    signal?.throwIfAborted();
-    published ??= getPublishedDataset(AbortSignal.timeout(15_000)).catch(
-      (error) => {
-        published = undefined;
-        throw error;
-      },
-    );
-    return published;
-  }
-
   async function context(input: DiscoveryQuery, signal?: AbortSignal) {
     if (!input.visitDate) throw new Error("Missing Seoul visit date");
-    const datasetId = input.datasetId ?? (await dataset(signal));
-    signal?.throwIfAborted();
-    return { datasetId, ...v2Time(input.visitDate, input.slot) };
+    const meta = await loadServiceMeta(signal);
+    const dataset = selectDataset(meta, input.datasetId);
+    const { weekday, slot } = v2Time(input.visitDate, input.slot);
+    return { meta, dataset, weekday, slot };
   }
 
   return {
     async query(input, { signal } = {}) {
-      const scope = await context(input, signal);
-      const { lat, lng } = input.origin ?? courseOrigin(input.area);
+      const { meta, dataset, weekday, slot } = await context(input, signal);
+      const center = input.origin ?? areaCenter(meta, input.area);
+      if (!center) throw new Error("No service area in metadata");
+      const { lat, lng } = center;
       const params = new URLSearchParams({
-        ...scope,
+        datasetId: dataset.id,
+        weekday,
+        slot,
         lat: String(lat),
         lng: String(lng),
         category: input.category === "culture" ? "all" : input.category,
@@ -54,8 +43,7 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
           items: (ApiPlace & { cellId: string })[];
         }>("recommendations", signal, params);
       } catch (error) {
-        if (error instanceof V2RequestError && error.status === 404)
-          published = undefined;
+        if (isMissingDatasetResponse(error)) invalidateServiceMeta();
         throw error;
       }
       const items = data.items
@@ -90,7 +78,8 @@ export function createLiveDiscoveryDataSource(): DiscoveryDataSource {
         visitPattern: {
           provenance: "live",
           cellId: detail.place.cellId,
-          datasetId: scope.datasetId,
+          datasetId: scope.dataset.id,
+          referenceMonth: scope.dataset.referenceMonth,
           weekday: scope.weekday,
         },
       };

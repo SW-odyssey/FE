@@ -52,16 +52,3 @@ export async function getV2Data<T>(
     throw new Error("Odyssey API did not return data");
   return payload.data;
 }
-
-/** Return the newest published dataset ID selected by the BE metadata. */
-export async function getPublishedDataset(
-  signal?: AbortSignal,
-): Promise<string> {
-  const { datasets } = await getV2Data<{ datasets: { id: string }[] }>(
-    "meta",
-    signal,
-  );
-  const dataset = datasets[0];
-  if (!dataset?.id) throw new Error("No published recommendation dataset");
-  return dataset.id;
-}

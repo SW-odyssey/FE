@@ -10,13 +10,13 @@ import {
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
 import type { LocalPlace } from "../model";
-import { areaLabels } from "../presentation";
 import { discoveryCopy } from "../recommendation-analysis";
 import { Photo } from "./PlacePhoto";
 
 type Props = Pick<
   DiscoveryController,
   | "language"
+  | "areaName"
   | "kind"
   | "name"
   | "openPlace"
@@ -67,6 +67,7 @@ function slideAtScroll(node: HTMLDivElement) {
 export function FeaturedCarousel({
   places,
   language,
+  areaName,
   kind,
   name,
   openPlace,
@@ -297,7 +298,7 @@ export function FeaturedCarousel({
               <strong>{name(place)}</strong>
               <span>
                 <LocalIcon name="map-pin" size={13} />
-                {place.area && `${areaLabels[language][place.area]} · `}
+                {place.area && `${areaName(place.area)} · `}
                 {kind(place)}
               </span>
             </span>

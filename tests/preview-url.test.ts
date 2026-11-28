@@ -111,8 +111,18 @@ test("only a missing area or Jongno restores the current-area flag", () => {
     assert.equal(state.area, "all");
     assert.equal(state.currentArea, false);
   }
-  for (const area of ["ikseon", "insa", "eulji", "bukchon"]) {
+  for (const area of ["ikseon", "insadong", "euljiro", "myeongdong"]) {
     const state = readPreviewUrl(`?area=${area}`, now, null);
+    assert.equal(state.area, area);
+    assert.equal(state.currentArea, false);
+  }
+  // Links made before the server area IDs keep working (#77).
+  for (const [legacy, area] of [
+    ["insa", "insadong"],
+    ["eulji", "euljiro"],
+    ["bukchon", "all"],
+  ]) {
+    const state = readPreviewUrl(`?area=${legacy}`, now, null);
     assert.equal(state.area, area);
     assert.equal(state.currentArea, false);
   }
@@ -363,7 +373,7 @@ test("back navigation restores the earlier map, date and filter URL without late
   const earlier: PreviewUrlSelection = {
     ...defaults,
     view: "map",
-    area: "eulji",
+    area: "euljiro",
     language: "ja",
     query: "coffee",
     category: "food",
@@ -435,7 +445,7 @@ test("duplicate query keys use their first value, matching URLSearchParams resto
     null,
   );
   assert.equal(state.view, "map");
-  assert.equal(state.area, "insa");
+  assert.equal(state.area, "insadong");
   assert.equal(state.language, "zh");
   assert.equal(state.slot, "lunch");
   assert.equal(state.day, 2);

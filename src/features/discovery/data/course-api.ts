@@ -1,8 +1,8 @@
 import type { CourseOptions } from "../course.ts";
 import type {
+  AreaId,
   Coordinate,
   CoursePlaceKind,
-  DiscoveryArea,
   DiscoveryLanguage,
   LocalPlace,
   VisitSlot,
@@ -12,21 +12,7 @@ import type { DiscoveryPlaceDetail } from "./types.ts";
 import { previewPlaceDetail } from "./preview.ts";
 import { localPlaces } from "./preview/places.ts";
 
-import {
-  getPublishedDataset,
-  getV2Data,
-  screenSlots,
-  v2Time,
-} from "./v2-client.ts";
-
-const origins: Record<DiscoveryArea, Coordinate> = {
-  all: { lat: 37.5716, lng: 126.9861 },
-  jongno: { lat: 37.5716, lng: 126.9861 },
-  ikseon: { lat: 37.5736, lng: 126.989 },
-  insa: { lat: 37.57445, lng: 126.98493 },
-  eulji: { lat: 37.5655342, lng: 126.9903373 },
-  bukchon: { lat: 37.5804, lng: 126.9849 },
-};
+import { getV2Data, screenSlots, v2Time } from "./v2-client.ts";
 
 const categories = {
   korean: "food",
@@ -52,6 +38,8 @@ export type ApiPlace = Coordinate & {
   googlePlaceId: string | null;
   cellId?: string;
   sinceDate?: string | null;
+  /** Server area ID matching GET /api/v2/meta `areas[].id`. */
+  areaId?: AreaId | null;
 };
 
 type ApiCourseStop = {
@@ -101,13 +89,6 @@ export type CourseRequest = {
   language?: DiscoveryLanguage;
 };
 
-/** Return the departure point for a selected area in the course API. */
-export function courseOrigin(area: DiscoveryArea): Coordinate {
-  return origins[area];
-}
-
-export const getCourseDataset = getPublishedDataset;
-
 /** Map the Seoul calendar date and departure slot to the course endpoint parameters. */
 export function courseSearchParams(request: CourseRequest): URLSearchParams {
   const { weekday, slot } = v2Time(request.visitDate, request.slot);
@@ -138,7 +119,7 @@ export function v2Place(place: ApiPlace): LocalPlace {
     id: mapApiIdToDiscovery(place.id),
     name: place.name,
     koreanName: place.name,
-    area: null,
+    area: place.areaId ?? null,
     category: categories[place.kind],
     courseKind: place.kind,
     cellId: place.cellId,

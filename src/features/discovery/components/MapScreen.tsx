@@ -45,6 +45,7 @@ type Props = Pick<
   | "view"
   | "name"
   | "kind"
+  | "areaName"
   | "status"
   | "retry"
 > &

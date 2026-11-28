@@ -1,10 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
-  courseOrigin,
   courseSearchParams,
   getCourse,
-  getCourseDataset,
   getCoursePlaceDetail,
 } from "../src/features/discovery/data/course-api.ts";
 
@@ -12,7 +10,7 @@ const request = {
   datasetId: "published",
   visitDate: "2026-11-27",
   slot: "evening" as const,
-  origin: courseOrigin("eulji"),
+  origin: { lat: 37.565748, lng: 126.99013 },
 };
 
 test("course queries use the Seoul weekday and v2 start slot", () => {
@@ -20,8 +18,8 @@ test("course queries use the Seoul weekday and v2 start slot", () => {
     datasetId: "published",
     weekday: "fri",
     startSlot: "dinner",
-    lat: "37.5655342",
-    lng: "126.9903373",
+    lat: "37.565748",
+    lng: "126.99013",
   });
 });
 
@@ -36,7 +34,7 @@ test("full course rebuild sends previous stores without excluding them", () => {
   assert.equal(query.has("excludeIds"), false);
 });
 
-test("course adapter loads the published batch and keeps server positions and empty states", async (t) => {
+test("course adapter keeps server positions, area IDs and empty states", async (t) => {
   const response = {
     status: "PARTIAL",
     context: { datasetId: "published" },
@@ -58,24 +56,20 @@ test("course adapter loads the published batch and keeps server positions and em
           lng: 126.99,
           distanceMeters: 200,
           googlePlaceId: null,
+          areaId: "euljiro",
         },
       },
     ],
     skipped: [{ position: 5, slot: "dinner", reason: "SKIPPED_FOR_ROUTE" }],
     interruption: { slot: "late_night", reason: "NO_NEARBY_MATCH" },
   };
-  const fetch = t.mock.method(globalThis, "fetch", async (url: URL) =>
-    Response.json({
-      success: true,
-      data: url.pathname.endsWith("/meta")
-        ? { datasets: [{ id: "published" }] }
-        : response,
-    }),
+  const fetch = t.mock.method(globalThis, "fetch", async () =>
+    Response.json({ success: true, data: response }),
   );
   const { signal } = new AbortController();
-  const datasetId = await getCourseDataset(signal);
-  const course = await getCourse({ ...request, datasetId }, signal);
-  assert.equal(fetch.mock.callCount(), 2);
+  const course = await getCourse(request, signal);
+  assert.equal(fetch.mock.callCount(), 1);
+  assert.equal(course.route[0]?.place.area, "euljiro");
   assert.equal(course.status, "PARTIAL");
   assert.equal(course.route[0]?.position, 4);
   assert.equal(course.route[0]?.place.id, "41");

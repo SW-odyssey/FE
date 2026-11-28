@@ -29,13 +29,14 @@ export type ApiMappingResult<T> =
       ok: false;
       issues: ApiMappingIssue[];
     };
-const areas = {
+const areas: Record<string, ApiAreaId> = {
   all: "all",
   jongno: "jongno",
   ikseon: "ikseon",
-  insa: "insadong",
-  eulji: "euljiro",
-} as const;
+  insadong: "insadong",
+  euljiro: "euljiro",
+  myeongdong: "myeongdong",
+};
 const slots = {
   lunch: "lunch",
   afternoon: "afternoon",
@@ -54,7 +55,7 @@ function isCalendarDate(value: string | undefined): value is string {
  * @param input Current UI selections and an explicitly derived Seoul visitDate
  * @param food Food-only API selections, emitted only for category=food
  * @returns The #28/#30 query or unresolved selections; it performs no request.
- * Bukchon and concept filters need an agreed contract. Origin and UI language
+ * Concept filters need an agreed contract. Origin and UI language
  * stay client-side. Date-range and search-length policy belong to the caller.
  */
 export function mapDiscoveryQueryToApi(
@@ -65,11 +66,11 @@ export function mapDiscoveryQueryToApi(
   } = {},
 ): ApiMappingResult<ApiRecommendationsQuery> {
   const issues: ApiMappingIssue[] = [];
-  if (input.area === "bukchon")
+  if (!Object.hasOwn(areas, input.area))
     issues.push({
       field: "area",
       code: "UNMAPPED_AREA",
-      message: "북촌의 서버 지역 범위는 합의가 필요합니다.",
+      message: "서버 메타에 없는 지역입니다.",
     });
   if (input.category === "culture")
     issues.push({
@@ -93,7 +94,7 @@ export function mapDiscoveryQueryToApi(
   return {
     ok: true,
     value: {
-      areaId: areas[input.area as keyof typeof areas],
+      areaId: areas[input.area],
       category: input.category as ApiRecommendationsQuery["category"],
       ...(input.category === "food"
         ? { foodType: food.foodType ?? "any", since: food.since ?? "any" }

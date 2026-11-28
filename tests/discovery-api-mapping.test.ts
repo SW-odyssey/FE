@@ -9,7 +9,7 @@ import {
 import type { DiscoveryQuery } from "../src/features/discovery/data/types.ts";
 
 const input: DiscoveryQuery = {
-  area: "insa",
+  area: "insadong",
   category: "food",
   query: "공평",
   slot: "evening",
@@ -58,7 +58,7 @@ test("known preview choices map to the exact eight server query keys", () => {
 test("cafe mapping uses no food-only, preview space or language parameters", () => {
   const result = mapDiscoveryQueryToApi({
     ...input,
-    area: "eulji",
+    area: "euljiro",
     category: "cafe",
     slot: "late",
     activity: "any",
@@ -83,10 +83,10 @@ test("cafe mapping uses no food-only, preview space or language parameters", () 
     assert.equal(params.has(unsupported), false);
 });
 
-test("unresolved Bukchon, culture and concept selections cannot masquerade as supported API filters", () => {
+test("unpublished areas, culture and concept selections cannot masquerade as supported API filters", () => {
   const result = mapDiscoveryQueryToApi({
     ...input,
-    area: "bukchon",
+    area: "seochon",
     category: "culture",
     spaces: ["hanok"],
   });

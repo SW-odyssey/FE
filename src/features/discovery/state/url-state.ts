@@ -1,8 +1,5 @@
-import type {
-  DiscoveryArea,
-  DiscoveryLanguage,
-  DiscoveryView,
-} from "../model.ts";
+import { readAreaParam } from "../presentation.ts";
+import type { DiscoveryLanguage, DiscoveryView } from "../model.ts";
 export function readDiscoveryUrl(search: string) {
   const params = new URLSearchParams(search);
   const view = params.get("view");
@@ -11,11 +8,7 @@ export function readDiscoveryUrl(search: string) {
     view: (["discover", "course", "map"].includes(view ?? "")
       ? view
       : "discover") as DiscoveryView,
-    area: (["all", "jongno", "ikseon", "insa", "eulji", "bukchon"].includes(
-      area ?? "",
-    )
-      ? area
-      : "all") as DiscoveryArea,
+    area: readAreaParam(area),
     language: (["en", "ko", "ja", "zh"].includes(params.get("lang") ?? "")
       ? params.get("lang")
       : "en") as DiscoveryLanguage,

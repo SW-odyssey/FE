@@ -63,7 +63,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJedlDzuWifDURBaOCaa5hkL4",
     name: "Coffee Hanyakbang",
     koreanName: "커피한약방",
-    area: "eulji",
+    area: "euljiro",
     category: "cafe",
     image: "/assets/local/hanyakbang.jpg",
     descriptionEn:
@@ -81,7 +81,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJQRutlcKifDURiMoaUPYmWX4",
     name: "Ssamziegil",
     koreanName: "쌈지길",
-    area: "insa",
+    area: "insadong",
     category: "culture",
     image: "/assets/local/ssamziegil.jpg",
     descriptionEn:
@@ -98,7 +98,7 @@ export const localPlaces: LocalPlace[] = [
     id: "nogari",
     name: "Nogari Alley",
     koreanName: "을지로 노가리 골목",
-    area: "eulji",
+    area: "euljiro",
     category: "food",
     image: "/assets/local/nogari.jpg",
     descriptionEn:
@@ -117,7 +117,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJx3KYRuSjfDURTmn2MdETH0k",
     name: "Osulloc Bukchon",
     koreanName: "오설록 북촌",
-    area: "bukchon",
+    area: null,
     category: "cafe",
     image: "/assets/local/osulloc.jpg",
     descriptionEn:
@@ -136,7 +136,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJN0aOM-iifDUR98SZc1MQre0",
     name: "Imun Seollongtang",
     koreanName: "이문설농탕",
-    area: "insa",
+    area: "insadong",
     category: "food",
     image: "/assets/local/imun.jpg",
     descriptionEn:
@@ -154,7 +154,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJr1nKrsSifDURgg2lrxJlNZU",
     name: "Café Layered",
     koreanName: "카페 레이어드",
-    area: "bukchon",
+    area: null,
     category: "cafe",
     image: "/assets/local/layered.jpg",
     descriptionEn:
@@ -241,7 +241,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJJ9CNUjOjfDURfSXr8cXKQ4o",
     name: "Cha Masineun Tteul",
     koreanName: "차마시는뜰",
-    area: "bukchon",
+    area: null,
     category: "cafe",
     image: "/assets/local/chatteul.jpg",
     descriptionEn:
@@ -263,7 +263,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJswulBeiifDUR9vi4V4siQ8I",
     name: "Beautiful Tea Room",
     koreanName: "아름다운 차박물관 찻집",
-    area: "insa",
+    area: "insadong",
     category: "cafe",
     image: "/assets/local/beautifultea.jpg",
     descriptionEn:
@@ -286,7 +286,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJI9JAR8-ifDURSFjz37c33lE",
     name: "Samcheong-dong Sujebi",
     koreanName: "삼청동수제비",
-    area: "bukchon",
+    area: null,
     category: "food",
     image: "/assets/local/sujebi.jpg",
     descriptionEn:
@@ -309,7 +309,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJn75_FOGifDUR29kfireXljw",
     name: "Joseonok",
     koreanName: "조선옥",
-    area: "eulji",
+    area: "euljiro",
     category: "food",
     image: "/assets/local/joseonok.jpg",
     descriptionEn:
@@ -332,7 +332,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJ2xI4RQCjfDURiZ0atPhWxcY",
     name: "Dalmaji Barbecue",
     koreanName: "달맞이광장 바베큐",
-    area: "eulji",
+    area: "euljiro",
     category: "food",
     image: "/assets/local/dalmaji.jpg",
     descriptionEn:
@@ -355,7 +355,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJwXiLP-CifDURg8Q2HfLxWK8",
     name: "Sammijung",
     koreanName: "삼미정",
-    area: "eulji",
+    area: "euljiro",
     category: "food",
     image: "/assets/local/sammijung.jpg",
     descriptionEn:
@@ -377,7 +377,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJqw-SrcKifDURleSrRbcdhDE",
     name: "Banjjak Tea House",
     koreanName: "반짝반짝 빛나는",
-    area: "insa",
+    area: "insadong",
     category: "cafe",
     image: "/assets/local/banjjak.jpg",
     descriptionEn:
@@ -400,7 +400,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJVS4NJs-ifDURkgXADmJ4Ui4",
     name: "Soseonjae",
     koreanName: "소선재",
-    area: "bukchon",
+    area: null,
     category: "food",
     image: "/assets/local/soseonjae.jpg",
     descriptionEn:
@@ -422,7 +422,7 @@ export const localPlaces: LocalPlace[] = [
     googlePlaceId: "ChIJG_zBE-iifDURGS5-a17d2Qs",
     name: "Hanaro Hwaegwan",
     koreanName: "하나로회관",
-    area: "insa",
+    area: "insadong",
     category: "food",
     image: "/assets/local/hanaro.jpg",
     descriptionEn:

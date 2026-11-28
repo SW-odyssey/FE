@@ -46,6 +46,8 @@ export type AreaVisitPattern =
   | {
       provenance: "live";
       datasetId: string;
+      /** YYYY-MM of the dataset, shown as the data reference month. */
+      referenceMonth?: string;
       cellId: string;
       weekday: ApiWeekday;
     };
