@@ -10,6 +10,9 @@ import {
 } from "../server/place-request.ts";
 import { handlePlaceSummary } from "../server/place-summary.ts";
 import { odysseyApiOrigin } from "../src/features/discovery/data/odyssey-api-origin.ts";
+import { resetPlaceLookups } from "../server/place-request.ts";
+
+beforeEach(resetPlaceLookups);
 
 beforeEach(resetPlaceQuota);
 const staging = "https://odyssey-be-staging.example.run.app";
@@ -101,7 +104,8 @@ test("photos and summaries read the place from the same configured API", async (
     undefined,
     env,
   );
-  assert.deepEqual(looked, [staging, staging]);
+  // One shared lookup serves both helpers (#86).
+  assert.deepEqual(looked, [staging]);
 });
 
 test("a misconfigured server answers 500 without calling any API", async (t) => {

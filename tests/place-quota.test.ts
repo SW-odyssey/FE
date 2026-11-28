@@ -8,6 +8,9 @@ import {
   type RateLimitBinding,
 } from "../server/place-quota.ts";
 import { handlePlaceSummary } from "../server/place-summary.ts";
+import { resetPlaceLookups } from "../server/place-request.ts";
+
+beforeEach(resetPlaceLookups);
 
 beforeEach(resetPlaceQuota);
 
