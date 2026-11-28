@@ -9,6 +9,7 @@ import type {
   SpacePreference,
   VisitSlot,
 } from "../model";
+import type { CellReasonCode } from "../cell-reasons";
 import type { ApiWeekday } from "./v2-client";
 /** UI selections already derived by the screen; the source does not read its clock. */
 export type DiscoveryQuery = {
@@ -32,6 +33,11 @@ export type DiscoveryQueryResult = {
   page?: number;
   hasNext?: boolean;
   analyses?: Record<string, RecommendationAnalysis>;
+  /**
+   * Live list only: why each 50 m cell is recommended for the requested
+   * weekday and slot, by `LocalPlace.cellId`. Missing when the lookup failed.
+   */
+  cellReasons?: Record<string, CellReasonCode[]>;
 };
 /** Recommendation evidence belongs to the response that selected the place. */
 export type RecommendationAnalysis = {

@@ -10,6 +10,7 @@
 | ----------------------------- | --------------------------------------------------------- | --------------------------------------------------------- | -------------- |
 | 서비스 메타(배치·지역·시간대) | `GET /api/v2/meta` 1회 공유                               | `data/service-meta.ts`, `hooks/useServiceMeta.ts`         | #90            |
 | 지역 전체 탐색                | `GET /api/v2/area-recommendations` (페이지)               | `data/live-recommendations.ts`                            | #91            |
+| 목록 카드 추천 이유           | `GET /api/v2/cells/reasons` (페이지당 1회)                | `data/live-recommendations.ts`, `cell-reasons.ts`         | #103           |
 | 지도 중심·내 위치 주변 추천   | `GET /api/v2/recommendations` (반경 300m, 최대 30곳)      | `data/live-recommendations.ts`                            | #91, #93       |
 | 상호 검색·자동완성            | `GET /api/v2/place-search`                                | `data/place-search.ts`                                    | #92            |
 | 장소 상세                     | `GET /api/v2/places/{id}?lang`                            | `data/course-api.ts` `getCoursePlaceDetail`               | #97            |
@@ -49,6 +50,8 @@ v1 경로(`/api/v1/*`)는 BE에서 제거됐고([BE #99](https://github.com/SW-o
 | `area-recommendations` | 좌표 없이 지역 탐색       | 지역·조건·종류의 전체 일치 수 | `page`(0부터)·`size=30`·`hasNext`, 「장소 더 보기」로 이어 붙임 |
 | `recommendations`      | 지도 재검색 좌표, 내 위치 | 이번에 받은 수(≤30)           | 없음                                                            |
 
+- 목록 카드의 추천 이유: 지역·주변 목록의 한 페이지마다 `GET /api/v2/cells/reasons`를 1회(서로 다른 `cellId` 최대 30개) 요청하고, 목록과 같은 `datasetId`·`weekday`·`slot`을 보냅니다. `AVAILABLE` 칸의 알려진 코드만 서버 순서대로 최대 두 개 표시하고(`cell-reasons.ts`), 「더 보기」에서는 새로 나온 칸만 묻습니다. 이유 조회가 실패하면 목록은 그대로 두고 이유만 생략합니다. 상호 검색은 시간과 무관해 이유를 붙이지 않으며, 장소 상세에도 표시하지 않습니다.
+- 문구는 BE 안내를 따릅니다: 비교 대상은 주변이 아니라 전체 칸이고, 연령 코드는 매장 손님 연령 비율이 아니라고 함께 적습니다.
 - 탭: 전체 `categories=food,cafe`(주점은 food), 음식점 `food`, 카페 `cafe`. 지역 경로는 서버가 쇼핑·놀거리를 빼고, 주변 경로는 FE가 뺍니다.
 - 지역·카테고리·시간·언어가 바뀌면 누적 페이지를 버리고 진행 중인 요청을 abort합니다. 늦은 응답은 `createLatestRequest`로 무시합니다.
 - 지도 재검색은 지도에서 가려지지 않은 영역의 중심 좌표를 보내며, 버튼과 결과 문구에 「지도 중심 300m」를 표시합니다. 화면 영역 전체 조회는 별도 BE 계약이 필요합니다.
@@ -92,7 +95,6 @@ v1 경로(`/api/v1/*`)는 BE에서 제거됐고([BE #99](https://github.com/SW-o
 | 스테이징 빌드·런타임 변수가 같은 BE·호스트를 가리키는지                    | 미확인           | #82  |
 | 검토 화면·API의 Access 정책, 외부 Sites 직접 접근 제한, 중계 503 원인 확정 | 미적용·미확인    | #84  |
 | 원본 U+ 데이터의 자정 이후 요일 집계 근거                                  | 분석 범위        | #76  |
-| 코스 이유를 목록·상세로 확대할지                                           | 결정 필요        | #83  |
 
 ## 검수 방법
 

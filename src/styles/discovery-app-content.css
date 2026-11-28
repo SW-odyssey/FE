@@ -110,3 +110,20 @@
 .local-load-more .local-secondary {
   min-width: 160px;
 }
+
+/* List card reasons for the place's 50 m cell (GET /api/v2/cells/reasons). */
+.local-place-info > .local-place-reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 1px;
+}
+.local-place-info > .local-place-reasons > span {
+  padding: 1px 7px;
+  border-radius: var(--r-pill, 999px);
+  background: color-mix(in srgb, var(--local-plum, #4c2a85) 8%, transparent);
+  color: var(--refresh-text, #1f2937);
+  font-size: 11.5px;
+  font-weight: 550;
+  line-height: 1.5;
+}

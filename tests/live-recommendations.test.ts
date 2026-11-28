@@ -94,11 +94,15 @@ test("nearby recommendations include bars and share the published dataset", asyn
   assert.equal(calls[1]?.searchParams.get("lat"), "37.565748");
   assert.equal(calls[1]?.searchParams.get("lng"), "126.99013");
   assert.equal(found.items[0]?.name, "Recommended Place");
-  assert.equal(calls.length, 2);
+  // One reasons lookup for the page's distinct cells, with the same scope.
+  assert.equal(calls[2]?.pathname, "/api/v2/cells/reasons");
+  assert.equal(calls[2]?.searchParams.get("cellIds"), "81655936");
+  assert.equal(calls[2]?.searchParams.get("slot"), "dinner");
+  assert.equal(calls.length, 3);
   for (const url of calls.slice(1))
     assert.equal(url.searchParams.get("datasetId"), "public-latest");
   const detail = await source.getPlace("1557", { query });
-  assert.equal(calls[2]?.searchParams.get("lang"), "en");
+  assert.equal(calls[3]?.searchParams.get("lang"), "en");
   assert.equal(detail?.place.name, found.items[0]?.name);
   const pattern = detail?.visitPattern;
   assert.deepEqual(pattern, {
@@ -141,6 +145,7 @@ test("empty recommendations and missing place links are handled without demo dat
     total: 0,
     page: 0,
     hasNext: false,
+    cellReasons: {},
   });
   assert.equal(await source.getPlace("1557", { query }), null);
   assert.equal(await source.getPlace("old-preview-slug", { query }), null);
@@ -222,10 +227,12 @@ test("area browsing pages through area-recommendations without duplicate stores"
     },
   ];
   t.mock.method(globalThis, "fetch", async (url: URL) => {
-    calls.push(url);
     const data = url.pathname.endsWith("/meta")
       ? meta
-      : pages[Number(url.searchParams.get("page"))];
+      : url.pathname.endsWith("/cells/reasons")
+        ? { reasonsByCellId: {} }
+        : pages[Number(url.searchParams.get("page"))];
+    if (!url.pathname.endsWith("/cells/reasons")) calls.push(url);
     return Response.json({ success: true, data });
   });
   const source = createLiveDiscoveryDataSource();
@@ -264,4 +271,122 @@ test("area browsing pages through area-recommendations without duplicate stores"
   // An area missing from the metadata is browsed as all areas.
   await source.query({ ...query, area: "bukchon" });
   assert.equal(calls.at(-1)?.searchParams.has("areaId"), false);
+});
+
+test("list cards get their cell reasons with one lookup per page", async (t) => {
+  const reasonCalls: URL[] = [];
+  let failReasons = false;
+  const pages = [
+    {
+      total: 4,
+      page: 0,
+      hasNext: true,
+      items: [
+        place,
+        { ...place, id: 2 },
+        { ...place, id: 3, cellId: "81479955" },
+      ],
+    },
+    {
+      total: 4,
+      page: 1,
+      hasNext: false,
+      items: [
+        { ...place, id: 4, cellId: "81479955" },
+        { ...place, id: 5, cellId: "70000001" },
+      ],
+    },
+  ];
+  t.mock.method(globalThis, "fetch", async (url: URL) => {
+    if (url.pathname.endsWith("/cells/reasons")) {
+      reasonCalls.push(url);
+      if (failReasons) return new Response(null, { status: 503 });
+      return Response.json({
+        success: true,
+        data: {
+          reasonsByCellId: {
+            "81655936": {
+              status: "AVAILABLE",
+              reasons: [
+                { code: "VISIT_RELATIVE_HIGH" },
+                { code: "NEW_CODE" },
+                { code: "TIME_PEAK" },
+              ],
+            },
+            "81479955": { status: "NOT_OBSERVED", reasons: [] },
+            "70000001": {
+              status: "AVAILABLE",
+              reasons: [{ code: "AGE30_DISTINCT" }],
+            },
+          },
+        },
+      });
+    }
+    const data = url.pathname.endsWith("/meta")
+      ? meta
+      : pages[Number(url.searchParams.get("page"))];
+    return Response.json({ success: true, data });
+  });
+  const source = createLiveDiscoveryDataSource();
+  const first = await source.query(query);
+  assert.equal(reasonCalls.length, 1);
+  assert.equal(
+    reasonCalls[0]?.searchParams.get("cellIds"),
+    "81655936,81479955",
+  );
+  // Unknown codes and cells without AVAILABLE are left out.
+  assert.deepEqual(first.cellReasons, {
+    "81655936": ["VISIT_RELATIVE_HIGH", "TIME_PEAK"],
+  });
+  const second = await source.queryNext!(query, first);
+  // Page two asks only for cells it has not looked up yet.
+  assert.equal(reasonCalls.length, 2);
+  assert.equal(
+    reasonCalls[1]?.searchParams.get("cellIds"),
+    "81479955,70000001",
+  );
+  assert.deepEqual(second.cellReasons, {
+    "81655936": ["VISIT_RELATIVE_HIGH", "TIME_PEAK"],
+    "70000001": ["AGE30_DISTINCT"],
+  });
+
+  // A failed lookup keeps the list and only drops the reasons.
+  failReasons = true;
+  const withoutReasons = await source.query(query);
+  assert.equal(withoutReasons.items.length, 3);
+  assert.deepEqual(withoutReasons.cellReasons, {});
+
+  // Name search ignores time, so it has no time-based reasons.
+  const before = reasonCalls.length;
+  t.mock.method(globalThis, "fetch", async () =>
+    Response.json({ success: true, data: { items: [place] } }),
+  );
+  const found = await source.query({ ...query, query: "Recommended" });
+  assert.equal(found.cellReasons, undefined);
+  assert.equal(reasonCalls.length, before);
+});
+
+test("an abort during the reasons lookup still cancels the list", async (t) => {
+  const controller = new AbortController();
+  t.mock.method(
+    globalThis,
+    "fetch",
+    async (url: URL, init?: { signal?: AbortSignal }) => {
+      if (url.pathname.endsWith("/cells/reasons")) {
+        controller.abort();
+        init?.signal?.throwIfAborted();
+      }
+      return Response.json({
+        success: true,
+        data: url.pathname.endsWith("/meta")
+          ? meta
+          : { total: 1, page: 0, hasNext: false, items: [place] },
+      });
+    },
+  );
+  const source = createLiveDiscoveryDataSource();
+  await assert.rejects(
+    source.query(query, { signal: controller.signal }),
+    (error: unknown) => (error as Error).name === "AbortError",
+  );
 });

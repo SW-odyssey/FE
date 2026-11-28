@@ -46,6 +46,7 @@ type Props = Pick<
   | "name"
   | "kind"
   | "areaName"
+  | "reasonsFor"
   | "nearbyScope"
   | "searchTerm"
   | "status"
