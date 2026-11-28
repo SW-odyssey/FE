@@ -168,7 +168,43 @@ test("a mixed afternoon is sent on the same course request", () => {
   );
 });
 
-test("live place detail restores sourced promo copy only for the matching Google ID", async (t) => {
+test("live place detail never merges sample copy, even for a sample's Google ID", async (t) => {
+  const { localPlaces } =
+    await import("../src/features/discovery/data/preview/places.ts");
+  const sampleIds = localPlaces
+    .map(({ googlePlaceId }) => googlePlaceId)
+    .filter((id): id is string => Boolean(id));
+  assert.ok(sampleIds.length >= 8);
+  let current = "";
+  t.mock.method(globalThis, "fetch", async () =>
+    Response.json({
+      success: true,
+      data: {
+        id: 41,
+        name: "실제 매장",
+        kind: "korean",
+        lat: 37.5,
+        lng: 126.9,
+        googlePlaceId: current,
+      },
+    }),
+  );
+  for (const googlePlaceId of sampleIds) {
+    current = googlePlaceId;
+    const detail = await getCoursePlaceDetail("41");
+    assert.equal(detail.place.name, "실제 매장");
+    assert.equal(detail.aiSummary, undefined, googlePlaceId);
+    assert.deepEqual(detail.descriptions, { ko: "", en: "", ja: "", zh: "" });
+    assert.equal(detail.sourceUrl, "");
+    assert.equal(detail.place.sourceUrl, "");
+    assert.equal(detail.photos.length, 0);
+    assert.equal(detail.visitPattern, undefined);
+  }
+});
+
+test("only the /guide preview adds sourced sample copy for a matching Google ID", async (t) => {
+  const { getPreviewCoursePlaceDetail } =
+    await import("../src/features/discovery/data/preview.ts");
   t.mock.method(globalThis, "fetch", async (url: URL) =>
     Response.json({
       success: true,
@@ -182,12 +218,10 @@ test("live place detail restores sourced promo copy only for the matching Google
       },
     }),
   );
-  const match = await getCoursePlaceDetail("41");
+  const match = await getPreviewCoursePlaceDetail("41");
   assert.ok(match.aiSummary?.ko.includes("샤부샤부"));
   assert.ok(match.place.sourceUrl.includes("visitkorea.or.kr"));
-  assert.equal(match.visitPattern, undefined);
-  assert.equal(match.photos.length, 0);
-  const nonMatch = await getCoursePlaceDetail("42");
+  const nonMatch = await getPreviewCoursePlaceDetail("42");
   assert.equal(nonMatch.aiSummary, undefined);
   assert.equal(nonMatch.place.sourceUrl, "");
 });

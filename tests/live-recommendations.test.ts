@@ -144,6 +144,9 @@ test("empty recommendations and missing place links are handled without demo dat
   });
   assert.equal(await source.getPlace("1557", { query }), null);
   assert.equal(await source.getPlace("old-preview-slug", { query }), null);
+  // Sample slugs that exist in the preview are not live places either (#80).
+  for (const sample of ["cheongsudang", "oncheonjip", "nogari"])
+    assert.equal(await source.getPlace(sample, { query }), null);
   assert.equal(fetch.mock.callCount(), 3);
 });
 

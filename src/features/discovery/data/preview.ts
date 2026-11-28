@@ -1,4 +1,5 @@
 import { localizedPlaceSummary } from "../localization.ts";
+import { getCoursePlaceDetail } from "./course-api.ts";
 import type { DiscoveryLanguage, LocalPlace, PlacePhoto } from "../model";
 import { previewGeminiSummaries, previewSummaries } from "./preview/copy.ts";
 import photoManifest from "./preview/guide-photos.json" with { type: "json" };
@@ -119,3 +120,28 @@ export const previewDataSource: DiscoveryDataSource = {
     return details.get(id) ?? null;
   },
 };
+
+/**
+ * Preview-only course detail: the live server detail plus the sourced sample
+ * copy of the matching guide place. Used by /guide, never by the live app.
+ */
+export async function getPreviewCoursePlaceDetail(
+  id: string,
+  signal?: AbortSignal,
+  language?: DiscoveryLanguage,
+): Promise<DiscoveryPlaceDetail> {
+  const detail = await getCoursePlaceDetail(id, signal, language);
+  const { googlePlaceId } = detail.place;
+  const matched = googlePlaceId
+    ? localPlaces.find((candidate) => candidate.googlePlaceId === googlePlaceId)
+    : undefined;
+  if (!matched) return detail;
+  const editorial = previewPlaceDetail(matched);
+  return {
+    ...detail,
+    place: { ...detail.place, sourceUrl: editorial.sourceUrl },
+    descriptions: editorial.descriptions,
+    aiSummary: editorial.aiSummary,
+    sourceUrl: editorial.sourceUrl,
+  };
+}
