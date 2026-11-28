@@ -5,7 +5,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1676, "name": "제주침시술소 을지로점", "cellId": "81607938", "kind": "korean", "lat": 37.5655, "lng": 126.9904598, "sinceDate": "2018-07-09", "googlePlaceId": "ChIJX4PnaQCjfDURPDbvw6jZwqY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1676, "name": "제주침시술소 을지로점", "cellId": "81607938", "kind": "korean", "lat": 37.5655, "lng": 126.9904598, "sinceDate": "2018-07-09", "googlePlaceId": "ChIJX4PnaQCjfDURPDbvw6jZwqY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -13,7 +13,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1675, "name": "전주집", "cellId": "81607938", "kind": "korean", "lat": 37.5654116, "lng": 126.9906701, "sinceDate": "2020-10-28", "googlePlaceId": "ChIJ0x3qy-aifDURBVvjMR2gfOw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1675, "name": "전주집", "cellId": "81607938", "kind": "korean", "lat": 37.5654116, "lng": 126.9906701, "sinceDate": "2020-10-28", "googlePlaceId": "ChIJ0x3qy-aifDURBVvjMR2gfOw", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -21,7 +21,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1503, "name": "1/10 (십분의일)", "cellId": "81591938", "kind": "bar", "lat": 37.5653268, "lng": 126.9902371, "sinceDate": "2016-08-12", "googlePlaceId": "ChIJ166pQeSifDURncSXBHHCXy8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1503, "name": "1/10 (십분의일)", "cellId": "81591938", "kind": "bar", "lat": 37.5653268, "lng": 126.9902371, "sinceDate": "2016-08-12", "googlePlaceId": "ChIJ166pQeSifDURncSXBHHCXy8", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -29,7 +29,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1505, "name": "로바타카미", "cellId": "81591938", "kind": "other", "lat": 37.5653268, "lng": 126.9902371, "sinceDate": "2022-08-11", "googlePlaceId": "ChIJg6OLzw-jfDURDVNmKsfb9RA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1505, "name": "로바타카미", "cellId": "81591938", "kind": "other", "lat": 37.5653268, "lng": 126.9902371, "sinceDate": "2022-08-11", "googlePlaceId": "ChIJg6OLzw-jfDURDVNmKsfb9RA", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -37,7 +37,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1674, "name": "을지육점", "cellId": "81607938", "kind": "korean", "lat": 37.565523, "lng": 126.9908935, "sinceDate": "2018-11-28", "googlePlaceId": "ChIJlbK8j_ujfDURR1b4vrLV4Xo"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1674, "name": "을지육점", "cellId": "81607938", "kind": "korean", "lat": 37.565523, "lng": 126.9908935, "sinceDate": "2018-11-28", "googlePlaceId": "ChIJlbK8j_ujfDURR1b4vrLV4Xo", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -45,7 +45,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1669, "name": "아루코루", "cellId": "81607938", "kind": "other", "lat": 37.565523, "lng": 126.9908935, "sinceDate": "2020-05-07", "googlePlaceId": "ChIJS7RcOwCjfDUR5EH5aC_6bc0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1669, "name": "아루코루", "cellId": "81607938", "kind": "other", "lat": 37.565523, "lng": 126.9908935, "sinceDate": "2020-05-07", "googlePlaceId": "ChIJS7RcOwCjfDUR5EH5aC_6bc0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -53,7 +53,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1508, "name": "빈집;비어있는집", "cellId": "81591938", "kind": "bar", "lat": 37.5652796, "lng": 126.9902169, "sinceDate": "2017-11-30", "googlePlaceId": "ChIJJeQ0zsWjfDURBaIOLfHIPCI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1508, "name": "빈집;비어있는집", "cellId": "81591938", "kind": "bar", "lat": 37.5652796, "lng": 126.9902169, "sinceDate": "2017-11-30", "googlePlaceId": "ChIJJeQ0zsWjfDURBaIOLfHIPCI", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -61,7 +61,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1522, "name": "지유켄", "cellId": "81591938", "kind": "other", "lat": 37.5652796, "lng": 126.9902169, "sinceDate": "2023-08-24", "googlePlaceId": "ChIJJ_QOsVGjfDURxHpX1rE66rY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1522, "name": "지유켄", "cellId": "81591938", "kind": "other", "lat": 37.5652796, "lng": 126.9902169, "sinceDate": "2023-08-24", "googlePlaceId": "ChIJJ_QOsVGjfDURxHpX1rE66rY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -69,7 +69,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1542, "name": "달맞이 광장 바베큐 본점", "cellId": "81591940", "kind": "bar", "lat": 37.5658285, "lng": 126.990446, "sinceDate": "2025-06-16", "googlePlaceId": "ChIJ2xI4RQCjfDURiZ0atPhWxcY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1542, "name": "달맞이 광장 바베큐 본점", "cellId": "81591940", "kind": "bar", "lat": 37.5658285, "lng": 126.990446, "sinceDate": "2025-06-16", "googlePlaceId": "ChIJ2xI4RQCjfDURiZ0atPhWxcY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -77,7 +77,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1513, "name": "에비스야 우동", "cellId": "81591938", "kind": "other", "lat": 37.5653376, "lng": 126.9900876, "sinceDate": "2024-03-08", "googlePlaceId": "ChIJobjElpGjfDURDDD6JBeJ6Do"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1513, "name": "에비스야 우동", "cellId": "81591938", "kind": "other", "lat": 37.5653376, "lng": 126.9900876, "sinceDate": "2024-03-08", "googlePlaceId": "ChIJobjElpGjfDURDDD6JBeJ6Do", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -85,7 +85,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1666, "name": "꽃지로", "cellId": "81607938", "kind": "bar", "lat": 37.5655978, "lng": 126.9909764, "sinceDate": "2020-05-08", "googlePlaceId": "ChIJx1ot2smjfDURCr5660Epi5w"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1666, "name": "꽃지로", "cellId": "81607938", "kind": "bar", "lat": 37.5655978, "lng": 126.9909764, "sinceDate": "2020-05-08", "googlePlaceId": "ChIJx1ot2smjfDURCr5660Epi5w", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -93,7 +93,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1518, "name": "을지오케이", "cellId": "81591938", "kind": "bar", "lat": 37.5651665, "lng": 126.9901749, "sinceDate": "2020-08-05", "googlePlaceId": "ChIJQbyG6DajfDURLmpNzUsRGTk"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1518, "name": "을지오케이", "cellId": "81591938", "kind": "bar", "lat": 37.5651665, "lng": 126.9901749, "sinceDate": "2020-08-05", "googlePlaceId": "ChIJQbyG6DajfDURLmpNzUsRGTk", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -101,7 +101,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1526, "name": "힙지로누룽지통닭", "cellId": "81591938", "kind": "bar", "lat": 37.5652554, "lng": 126.9900585, "sinceDate": "2016-12-01", "googlePlaceId": "ChIJdxx2C9ijfDURxtm-lICaoZc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1526, "name": "힙지로누룽지통닭", "cellId": "81591938", "kind": "bar", "lat": 37.5652554, "lng": 126.9900585, "sinceDate": "2016-12-01", "googlePlaceId": "ChIJdxx2C9ijfDURxtm-lICaoZc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -109,7 +109,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1519, "name": "을지잔치", "cellId": "81591938", "kind": "korean", "lat": 37.5652554, "lng": 126.9900585, "sinceDate": "2020-08-10", "googlePlaceId": "ChIJc3ZfXwCjfDUR_Dpp0fKouOQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1519, "name": "을지잔치", "cellId": "81591938", "kind": "korean", "lat": 37.5652554, "lng": 126.9900585, "sinceDate": "2020-08-10", "googlePlaceId": "ChIJc3ZfXwCjfDUR_Dpp0fKouOQ", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -117,7 +117,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1515, "name": "요술", "cellId": "81591938", "kind": "other", "lat": 37.5650842, "lng": 126.9903373, "sinceDate": "2018-09-17", "googlePlaceId": "ChIJffCCGxqjfDURsEOGUk9Ae1k"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1515, "name": "요술", "cellId": "81591938", "kind": "other", "lat": 37.5650842, "lng": 126.9903373, "sinceDate": "2018-09-17", "googlePlaceId": "ChIJffCCGxqjfDURsEOGUk9Ae1k", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -125,7 +125,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1512, "name": "실비바 파도", "cellId": "81591938", "kind": "other", "lat": 37.5650842, "lng": 126.9903373, "sinceDate": "2019-05-02", "googlePlaceId": "ChIJR4YjFQCjfDUR8hyij0E4UAk"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1512, "name": "실비바 파도", "cellId": "81591938", "kind": "other", "lat": 37.5650842, "lng": 126.9903373, "sinceDate": "2019-05-02", "googlePlaceId": "ChIJR4YjFQCjfDUR8hyij0E4UAk", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -133,7 +133,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1525, "name": "콘부 을지로", "cellId": "81591938", "kind": "other", "lat": 37.5650842, "lng": 126.9903373, "sinceDate": "2021-06-07", "googlePlaceId": "ChIJq8Pta5KjfDUR885FLv7BOBo"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1525, "name": "콘부 을지로", "cellId": "81591938", "kind": "other", "lat": 37.5650842, "lng": 126.9903373, "sinceDate": "2021-06-07", "googlePlaceId": "ChIJq8Pta5KjfDUR885FLv7BOBo", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -141,7 +141,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1667, "name": "뉴호프", "cellId": "81607938", "kind": "other", "lat": 37.5656676, "lng": 126.9910135, "sinceDate": "2023-12-19", "googlePlaceId": "ChIJoQTFn8ejfDUReo6KAsmOxH0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1667, "name": "뉴호프", "cellId": "81607938", "kind": "other", "lat": 37.5656676, "lng": 126.9910135, "sinceDate": "2023-12-19", "googlePlaceId": "ChIJoQTFn8ejfDUReo6KAsmOxH0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -149,7 +149,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1523, "name": "촙촙", "cellId": "81591938", "kind": "other", "lat": 37.5651955, "lng": 126.9900643, "sinceDate": "2018-05-14", "googlePlaceId": "ChIJPZVw74ajfDURm15FD7WAiAs"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1523, "name": "촙촙", "cellId": "81591938", "kind": "other", "lat": 37.5651955, "lng": 126.9900643, "sinceDate": "2018-05-14", "googlePlaceId": "ChIJPZVw74ajfDURm15FD7WAiAs", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -157,7 +157,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1504, "name": "골목식당", "cellId": "81591938", "kind": "korean", "lat": 37.5650269, "lng": 126.9902771, "sinceDate": "2011-06-07", "googlePlaceId": "ChIJr8VYQuSifDURjJ4rRaRpieI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1504, "name": "골목식당", "cellId": "81591938", "kind": "korean", "lat": 37.5650269, "lng": 126.9902771, "sinceDate": "2011-06-07", "googlePlaceId": "ChIJr8VYQuSifDURjJ4rRaRpieI", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -165,7 +165,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1803, "name": "을지로 화랑", "cellId": "81623937", "kind": "other", "lat": 37.5654436, "lng": 126.9911359, "sinceDate": "2020-11-03", "googlePlaceId": "ChIJwfo2HkCjfDURP3FXXR_SCdc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1803, "name": "을지로 화랑", "cellId": "81623937", "kind": "other", "lat": 37.5654436, "lng": 126.9911359, "sinceDate": "2020-11-03", "googlePlaceId": "ChIJwfo2HkCjfDURP3FXXR_SCdc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -173,7 +173,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1812, "name": "효계", "cellId": "81623937", "kind": "korean", "lat": 37.5654436, "lng": 126.9911359, "sinceDate": "2021-06-09", "googlePlaceId": "ChIJGbB6qA2jfDURk0hwYoE9M-Y"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1812, "name": "효계", "cellId": "81623937", "kind": "korean", "lat": 37.5654436, "lng": 126.9911359, "sinceDate": "2021-06-09", "googlePlaceId": "ChIJGbB6qA2jfDURk0hwYoE9M-Y", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -181,7 +181,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1802, "name": "을지로 밑", "cellId": "81623937", "kind": "korean", "lat": 37.5654436, "lng": 126.9911359, "sinceDate": "2021-12-21", "googlePlaceId": "ChIJUygSSVKjfDURu1xi0NydccE"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1802, "name": "을지로 밑", "cellId": "81623937", "kind": "korean", "lat": 37.5654436, "lng": 126.9911359, "sinceDate": "2021-12-21", "googlePlaceId": "ChIJUygSSVKjfDURu1xi0NydccE", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -189,7 +189,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1801, "name": "을지깐깐", "cellId": "81623937", "kind": "other", "lat": 37.565741, "lng": 126.9910724, "sinceDate": "2019-10-31", "googlePlaceId": "ChIJ8Xza_TOjfDUR801TxPm9GEI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1801, "name": "을지깐깐", "cellId": "81623937", "kind": "other", "lat": 37.565741, "lng": 126.9910724, "sinceDate": "2019-10-31", "googlePlaceId": "ChIJ8Xza_TOjfDUR801TxPm9GEI", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -197,7 +197,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1808, "name": "장만옥", "cellId": "81623937", "kind": "bar", "lat": 37.565741, "lng": 126.9910724, "sinceDate": "2019-11-08", "googlePlaceId": "ChIJXe5VL3CjfDUROTfZO_o0mgM"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1808, "name": "장만옥", "cellId": "81623937", "kind": "bar", "lat": 37.565741, "lng": 126.9910724, "sinceDate": "2019-11-08", "googlePlaceId": "ChIJXe5VL3CjfDUROTfZO_o0mgM", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -205,7 +205,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1810, "name": "코너숍(CORNERSHOP)", "cellId": "81623937", "kind": "other", "lat": 37.56557, "lng": 126.9911509, "sinceDate": "2022-09-29", "googlePlaceId": "ChIJ921JDuSifDURX3uLixuUDzc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1810, "name": "코너숍(CORNERSHOP)", "cellId": "81623937", "kind": "other", "lat": 37.56557, "lng": 126.9911509, "sinceDate": "2022-09-29", "googlePlaceId": "ChIJ921JDuSifDURX3uLixuUDzc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -213,7 +213,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1511, "name": "신세계분식", "cellId": "81591938", "kind": "korean", "lat": 37.5650943, "lng": 126.9900799, "sinceDate": "1992-05-15", "googlePlaceId": "ChIJEZB7Q-SifDURXj3ZaGO-3n4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1511, "name": "신세계분식", "cellId": "81591938", "kind": "korean", "lat": 37.5650943, "lng": 126.9900799, "sinceDate": "1992-05-15", "googlePlaceId": "ChIJEZB7Q-SifDURXj3ZaGO-3n4", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -221,7 +221,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1546, "name": "양평해장국", "cellId": "81591940", "kind": "korean", "lat": 37.5658687, "lng": 126.9899915, "sinceDate": "1984-12-21", "googlePlaceId": "ChIJYx2IX3ujfDUR0xqT750l9KA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1546, "name": "양평해장국", "cellId": "81591940", "kind": "korean", "lat": 37.5658687, "lng": 126.9899915, "sinceDate": "1984-12-21", "googlePlaceId": "ChIJYx2IX3ujfDUR0xqT750l9KA", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -229,7 +229,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1540, "name": "금돈옥 을지로점", "cellId": "81591940", "kind": "korean", "lat": 37.5660606, "lng": 126.9903919, "sinceDate": "2024-10-31", "googlePlaceId": "ChIJmcRdeQCjfDURBqVbcgtYKSY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1540, "name": "금돈옥 을지로점", "cellId": "81591940", "kind": "korean", "lat": 37.5660606, "lng": 126.9903919, "sinceDate": "2024-10-31", "googlePlaceId": "ChIJmcRdeQCjfDURBqVbcgtYKSY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -237,7 +237,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1516, "name": "우진골뱅이", "cellId": "81591938", "kind": "bar", "lat": 37.5649527, "lng": 126.9902743, "sinceDate": "1986-09-04", "googlePlaceId": "ChIJY-IMSOSifDURLij5_bJ6wIc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1516, "name": "우진골뱅이", "cellId": "81591938", "kind": "bar", "lat": 37.5649527, "lng": 126.9902743, "sinceDate": "1986-09-04", "googlePlaceId": "ChIJY-IMSOSifDURLij5_bJ6wIc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -245,7 +245,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1681, "name": "산청숯불가든 을지로", "cellId": "81607939", "kind": "korean", "lat": 37.56582, "lng": 126.9906213, "sinceDate": "2023-07-17", "googlePlaceId": "ChIJNyduCUCjfDURI3HOclQsBho"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1681, "name": "산청숯불가든 을지로", "cellId": "81607939", "kind": "korean", "lat": 37.56582, "lng": 126.9906213, "sinceDate": "2023-07-17", "googlePlaceId": "ChIJNyduCUCjfDURI3HOclQsBho", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -253,7 +253,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1679, "name": "레코드피자 힙지로점", "cellId": "81607939", "kind": "other", "lat": 37.5660393, "lng": 126.9905992, "sinceDate": "2025-04-18", "googlePlaceId": "ChIJsWkBNQCjfDURy3sUnVD1gUQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1679, "name": "레코드피자 힙지로점", "cellId": "81607939", "kind": "other", "lat": 37.5660393, "lng": 126.9905992, "sinceDate": "2025-04-18", "googlePlaceId": "ChIJsWkBNQCjfDURy3sUnVD1gUQ", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -261,7 +261,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1680, "name": "발해감자탕 을지로 직영점", "cellId": "81607939", "kind": "korean", "lat": 37.5660502, "lng": 126.9905275, "sinceDate": "2019-05-02", "googlePlaceId": "ChIJxQQmVwyjfDURx3-phIHjCTs"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1680, "name": "발해감자탕 을지로 직영점", "cellId": "81607939", "kind": "korean", "lat": 37.5660502, "lng": 126.9905275, "sinceDate": "2019-05-02", "googlePlaceId": "ChIJxQQmVwyjfDURx3-phIHjCTs", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -269,7 +269,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1521, "name": "주식회사 성수라", "cellId": "81591938", "kind": "korean", "lat": 37.5649527, "lng": 126.9902743, "sinceDate": "2023-09-01", "googlePlaceId": "ChIJP_XSX2qjfDURBx4j48gpKIw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1521, "name": "주식회사 성수라", "cellId": "81591938", "kind": "korean", "lat": 37.5649527, "lng": 126.9902743, "sinceDate": "2023-09-01", "googlePlaceId": "ChIJP_XSX2qjfDURBx4j48gpKIw", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -277,7 +277,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1678, "name": "대엽 을지로점", "cellId": "81607939", "kind": "korean", "lat": 37.5660765, "lng": 126.990459, "sinceDate": "2024-12-26", "googlePlaceId": "ChIJxyYpCACjfDURBCkDDoPnbpM"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1678, "name": "대엽 을지로점", "cellId": "81607939", "kind": "korean", "lat": 37.5660765, "lng": 126.990459, "sinceDate": "2024-12-26", "googlePlaceId": "ChIJxyYpCACjfDURBCkDDoPnbpM", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -285,7 +285,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1555, "name": "한국관", "cellId": "81591940", "kind": "korean", "lat": 37.5660158, "lng": 126.9901617, "sinceDate": "2013-04-12", "googlePlaceId": "ChIJB0oVVgWjfDURQ3faI4FsGR8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1555, "name": "한국관", "cellId": "81591940", "kind": "korean", "lat": 37.5660158, "lng": 126.9901617, "sinceDate": "2013-04-12", "googlePlaceId": "ChIJB0oVVgWjfDURQ3faI4FsGR8", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -293,7 +293,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1804, "name": "을지상회", "cellId": "81623937", "kind": "bar", "lat": 37.5654004, "lng": 126.9912328, "sinceDate": "2022-09-16", "googlePlaceId": "ChIJGfPOzMijfDURggrRN5voddg"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1804, "name": "을지상회", "cellId": "81623937", "kind": "bar", "lat": 37.5654004, "lng": 126.9912328, "sinceDate": "2022-09-16", "googlePlaceId": "ChIJGfPOzMijfDURggrRN5voddg", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -301,7 +301,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1798, "name": "우주", "cellId": "81623937", "kind": "bar", "lat": 37.5654004, "lng": 126.9912328, "sinceDate": "2022-10-31", "googlePlaceId": "ChIJHfwjLxijfDURb_bXNzpgATA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1798, "name": "우주", "cellId": "81623937", "kind": "bar", "lat": 37.5654004, "lng": 126.9912328, "sinceDate": "2022-10-31", "googlePlaceId": "ChIJHfwjLxijfDURb_bXNzpgATA", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -309,7 +309,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1794, "name": "부장님댁", "cellId": "81623937", "kind": "korean", "lat": 37.5654004, "lng": 126.9912328, "sinceDate": "2022-11-07", "googlePlaceId": "ChIJcQaUyi2jfDURNLEY2Psd-M4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1794, "name": "부장님댁", "cellId": "81623937", "kind": "korean", "lat": 37.5654004, "lng": 126.9912328, "sinceDate": "2022-11-07", "googlePlaceId": "ChIJcQaUyi2jfDURNLEY2Psd-M4", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -317,7 +317,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1811, "name": "황금마차", "cellId": "81623937", "kind": "other", "lat": 37.5655399, "lng": 126.9912605, "sinceDate": "2020-07-08", "googlePlaceId": "ChIJE1YYSg-jfDURRQxb6GlsBMc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1811, "name": "황금마차", "cellId": "81623937", "kind": "other", "lat": 37.5655399, "lng": 126.9912605, "sinceDate": "2020-07-08", "googlePlaceId": "ChIJE1YYSg-jfDURRQxb6GlsBMc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -325,7 +325,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1796, "name": "양념집", "cellId": "81623937", "kind": "korean", "lat": 37.5655399, "lng": 126.9912605, "sinceDate": "2020-08-20", "googlePlaceId": "ChIJ691c-m2jfDURSKdcWlrXxwo"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1796, "name": "양념집", "cellId": "81623937", "kind": "korean", "lat": 37.5655399, "lng": 126.9912605, "sinceDate": "2020-08-20", "googlePlaceId": "ChIJ691c-m2jfDURSKdcWlrXxwo", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -333,7 +333,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1807, "name": "이대헌 스시", "cellId": "81623937", "kind": "other", "lat": 37.5655399, "lng": 126.9912605, "sinceDate": "2020-09-16", "googlePlaceId": "ChIJ_3oTUv2ifDUR6HkMtOet_vk"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1807, "name": "이대헌 스시", "cellId": "81623937", "kind": "other", "lat": 37.5655399, "lng": 126.9912605, "sinceDate": "2020-09-16", "googlePlaceId": "ChIJ_3oTUv2ifDUR6HkMtOet_vk", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -341,7 +341,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1544, "name": "바지선 라딸랑뜨", "cellId": "81591940", "kind": "bar", "lat": 37.565922, "lng": 126.9899337, "sinceDate": "2019-11-15", "googlePlaceId": "ChIJVYI_1hWjfDURb0KyvKhOWAs"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1544, "name": "바지선 라딸랑뜨", "cellId": "81591940", "kind": "bar", "lat": 37.565922, "lng": 126.9899337, "sinceDate": "2019-11-15", "googlePlaceId": "ChIJVYI_1hWjfDURb0KyvKhOWAs", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -349,7 +349,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1791, "name": "밑주락", "cellId": "81623937", "kind": "korean", "lat": 37.5656514, "lng": 126.9912644, "sinceDate": "2013-08-26", "googlePlaceId": "ChIJYb9nDwCjfDURKqb51dMmevQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1791, "name": "밑주락", "cellId": "81623937", "kind": "korean", "lat": 37.5656514, "lng": 126.9912644, "sinceDate": "2013-08-26", "googlePlaceId": "ChIJYb9nDwCjfDURKqb51dMmevQ", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -357,7 +357,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1787, "name": "Good friends(굿프렌즈)", "cellId": "81623937", "kind": "bar", "lat": 37.5656514, "lng": 126.9912644, "sinceDate": "2017-12-06", "googlePlaceId": "ChIJ4SZwD-SifDURVk9YMVM5bHE"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1787, "name": "Good friends(굿프렌즈)", "cellId": "81623937", "kind": "bar", "lat": 37.5656514, "lng": 126.9912644, "sinceDate": "2017-12-06", "googlePlaceId": "ChIJ4SZwD-SifDURVk9YMVM5bHE", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -365,7 +365,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1792, "name": "바스버거 을지로점", "cellId": "81623937", "kind": "other", "lat": 37.5656514, "lng": 126.9912644, "sinceDate": "2019-12-30", "googlePlaceId": "ChIJT0zQQj-jfDURfLb9NyMb4kA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1792, "name": "바스버거 을지로점", "cellId": "81623937", "kind": "other", "lat": 37.5656514, "lng": 126.9912644, "sinceDate": "2019-12-30", "googlePlaceId": "ChIJT0zQQj-jfDURfLb9NyMb4kA", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -373,7 +373,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1795, "name": "선셋 레코드", "cellId": "81623937", "kind": "other", "lat": 37.5656514, "lng": 126.9912644, "sinceDate": "2020-10-22", "googlePlaceId": "ChIJLzgA1pOjfDURfTOI6iKDa18"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1795, "name": "선셋 레코드", "cellId": "81623937", "kind": "other", "lat": 37.5656514, "lng": 126.9912644, "sinceDate": "2020-10-22", "googlePlaceId": "ChIJLzgA1pOjfDURfTOI6iKDa18", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -381,7 +381,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1797, "name": "어나더레벨(Another level)", "cellId": "81623937", "kind": "bar", "lat": 37.5656514, "lng": 126.9912644, "sinceDate": "2020-11-05", "googlePlaceId": "ChIJQ4QPT_qjfDUR_CtRnA6uRmw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1797, "name": "어나더레벨(Another level)", "cellId": "81623937", "kind": "bar", "lat": 37.5656514, "lng": 126.9912644, "sinceDate": "2020-11-05", "googlePlaceId": "ChIJQ4QPT_qjfDUR_CtRnA6uRmw", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -389,7 +389,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1552, "name": "청와옥 을지로점", "cellId": "81591940", "kind": "korean", "lat": 37.5660176, "lng": 126.9900579, "sinceDate": "2015-01-05", "googlePlaceId": "ChIJpSfFT-GifDURIiC5FecV2c8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1552, "name": "청와옥 을지로점", "cellId": "81591940", "kind": "korean", "lat": 37.5660176, "lng": 126.9900579, "sinceDate": "2015-01-05", "googlePlaceId": "ChIJpSfFT-GifDURIiC5FecV2c8", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -397,7 +397,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1549, "name": "오덕장 을지로점", "cellId": "81591940", "kind": "korean", "lat": 37.5660176, "lng": 126.9900579, "sinceDate": "2023-07-31", "googlePlaceId": "ChIJYWKxUzyjfDUR3ZB4YjW6Mj4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1549, "name": "오덕장 을지로점", "cellId": "81591940", "kind": "korean", "lat": 37.5660176, "lng": 126.9900579, "sinceDate": "2023-07-31", "googlePlaceId": "ChIJYWKxUzyjfDUR3ZB4YjW6Mj4", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -405,7 +405,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1806, "name": "을지하옥", "cellId": "81623937", "kind": "korean", "lat": 37.5653862, "lng": 126.991295, "sinceDate": "2023-02-21", "googlePlaceId": "ChIJpYE4MQCjfDUR2ZWGqWg3yVE"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1806, "name": "을지하옥", "cellId": "81623937", "kind": "korean", "lat": 37.5653862, "lng": 126.991295, "sinceDate": "2023-02-21", "googlePlaceId": "ChIJpYE4MQCjfDUR2ZWGqWg3yVE", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -413,7 +413,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1550, "name": "을지로 양대장", "cellId": "81591940", "kind": "korean", "lat": 37.5659738, "lng": 126.989925, "sinceDate": "2014-10-06", "googlePlaceId": "ChIJrSwDZDujfDURZcdMsfUfl90"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1550, "name": "을지로 양대장", "cellId": "81591940", "kind": "korean", "lat": 37.5659738, "lng": 126.989925, "sinceDate": "2014-10-06", "googlePlaceId": "ChIJrSwDZDujfDURZcdMsfUfl90", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -421,7 +421,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1799, "name": "을지 작업장", "cellId": "81623937", "kind": "korean", "lat": 37.5655052, "lng": 126.9913791, "sinceDate": "2023-09-21", "googlePlaceId": "ChIJZztNQKOjfDUR2xWfO2kOsCQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1799, "name": "을지 작업장", "cellId": "81623937", "kind": "korean", "lat": 37.5655052, "lng": 126.9913791, "sinceDate": "2023-09-21", "googlePlaceId": "ChIJZztNQKOjfDUR2xWfO2kOsCQ", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -429,7 +429,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1789, "name": "드므", "cellId": "81623937", "kind": "other", "lat": 37.5654732, "lng": 126.9914857, "sinceDate": "2020-01-02", "googlePlaceId": "ChIJ4S3WOIOjfDUR34kqz0SwpyY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1789, "name": "드므", "cellId": "81623937", "kind": "other", "lat": 37.5654732, "lng": 126.9914857, "sinceDate": "2020-01-02", "googlePlaceId": "ChIJ4S3WOIOjfDUR34kqz0SwpyY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -437,7 +437,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1805, "name": "을지정육식당", "cellId": "81623937", "kind": "korean", "lat": 37.5654732, "lng": 126.9914857, "sinceDate": "2023-07-12", "googlePlaceId": "ChIJu8aEkQqjfDUR1X3Je8f3-KI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1805, "name": "을지정육식당", "cellId": "81623937", "kind": "korean", "lat": 37.5654732, "lng": 126.9914857, "sinceDate": "2023-07-12", "googlePlaceId": "ChIJu8aEkQqjfDUR1X3Je8f3-KI", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -445,7 +445,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1790, "name": "미돈미우 을지로점", "cellId": "81623937", "kind": "korean", "lat": 37.5656708, "lng": 126.9915501, "sinceDate": "2008-10-08", "googlePlaceId": "ChIJBS8t08SjfDUR17B8tnv977U"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1790, "name": "미돈미우 을지로점", "cellId": "81623937", "kind": "korean", "lat": 37.5656708, "lng": 126.9915501, "sinceDate": "2008-10-08", "googlePlaceId": "ChIJBS8t08SjfDUR17B8tnv977U", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -453,7 +453,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1510, "name": "서울 삼계탕", "cellId": "81591938", "kind": "korean", "lat": 37.5649576, "lng": 126.990166, "sinceDate": "2003-04-11", "googlePlaceId": "ChIJc4gxQ-SifDURmAcVJgNVhK4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1510, "name": "서울 삼계탕", "cellId": "81591938", "kind": "korean", "lat": 37.5649576, "lng": 126.990166, "sinceDate": "2003-04-11", "googlePlaceId": "ChIJc4gxQ-SifDURmAcVJgNVhK4", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -461,7 +461,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1509, "name": "삼형제김밥 을지로3가점", "cellId": "81591938", "kind": "korean", "lat": 37.5649576, "lng": 126.990166, "sinceDate": "2025-05-16", "googlePlaceId": "ChIJD9k2YDejfDURVCg7wTYtvPk"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1509, "name": "삼형제김밥 을지로3가점", "cellId": "81591938", "kind": "korean", "lat": 37.5649576, "lng": 126.990166, "sinceDate": "2025-05-16", "googlePlaceId": "ChIJD9k2YDejfDURVCg7wTYtvPk", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -469,7 +469,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1361, "name": "을지로술집", "cellId": "81575938", "kind": "other", "lat": 37.5646048, "lng": 126.9897668, "sinceDate": "1994-03-28", "googlePlaceId": "ChIJVQeHNHCjfDURJsfcrKK3dTU"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1361, "name": "을지로술집", "cellId": "81575938", "kind": "other", "lat": 37.5646048, "lng": 126.9897668, "sinceDate": "1994-03-28", "googlePlaceId": "ChIJVQeHNHCjfDURJsfcrKK3dTU", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -477,7 +477,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1362, "name": "태평옥", "cellId": "81575938", "kind": "korean", "lat": 37.5648946, "lng": 126.989347, "sinceDate": "1985-11-27", "googlePlaceId": "ChIJb9lZY-WifDURg-Bs4SQLkL4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1362, "name": "태평옥", "cellId": "81575938", "kind": "korean", "lat": 37.5648946, "lng": 126.989347, "sinceDate": "1985-11-27", "googlePlaceId": "ChIJb9lZY-WifDURg-Bs4SQLkL4", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -485,7 +485,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1360, "name": "니즈버거 을지로점", "cellId": "81575938", "kind": "other", "lat": 37.5648946, "lng": 126.989347, "sinceDate": "2021-12-27", "googlePlaceId": "ChIJuUKwWKujfDURa1bIjXGy2PY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1360, "name": "니즈버거 을지로점", "cellId": "81575938", "kind": "other", "lat": 37.5648946, "lng": 126.989347, "sinceDate": "2021-12-27", "googlePlaceId": "ChIJuUKwWKujfDURa1bIjXGy2PY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -493,7 +493,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1363, "name": "토리노 라스베가스", "cellId": "81575938", "kind": "other", "lat": 37.5648946, "lng": 126.989347, "sinceDate": "2023-02-10", "googlePlaceId": "ChIJ2ZQHQACjfDURmli-co-qmz8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1363, "name": "토리노 라스베가스", "cellId": "81575938", "kind": "other", "lat": 37.5648946, "lng": 126.989347, "sinceDate": "2023-02-10", "googlePlaceId": "ChIJ2ZQHQACjfDURmli-co-qmz8", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -501,7 +501,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1364, "name": "한식공간 소반", "cellId": "81575938", "kind": "korean", "lat": 37.5648946, "lng": 126.989347, "sinceDate": "2025-09-24", "googlePlaceId": "ChIJD5WAHumjfDURovoFiNn01NY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1364, "name": "한식공간 소반", "cellId": "81575938", "kind": "korean", "lat": 37.5648946, "lng": 126.989347, "sinceDate": "2025-09-24", "googlePlaceId": "ChIJD5WAHumjfDURovoFiNn01NY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -509,7 +509,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1557, "name": "오구반점", "cellId": "81591941", "kind": "other", "lat": 37.566533, "lng": 126.9898798, "sinceDate": "1972-02-26", "googlePlaceId": "ChIJdxt9JuSifDURGgJlEY_Boo4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1557, "name": "오구반점", "cellId": "81591941", "kind": "other", "lat": 37.566533, "lng": 126.9898798, "sinceDate": "1972-02-26", "googlePlaceId": "ChIJdxt9JuSifDURGgJlEY_Boo4", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -517,7 +517,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1556, "name": "수표교", "cellId": "81591941", "kind": "bar", "lat": 37.5666825, "lng": 126.9902289, "sinceDate": "2011-08-16", "googlePlaceId": "ChIJaXVuuuaifDURGg1B-txP-pw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1556, "name": "수표교", "cellId": "81591941", "kind": "bar", "lat": 37.5666825, "lng": 126.9902289, "sinceDate": "2011-08-16", "googlePlaceId": "ChIJaXVuuuaifDURGg1B-txP-pw", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -525,7 +525,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1983, "name": "을지로 회장님", "cellId": "81655935", "kind": "korean", "lat": 37.5654431, "lng": 126.9922042, "sinceDate": "2024-11-14", "googlePlaceId": "ChIJ2bTLSwCjfDURkdmY1ZwFqEk"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1983, "name": "을지로 회장님", "cellId": "81655935", "kind": "korean", "lat": 37.5654431, "lng": 126.9922042, "sinceDate": "2024-11-14", "googlePlaceId": "ChIJ2bTLSwCjfDURkdmY1ZwFqEk", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -533,7 +533,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1987, "name": "주도락 을지로점", "cellId": "81655935", "kind": "other", "lat": 37.5656405, "lng": 126.9921995, "sinceDate": "2019-09-05", "googlePlaceId": "ChIJR8B3enejfDURQ-s2MdlEpdg"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1987, "name": "주도락 을지로점", "cellId": "81655935", "kind": "other", "lat": 37.5656405, "lng": 126.9921995, "sinceDate": "2019-09-05", "googlePlaceId": "ChIJR8B3enejfDURQ-s2MdlEpdg", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -541,7 +541,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1988, "name": "참프루", "cellId": "81655935", "kind": "bar", "lat": 37.5656405, "lng": 126.9921995, "sinceDate": "2021-10-07", "googlePlaceId": "ChIJu53KUACjfDURUX02u2Q_rG0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1988, "name": "참프루", "cellId": "81655935", "kind": "bar", "lat": 37.5656405, "lng": 126.9921995, "sinceDate": "2021-10-07", "googlePlaceId": "ChIJu53KUACjfDURUX02u2Q_rG0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -549,7 +549,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1976, "name": "봉봉바", "cellId": "81655935", "kind": "other", "lat": 37.5657468, "lng": 126.9921947, "sinceDate": "2009-04-02", "googlePlaceId": "ChIJfS4LQwCjfDURGAEnK4SKj6I"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1976, "name": "봉봉바", "cellId": "81655935", "kind": "other", "lat": 37.5657468, "lng": 126.9921947, "sinceDate": "2009-04-02", "googlePlaceId": "ChIJfS4LQwCjfDURGAEnK4SKj6I", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -557,7 +557,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1977, "name": "빨간우체통", "cellId": "81655935", "kind": "korean", "lat": 37.5657468, "lng": 126.9921947, "sinceDate": "2018-03-26", "googlePlaceId": "ChIJldvn_OOifDURSd8WJlrIbJQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1977, "name": "빨간우체통", "cellId": "81655935", "kind": "korean", "lat": 37.5657468, "lng": 126.9921947, "sinceDate": "2018-03-26", "googlePlaceId": "ChIJldvn_OOifDURSd8WJlrIbJQ", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -565,7 +565,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1903, "name": "유메오미루", "cellId": "81639936", "kind": "other", "lat": 37.5656168, "lng": 126.9917154, "sinceDate": "2021-03-10", "googlePlaceId": "ChIJz2vpGgCjfDURrUl_utlH3dw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1903, "name": "유메오미루", "cellId": "81639936", "kind": "other", "lat": 37.5656168, "lng": 126.9917154, "sinceDate": "2021-03-10", "googlePlaceId": "ChIJz2vpGgCjfDURrUl_utlH3dw", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -573,7 +573,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1900, "name": "미나리밭 오리사냥 을지로점", "cellId": "81639936", "kind": "korean", "lat": 37.5655951, "lng": 126.9918915, "sinceDate": "2025-06-20", "googlePlaceId": "ChIJ_0eNCwCjfDUR2e_L9QiqW_E"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1900, "name": "미나리밭 오리사냥 을지로점", "cellId": "81639936", "kind": "korean", "lat": 37.5655951, "lng": 126.9918915, "sinceDate": "2025-06-20", "googlePlaceId": "ChIJ_0eNCwCjfDUR2e_L9QiqW_E", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -581,7 +581,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1904, "name": "을지도 서울바다", "cellId": "81639936", "kind": "korean", "lat": 37.5655951, "lng": 126.9918915, "sinceDate": "2022-06-03", "googlePlaceId": "ChIJBxlu27ejfDURr8wpm02Ggr0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1904, "name": "을지도 서울바다", "cellId": "81639936", "kind": "korean", "lat": 37.5655951, "lng": 126.9918915, "sinceDate": "2022-06-03", "googlePlaceId": "ChIJBxlu27ejfDURr8wpm02Ggr0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -589,7 +589,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1975, "name": "골수", "cellId": "81655935", "kind": "korean", "lat": 37.565416, "lng": 126.9923126, "sinceDate": "2024-08-05", "googlePlaceId": "ChIJ0SOlCHGjfDURhBdmfEsv1As"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1975, "name": "골수", "cellId": "81655935", "kind": "korean", "lat": 37.565416, "lng": 126.9923126, "sinceDate": "2024-08-05", "googlePlaceId": "ChIJ0SOlCHGjfDURhBdmfEsv1As", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -597,7 +597,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1991, "name": "43번지 혼술바 서울을지로점", "cellId": "81655936", "kind": "other", "lat": 37.5659461, "lng": 126.9922279, "sinceDate": "2026-09-18", "googlePlaceId": "ChIJkw9O3OqjfDUR6L_wN99eAoY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1991, "name": "43번지 혼술바 서울을지로점", "cellId": "81655936", "kind": "other", "lat": 37.5659461, "lng": 126.9922279, "sinceDate": "2026-09-18", "googlePlaceId": "ChIJkw9O3OqjfDUR6L_wN99eAoY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -605,7 +605,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1985, "name": "잠수교집", "cellId": "81655935", "kind": "korean", "lat": 37.5656149, "lng": 126.9923326, "sinceDate": "2025-12-17", "googlePlaceId": "ChIJgSNRMgCjfDURYIy3yMGhRrY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1985, "name": "잠수교집", "cellId": "81655935", "kind": "korean", "lat": 37.5656149, "lng": 126.9923326, "sinceDate": "2025-12-17", "googlePlaceId": "ChIJgSNRMgCjfDURYIy3yMGhRrY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -613,7 +613,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1979, "name": "용삼식당 을지로", "cellId": "81655935", "kind": "korean", "lat": 37.5657263, "lng": 126.9923423, "sinceDate": "2025-07-03", "googlePlaceId": "ChIJMcaI19-jfDUR4Iw8izp-pzU"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1979, "name": "용삼식당 을지로", "cellId": "81655935", "kind": "korean", "lat": 37.5657263, "lng": 126.9923423, "sinceDate": "2025-07-03", "googlePlaceId": "ChIJMcaI19-jfDUR4Iw8izp-pzU", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -621,7 +621,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1995, "name": "사랑평화지구", "cellId": "81655936", "kind": "korean", "lat": 37.5661254, "lng": 126.992229, "sinceDate": "2018-06-15", "googlePlaceId": "ChIJ3_N0SACjfDUR8uxk3J2x4sY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1995, "name": "사랑평화지구", "cellId": "81655936", "kind": "korean", "lat": 37.5661254, "lng": 126.992229, "sinceDate": "2018-06-15", "googlePlaceId": "ChIJ3_N0SACjfDUR8uxk3J2x4sY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -629,7 +629,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1998, "name": "타이거디스코(tiger disco)", "cellId": "81655936", "kind": "bar", "lat": 37.5661254, "lng": 126.992229, "sinceDate": "2020-05-28", "googlePlaceId": "ChIJ3xVZi_ijfDURtI6j9Txdf6E"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1998, "name": "타이거디스코(tiger disco)", "cellId": "81655936", "kind": "bar", "lat": 37.5661254, "lng": 126.992229, "sinceDate": "2020-05-28", "googlePlaceId": "ChIJ3xVZi_ijfDURtI6j9Txdf6E", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -637,7 +637,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1994, "name": "박만배 아리랑 보쌈 을지로점", "cellId": "81655936", "kind": "korean", "lat": 37.5661254, "lng": 126.992229, "sinceDate": "2026-02-20", "googlePlaceId": "ChIJ8UAUeiyjfDURX2Pi-JG2RY4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1994, "name": "박만배 아리랑 보쌈 을지로점", "cellId": "81655936", "kind": "korean", "lat": 37.5661254, "lng": 126.992229, "sinceDate": "2026-02-20", "googlePlaceId": "ChIJ8UAUeiyjfDURX2Pi-JG2RY4", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -645,7 +645,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1986, "name": "전통남원추어탕", "cellId": "81655935", "kind": "korean", "lat": 37.5654126, "lng": 126.9924013, "sinceDate": "1985-06-12", "googlePlaceId": "ChIJTScr5eOifDURatWXIBaE7Ls"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1986, "name": "전통남원추어탕", "cellId": "81655935", "kind": "korean", "lat": 37.5654126, "lng": 126.9924013, "sinceDate": "1985-06-12", "googlePlaceId": "ChIJTScr5eOifDURatWXIBaE7Ls", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -653,7 +653,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1992, "name": "르템플 주식회사", "cellId": "81655936", "kind": "bar", "lat": 37.5659109, "lng": 126.9924169, "sinceDate": "2019-05-13", "googlePlaceId": "ChIJmwXhRXKjfDURsZy2CERwD1o"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1992, "name": "르템플 주식회사", "cellId": "81655936", "kind": "bar", "lat": 37.5659109, "lng": 126.9924169, "sinceDate": "2019-05-13", "googlePlaceId": "ChIJmwXhRXKjfDURsZy2CERwD1o", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -661,7 +661,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1993, "name": "무무", "cellId": "81655936", "kind": "bar", "lat": 37.5659109, "lng": 126.9924169, "sinceDate": "2023-07-18", "googlePlaceId": "ChIJ549wWOOjfDUROTQrb7qzIqQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1993, "name": "무무", "cellId": "81655936", "kind": "bar", "lat": 37.5659109, "lng": 126.9924169, "sinceDate": "2023-07-18", "googlePlaceId": "ChIJ549wWOOjfDUROTQrb7qzIqQ", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -669,7 +669,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1982, "name": "을지로 브이", "cellId": "81655935", "kind": "other", "lat": 37.5657904, "lng": 126.9924851, "sinceDate": "2018-06-07", "googlePlaceId": "ChIJSxKQNp-jfDUR57Kj9JlFlK8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1982, "name": "을지로 브이", "cellId": "81655935", "kind": "other", "lat": 37.5657904, "lng": 126.9924851, "sinceDate": "2018-06-07", "googlePlaceId": "ChIJSxKQNp-jfDUR57Kj9JlFlK8", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -677,7 +677,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1980, "name": "유즈호(Yuzuho)", "cellId": "81655935", "kind": "other", "lat": 37.5657904, "lng": 126.9924851, "sinceDate": "2022-11-22", "googlePlaceId": "ChIJG9xbfGKjfDUR3xV8Zy1JTZA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1980, "name": "유즈호(Yuzuho)", "cellId": "81655935", "kind": "other", "lat": 37.5657904, "lng": 126.9924851, "sinceDate": "2022-11-22", "googlePlaceId": "ChIJG9xbfGKjfDUR3xV8Zy1JTZA", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -685,7 +685,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1984, "name": "을지식당", "cellId": "81655935", "kind": "korean", "lat": 37.5654672, "lng": 126.9925201, "sinceDate": "2018-03-05", "googlePlaceId": "ChIJiSvPghijfDURfH9KDfWygEc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1984, "name": "을지식당", "cellId": "81655935", "kind": "korean", "lat": 37.5654672, "lng": 126.9925201, "sinceDate": "2018-03-05", "googlePlaceId": "ChIJiSvPghijfDURfH9KDfWygEc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -693,7 +693,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1978, "name": "소규모와인 bar", "cellId": "81655935", "kind": "bar", "lat": 37.5654672, "lng": 126.9925201, "sinceDate": "2019-04-12", "googlePlaceId": "ChIJjxLd7-yjfDURRvN0jYYZD9A"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1978, "name": "소규모와인 bar", "cellId": "81655935", "kind": "bar", "lat": 37.5654672, "lng": 126.9925201, "sinceDate": "2019-04-12", "googlePlaceId": "ChIJjxLd7-yjfDURRvN0jYYZD9A", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -701,7 +701,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1981, "name": "을지", "cellId": "81655935", "kind": "bar", "lat": 37.5657429, "lng": 126.9925019, "sinceDate": "2024-02-13", "googlePlaceId": "ChIJ3zYreQCjfDURi9_6-NNLurk"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1981, "name": "을지", "cellId": "81655935", "kind": "bar", "lat": 37.5657429, "lng": 126.9925019, "sinceDate": "2024-02-13", "googlePlaceId": "ChIJ3zYreQCjfDURi9_6-NNLurk", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -709,7 +709,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1780, "name": "초불집", "cellId": "81623936", "kind": "korean", "lat": 37.5652028, "lng": 126.9910548, "sinceDate": "2025-01-07", "googlePlaceId": "ChIJR1JNfgCjfDURG4lmxBJ_yU0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1780, "name": "초불집", "cellId": "81623936", "kind": "korean", "lat": 37.5652028, "lng": 126.9910548, "sinceDate": "2025-01-07", "googlePlaceId": "ChIJR1JNfgCjfDURG4lmxBJ_yU0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -717,15 +717,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1502, "name": "평래옥", "cellId": "81591937", "kind": "korean", "lat": 37.5649103, "lng": 126.99039, "sinceDate": "1991-05-24", "googlePlaceId": "ChIJddwdaOSifDURUeKnfI1iPtE"}, "error": null}
-      }
-    },
-    {
-      "request": {"method": "GET", "url": "/api/v2/places/1644"},
-      "response": {
-        "status": 200,
-        "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1644, "name": "다원닭한마리빈대떡", "cellId": "81607936", "kind": "korean", "lat": 37.5648971, "lng": 126.9905027, "sinceDate": "1997-12-26", "googlePlaceId": "ChIJzfugEuSifDUR_LfdCdtHGGE"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1502, "name": "평래옥", "cellId": "81591937", "kind": "korean", "lat": 37.5649103, "lng": 126.99039, "sinceDate": "1991-05-24", "googlePlaceId": "ChIJddwdaOSifDURUeKnfI1iPtE", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -733,7 +725,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1778, "name": "주마등", "cellId": "81623936", "kind": "bar", "lat": 37.5653492, "lng": 126.9914005, "sinceDate": "2022-11-17", "googlePlaceId": "ChIJ9cqrEVyjfDURVudSUxq7KKY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1778, "name": "주마등", "cellId": "81623936", "kind": "bar", "lat": 37.5653492, "lng": 126.9914005, "sinceDate": "2022-11-17", "googlePlaceId": "ChIJ9cqrEVyjfDURVudSUxq7KKY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -741,7 +733,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1775, "name": "느루집 을지로점", "cellId": "81623936", "kind": "korean", "lat": 37.5651439, "lng": 126.9913892, "sinceDate": "2025-12-18", "googlePlaceId": "ChIJveU1UmKjfDURmEnl3PsPUn8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1775, "name": "느루집 을지로점", "cellId": "81623936", "kind": "korean", "lat": 37.5651439, "lng": 126.9913892, "sinceDate": "2025-12-18", "googlePlaceId": "ChIJveU1UmKjfDURmEnl3PsPUn8", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -749,7 +741,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1785, "name": "프로티너 을지로3가역점", "cellId": "81623936", "kind": "other", "lat": 37.5651439, "lng": 126.9913892, "sinceDate": "2026-02-27", "googlePlaceId": "ChIJNy25sT-jfDUREUsUSylFPYA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1785, "name": "프로티너 을지로3가역점", "cellId": "81623936", "kind": "other", "lat": 37.5651439, "lng": 126.9913892, "sinceDate": "2026-02-27", "googlePlaceId": "ChIJNy25sT-jfDUREUsUSylFPYA", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -757,7 +749,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1779, "name": "차알 을지로107 타워점", "cellId": "81623936", "kind": "other", "lat": 37.5651439, "lng": 126.9913892, "sinceDate": "2026-03-18", "googlePlaceId": "ChIJOWSQAACjfDURzxnZYd5qPwc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1779, "name": "차알 을지로107 타워점", "cellId": "81623936", "kind": "other", "lat": 37.5651439, "lng": 126.9913892, "sinceDate": "2026-03-18", "googlePlaceId": "ChIJOWSQAACjfDURzxnZYd5qPwc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -765,7 +757,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1786, "name": "후라토식당 을지로점", "cellId": "81623936", "kind": "other", "lat": 37.5651439, "lng": 126.9913892, "sinceDate": "2026-05-27", "googlePlaceId": "ChIJL0TaFsGjfDURvKFJHsqJxI4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1786, "name": "후라토식당 을지로점", "cellId": "81623936", "kind": "other", "lat": 37.5651439, "lng": 126.9913892, "sinceDate": "2026-05-27", "googlePlaceId": "ChIJL0TaFsGjfDURvKFJHsqJxI4", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -773,7 +765,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1781, "name": "취향로3가", "cellId": "81623936", "kind": "korean", "lat": 37.5653257, "lng": 126.9914865, "sinceDate": "2018-06-21", "googlePlaceId": "ChIJg7VhCeSifDURuwiie6FzuYA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1781, "name": "취향로3가", "cellId": "81623936", "kind": "korean", "lat": 37.5653257, "lng": 126.9914865, "sinceDate": "2018-06-21", "googlePlaceId": "ChIJg7VhCeSifDURuwiie6FzuYA", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -781,7 +773,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1788, "name": "감각의 제국", "cellId": "81623937", "kind": "bar", "lat": 37.5656708, "lng": 126.9915501, "sinceDate": "2017-11-01", "googlePlaceId": "ChIJgS46dUajfDURcTEV2-6r1p0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1788, "name": "감각의 제국", "cellId": "81623937", "kind": "bar", "lat": 37.5656708, "lng": 126.9915501, "sinceDate": "2017-11-01", "googlePlaceId": "ChIJgS46dUajfDURcTEV2-6r1p0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -789,7 +781,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1809, "name": "주마등2", "cellId": "81623937", "kind": "bar", "lat": 37.5656708, "lng": 126.9915501, "sinceDate": "2026-05-21", "googlePlaceId": "ChIJPZgfSomjfDUR88Pbkso7MZc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1809, "name": "주마등2", "cellId": "81623937", "kind": "bar", "lat": 37.5656708, "lng": 126.9915501, "sinceDate": "2026-05-21", "googlePlaceId": "ChIJPZgfSomjfDUR88Pbkso7MZc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -797,7 +789,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1537, "name": "차오", "cellId": "81591939", "kind": "korean", "lat": 37.5656404, "lng": 126.9903866, "sinceDate": "2024-10-04", "googlePlaceId": "ChIJV_c1fwCjfDURt0SYin62Ghw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1537, "name": "차오", "cellId": "81591939", "kind": "korean", "lat": 37.5656404, "lng": 126.9903866, "sinceDate": "2024-10-04", "googlePlaceId": "ChIJV_c1fwCjfDURt0SYin62Ghw", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -805,7 +797,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1528, "name": "디핀을지로3가", "cellId": "81591939", "kind": "other", "lat": 37.5656404, "lng": 126.9903866, "sinceDate": "2024-12-30", "googlePlaceId": "ChIJlzwBSwCjfDURPHnAzYTg7ec"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1528, "name": "디핀을지로3가", "cellId": "81591939", "kind": "other", "lat": 37.5656404, "lng": 126.9903866, "sinceDate": "2024-12-30", "googlePlaceId": "ChIJlzwBSwCjfDURPHnAzYTg7ec", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -813,7 +805,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1530, "name": "백염막창", "cellId": "81591939", "kind": "korean", "lat": 37.5656112, "lng": 126.9901272, "sinceDate": "2019-08-20", "googlePlaceId": "ChIJxxxKAoyjfDUR8t-Lm87M-lg"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1530, "name": "백염막창", "cellId": "81591939", "kind": "korean", "lat": 37.5656112, "lng": 126.9901272, "sinceDate": "2019-08-20", "googlePlaceId": "ChIJxxxKAoyjfDUR8t-Lm87M-lg", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -821,7 +813,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1647, "name": "명인돈까스", "cellId": "81607937", "kind": "other", "lat": 37.5653648, "lng": 126.9908689, "sinceDate": "2009-08-05", "googlePlaceId": "ChIJ6_kdE-SifDUR-sPE34ImwQ4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1647, "name": "명인돈까스", "cellId": "81607937", "kind": "other", "lat": 37.5653648, "lng": 126.9908689, "sinceDate": "2009-08-05", "googlePlaceId": "ChIJ6_kdE-SifDUR-sPE34ImwQ4", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -829,7 +821,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1657, "name": "을지 만지카이", "cellId": "81607937", "kind": "other", "lat": 37.5653648, "lng": 126.9908689, "sinceDate": "2025-04-10", "googlePlaceId": "ChIJt2CxQEajfDUR4LeQvdSVsHw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1657, "name": "을지 만지카이", "cellId": "81607937", "kind": "other", "lat": 37.5653648, "lng": 126.9908689, "sinceDate": "2025-04-10", "googlePlaceId": "ChIJt2CxQEajfDUR4LeQvdSVsHw", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -837,7 +829,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1665, "name": "힛토", "cellId": "81607937", "kind": "other", "lat": 37.5653648, "lng": 126.9908689, "sinceDate": "2025-06-10", "googlePlaceId": "ChIJfQcSRgCjfDURHO_nqaL8dBs"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1665, "name": "힛토", "cellId": "81607937", "kind": "other", "lat": 37.5653648, "lng": 126.9908689, "sinceDate": "2025-06-10", "googlePlaceId": "ChIJfQcSRgCjfDURHO_nqaL8dBs", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -845,7 +837,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1650, "name": "상우가든", "cellId": "81607937", "kind": "korean", "lat": 37.5651598, "lng": 126.9905659, "sinceDate": "2018-11-02", "googlePlaceId": "ChIJF5_Gz-WifDURbbXwq3IayMA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1650, "name": "상우가든", "cellId": "81607937", "kind": "korean", "lat": 37.5651598, "lng": 126.9905659, "sinceDate": "2018-11-02", "googlePlaceId": "ChIJF5_Gz-WifDURbbXwq3IayMA", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -853,7 +845,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1645, "name": "단토리 저동점", "cellId": "81607937", "kind": "korean", "lat": 37.5651598, "lng": 126.9905659, "sinceDate": "2019-06-11", "googlePlaceId": "ChIJ5Yy7fQCjfDURJPUdGXFOFo8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1645, "name": "단토리 저동점", "cellId": "81607937", "kind": "korean", "lat": 37.5651598, "lng": 126.9905659, "sinceDate": "2019-06-11", "googlePlaceId": "ChIJ5Yy7fQCjfDURJPUdGXFOFo8", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -861,7 +853,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1658, "name": "을지로 라스베가스", "cellId": "81607937", "kind": "bar", "lat": 37.5651598, "lng": 126.9905659, "sinceDate": "2019-06-24", "googlePlaceId": "ChIJ-ydxa-SifDURUO9m4RhsrKs"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1658, "name": "을지로 라스베가스", "cellId": "81607937", "kind": "bar", "lat": 37.5651598, "lng": 126.9905659, "sinceDate": "2019-06-24", "googlePlaceId": "ChIJ-ydxa-SifDURUO9m4RhsrKs", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -869,7 +861,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1662, "name": "코야 레코드", "cellId": "81607937", "kind": "other", "lat": 37.5651598, "lng": 126.9905659, "sinceDate": "2023-02-27", "googlePlaceId": "ChIJUx_597WjfDURnSXTiKd9Di0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1662, "name": "코야 레코드", "cellId": "81607937", "kind": "other", "lat": 37.5651598, "lng": 126.9905659, "sinceDate": "2023-02-27", "googlePlaceId": "ChIJUx_597WjfDURnSXTiKd9Di0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -877,7 +869,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1652, "name": "세렌티", "cellId": "81607937", "kind": "korean", "lat": 37.5651598, "lng": 126.9905659, "sinceDate": "2025-03-28", "googlePlaceId": "ChIJ7f_vB2yjfDURUlv7zOTDwgM"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1652, "name": "세렌티", "cellId": "81607937", "kind": "korean", "lat": 37.5651598, "lng": 126.9905659, "sinceDate": "2025-03-28", "googlePlaceId": "ChIJ7f_vB2yjfDURUlv7zOTDwgM", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -885,7 +877,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1535, "name": "을삼호프", "cellId": "81591939", "kind": "other", "lat": 37.565649, "lng": 126.9900923, "sinceDate": "2003-06-27", "googlePlaceId": "ChIJh60ZnSujfDUR_YiS6QkBDfM"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1535, "name": "을삼호프", "cellId": "81591939", "kind": "other", "lat": 37.565649, "lng": 126.9900923, "sinceDate": "2003-06-27", "googlePlaceId": "ChIJh60ZnSujfDUR_YiS6QkBDfM", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -893,7 +885,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1538, "name": "파친코(pachinko euljiro)", "cellId": "81591939", "kind": "korean", "lat": 37.565649, "lng": 126.9900923, "sinceDate": "2015-04-06", "googlePlaceId": "ChIJTzXTX02jfDURox3mKpg22pU"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1538, "name": "파친코(pachinko euljiro)", "cellId": "81591939", "kind": "korean", "lat": 37.565649, "lng": 126.9900923, "sinceDate": "2015-04-06", "googlePlaceId": "ChIJTzXTX02jfDURox3mKpg22pU", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -901,7 +893,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1529, "name": "막삼가 을지로", "cellId": "81591939", "kind": "korean", "lat": 37.565649, "lng": 126.9900923, "sinceDate": "2024-05-17", "googlePlaceId": "ChIJFdx6XgCjfDURYEwYwhZPwEE"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1529, "name": "막삼가 을지로", "cellId": "81591939", "kind": "korean", "lat": 37.565649, "lng": 126.9900923, "sinceDate": "2024-05-17", "googlePlaceId": "ChIJFdx6XgCjfDURYEwYwhZPwEE", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -909,7 +901,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1539, "name": "풍남", "cellId": "81591939", "kind": "bar", "lat": 37.5656735, "lng": 126.9899831, "sinceDate": "1995-09-30", "googlePlaceId": "ChIJ4YCXOOSifDUR2uLv9k5Tluo"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1539, "name": "풍남", "cellId": "81591939", "kind": "bar", "lat": 37.5656735, "lng": 126.9899831, "sinceDate": "1995-09-30", "googlePlaceId": "ChIJ4YCXOOSifDUR2uLv9k5Tluo", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -917,7 +909,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1532, "name": "어사랑", "cellId": "81591939", "kind": "other", "lat": 37.5656735, "lng": 126.9899831, "sinceDate": "1997-05-19", "googlePlaceId": "ChIJH6Nk1WKjfDURazoxbQ1GwGs"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1532, "name": "어사랑", "cellId": "81591939", "kind": "other", "lat": 37.5656735, "lng": 126.9899831, "sinceDate": "1997-05-19", "googlePlaceId": "ChIJH6Nk1WKjfDURazoxbQ1GwGs", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -925,7 +917,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1654, "name": "애프터올", "cellId": "81607937", "kind": "bar", "lat": 37.5650401, "lng": 126.9904558, "sinceDate": "2019-01-24", "googlePlaceId": "ChIJLVfgHcOjfDURA-2NDlUfNmI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1654, "name": "애프터올", "cellId": "81607937", "kind": "bar", "lat": 37.5650401, "lng": 126.9904558, "sinceDate": "2019-01-24", "googlePlaceId": "ChIJLVfgHcOjfDURA-2NDlUfNmI", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -933,7 +925,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1651, "name": "서초닭발", "cellId": "81607937", "kind": "other", "lat": 37.5650401, "lng": 126.9904558, "sinceDate": "2023-04-17", "googlePlaceId": "ChIJZaLSDACjfDURw5XBmKel_ho"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1651, "name": "서초닭발", "cellId": "81607937", "kind": "other", "lat": 37.5650401, "lng": 126.9904558, "sinceDate": "2023-04-17", "googlePlaceId": "ChIJZaLSDACjfDURw5XBmKel_ho", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -941,7 +933,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1660, "name": "정원", "cellId": "81607937", "kind": "korean", "lat": 37.5650401, "lng": 126.9904558, "sinceDate": "2026-07-09", "googlePlaceId": "ChIJDYa9AgCjfDURhnctQkQyw7o"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1660, "name": "정원", "cellId": "81607937", "kind": "korean", "lat": 37.5650401, "lng": 126.9904558, "sinceDate": "2026-07-09", "googlePlaceId": "ChIJDYa9AgCjfDURhnctQkQyw7o", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -949,7 +941,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1533, "name": "영락골뱅이", "cellId": "81591939", "kind": "bar", "lat": 37.5657691, "lng": 126.9899745, "sinceDate": "2012-12-11", "googlePlaceId": "ChIJ0_34N-SifDURBssfNJPQ6Fg"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1533, "name": "영락골뱅이", "cellId": "81591939", "kind": "bar", "lat": 37.5657691, "lng": 126.9899745, "sinceDate": "2012-12-11", "googlePlaceId": "ChIJ0_34N-SifDURBssfNJPQ6Fg", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -957,7 +949,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1536, "name": "지지타운", "cellId": "81591939", "kind": "other", "lat": 37.5657691, "lng": 126.9899745, "sinceDate": "2017-09-18", "googlePlaceId": "ChIJjRr0QwCjfDURT1cfp2cdSNc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1536, "name": "지지타운", "cellId": "81591939", "kind": "other", "lat": 37.5657691, "lng": 126.9899745, "sinceDate": "2017-09-18", "googlePlaceId": "ChIJjRr0QwCjfDURT1cfp2cdSNc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -965,7 +957,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1531, "name": "아트몬스터 을지로점", "cellId": "81591939", "kind": "other", "lat": 37.5657691, "lng": 126.9899745, "sinceDate": "2019-05-03", "googlePlaceId": "ChIJHTZ9azCjfDURUP9iPywx3F8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1531, "name": "아트몬스터 을지로점", "cellId": "81591939", "kind": "other", "lat": 37.5657691, "lng": 126.9899745, "sinceDate": "2019-05-03", "googlePlaceId": "ChIJHTZ9azCjfDURUP9iPywx3F8", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -973,7 +965,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 121, "name": "더컵(THE CUP)", "cellId": "81399949", "kind": "cafe", "lat": 37.5645259, "lng": 126.9834171, "sinceDate": "2006-06-07", "googlePlaceId": "ChIJPTwLKu6ifDUR3faa-usOQOQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 121, "name": "더컵(THE CUP)", "cellId": "81399949", "kind": "cafe", "lat": 37.5645259, "lng": 126.9834171, "sinceDate": "2006-06-07", "googlePlaceId": "ChIJPTwLKu6ifDUR3faa-usOQOQ", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -981,7 +973,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 130, "name": "유천냉면 명동점", "cellId": "81399949", "kind": "korean", "lat": 37.5645259, "lng": 126.9834171, "sinceDate": "2019-03-26", "googlePlaceId": "ChIJVRacQhWjfDURARF5vEGpD2w"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 130, "name": "유천냉면 명동점", "cellId": "81399949", "kind": "korean", "lat": 37.5645259, "lng": 126.9834171, "sinceDate": "2019-03-26", "googlePlaceId": "ChIJVRacQhWjfDURARF5vEGpD2w", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -989,7 +981,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 127, "name": "어펜드 커피 로스터스(upnd coffee roasters)", "cellId": "81399949", "kind": "cafe", "lat": 37.5645259, "lng": 126.9834171, "sinceDate": "2021-12-06", "googlePlaceId": "ChIJ1zDCmdSjfDURy1SZklk5rZU"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 127, "name": "어펜드 커피 로스터스(upnd coffee roasters)", "cellId": "81399949", "kind": "cafe", "lat": 37.5645259, "lng": 126.9834171, "sinceDate": "2021-12-06", "googlePlaceId": "ChIJ1zDCmdSjfDURy1SZklk5rZU", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -997,7 +989,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 132, "name": "포레스트(forest)", "cellId": "81399949", "kind": "bar", "lat": 37.5645259, "lng": 126.9834171, "sinceDate": "2024-09-11", "googlePlaceId": "ChIJ5Sunkn6jfDURQRev_tth4Ic"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 132, "name": "포레스트(forest)", "cellId": "81399949", "kind": "bar", "lat": 37.5645259, "lng": 126.9834171, "sinceDate": "2024-09-11", "googlePlaceId": "ChIJ5Sunkn6jfDURQRev_tth4Ic", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1005,15 +997,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 126, "name": "신룽푸", "cellId": "81399949", "kind": "other", "lat": 37.5645268, "lng": 126.9833065, "sinceDate": "2010-10-22", "googlePlaceId": "ChIJeQyZ2O-jfDURDyRyv-AOims"}, "error": null}
-      }
-    },
-    {
-      "request": {"method": "GET", "url": "/api/v2/places/128"},
-      "response": {
-        "status": 200,
-        "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 128, "name": "요꼬쪼", "cellId": "81399949", "kind": "other", "lat": 37.5645268, "lng": 126.9833065, "sinceDate": "2021-12-27", "googlePlaceId": "ChIJ9Wro5x-jfDURqOtGMXALmCc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 126, "name": "신룽푸", "cellId": "81399949", "kind": "other", "lat": 37.5645268, "lng": 126.9833065, "sinceDate": "2010-10-22", "googlePlaceId": "ChIJeQyZ2O-jfDURDyRyv-AOims", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1021,7 +1005,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 124, "name": "미쓰족발", "cellId": "81399949", "kind": "korean", "lat": 37.5646408, "lng": 126.9834216, "sinceDate": "2016-07-19", "googlePlaceId": "ChIJe_h6XQujfDURmdScoyBreIo"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 124, "name": "미쓰족발", "cellId": "81399949", "kind": "korean", "lat": 37.5646408, "lng": 126.9834216, "sinceDate": "2016-07-19", "googlePlaceId": "ChIJe_h6XQujfDURmdScoyBreIo", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1029,7 +1013,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 129, "name": "원당감자탕 명동1호점", "cellId": "81399949", "kind": "korean", "lat": 37.5645698, "lng": 126.9831454, "sinceDate": "2023-07-11", "googlePlaceId": "ChIJGzls3O-ifDURB791sZFgJgg"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 129, "name": "원당감자탕 명동1호점", "cellId": "81399949", "kind": "korean", "lat": 37.5645698, "lng": 126.9831454, "sinceDate": "2023-07-11", "googlePlaceId": "ChIJGzls3O-ifDURB791sZFgJgg", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1037,7 +1021,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 122, "name": "명동서서갈비", "cellId": "81399949", "kind": "korean", "lat": 37.5647592, "lng": 126.9833114, "sinceDate": "2022-06-09", "googlePlaceId": "ChIJsZdcC_CifDURqzhAwVye6TE"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 122, "name": "명동서서갈비", "cellId": "81399949", "kind": "korean", "lat": 37.5647592, "lng": 126.9833114, "sinceDate": "2022-06-09", "googlePlaceId": "ChIJsZdcC_CifDURqzhAwVye6TE", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1045,7 +1029,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 123, "name": "명동설빙", "cellId": "81399949", "kind": "cafe", "lat": 37.5648799, "lng": 126.9834333, "sinceDate": "2022-02-07", "googlePlaceId": "ChIJ7U_tXGajfDURuAXn-VtaKzw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 123, "name": "명동설빙", "cellId": "81399949", "kind": "cafe", "lat": 37.5648799, "lng": 126.9834333, "sinceDate": "2022-02-07", "googlePlaceId": "ChIJ7U_tXGajfDURuAXn-VtaKzw", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1053,7 +1037,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 24, "name": "골목길", "cellId": "81367949", "kind": "korean", "lat": 37.5638262, "lng": 126.9824763, "sinceDate": "2025-06-25", "googlePlaceId": "ChIJ66slAgWjfDURAxBBRWVJRgg"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 24, "name": "골목길", "cellId": "81367949", "kind": "korean", "lat": 37.5638262, "lng": 126.9824763, "sinceDate": "2025-06-25", "googlePlaceId": "ChIJ66slAgWjfDURAxBBRWVJRgg", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1061,7 +1045,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 2334, "name": "헤리스카페", "cellId": "81351951", "kind": "cafe", "lat": 37.5640997, "lng": 126.9819254, "sinceDate": "2014-03-03", "googlePlaceId": "ChIJ8duJ7fGifDURcvc5cHhVw8s"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 2334, "name": "헤리스카페", "cellId": "81351951", "kind": "cafe", "lat": 37.5640997, "lng": 126.9819254, "sinceDate": "2014-03-03", "googlePlaceId": "ChIJ8duJ7fGifDURcvc5cHhVw8s", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1069,7 +1053,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 575, "name": "을지돈가스", "cellId": "81447945", "kind": "korean", "lat": 37.5643475, "lng": 126.9850352, "sinceDate": "2015-08-18", "googlePlaceId": "ChIJE7KHyqWjfDURmd3XDUgLhCM"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 575, "name": "을지돈가스", "cellId": "81447945", "kind": "korean", "lat": 37.5643475, "lng": 126.9850352, "sinceDate": "2015-08-18", "googlePlaceId": "ChIJE7KHyqWjfDURmd3XDUgLhCM", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1077,7 +1061,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 293, "name": "청기와타운 을지로점", "cellId": "81415951", "kind": "korean", "lat": 37.5658482, "lng": 126.9836579, "sinceDate": "2022-01-25", "googlePlaceId": "ChIJv801Z7ajfDUROYhtvutzDHU"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 293, "name": "청기와타운 을지로점", "cellId": "81415951", "kind": "korean", "lat": 37.5658482, "lng": 126.9836579, "sinceDate": "2022-01-25", "googlePlaceId": "ChIJv801Z7ajfDUROYhtvutzDHU", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1085,7 +1069,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 285, "name": "비진도", "cellId": "81415951", "kind": "korean", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2006-03-14", "googlePlaceId": "ChIJb7FZ9gGjfDURaCVrY3_MfFI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 285, "name": "비진도", "cellId": "81415951", "kind": "korean", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2006-03-14", "googlePlaceId": "ChIJb7FZ9gGjfDURaCVrY3_MfFI", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1093,7 +1077,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 281, "name": "명동순대국", "cellId": "81415951", "kind": "korean", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2011-08-11", "googlePlaceId": "ChIJV0NQsu-ifDUREIT6d-W4Brg"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 281, "name": "명동순대국", "cellId": "81415951", "kind": "korean", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2011-08-11", "googlePlaceId": "ChIJV0NQsu-ifDUREIT6d-W4Brg", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1101,7 +1085,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 279, "name": "먹보대장", "cellId": "81415951", "kind": "korean", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2012-11-12", "googlePlaceId": "ChIJT5iZ5cyjfDURiZMFjnNQeHQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 279, "name": "먹보대장", "cellId": "81415951", "kind": "korean", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2012-11-12", "googlePlaceId": "ChIJT5iZ5cyjfDURiZMFjnNQeHQ", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1109,7 +1093,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 289, "name": "어컵오브(a cup of)", "cellId": "81415951", "kind": "cafe", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2005-04-15", "googlePlaceId": "ChIJ1RCos--ifDUR-aa4aDaE1r0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 289, "name": "어컵오브(a cup of)", "cellId": "81415951", "kind": "cafe", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2005-04-15", "googlePlaceId": "ChIJ1RCos--ifDUR-aa4aDaE1r0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1117,7 +1101,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 278, "name": "로스터리 요정", "cellId": "81415951", "kind": "cafe", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2010-03-22", "googlePlaceId": "ChIJDz2JyO-ifDUR-kYEbMmLKxc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 278, "name": "로스터리 요정", "cellId": "81415951", "kind": "cafe", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2010-03-22", "googlePlaceId": "ChIJDz2JyO-ifDUR-kYEbMmLKxc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1125,7 +1109,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 288, "name": "아리스타커피(ARISTA COFFEE)", "cellId": "81415951", "kind": "cafe", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2012-04-04", "googlePlaceId": "ChIJ1RCos--ifDURqWcryw5viw0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 288, "name": "아리스타커피(ARISTA COFFEE)", "cellId": "81415951", "kind": "cafe", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2012-04-04", "googlePlaceId": "ChIJ1RCos--ifDURqWcryw5viw0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1133,7 +1117,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 277, "name": "국수대장", "cellId": "81415951", "kind": "korean", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2012-05-07", "googlePlaceId": "ChIJ1RCos--ifDURVgCPhPE8loI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 277, "name": "국수대장", "cellId": "81415951", "kind": "korean", "lat": 37.5659097, "lng": 126.9838353, "sinceDate": "2012-05-07", "googlePlaceId": "ChIJ1RCos--ifDURVgCPhPE8loI", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1141,7 +1125,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 276, "name": "1982 컵밥(1982CUPBAB)", "cellId": "81415951", "kind": "korean", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2014-06-16", "googlePlaceId": "ChIJNbLdre-ifDURsEs_qhKm-nc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 276, "name": "1982 컵밥(1982CUPBAB)", "cellId": "81415951", "kind": "korean", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2014-06-16", "googlePlaceId": "ChIJNbLdre-ifDURsEs_qhKm-nc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1149,7 +1133,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 292, "name": "짜드라(ZZADRA)", "cellId": "81415951", "kind": "cafe", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2022-03-14", "googlePlaceId": "ChIJNbLdre-ifDURT44SqGOGhU0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 292, "name": "짜드라(ZZADRA)", "cellId": "81415951", "kind": "cafe", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2022-03-14", "googlePlaceId": "ChIJNbLdre-ifDURT44SqGOGhU0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1157,7 +1141,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 291, "name": "제퍼커피 을지로입구역점", "cellId": "81415951", "kind": "cafe", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2015-02-05", "googlePlaceId": "ChIJNbLdre-ifDURnhBfL750slE"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 291, "name": "제퍼커피 을지로입구역점", "cellId": "81415951", "kind": "cafe", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2015-02-05", "googlePlaceId": "ChIJNbLdre-ifDURnhBfL750slE", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1165,7 +1149,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 284, "name": "민 샌드위치", "cellId": "81415951", "kind": "other", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2015-09-22", "googlePlaceId": "ChIJNbLdre-ifDURAXTwERu29S0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 284, "name": "민 샌드위치", "cellId": "81415951", "kind": "other", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2015-09-22", "googlePlaceId": "ChIJNbLdre-ifDURAXTwERu29S0", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1173,7 +1157,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 287, "name": "심플마인드", "cellId": "81415951", "kind": "other", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2016-12-01", "googlePlaceId": "ChIJk7w8mi6jfDURL0kdQOYC-Xo"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 287, "name": "심플마인드", "cellId": "81415951", "kind": "other", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2016-12-01", "googlePlaceId": "ChIJk7w8mi6jfDURL0kdQOYC-Xo", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1181,7 +1165,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 282, "name": "모노치즈 을지로점", "cellId": "81415951", "kind": "cafe", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2020-06-03", "googlePlaceId": "ChIJRX1Kn--ifDURI86LelBfANw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 282, "name": "모노치즈 을지로점", "cellId": "81415951", "kind": "cafe", "lat": 37.5660447, "lng": 126.9836644, "sinceDate": "2020-06-03", "googlePlaceId": "ChIJRX1Kn--ifDURI86LelBfANw", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1189,7 +1173,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 573, "name": "서울명동 다이닝원", "cellId": "81447945", "kind": "korean", "lat": 37.5642067, "lng": 126.9853512, "sinceDate": "2013-04-09", "googlePlaceId": "ChIJv9si8ISjfDURBvgqLQCwnxI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 573, "name": "서울명동 다이닝원", "cellId": "81447945", "kind": "korean", "lat": 37.5642067, "lng": 126.9853512, "sinceDate": "2013-04-09", "googlePlaceId": "ChIJv9si8ISjfDURBvgqLQCwnxI", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1197,7 +1181,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 576, "name": "타이가든 본점", "cellId": "81447945", "kind": "other", "lat": 37.5642067, "lng": 126.9853512, "sinceDate": "2014-11-18", "googlePlaceId": "ChIJwTD6HhCjfDURvwYafRWGJ0A"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 576, "name": "타이가든 본점", "cellId": "81447945", "kind": "other", "lat": 37.5642067, "lng": 126.9853512, "sinceDate": "2014-11-18", "googlePlaceId": "ChIJwTD6HhCjfDURvwYafRWGJ0A", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1205,7 +1189,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 574, "name": "솥고집 명동점", "cellId": "81447945", "kind": "other", "lat": 37.5642067, "lng": 126.9853512, "sinceDate": "2023-02-03", "googlePlaceId": "ChIJcUarAwCjfDURA63IZB6ictE"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 574, "name": "솥고집 명동점", "cellId": "81447945", "kind": "other", "lat": 37.5642067, "lng": 126.9853512, "sinceDate": "2023-02-03", "googlePlaceId": "ChIJcUarAwCjfDURA63IZB6ictE", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1213,7 +1197,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 107, "name": "꽁시면관", "cellId": "81399942", "kind": "other", "lat": 37.5613991, "lng": 126.9832249, "sinceDate": "2006-04-10", "googlePlaceId": "ChIJzbHQG_GifDURRgH_FqcgmMo"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 107, "name": "꽁시면관", "cellId": "81399942", "kind": "other", "lat": 37.5613991, "lng": 126.9832249, "sinceDate": "2006-04-10", "googlePlaceId": "ChIJzbHQG_GifDURRgH_FqcgmMo", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1221,7 +1205,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 178, "name": "빤닭빤닭", "cellId": "81415941", "kind": "korean", "lat": 37.561718, "lng": 126.9839485, "sinceDate": "2023-10-12", "googlePlaceId": "ChIJ749NGfCifDURVRam9mS9tyk"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 178, "name": "빤닭빤닭", "cellId": "81415941", "kind": "korean", "lat": 37.561718, "lng": 126.9839485, "sinceDate": "2023-10-12", "googlePlaceId": "ChIJ749NGfCifDURVRam9mS9tyk", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1229,7 +1213,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 181, "name": "익선동목장", "cellId": "81415941", "kind": "korean", "lat": 37.561718, "lng": 126.9839485, "sinceDate": "2024-12-20", "googlePlaceId": "ChIJz65zmt2jfDURwNO1w3Snk_M"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 181, "name": "익선동목장", "cellId": "81415941", "kind": "korean", "lat": 37.561718, "lng": 126.9839485, "sinceDate": "2024-12-20", "googlePlaceId": "ChIJz65zmt2jfDURwNO1w3Snk_M", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1237,7 +1221,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 179, "name": "쇼미더크랩 명동점", "cellId": "81415941", "kind": "other", "lat": 37.561718, "lng": 126.9839485, "sinceDate": "2026-04-13", "googlePlaceId": "ChIJxYLR4AqjfDURqsd6v-QC9JY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 179, "name": "쇼미더크랩 명동점", "cellId": "81415941", "kind": "other", "lat": 37.561718, "lng": 126.9839485, "sinceDate": "2026-04-13", "googlePlaceId": "ChIJxYLR4AqjfDURqsd6v-QC9JY", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1245,7 +1229,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 2235, "name": "명동중앙점 왕비집", "cellId": "81367943", "kind": "korean", "lat": 37.5610721, "lng": 126.9823989, "sinceDate": "1988-10-10", "googlePlaceId": "ChIJYfuPafGifDUR2nysgCIUSh0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 2235, "name": "명동중앙점 왕비집", "cellId": "81367943", "kind": "korean", "lat": 37.5610721, "lng": 126.9823989, "sinceDate": "1988-10-10", "googlePlaceId": "ChIJYfuPafGifDUR2nysgCIUSh0", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1253,7 +1237,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 2236, "name": "한식왕비집 명동중앙점", "cellId": "81367943", "kind": "other", "lat": 37.5610721, "lng": 126.9823989, "sinceDate": "2026-10-07", "googlePlaceId": "ChIJS8DKtoyjfDURJXusnl6IhGY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 2236, "name": "한식왕비집 명동중앙점", "cellId": "81367943", "kind": "other", "lat": 37.5610721, "lng": 126.9823989, "sinceDate": "2026-10-07", "googlePlaceId": "ChIJS8DKtoyjfDURJXusnl6IhGY", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1261,7 +1245,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 2238, "name": "란주칼면", "cellId": "81367943", "kind": "other", "lat": 37.5610191, "lng": 126.982148, "sinceDate": "2007-03-12", "googlePlaceId": "ChIJO6g-RvGifDURx_vXYokm50I"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 2238, "name": "란주칼면", "cellId": "81367943", "kind": "other", "lat": 37.5610191, "lng": 126.982148, "sinceDate": "2007-03-12", "googlePlaceId": "ChIJO6g-RvGifDURx_vXYokm50I", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1269,7 +1253,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 2237, "name": "김삼보 김치찌개", "cellId": "81367943", "kind": "korean", "lat": 37.5610191, "lng": 126.982148, "sinceDate": "2021-12-06", "googlePlaceId": "ChIJ-2HJO_6jfDUR3xAE617AIoY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 2237, "name": "김삼보 김치찌개", "cellId": "81367943", "kind": "korean", "lat": 37.5610191, "lng": 126.982148, "sinceDate": "2021-12-06", "googlePlaceId": "ChIJ-2HJO_6jfDUR3xAE617AIoY", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1277,7 +1261,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 2270, "name": "황금목장(본점)", "cellId": "81431940", "kind": "korean", "lat": 37.5616412, "lng": 126.9845773, "sinceDate": "2010-02-22", "googlePlaceId": "ChIJ9QDD9fCifDURRdxwvqEEuDA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 2270, "name": "황금목장(본점)", "cellId": "81431940", "kind": "korean", "lat": 37.5616412, "lng": 126.9845773, "sinceDate": "2010-02-22", "googlePlaceId": "ChIJ9QDD9fCifDURRdxwvqEEuDA", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1285,7 +1269,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 409, "name": "한식왕비집 명동점", "cellId": "81431942", "kind": "korean", "lat": 37.5626125, "lng": 126.9844789, "sinceDate": "2024-06-13", "googlePlaceId": "ChIJR8HSy56jfDURF86-glq9V_Y"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 409, "name": "한식왕비집 명동점", "cellId": "81431942", "kind": "korean", "lat": 37.5626125, "lng": 126.9844789, "sinceDate": "2024-06-13", "googlePlaceId": "ChIJR8HSy56jfDURF86-glq9V_Y", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1293,7 +1277,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 2271, "name": "라이프워크", "cellId": "81447939", "kind": "korean", "lat": 37.561328, "lng": 126.9853531, "sinceDate": "2020-07-30", "googlePlaceId": "ChIJXwIznnmjfDURmj2g2YLng4o"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 2271, "name": "라이프워크", "cellId": "81447939", "kind": "korean", "lat": 37.561328, "lng": 126.9853531, "sinceDate": "2020-07-30", "googlePlaceId": "ChIJXwIznnmjfDURmj2g2YLng4o", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1301,7 +1285,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 23, "name": "초원", "cellId": "81367948", "kind": "korean", "lat": 37.5631155, "lng": 126.9822097, "sinceDate": "2014-02-19", "googlePlaceId": "ChIJ5-Rk9-WifDURIYTQsoAQ0AY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 23, "name": "초원", "cellId": "81367948", "kind": "korean", "lat": 37.5631155, "lng": 126.9822097, "sinceDate": "2014-02-19", "googlePlaceId": "ChIJ5-Rk9-WifDURIYTQsoAQ0AY", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1309,7 +1293,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 58, "name": "CGV명동", "cellId": "81383947", "kind": "korean", "lat": 37.5634129, "lng": 126.9828907, "sinceDate": "2001-12-20", "googlePlaceId": "ChIJxQ1BuPGifDURErJgmIrLIXs"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 58, "name": "CGV명동", "cellId": "81383947", "kind": "korean", "lat": 37.5634129, "lng": 126.9828907, "sinceDate": "2001-12-20", "googlePlaceId": "ChIJxQ1BuPGifDURErJgmIrLIXs", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1317,7 +1301,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 59, "name": "딤딤섬 명동점", "cellId": "81383947", "kind": "other", "lat": 37.5634129, "lng": 126.9828907, "sinceDate": "2022-09-26", "googlePlaceId": "ChIJ_42QPPWjfDURhqSfvznagio"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 59, "name": "딤딤섬 명동점", "cellId": "81383947", "kind": "other", "lat": 37.5634129, "lng": 126.9828907, "sinceDate": "2022-09-26", "googlePlaceId": "ChIJ_42QPPWjfDURhqSfvznagio", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1325,7 +1309,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 556, "name": "후게츠 명동점", "cellId": "81447942", "kind": "other", "lat": 37.5628415, "lng": 126.985038, "sinceDate": "2002-02-08", "googlePlaceId": "ChIJu11nFfCifDURTLANLMcTDyc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 556, "name": "후게츠 명동점", "cellId": "81447942", "kind": "other", "lat": 37.5628415, "lng": 126.985038, "sinceDate": "2002-02-08", "googlePlaceId": "ChIJu11nFfCifDURTLANLMcTDyc", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1333,7 +1317,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 548, "name": "리틀하노이", "cellId": "81447942", "kind": "other", "lat": 37.5628415, "lng": 126.985038, "sinceDate": "2005-05-07", "googlePlaceId": "ChIJwaEUHPCifDURhv2hziPirJ8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 548, "name": "리틀하노이", "cellId": "81447942", "kind": "other", "lat": 37.5628415, "lng": 126.985038, "sinceDate": "2005-05-07", "googlePlaceId": "ChIJwaEUHPCifDURhv2hziPirJ8", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1341,7 +1325,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 551, "name": "명동해물탕", "cellId": "81447942", "kind": "korean", "lat": 37.5629147, "lng": 126.9851744, "sinceDate": "2023-02-02", "googlePlaceId": "ChIJk7IBibqjfDURBb4ZVSk6gyo"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 551, "name": "명동해물탕", "cellId": "81447942", "kind": "korean", "lat": 37.5629147, "lng": 126.9851744, "sinceDate": "2023-02-02", "googlePlaceId": "ChIJk7IBibqjfDURBb4ZVSk6gyo", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1349,7 +1333,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 698, "name": "홍빠 명돈가", "cellId": "81463940", "kind": "korean", "lat": 37.5622061, "lng": 126.9857642, "sinceDate": "2012-09-17", "googlePlaceId": "ChIJE4DucfCifDURE_tPetYrA60"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 698, "name": "홍빠 명돈가", "cellId": "81463940", "kind": "korean", "lat": 37.5622061, "lng": 126.9857642, "sinceDate": "2012-09-17", "googlePlaceId": "ChIJE4DucfCifDURE_tPetYrA60", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1357,7 +1341,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 702, "name": "명동 주막", "cellId": "81463941", "kind": "korean", "lat": 37.5626691, "lng": 126.9855941, "sinceDate": "2024-07-23", "googlePlaceId": "ChIJY_LTQgCjfDUR7QUVorXen4g"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 702, "name": "명동 주막", "cellId": "81463941", "kind": "korean", "lat": 37.5626691, "lng": 126.9855941, "sinceDate": "2024-07-23", "googlePlaceId": "ChIJY_LTQgCjfDUR7QUVorXen4g", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1365,7 +1349,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 553, "name": "수라게장", "cellId": "81447942", "kind": "other", "lat": 37.562971, "lng": 126.9852869, "sinceDate": "2024-02-22", "googlePlaceId": "ChIJK0AARp-jfDURZN60tE_e0O0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 553, "name": "수라게장", "cellId": "81447942", "kind": "other", "lat": 37.562971, "lng": 126.9852869, "sinceDate": "2024-02-22", "googlePlaceId": "ChIJK0AARp-jfDURZN60tE_e0O0", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1373,7 +1357,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 554, "name": "일편등심 명동점", "cellId": "81447942", "kind": "korean", "lat": 37.562971, "lng": 126.9852869, "sinceDate": "2024-03-25", "googlePlaceId": "ChIJuWbErtmjfDURYCjGuQhxZR4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 554, "name": "일편등심 명동점", "cellId": "81447942", "kind": "korean", "lat": 37.562971, "lng": 126.9852869, "sinceDate": "2024-03-25", "googlePlaceId": "ChIJuWbErtmjfDURYCjGuQhxZR4", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1381,15 +1365,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 555, "name": "태초갈비 명동점", "cellId": "81447942", "kind": "korean", "lat": 37.562971, "lng": 126.9852869, "sinceDate": "2024-11-14", "googlePlaceId": "ChIJKeMm9s2jfDURck7uJeHBIYg"}, "error": null}
-      }
-    },
-    {
-      "request": {"method": "GET", "url": "/api/v2/places/547"},
-      "response": {
-        "status": 200,
-        "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 547, "name": "구르카", "cellId": "81447942", "kind": "other", "lat": 37.563064, "lng": 126.9851915, "sinceDate": "2002-10-22", "googlePlaceId": "ChIJi4gnGPCifDUR-L1tbdOVE7Q"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 555, "name": "태초갈비 명동점", "cellId": "81447942", "kind": "korean", "lat": 37.562971, "lng": 126.9852869, "sinceDate": "2024-11-14", "googlePlaceId": "ChIJKeMm9s2jfDURck7uJeHBIYg", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1397,7 +1373,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 696, "name": "명동교자 후", "cellId": "81463940", "kind": "korean", "lat": 37.5625712, "lng": 126.9857575, "sinceDate": "1980-02-08", "googlePlaceId": "ChIJeyvrHwCjfDUR8pCovX0kxTc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 696, "name": "명동교자 후", "cellId": "81463940", "kind": "korean", "lat": 37.5625712, "lng": 126.9857575, "sinceDate": "1980-02-08", "googlePlaceId": "ChIJeyvrHwCjfDUR8pCovX0kxTc", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1405,7 +1381,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 703, "name": "명동함흥면옥", "cellId": "81463941", "kind": "korean", "lat": 37.562769, "lng": 126.9856893, "sinceDate": "1981-04-17", "googlePlaceId": "ChIJb6R1EvCifDURWJc4vg3dyZk"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 703, "name": "명동함흥면옥", "cellId": "81463941", "kind": "korean", "lat": 37.562769, "lng": 126.9856893, "sinceDate": "1981-04-17", "googlePlaceId": "ChIJb6R1EvCifDURWJc4vg3dyZk", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1413,7 +1389,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 712, "name": "황금목장(명동성당점)", "cellId": "81463941", "kind": "korean", "lat": 37.5628596, "lng": 126.985651, "sinceDate": "2005-10-14", "googlePlaceId": "ChIJ4aLcE_CifDURmtbjP0V4QBo"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 712, "name": "황금목장(명동성당점)", "cellId": "81463941", "kind": "korean", "lat": 37.5628596, "lng": 126.985651, "sinceDate": "2005-10-14", "googlePlaceId": "ChIJ4aLcE_CifDURmtbjP0V4QBo", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1421,7 +1397,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 701, "name": "곰국시집", "cellId": "81463941", "kind": "korean", "lat": 37.5630675, "lng": 126.9856152, "sinceDate": "2007-10-24", "googlePlaceId": "ChIJVVVVVe6ifDURdLp8vW4LdUI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 701, "name": "곰국시집", "cellId": "81463941", "kind": "korean", "lat": 37.5630675, "lng": 126.9856152, "sinceDate": "2007-10-24", "googlePlaceId": "ChIJVVVVVe6ifDURdLp8vW4LdUI", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1429,7 +1405,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 711, "name": "익선병아리김밥(명동점)", "cellId": "81463941", "kind": "korean", "lat": 37.5630675, "lng": 126.9856152, "sinceDate": "2023-03-02", "googlePlaceId": "ChIJv8RchhSjfDURufEcsZHjwhA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 711, "name": "익선병아리김밥(명동점)", "cellId": "81463941", "kind": "korean", "lat": 37.5630675, "lng": 126.9856152, "sinceDate": "2023-03-02", "googlePlaceId": "ChIJv8RchhSjfDURufEcsZHjwhA", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1437,7 +1413,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 709, "name": "윤슬숯불구이 명동점", "cellId": "81463941", "kind": "korean", "lat": 37.5630675, "lng": 126.9856152, "sinceDate": "2023-06-14", "googlePlaceId": "ChIJ64XBWVujfDUR1dBOMkPFa6E"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 709, "name": "윤슬숯불구이 명동점", "cellId": "81463941", "kind": "korean", "lat": 37.5630675, "lng": 126.9856152, "sinceDate": "2023-06-14", "googlePlaceId": "ChIJ64XBWVujfDUR1dBOMkPFa6E", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1445,7 +1421,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 700, "name": "고양이사랑채", "cellId": "81463941", "kind": "other", "lat": 37.5630675, "lng": 126.9856152, "sinceDate": "2024-04-02", "googlePlaceId": "ChIJszI1HAOjfDURFX6B3ZTptq4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 700, "name": "고양이사랑채", "cellId": "81463941", "kind": "other", "lat": 37.5630675, "lng": 126.9856152, "sinceDate": "2024-04-02", "googlePlaceId": "ChIJszI1HAOjfDURFX6B3ZTptq4", "areaId": "myeongdong"}, "error": null}
       }
     },
     {
@@ -1453,7 +1429,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1793, "name": "베로나", "cellId": "81623937", "kind": "cafe", "lat": 37.5654732, "lng": 126.9914857, "sinceDate": "2020-02-17", "googlePlaceId": "ChIJJWAL-eijfDURcXudQzrfzCc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1793, "name": "베로나", "cellId": "81623937", "kind": "cafe", "lat": 37.5654732, "lng": 126.9914857, "sinceDate": "2020-02-17", "googlePlaceId": "ChIJJWAL-eijfDURcXudQzrfzCc", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1461,7 +1437,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 789, "name": "뜰과다원", "cellId": "81463965", "kind": "cafe", "lat": 37.5736514, "lng": 126.9858512, "sinceDate": "2014-05-23", "googlePlaceId": "ChIJi0T9sMKifDUR9yGtKAAH9Ok"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 789, "name": "뜰과다원", "cellId": "81463965", "kind": "cafe", "lat": 37.5736514, "lng": 126.9858512, "sinceDate": "2014-05-23", "googlePlaceId": "ChIJi0T9sMKifDUR9yGtKAAH9Ok", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1469,7 +1445,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 795, "name": "지대방", "cellId": "81463965", "kind": "cafe", "lat": 37.5734624, "lng": 126.9854773, "sinceDate": "1987-04-15", "googlePlaceId": "ChIJ_UTlpMKifDUR2QFRXxRpz48"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 795, "name": "지대방", "cellId": "81463965", "kind": "cafe", "lat": 37.5734624, "lng": 126.9854773, "sinceDate": "1987-04-15", "googlePlaceId": "ChIJ_UTlpMKifDUR2QFRXxRpz48", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1477,7 +1453,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 797, "name": "한강", "cellId": "81463965", "kind": "other", "lat": 37.5734624, "lng": 126.9854773, "sinceDate": "1995-08-28", "googlePlaceId": "ChIJMwjgpMKifDURMQvlVyu40bQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 797, "name": "한강", "cellId": "81463965", "kind": "other", "lat": 37.5734624, "lng": 126.9854773, "sinceDate": "1995-08-28", "googlePlaceId": "ChIJMwjgpMKifDURMQvlVyu40bQ", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1485,7 +1461,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 790, "name": "명동보리밥과 코다리", "cellId": "81463965", "kind": "korean", "lat": 37.5737887, "lng": 126.9854277, "sinceDate": "2005-09-26", "googlePlaceId": "ChIJfV0zU0WjfDURC665Jy-yohA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 790, "name": "명동보리밥과 코다리", "cellId": "81463965", "kind": "korean", "lat": 37.5737887, "lng": 126.9854277, "sinceDate": "2005-09-26", "googlePlaceId": "ChIJfV0zU0WjfDURC665Jy-yohA", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1493,7 +1469,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 791, "name": "수요일", "cellId": "81463965", "kind": "cafe", "lat": 37.5737887, "lng": 126.9854277, "sinceDate": "2005-10-06", "googlePlaceId": "ChIJTfOXu8KifDUR0yTavNbEB9c"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 791, "name": "수요일", "cellId": "81463965", "kind": "cafe", "lat": 37.5737887, "lng": 126.9854277, "sinceDate": "2005-10-06", "googlePlaceId": "ChIJTfOXu8KifDUR0yTavNbEB9c", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1501,7 +1477,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 792, "name": "옛찻집", "cellId": "81463965", "kind": "cafe", "lat": 37.5734995, "lng": 126.9853881, "sinceDate": "1997-03-24", "googlePlaceId": "ChIJR12vtMKifDURL0P9NbxzxS4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 792, "name": "옛찻집", "cellId": "81463965", "kind": "cafe", "lat": 37.5734995, "lng": 126.9853881, "sinceDate": "1997-03-24", "googlePlaceId": "ChIJR12vtMKifDURL0P9NbxzxS4", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1509,7 +1485,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 793, "name": "인사동", "cellId": "81463965", "kind": "cafe", "lat": 37.5734995, "lng": 126.9853881, "sinceDate": "1986-01-25", "googlePlaceId": "ChIJt4WapMKifDURgV9gLJdAat0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 793, "name": "인사동", "cellId": "81463965", "kind": "cafe", "lat": 37.5734995, "lng": 126.9853881, "sinceDate": "1986-01-25", "googlePlaceId": "ChIJt4WapMKifDURgV9gLJdAat0", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1517,7 +1493,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 794, "name": "전통찻집 코끼리베이글", "cellId": "81463965", "kind": "cafe", "lat": 37.5735398, "lng": 126.9853066, "sinceDate": "2024-11-15", "googlePlaceId": "ChIJsVSOEQCjfDURAgxrH1ll8Lo"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 794, "name": "전통찻집 코끼리베이글", "cellId": "81463965", "kind": "cafe", "lat": 37.5735398, "lng": 126.9853066, "sinceDate": "2024-11-15", "googlePlaceId": "ChIJsVSOEQCjfDURAgxrH1ll8Lo", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1525,7 +1501,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 660, "name": "가배랑솜 인사동 카페", "cellId": "81447966", "kind": "cafe", "lat": 37.573673, "lng": 126.9851882, "sinceDate": "2000-04-10", "googlePlaceId": "ChIJV46kJ7ejfDURYZsy6q-nhuc"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 660, "name": "가배랑솜 인사동 카페", "cellId": "81447966", "kind": "cafe", "lat": 37.573673, "lng": 126.9851882, "sinceDate": "2000-04-10", "googlePlaceId": "ChIJV46kJ7ejfDURYZsy6q-nhuc", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1533,7 +1509,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 662, "name": "민들레 전통찻집", "cellId": "81447966", "kind": "korean", "lat": 37.5736637, "lng": 126.98501, "sinceDate": "1980-08-09", "googlePlaceId": "ChIJxWsa68qjfDURJH75HNldGgM"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 662, "name": "민들레 전통찻집", "cellId": "81447966", "kind": "korean", "lat": 37.5736637, "lng": 126.98501, "sinceDate": "1980-08-09", "googlePlaceId": "ChIJxWsa68qjfDURJH75HNldGgM", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1541,7 +1517,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 661, "name": "마루 자연식 김밥", "cellId": "81447966", "kind": "korean", "lat": 37.5735543, "lng": 126.9849275, "sinceDate": "2018-06-08", "googlePlaceId": "ChIJBbFYeZujfDURBWMelK-t8Xs"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 661, "name": "마루 자연식 김밥", "cellId": "81447966", "kind": "korean", "lat": 37.5735543, "lng": 126.9849275, "sinceDate": "2018-06-08", "googlePlaceId": "ChIJBbFYeZujfDURBWMelK-t8Xs", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1549,7 +1525,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 658, "name": "문경올드", "cellId": "81447965", "kind": "korean", "lat": 37.5730861, "lng": 126.9852119, "sinceDate": "1995-04-04", "googlePlaceId": "ChIJ-dOxeHOjfDURZHa1bqCjC40"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 658, "name": "문경올드", "cellId": "81447965", "kind": "korean", "lat": 37.5730861, "lng": 126.9852119, "sinceDate": "1995-04-04", "googlePlaceId": "ChIJ-dOxeHOjfDURZHa1bqCjC40", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1557,7 +1533,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 784, "name": "장수하늘소 인사동", "cellId": "81463963", "kind": "korean", "lat": 37.5726487, "lng": 126.9856656, "sinceDate": "2026-08-26", "googlePlaceId": "ChIJbd2L7fejfDURn-u-KYixrW8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 784, "name": "장수하늘소 인사동", "cellId": "81463963", "kind": "korean", "lat": 37.5726487, "lng": 126.9856656, "sinceDate": "2026-08-26", "googlePlaceId": "ChIJbd2L7fejfDURn-u-KYixrW8", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1565,7 +1541,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 785, "name": "평양고깃집", "cellId": "81463963", "kind": "korean", "lat": 37.5727094, "lng": 126.9853071, "sinceDate": "2015-06-16", "googlePlaceId": "ChIJUYIEHOiifDURMRAJ2NDqfmI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 785, "name": "평양고깃집", "cellId": "81463963", "kind": "korean", "lat": 37.5727094, "lng": 126.9853071, "sinceDate": "2015-06-16", "googlePlaceId": "ChIJUYIEHOiifDURMRAJ2NDqfmI", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1573,7 +1549,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 655, "name": "금촌국밥", "cellId": "81447964", "kind": "korean", "lat": 37.5726674, "lng": 126.985159, "sinceDate": "1999-10-06", "googlePlaceId": "ChIJLSDJnVujfDUR0Q8dgPEDdAE"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 655, "name": "금촌국밥", "cellId": "81447964", "kind": "korean", "lat": 37.5726674, "lng": 126.985159, "sinceDate": "1999-10-06", "googlePlaceId": "ChIJLSDJnVujfDUR0Q8dgPEDdAE", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1581,7 +1557,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 656, "name": "인디아 쉐프", "cellId": "81447964", "kind": "korean", "lat": 37.5726674, "lng": 126.985159, "sinceDate": "2008-05-20", "googlePlaceId": "ChIJ2WV5IACjfDURAl5NcWkScs4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 656, "name": "인디아 쉐프", "cellId": "81447964", "kind": "korean", "lat": 37.5726674, "lng": 126.985159, "sinceDate": "2008-05-20", "googlePlaceId": "ChIJ2WV5IACjfDURAl5NcWkScs4", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1589,7 +1565,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 657, "name": "취야벌", "cellId": "81447964", "kind": "korean", "lat": 37.5727877, "lng": 126.9848057, "sinceDate": "1986-06-24", "googlePlaceId": "ChIJC_WfI-iifDURboKSr8VD0Nk"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 657, "name": "취야벌", "cellId": "81447964", "kind": "korean", "lat": 37.5727877, "lng": 126.9848057, "sinceDate": "1986-06-24", "googlePlaceId": "ChIJC_WfI-iifDURboKSr8VD0Nk", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1597,7 +1573,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1005, "name": "바람부는섬", "cellId": "81495960", "kind": "cafe", "lat": 37.5725125, "lng": 126.9867726, "sinceDate": "1989-06-08", "googlePlaceId": "ChIJkUBj-OeifDURLa8Zodgp6ew"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1005, "name": "바람부는섬", "cellId": "81495960", "kind": "cafe", "lat": 37.5725125, "lng": 126.9867726, "sinceDate": "1989-06-08", "googlePlaceId": "ChIJkUBj-OeifDURLa8Zodgp6ew", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1605,7 +1581,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1008, "name": "숨은 고깃집", "cellId": "81495960", "kind": "other", "lat": 37.5724423, "lng": 126.9868749, "sinceDate": "2004-02-16", "googlePlaceId": "ChIJW1I9VgCjfDURV84bv1Q_Yk0"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1008, "name": "숨은 고깃집", "cellId": "81495960", "kind": "other", "lat": 37.5724423, "lng": 126.9868749, "sinceDate": "2004-02-16", "googlePlaceId": "ChIJW1I9VgCjfDURV84bv1Q_Yk0", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1613,7 +1589,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1006, "name": "소살리토", "cellId": "81495960", "kind": "other", "lat": 37.5721346, "lng": 126.9865164, "sinceDate": "1994-09-07", "googlePlaceId": "ChIJQ6T_9eeifDURg3yuD6XQiw8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1006, "name": "소살리토", "cellId": "81495960", "kind": "other", "lat": 37.5721346, "lng": 126.9865164, "sinceDate": "1994-09-07", "googlePlaceId": "ChIJQ6T_9eeifDURg3yuD6XQiw8", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1621,7 +1597,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1007, "name": "솥내음 종로인사동점", "cellId": "81495960", "kind": "korean", "lat": 37.5721808, "lng": 126.9869971, "sinceDate": "2024-11-27", "googlePlaceId": "ChIJeVvmFgCjfDURY8bnvNWVg5g"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1007, "name": "솥내음 종로인사동점", "cellId": "81495960", "kind": "korean", "lat": 37.5721808, "lng": 126.9869971, "sinceDate": "2024-11-27", "googlePlaceId": "ChIJeVvmFgCjfDURY8bnvNWVg5g", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1629,7 +1605,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 388, "name": "레아", "cellId": "81415970", "kind": "cafe", "lat": 37.5746092, "lng": 126.9839485, "sinceDate": "2003-10-01", "googlePlaceId": "ChIJQ8dui8KifDURVVd13i-MmS4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 388, "name": "레아", "cellId": "81415970", "kind": "cafe", "lat": 37.5746092, "lng": 126.9839485, "sinceDate": "2003-10-01", "googlePlaceId": "ChIJQ8dui8KifDURVVd13i-MmS4", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1637,7 +1613,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 398, "name": "이태리부대찌개(안녕인사동점)", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2007-02-01", "googlePlaceId": "ChIJPagsSm2jfDUR2XBwUOEvjYU"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 398, "name": "이태리부대찌개(안녕인사동점)", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2007-02-01", "googlePlaceId": "ChIJPagsSm2jfDUR2XBwUOEvjYU", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1645,7 +1621,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 391, "name": "설레는 마중", "cellId": "81415970", "kind": "cafe", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2019-09-24", "googlePlaceId": "ChIJpSMzKACjfDURrVq3W7RNfEw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 391, "name": "설레는 마중", "cellId": "81415970", "kind": "cafe", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2019-09-24", "googlePlaceId": "ChIJpSMzKACjfDURrVq3W7RNfEw", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1653,7 +1629,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 404, "name": "한남북엇국 안녕인사동점", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2019-09-25", "googlePlaceId": "ChIJWcI5kDmjfDUR2ekJmn0Fo-w"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 404, "name": "한남북엇국 안녕인사동점", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2019-09-25", "googlePlaceId": "ChIJWcI5kDmjfDUR2ekJmn0Fo-w", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1661,7 +1637,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 396, "name": "어부몽", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2019-10-14", "googlePlaceId": "ChIJ480iSwCjfDUR_QSWU96pRls"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 396, "name": "어부몽", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2019-10-14", "googlePlaceId": "ChIJ480iSwCjfDUR_QSWU96pRls", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1669,7 +1645,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 384, "name": "(주)오근내5닭갈비 안녕인사동점", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2019-10-17", "googlePlaceId": "ChIJ3e19h5ujfDURAjHf1Pm-RN4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 384, "name": "(주)오근내5닭갈비 안녕인사동점", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2019-10-17", "googlePlaceId": "ChIJ3e19h5ujfDURAjHf1Pm-RN4", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1677,7 +1653,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 390, "name": "사리원안녕인사동점", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2019-11-27", "googlePlaceId": "ChIJB3Kj_iCjfDURrbFTMdR_EJ8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 390, "name": "사리원안녕인사동점", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2019-11-27", "googlePlaceId": "ChIJB3Kj_iCjfDURrbFTMdR_EJ8", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1685,7 +1661,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 402, "name": "티로아", "cellId": "81415970", "kind": "cafe", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2021-06-14", "googlePlaceId": "ChIJl7lVPFijfDURrZBggbTMHCk"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 402, "name": "티로아", "cellId": "81415970", "kind": "cafe", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2021-06-14", "googlePlaceId": "ChIJl7lVPFijfDURrZBggbTMHCk", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1693,7 +1669,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 393, "name": "솥밥예찬 인사동점", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2021-10-20", "googlePlaceId": "ChIJ0esHXgCjfDURP2dAUi7Y1v8"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 393, "name": "솥밥예찬 인사동점", "cellId": "81415970", "kind": "korean", "lat": 37.5745514, "lng": 126.9837956, "sinceDate": "2021-10-20", "googlePlaceId": "ChIJ0esHXgCjfDURP2dAUi7Y1v8", "areaId": "insadong"}, "error": null}
       }
     },
     {
@@ -1701,7 +1677,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1670, "name": "언오디너리", "cellId": "81607938", "kind": "cafe", "lat": 37.565523, "lng": 126.9908935, "sinceDate": "2018-12-19", "googlePlaceId": "ChIJ73HG5hujfDURw0OXBEliqf4"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1670, "name": "언오디너리", "cellId": "81607938", "kind": "cafe", "lat": 37.565523, "lng": 126.9908935, "sinceDate": "2018-12-19", "googlePlaceId": "ChIJ73HG5hujfDURw0OXBEliqf4", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1709,7 +1685,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1517, "name": "을지로 문덕카페 을지로3가 본점", "cellId": "81591938", "kind": "cafe", "lat": 37.5651665, "lng": 126.9901749, "sinceDate": "2022-02-17", "googlePlaceId": "ChIJ2WCECDSjfDURSsfLEvjWFmw"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1517, "name": "을지로 문덕카페 을지로3가 본점", "cellId": "81591938", "kind": "cafe", "lat": 37.5651665, "lng": 126.9901749, "sinceDate": "2022-02-17", "googlePlaceId": "ChIJ2WCECDSjfDURSsfLEvjWFmw", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1717,7 +1693,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1520, "name": "젤라또먼트 을지로", "cellId": "81591938", "kind": "cafe", "lat": 37.5651955, "lng": 126.9900643, "sinceDate": "1994-11-25", "googlePlaceId": "ChIJW8tONQCjfDURF-8D2Yrx4FQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1520, "name": "젤라또먼트 을지로", "cellId": "81591938", "kind": "cafe", "lat": 37.5651955, "lng": 126.9900643, "sinceDate": "1994-11-25", "googlePlaceId": "ChIJW8tONQCjfDURF-8D2Yrx4FQ", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1725,7 +1701,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1524, "name": "커피가 좋아 3S", "cellId": "81591938", "kind": "cafe", "lat": 37.5651354, "lng": 126.9900401, "sinceDate": "2002-04-22", "googlePlaceId": "ChIJ81V5VOSifDURzPAiT3bDb3Q"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1524, "name": "커피가 좋아 3S", "cellId": "81591938", "kind": "cafe", "lat": 37.5651354, "lng": 126.9900401, "sinceDate": "2002-04-22", "googlePlaceId": "ChIJ81V5VOSifDURzPAiT3bDb3Q", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1733,7 +1709,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1545, "name": "스탠드업플리즈 을지로점", "cellId": "81591940", "kind": "cafe", "lat": 37.5659738, "lng": 126.989925, "sinceDate": "2022-11-01", "googlePlaceId": "ChIJo6M15GOjfDURsQZDuC08Q34"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1545, "name": "스탠드업플리즈 을지로점", "cellId": "81591940", "kind": "cafe", "lat": 37.5659738, "lng": 126.989925, "sinceDate": "2022-11-01", "googlePlaceId": "ChIJo6M15GOjfDURsQZDuC08Q34", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1741,7 +1717,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1819, "name": "죠-지 서울(George Seoul)", "cellId": "81623938", "kind": "cafe", "lat": 37.5659853, "lng": 126.9912062, "sinceDate": "2018-03-15", "googlePlaceId": "ChIJsx4lBeSifDURpKLcB2PQ0aI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1819, "name": "죠-지 서울(George Seoul)", "cellId": "81623938", "kind": "cafe", "lat": 37.5659853, "lng": 126.9912062, "sinceDate": "2018-03-15", "googlePlaceId": "ChIJsx4lBeSifDURpKLcB2PQ0aI", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1749,7 +1725,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1553, "name": "커피곳간 을지로3가역점", "cellId": "81591940", "kind": "cafe", "lat": 37.5662094, "lng": 126.9902285, "sinceDate": "2024-11-12", "googlePlaceId": "ChIJ_zE4FTOjfDUReAhKY8SZ8Xg"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1553, "name": "커피곳간 을지로3가역점", "cellId": "81591940", "kind": "cafe", "lat": 37.5662094, "lng": 126.9902285, "sinceDate": "2024-11-12", "googlePlaceId": "ChIJ_zE4FTOjfDUReAhKY8SZ8Xg", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1757,7 +1733,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1365, "name": "해운대 달맞이 빵", "cellId": "81575938", "kind": "cafe", "lat": 37.5647131, "lng": 126.9897351, "sinceDate": "2010-03-05", "googlePlaceId": "ChIJc4OTZWWjfDUR952FsLjBWpY"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1365, "name": "해운대 달맞이 빵", "cellId": "81575938", "kind": "cafe", "lat": 37.5647131, "lng": 126.9897351, "sinceDate": "2010-03-05", "googlePlaceId": "ChIJc4OTZWWjfDUR952FsLjBWpY", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1765,7 +1741,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1990, "name": "코히", "cellId": "81655935", "kind": "cafe", "lat": 37.5654431, "lng": 126.9922042, "sinceDate": "2025-11-21", "googlePlaceId": "ChIJwdvlLACjfDURurLJAdac3LQ"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1990, "name": "코히", "cellId": "81655935", "kind": "cafe", "lat": 37.5654431, "lng": 126.9922042, "sinceDate": "2025-11-21", "googlePlaceId": "ChIJwdvlLACjfDURurLJAdac3LQ", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1773,7 +1749,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1938, "name": "더데일리카페인 을지로", "cellId": "81655932", "kind": "cafe", "lat": 37.5641482, "lng": 126.9923797, "sinceDate": "2021-12-31", "googlePlaceId": "ChIJC0Ev-QOjfDURzMKVAasMqqM"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1938, "name": "더데일리카페인 을지로", "cellId": "81655932", "kind": "cafe", "lat": 37.5641482, "lng": 126.9923797, "sinceDate": "2021-12-31", "googlePlaceId": "ChIJC0Ev-QOjfDURzMKVAasMqqM", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1781,7 +1757,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1748, "name": "1020룸(1020room)", "cellId": "81623932", "kind": "cafe", "lat": 37.5635567, "lng": 126.9913996, "sinceDate": "2018-05-16", "googlePlaceId": "ChIJJ6dqbQCjfDURvomkBwIBfBA"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1748, "name": "1020룸(1020room)", "cellId": "81623932", "kind": "cafe", "lat": 37.5635567, "lng": 126.9913996, "sinceDate": "2018-05-16", "googlePlaceId": "ChIJJ6dqbQCjfDURvomkBwIBfBA", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1789,7 +1765,7 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1902, "name": "수선화", "cellId": "81639936", "kind": "cafe", "lat": 37.5657287, "lng": 126.991684, "sinceDate": "2015-09-23", "googlePlaceId": "ChIJmeR1B-SifDUR04NMMRkm9vI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1902, "name": "수선화", "cellId": "81639936", "kind": "cafe", "lat": 37.5657287, "lng": 126.991684, "sinceDate": "2015-09-23", "googlePlaceId": "ChIJmeR1B-SifDUR04NMMRkm9vI", "areaId": "euljiro"}, "error": null}
       }
     },
     {
@@ -1797,12 +1773,16 @@
       "response": {
         "status": 200,
         "headers": {"Content-Type": "application/json; charset=utf-8"},
-        "jsonBody": {"success": true, "data": {"id": 1892, "name": "분카샤(bunkasha)", "cellId": "81639935", "kind": "cafe", "lat": 37.5653078, "lng": 126.9920435, "sinceDate": "2017-05-04", "googlePlaceId": "ChIJoW57-uOifDURLdNpvySZzhI"}, "error": null}
+        "jsonBody": {"success": true, "data": {"id": 1892, "name": "분카샤(bunkasha)", "cellId": "81639935", "kind": "cafe", "lat": 37.5653078, "lng": 126.9920435, "sinceDate": "2017-05-04", "googlePlaceId": "ChIJoW57-uOifDURLdNpvySZzhI", "areaId": "euljiro"}, "error": null}
       }
     },
     {
       "request": {"method": "GET", "url": "/api/v2/places/999999"},
-      "response": {"status": 404, "headers": {"Content-Type": "application/json; charset=utf-8"}, "jsonBody": {"success": false, "data": null, "error": {"code": "PLACE_NOT_FOUND", "message": "현재 제공하는 장소가 아닙니다."}}}
+      "response": {
+        "status": 404,
+        "headers": {"Content-Type": "application/json; charset=utf-8"},
+        "jsonBody": {"success": false, "data": null, "error": {"code": "PLACE_NOT_FOUND", "message": "현재 제공하는 장소가 아닙니다."}}
+      }
     }
   ]
 }

@@ -134,18 +134,14 @@ wrangler pages deploy out --project-name local-odyssey --branch feat/mobile-firs
 
 사진과 폰트는 `public/assets/`에 있고 사진 출처와 폰트 라이선스도 같은 경로에 보존한다. 상태바 SVG의 원본 출처는 [Apple 디자인 리소스](https://developer.apple.com/design/resources/)다. 현재 시안의 장소와 조건은 프론트엔드 샘플이다. 편집 설명과 인구 자료의 단위는 각 데이터의 원래 의미로 유지한다.
 
-| 파일                                               | 데이터 연결 역할                                                      |
-| -------------------------------------------------- | --------------------------------------------------------------------- |
-| `src/features/discovery/data/types.ts`             | `DiscoveryDataSource.query()`와 `getPlace()`의 화면 모델 및 취소 신호 |
-| `src/features/discovery/data/preview.ts`           | 현재 로컬 장소, 사진과 편집 문구를 제공하는 기본 source               |
-| `src/features/discovery/data/preview/`             | 로컬 장소, 사진 출처, 설명과 추천 계산의 샘플 fixture                 |
-| `src/features/discovery/data/api-mapping.ts`       | 시안 값과 서버 query 8개, 숫자 ID의 변환                              |
-| `src/features/discovery/data/query.ts`             | 같은 조건을 식별하는 안정적인 요청 키                                 |
-| `src/features/discovery/data/latest-request.ts`    | 이전 요청 취소와 늦은 응답 차단                                       |
-| `src/features/discovery/hooks/useDiscoveryData.ts` | 확정 결과, 임시 개수와 상세의 요청 상태 및 재시도                     |
+| 파일                                                  | 데이터 연결 역할                                               |
+| ----------------------------------------------------- | -------------------------------------------------------------- |
+| `src/features/discovery/data/types.ts`                | `DiscoveryDataSource`의 query·queryNext·getPlace 화면 모델     |
+| `src/features/discovery/data/live-recommendations.ts` | 운영 v2 공급부: 지역 탐색·주변 추천·상호 검색·상세             |
+| `src/features/discovery/data/service-meta.ts`         | 배치·지역·시간대 메타의 공유 로더와 선택 규칙                  |
+| `src/features/discovery/data/course-api.ts`           | 코스와 장소 상세 응답 변환                                     |
+| `src/features/discovery/data/preview.ts`              | `/guide` 미리보기의 샘플 source                                |
+| `src/features/discovery/data/latest-request.ts`       | 이전 요청 취소와 늦은 응답 차단                                |
+| `src/features/discovery/hooks/useDiscoveryData.ts`    | 확정 결과, 다음 페이지, 임시 개수와 상세의 요청 상태 및 재시도 |
 
-HTTP 연결은 `data/`에서 `DiscoveryDataSource`를 구현하고, `src/app/page.tsx` 아래의 작은 `"use client"` 진입 컴포넌트에서 같은 공급부 인스턴스를 `DiscoveryApp`의 `source` prop으로 넘기는 방식으로 진행한다. controller가 이 공급부를 데이터 hook에 전달한다. 서버 응답은 공급부에서 화면 모델로 변환한다. 첫 요청과 필터 요청을 보내는 조건, 운영 환경의 API 주소와 CORS는 [API 연결 순서](docs/API_INTEGRATION.md#adapter-연결-순서)를 확인한다.
-
-`api-mapping.ts`는 요청 변환과 직렬화까지 제공한다. 네트워크 호출과 meta 선택지 초기화는 연결할 작업이다. 북촌, 컨셉 등 합의가 필요한 선택은 반환된 `issues`로 확인하며, UI 슬러그와 서버 숫자 ID는 변환 함수를 통해 연결한다. 지원 값과 필드는 최신 서버 명세로 대조한다.
-
-서버 연결 기준: [공통 규약 #28](https://github.com/SW-odyssey/BE/issues/28), [meta #29](https://github.com/SW-odyssey/BE/issues/29), [추천 #30](https://github.com/SW-odyssey/BE/issues/30), [상세 #31](https://github.com/SW-odyssey/BE/issues/31).
+운영 앱은 `DiscoveryApp`의 기본 공급부로 `liveDiscoveryDataSource`를 쓰고, 샘플은 `/guide`에서만 씁니다. 연결 경로, 요청 규칙, 환경 변수와 확인 중인 항목은 [API 연동](docs/API_INTEGRATION.md)에 있습니다.

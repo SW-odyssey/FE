@@ -1,133 +1,101 @@
 # API 연동
 
+2026-11-27 기준. 운영 앱(`/`)은 Odyssey v2 API를 직접 호출하는 `liveDiscoveryDataSource`를 쓰고, `/guide`·디자인 도구만 동기 샘플 `previewDataSource`를 씁니다. 응답 필드는 [BE 응답 계약 #104](https://github.com/SW-odyssey/BE/pull/104)를 따르며, FE가 지금 읽지 않는 공개 필드도 삭제를 전제로 하지 않습니다.
+
+후속 작업 추적: [FE #76](https://github.com/SW-odyssey/FE/issues/76). 아래 표의 「PR」은 이 문서 기준 변경이 들어간 PR입니다.
+
 ## 연결 상태
 
-| 대상            | 현재 상태                                                                                        |
-| --------------- | ------------------------------------------------------------------------------------------------ |
-| 화면 데이터     | `previewDataSource`의 동기 샘플 사용                                                             |
-| FE HTTP adapter | 미구현. `DiscoveryDataSource` 교체 경계 준비                                                     |
-| BE 초기 옵션    | `GET /api/v1/meta` main 반영, [PR #35](https://github.com/SW-odyssey/BE/pull/35) 병합            |
-| BE 추천         | `GET /api/v1/recommendations` main 반영, [PR #36](https://github.com/SW-odyssey/BE/pull/36) 병합 |
-| BE 상세         | [상세 #31](https://github.com/SW-odyssey/BE/issues/31) 연결 명세, BE main 미반영                 |
-| 지도            | 카카오 기반 프리뷰. 서비스 연결은 Google Maps로 전환                                             |
+| 화면·기능                     | 요청                                                      | 코드                                                      | PR             |
+| ----------------------------- | --------------------------------------------------------- | --------------------------------------------------------- | -------------- |
+| 서비스 메타(배치·지역·시간대) | `GET /api/v2/meta` 1회 공유                               | `data/service-meta.ts`, `hooks/useServiceMeta.ts`         | #90            |
+| 지역 전체 탐색                | `GET /api/v2/area-recommendations` (페이지)               | `data/live-recommendations.ts`                            | #91            |
+| 지도 중심·내 위치 주변 추천   | `GET /api/v2/recommendations` (반경 300m, 최대 30곳)      | `data/live-recommendations.ts`                            | #91, #93       |
+| 상호 검색·자동완성            | `GET /api/v2/place-search`                                | `data/place-search.ts`                                    | #92            |
+| 장소 상세                     | `GET /api/v2/places/{id}?lang`                            | `data/course-api.ts` `getCoursePlaceDetail`               | #97            |
+| 방문 그래프                   | `GET /api/v2/cells/{id}/visit-pattern`                    | `data/visit-pattern.ts`                                   | 기존           |
+| 코스                          | `GET /api/v2/course-recommendations`                      | `data/course-api.ts`, `hooks/useCourseRecommendations.ts` | #95, #96       |
+| 사진·영업정보                 | FE 서버 `GET /api/place-photos` → Google Places           | `server/place-photos.ts`                                  | #98, #99, #100 |
+| AI 요약                       | FE 서버 `POST /api/place-summary` → Gemini Maps Grounding | `server/place-summary.ts`                                 | #98, #99, #100 |
+| 추천 검토 화면                | FE 서버 `/api/recommendation-review` → 외부 Sites         | `functions/api/recommendation-review.ts`                  | #101           |
 
-규격: [공통 응답 #28](https://github.com/SW-odyssey/BE/issues/28), [선택 옵션 #29](https://github.com/SW-odyssey/BE/issues/29), [추천 #30](https://github.com/SW-odyssey/BE/issues/30), [장소 상세 #31](https://github.com/SW-odyssey/BE/issues/31).
+v1 경로(`/api/v1/*`)는 BE에서 제거됐고([BE #99](https://github.com/SW-odyssey/BE/pull/99)), FE의 v1 전용 변환도 제거했습니다(#89).
 
-BE 구현 상태는 2026년 11월 7일 main 기준이다. 같은 날 [BE 배포 OpenAPI](https://odyssey-be-346395334988.asia-northeast3.run.app/v3/api-docs)에서 meta와 추천 경로를 확인했다. 배포된 meta는 로컬 개발 출처 `http://localhost:3000`을 허용했고, 운영 FE 출처 `https://local.hrxlou.com`에서는 CORS 403을 반환했다.
+## 메타와 배치
 
-## 화면과 요청
+- 목록·코스·상세가 같은 로더(`loadServiceMeta`)를 공유합니다. 진행 중 요청과 성공 응답을 재사용하고 실패하면 다음 호출이 다시 요청합니다. 배치 404를 받으면 공유 메타를 무효화합니다.
+- 첫 진입은 `defaultDatasetId`. 기본값이 없으면 `referenceMonth`가 가장 늦은 배치를 고르며 `datasets` 배열 순서에 의존하지 않습니다. 공개 배치가 없으면 오류 화면과 다시 시도.
+- 코스 링크(`courseDataset`)의 배치가 메타에 없으면 seed·교체 이력을 재생하지 않고 기본 배치로 새 코스를 만듭니다.
+- 선택 배치의 `referenceMonth`를 목록·코스·방문 그래프에 「LG U+ 2025년 12월 데이터 기준」으로 표시합니다.
 
-| 화면                           | 요청                          | 사용처                                   |
-| ------------------------------ | ----------------------------- | ---------------------------------------- |
-| 첫 진입, 지역과 방문 시간 선택 | `GET /api/v1/meta`            | 선택지, 기본값, 서울 날짜 범위           |
-| 추천 목록과 검색               | `GET /api/v1/recommendations` | 장소와 추천 순서                         |
-| 필터                           | `GET /api/v1/recommendations` | 임시 조건의 `total`, 적용 후 목록과 지도 |
-| 지도와 선택 구역 목록          | 추천 응답 재사용              | 장소 좌표, 셀 경계와 구역별 장소         |
-| 장소 상세와 직접 링크          | `GET /api/v1/places/{id}`     | 서버 기본 정보와 주소                    |
-| 카드 사진과 상세 사진          | Google Places                 | 추천 또는 상세의 `googlePlaceId`로 조회  |
-| 언어 선택                      | FE 사전 전환                  | 같은 서버 응답 재사용                    |
+## 지역
 
-`meta`는 파라미터가 없다. `areas`, `categories`, `foodTypes`, `since`, `slots`, `densities`의 각 옵션은 `id`, `label`, `isDefault`다. `timeZone=Asia/Seoul`, `supportedLanguages=[ko]`, `visitDate.min/max`, `maxResults=200`도 받는다. 선택지와 초기값을 이 응답에 연결할 meta loader가 필요하다.
+- ID와 중심 좌표는 `areas`에서 읽습니다: `jongno`, `ikseon`, `insadong`, `euljiro`, `myeongdong`. 네 언어 표기는 `presentation.ts`의 `areaLabels`이고, 사전에 없는 새 ID는 서버 한국어 이름으로 표시합니다.
+- `전체 지역`(`all`)은 논리 옵션입니다. 지역 탐색에서는 `areaId`를 보내지 않고, 코스 출발점은 공개 지역 중심의 평균입니다.
+- 이전 URL: `insa`→`insadong`, `eulji`→`euljiro`, `bukchon`과 알 수 없는 값→`all`.
+- 장소 응답의 `areaId`를 `LocalPlace.area`로 보존해 카드·상세에 지역명을 표시합니다(법정동 기준 BE 매핑을 그대로 따름).
 
-## 추천 요청 8개
+## 시간대와 요일
 
-| query       | 허용값                                                         | 생략 기본값 |
-| ----------- | -------------------------------------------------------------- | ----------- |
-| `areaId`    | `all`, `jongno`, `ikseon`, `insadong`, `euljiro`, `myeongdong` | `all`       |
-| `category`  | `all`, `food`, `cafe`                                          | `all`       |
-| `foodType`  | `any`, `korean`, `bar`                                         | `any`       |
-| `since`     | `any`, `20`, `30`, `40`                                        | `any`       |
-| `visitDate` | 서울 오늘부터 6일 뒤까지 `YYYY-MM-DD`                          | 서울 오늘   |
-| `slot`      | `lunch`, `afternoon`, `dinner`, `late_night`                   | `afternoon` |
-| `density`   | `any`, `less_busy`, `lively`                                   | `any`       |
-| `q`         | 가게 이름 부분 일치, 대소문자 무시, 최대 80자                  | 빈 값       |
+- 자동 시간은 메타 `slotWindows`로 판단합니다(11~13, 14~17, 18~21, 22~익일 01시, 시작 포함·끝 제외). 메타 전과 미리보기만 같은 값의 기본 창을 씁니다(`visit-time.ts`).
+- 창 사이(예: 07:00, 13:00~14:00, 01:00 이후)는 「다음 · 점심 11:00」과 자료 없음 안내를 표시하고 다음 창으로 요청합니다.
+- 자동 현재 시각의 자정~01:00은 전날 심야로 요청합니다. 토요일 00:30 → `weekday=fri&slot=late_night`. 사용자가 고른 날짜·시간대는 그날 그대로입니다.
+- 화면 슬롯 `evening`·`late`는 API `dinner`·`late_night`입니다(`v2Time`).
 
-`foodType`과 `since`는 음식점에서 표시하고 전송한다. `since=20`은 개업 후 20년 이상인 가게의 조건이고, 응답 `since=1995`는 개업 연도다. 사람의 나이 필터와 구분한다.
+## 목록 두 경로
 
-## UI 값 변환
+| 경로                   | 언제                      | `total`                       | 페이지                                                          |
+| ---------------------- | ------------------------- | ----------------------------- | --------------------------------------------------------------- |
+| `area-recommendations` | 좌표 없이 지역 탐색       | 지역·조건·종류의 전체 일치 수 | `page`(0부터)·`size=30`·`hasNext`, 「장소 더 보기」로 이어 붙임 |
+| `recommendations`      | 지도 재검색 좌표, 내 위치 | 이번에 받은 수(≤30)           | 없음                                                            |
 
-변환 코드는 `src/features/discovery/data/api-mapping.ts`에 있다. 순수 변환 함수이며 HTTP 호출은 수행하지 않는다.
+- 탭: 전체 `categories=food,cafe`(주점은 food), 음식점 `food`, 카페 `cafe`. 지역 경로는 서버가 쇼핑·놀거리를 빼고, 주변 경로는 FE가 뺍니다.
+- 지역·카테고리·시간·언어가 바뀌면 누적 페이지를 버리고 진행 중인 요청을 abort합니다. 늦은 응답은 `createLatestRequest`로 무시합니다.
+- 지도 재검색은 지도에서 가려지지 않은 영역의 중심 좌표를 보내며, 버튼과 결과 문구에 「지도 중심 300m」를 표시합니다. 화면 영역 전체 조회는 별도 BE 계약이 필요합니다.
 
-| UI 값             | HTTP 값                | 연결 작업                                           |
-| ----------------- | ---------------------- | --------------------------------------------------- |
-| `insa`, `eulji`   | `insadong`, `euljiro`  | 응답 지역의 역변환도 추가                           |
-| `evening`, `late` | `dinner`, `late_night` | URL과 시간대 선택은 UI 값 유지                      |
-| `activity=quiet`  | `density=less_busy`    | `any`, `lively`도 대응                              |
-| 문자열 장소 ID    | 숫자 `id`              | `mapApiIdToDiscovery`, `mapDiscoveryIdToApi`로 왕복 |
-| 상대 날짜 `day`   | 절대 날짜 `visitDate`  | `visitDate(clock, day)` 사용, 자동 시간은 `day=0`   |
-| 기기 시각         | 서울 시각              | `seoulHour(clock)`으로 현재 슬롯 계산               |
-| UI 언어 4개       | 서버 `ko`              | UI 사전과 장소 원문을 분리                          |
+## 상호 검색
 
-샘플의 `cheongsudang` 같은 slug와 실제 서버 ID의 대응은 별도다. URL에는 실제 응답 ID를 보존하고, DB마다 달라질 수 있는 예제 번호를 고정값으로 쓰지 않는다.
+- `q`·`lang`·`limit`으로 서버를 조회하고 서버 순서와 ID를 그대로 씁니다. 위치·시간·점수를 적용하지 않아 주점·쇼핑·놀거리도 나옵니다. 카페·음식점 탭만 종류를 좁힙니다.
+- 입력 250ms 정지 후 요청, IME 조합 중에는 대기, 공백은 요청하지 않음. 자동완성은 같은 응답의 앞 6개를 써서 검색어당 1회 요청입니다.
+- 정적 상호 사전(`public/data/place-search.json`)은 제거했습니다.
 
-북촌은 mapper의 `UNMAPPED_AREA` 대상이다. 명동은 서버 옵션에 있으므로 UI 지역 타입, 표시명과 URL 처리에 추가해야 한다. 두 지역의 범위를 확인한 뒤 연결한다.
+## 장소 상세와 샘플 분리
 
-컨셉 칩의 한옥, 마당, 아늑함, 레트로는 현재 샘플 필터다. 선택된 컨셉은 mapper가 `UNSUPPORTED_CONCEPT_FILTER`로 반환한다. 음식점 종류와 개업 연수의 화면 배치 및 상태를 추가하고, 컨셉의 실제 데이터와 요청 규격은 별도로 정한다.
+- 운영 상세는 서버 필드만 씁니다. 숫자가 아닌 ID(샘플 slug)는 「장소 정보를 찾을 수 없어요」입니다.
+- 샘플 소개·출처를 Google Place ID로 붙이는 동작은 `/guide` 전용 `getPreviewCoursePlaceDetail`에만 있습니다.
 
-샘플 검색은 이름, 주소와 소개를 함께 검색한다. HTTP 연결 후 검색 범위는 서버의 가게 이름이다. `origin`과 UI 언어는 추천 query에 포함하지 않는다.
+## 코스
 
-## 서버 응답에서 UI 모델로
+- 정류장의 `position`·`slot`·`walkMinutes`·`hoursUnknown`·`place.distanceMeters`와 `reasons`를 보존합니다. 이유는 서버 순서의 앞 두 개를 네 언어로 표시하고, 알 수 없는 코드는 버립니다(`course-reasons.ts`).
+- 언어만 바꾸면 코스를 다시 요청하지 않고 `places/{id}?lang`으로 이름만 바꿉니다. 지도 SDK 때문에 페이지를 다시 불러오는 경우에도 history 상태로 코스를 넘겨 다시 요청하지 않습니다.
 
-성공은 `success=true`, `data=객체`, `error=null`이다. 실패는 `success=false`, `data=null`, `error={code,message}`다.
+## FE 서버(사진·요약)
 
-| 서버 데이터                                         | UI 연결                                                     |
-| --------------------------------------------------- | ----------------------------------------------------------- |
-| 추천 `data.applied`                                 | 서버 적용 `visitDate`, `dayType`, `slot` 대조               |
-| 추천 `data.total`, `items`                          | `DiscoveryQueryResult.total`, `items`                       |
-| 카드 `id`, `name`, `category`                       | 문자열 UI ID, 장소 이름과 유형                              |
-| 카드 `areaId`, `point`                              | UI 지역, 평탄화한 `lat`, `lng`                              |
-| 카드 `foodType`, `since`, `googlePlaceId`, `cellId` | 실제 응답을 보존하도록 UI 모델 확장                         |
-| 추천 `data.cells`                                   | 실제 셀 ID와 GeoJSON 보존 경로 추가                         |
-| 상세 `data`                                         | 카드 필드와 `address`를 `DiscoveryPlaceDetail.place`로 변환 |
-| 외부 사진과 출처                                    | `photos`, `photoCredits`, `sourceUrl` 구성                  |
+| 변수                                                      | 위치                   | 설명                                                                   |
+| --------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------- |
+| `NEXT_PUBLIC_ODYSSEY_API_BASE_URL`                        | 브라우저 빌드          | 비우면 운영 API. 값이 잘못되면 운영으로 대체하지 않음                  |
+| `ODYSSEY_API_BASE_URL`                                    | Next 서버·Pages 런타임 | 사진·요약의 장소 조회. 없으면 위 값, 그것도 없으면 운영                |
+| `PLACE_ALLOWED_HOSTS`                                     | Next 서버·Pages 런타임 | 쉼표 구분, `*.프로젝트.pages.dev` 허용. 비우면 운영 도메인과 localhost |
+| `GOOGLE_PLACES_API_KEY`, `GEMINIAI_API_KEY`               | 서버 비밀              | 공유 파일에는 이름과 빈 값만                                           |
+| `PLACE_PHOTOS_RATE_LIMITER`, `PLACE_SUMMARY_RATE_LIMITER` | Pages 바인딩(선택)     | 인스턴스 사이에 공유되는 요청 한도                                     |
+| `REVIEW_ACCESS_TEAM_DOMAIN`, `REVIEW_ACCESS_AUD`          | Pages 런타임(선택)     | 검토 화면·API의 Cloudflare Access 토큰 검증                            |
 
-추천 응답의 필드는 `applied`, `total`, `items`, `cells`다. `applied`는 날짜, 요일 묶음과 슬롯만 담는다. `items`의 순서가 추천 순서이고, `total`은 항목 수다. `cells`는 숫자 ID 오름차순이다.
+- 요청 한도: Odyssey 조회와 Google·Gemini 호출 전에 확인하고 초과 시 429·`Retry-After`. 바인딩이 없으면 인스턴스별 한도만 동작합니다(#98).
+- 장소 기본 정보 조회는 origin·ID별로 60초 공유하고, Pages에서는 위치별 Cache API에도 저장합니다. Google·Gemini 응답은 저장하지 않습니다(#100).
+- Gemini 요약은 해당 Google Place ID를 인용한 결과만 원문·출처와 함께 표시합니다.
 
-상세의 HTTP `data` 자체가 장소 객체다. 포트 반환값의 `place`는 FE 내부 모델이며 adapter에서 만든다. 카드와 상세의 필수 필드를 나누고, 주소는 상세 응답에서 채운다. 서버 이름과 주소는 한국어 원문으로 표시한다.
+## 확인 중인 항목
 
-현재 `DiscoveryQueryResult`는 `items`, `total`, 선택적인 추천 근거 `analyses`를 담는다. HTTP adapter에서는 `applied`와 `cells`를 함께 보존할 타입과 상태가 필요하다. 추천 카드와 상세의 필수 필드를 나누고, 추천 응답에 없는 주소와 소개는 상세에서 채운다. 카드 사진이 미제공일 때는 대체 표시를 사용한다.
+| 항목                                                                       | 상태             | 이슈 |
+| -------------------------------------------------------------------------- | ---------------- | ---- |
+| Cloudflare 요청 한도 규칙·바인딩, Google·Gemini 일일 한도와 비용 알림      | 운영 적용 미확인 | #81  |
+| 스테이징 빌드·런타임 변수가 같은 BE·호스트를 가리키는지                    | 미확인           | #82  |
+| 검토 화면·API의 Access 정책, 외부 Sites 직접 접근 제한, 중계 503 원인 확정 | 미적용·미확인    | #84  |
+| 원본 U+ 데이터의 자정 이후 요일 집계 근거                                  | 분석 범위        | #76  |
+| 코스 이유를 목록·상세로 확대할지                                           | 결정 필요        | #83  |
 
-## 사진과 지도
+## 검수 방법
 
-| 항목             | 연결 방법                                                       |
-| ---------------- | --------------------------------------------------------------- |
-| 카드 사진        | `items[].googlePlaceId`로 Google Places 조회                    |
-| 상세 콘텐츠      | `googlePlaceId`로 사진, 주소, 소개, 평점, 연락처, 영업시간 조회 |
-| Google ID `null` | 사진과 외부 정보의 대체 영역 표시                               |
-| 사진 0장         | `PhotoGallery`의 빈 상태 사용                                   |
-| 사진 목록 변경   | 현재 사진 유지와 인덱스 보정, 실제 출처 표시                    |
-| 장소 위치        | `point={lat,lng}`, WGS84                                        |
-| 셀 경계          | `cells[].geometry`의 닫힌 Polygon, 좌표는 `[lng,lat]`           |
-| 셀 장소 목록     | `items` 중 같은 `cellId`인 장소를 추천 순서로 표시              |
-
-실제 지도 경로는 서버의 셀 ID와 geometry를 사용한다. 현재 `src/features/map/geometry.ts`의 `previewCell`은 샘플용 좌표 계산이다. `DiscoveryQueryResult`와 지도 세션 입력을 확장한 뒤 `features/map/controller.ts` 경계에 Google 구현을 연결한다.
-
-셀과 군집에 표시할 수는 추천 장소 수다. 상세의 방문 그래프는 `/api/v2/cells/{id}/visit-pattern`의 공개 데이터셋과 선택 요일을 사용한다. LG U+ 수치는 50m 구역의 시간대별 상대 방문 지표다. 서버가 그래프를 제공하는 요일에만 방문 패턴 영역을 표시한다.
-
-원문 소개와 사전 생성한 Gemini 요약은 동일한 Google 장소 ID에 연결한다. 사전 요약이 없는 매장 상세를 열면 `POST /api/place-summary?id=…&lang=…`가 Google Maps Grounding을 호출한다. 원래 한국어 상호와 좌표는 서버에서 조회하고, 해당 Google 장소 ID를 인용한 결과만 원문 및 출처 링크와 함께 표시한다. Grounding 응답은 저장하거나 캐시하지 않는다. 인용을 확인할 수 없거나 요청에 실패하면 선택 언어로 요약 정보가 없음을 안내한다.
-
-추천, 코스, 상세 요청에는 선택 언어를 `lang=ko|en|ja|zh`로 보내며 목록과 지도 핀에도 서버가 반환한 `name`을 표시한다. BE에 해당 언어의 상호가 없으면 BE가 원래 상호를 반환한다. `GOOGLE_PLACES_API_KEY`와 Maps Grounding을 사용할 수 있는 유료 프로젝트의 `GEMINIAI_API_KEY`는 로컬 서버 및 Cloudflare Pages 서버 환경변수에 설정한다.
-
-## adapter 연결 순서
-
-1. API 기준 주소와 CORS를 먼저 확인한다. `LOCAL_PAGES_BUILD=1` 배포는 정적 export다. 브라우저에서 HTTPS API를 직접 호출하려면 실제 FE 출처를 BE 허용 목록에 추가한다. 같은 출처의 프록시가 필요하면 별도 런타임에서 제공한다. 브라우저 빌드에는 공개 설정만 전달한다.
-2. `meta` 응답을 선택지와 날짜 범위에 연결한다. 북촌과 컨셉처럼 변환할 수 없는 옵션을 어떻게 표시할지, 명동과 음식점 조건을 어디에 노출할지 정한다.
-3. `data/`에 `DiscoveryDataSource.query/getPlace`의 HTTP 구현을 둔다. `AbortSignal`을 전달하고 공통 응답과 오류 코드를 화면 모델로 변환한다.
-4. `src/app/page.tsx` 아래의 `"use client"` 진입 컴포넌트에서 HTTP 공급부를 가져와 `DiscoveryApp`의 `source`에 전달한다. 함수가 포함된 공급부 객체는 클라이언트에서 구성하고 요청이 진행되는 동안 참조를 유지한다. 동기 `snapshot`은 프리뷰에 사용한다.
-5. HTTP 첫 요청은 URL과 서울 시각 복원 및 `meta` 초기화가 끝난 뒤 시작한다. 현재 controller의 첫 렌더는 샘플 날짜를 사용한다. 필터 임시 요청은 필터 화면과 그 안에서 연 방문 시간 선택에만 활성화하고, 닫으면 취소한다.
-6. meta와 추천 목록을 먼저 검증하고, 상세는 BE 경로가 배포된 뒤 연결한다. 추천 결과의 `applied`, 실제 셀과 Google ID를 보존해 지도와 사진 연결에 사용한다. 첫 진입과 직접 링크, 빠른 조건 변경, 0건과 오류, 외부 정보 누락을 확인한다.
-
-`useDiscoveryData`는 applied, draft와 상세의 조회 상태를 분리한다. 현재는 요청 키 변경이나 hook 해제 시 이전 요청을 취소하고, 늦은 응답을 무시한다. 같은 applied와 draft 조건은 응답을 공유한다. `snapshot` 공급자는 첫 렌더부터 값을 주고 재시도에서도 비동기 호출을 생략한다.
-
-2026년 11월 7일 BE 배포에서 추천 옵션을 생략하거나 현재 FE 기본 지역인 `areaId=jongno`만 보냈을 때 `QUERY_SCOPE_TOO_WIDE`가 반환됐다. `areaId=ikseon&category=cafe`로 좁힌 요청은 성공했다. 첫 화면에서 사용할 기본 범위를 합의하고, 이 오류에서는 지역이나 조건을 좁힐 수 있게 안내한다.
-
-| HTTP 또는 상태                         | 연결할 처리                            |
-| -------------------------------------- | -------------------------------------- |
-| 200, `total=0`, `items=[]`, `cells=[]` | 요청 조건 유지, 빈 결과와 초기화       |
-| 400 `INVALID_INPUT`                    | 해당 입력 수정                         |
-| 400 `QUERY_SCOPE_TOO_WIDE`             | 200곳 상한에 맞춰 지역이나 조건 좁히기 |
-| 404 `PLACE_NOT_FOUND`                  | 장소 없음 안내와 목록 복귀             |
-| 503 `DATA_UNAVAILABLE`                 | 같은 조건 재시도                       |
-| 500 `INTERNAL_ERROR`                   | 일반 오류와 재시도                     |
-
-현재 화면의 `ResourceNotice`는 공통 로딩, 실패와 상세 누락을 구분한다. HTTP adapter는 서버 오류 코드를 보존하고 코드별 입력 복구와 안내를 연결해야 한다.
+- `npm test`, `npm run typecheck`, `npm run lint`, `LOCAL_PAGES_BUILD=1 npm run build` 후 `out/index.html`·`out/manifest.webmanifest`.
+- 요청 흐름은 브라우저 Resource Timing 또는 fetch 래퍼로 경로·횟수·순서와 abort 여부를 대조합니다. 각 PR 본문에 사용한 URL과 결과를 남겼습니다.
+- `mock/v2/mappings/`는 BE 계약 비교용 WireMock 응답(메타·장소 상세·방문 그래프)입니다. 앱 코드와 테스트는 이 목을 읽지 않으며, 운영 배치 ID를 구현에 고정하지 않습니다.

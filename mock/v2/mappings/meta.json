@@ -25,7 +25,22 @@
             "weekdays": ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
             "slots": ["lunch", "afternoon", "dinner", "late_night"],
             "categories": ["food", "cafe", "all"],
-            "kinds": ["korean", "bar", "other", "cafe", "all"]
+            "kinds": ["korean", "bar", "other", "cafe", "all"],
+            "defaultDatasetId": "2025-12-b7786edeeae8",
+            "areas": [
+              {"id": "jongno", "name": "종로", "centerLat": 37.569507, "centerLng": 126.988829},
+              {"id": "ikseon", "name": "익선동", "centerLat": 37.573044, "centerLng": 126.988991},
+              {"id": "insadong", "name": "인사동", "centerLat": 37.573339, "centerLng": 126.984739},
+              {"id": "euljiro", "name": "을지로", "centerLat": 37.565748, "centerLng": 126.99013},
+              {"id": "myeongdong", "name": "명동", "centerLat": 37.563101, "centerLng": 126.985092}
+            ],
+            "slotWindows": [
+              {"slot": "lunch", "from": "11:00", "toExclusive": "13:00", "endsNextDay": false},
+              {"slot": "afternoon", "from": "14:00", "toExclusive": "17:00", "endsNextDay": false},
+              {"slot": "dinner", "from": "18:00", "toExclusive": "21:00", "endsNextDay": false},
+              {"slot": "late_night", "from": "22:00", "toExclusive": "01:00", "endsNextDay": true}
+            ],
+            "serviceHours": {"from": "11:00", "toExclusive": "01:00", "endsNextDay": true}
           },
           "error": null
         }
