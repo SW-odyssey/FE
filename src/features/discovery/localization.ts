@@ -19,6 +19,12 @@ export const dateLocales: Record<DiscoveryLanguage, string> = {
   zh: "zh-CN",
 };
 const copy: Record<string, readonly [string, string]> = {
+  "Show more places": ["さらに表示", "显示更多"],
+  "Loading more places…": ["さらに読み込んでいます…", "正在加载更多…"],
+  "Could not load more places": [
+    "続きを読み込めませんでした",
+    "无法加载更多地点",
+  ],
   Course: ["コース", "路线"],
   "Back to map": ["地図に戻る", "返回地图"],
   "Map preview": ["地図プレビュー", "地图预览"],

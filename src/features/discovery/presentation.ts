@@ -133,3 +133,29 @@ export function formatReferenceMonth(
     zh: `LG U+ ${label}数据`,
   }[language];
 }
+/**
+ * @param loaded Places shown so far
+ * @param total Server match count before paging
+ * @param language UI language
+ * @returns e.g. "30 of 284 places", or "12 places" once everything is loaded
+ */
+export function formatLoadedCount(
+  loaded: number,
+  total: number,
+  language: DiscoveryLanguage,
+): string {
+  const all = Math.max(total, loaded);
+  if (loaded >= all)
+    return {
+      en: `${all} places`,
+      ko: `${all}곳`,
+      ja: `${all}件`,
+      zh: `共${all}家`,
+    }[language];
+  return {
+    en: `${loaded} of ${all} places`,
+    ko: `${all}곳 중 ${loaded}곳`,
+    ja: `${all}件中${loaded}件`,
+    zh: `共${all}家，已显示${loaded}家`,
+  }[language];
+}

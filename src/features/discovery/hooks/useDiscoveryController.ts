@@ -884,6 +884,10 @@ export function useDiscoveryController(
     courseStartSlot,
     showCourseOnMap,
     autoCourse: course,
+    total: data.total,
+    hasMore: data.hasMore,
+    moreStatus: data.moreStatus,
+    loadMore: data.loadMore,
     areaName,
     areaOptions,
     dataMonthLabel: listReferenceMonth

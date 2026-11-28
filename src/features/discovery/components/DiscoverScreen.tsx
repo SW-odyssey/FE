@@ -3,6 +3,7 @@ import type * as React from "react";
 import { LocalIcon } from "../../../components/ui/LocalIcon";
 import { isOverlapScope } from "../../map/geometry";
 import type { DiscoveryController } from "../hooks/useDiscoveryController";
+import { formatLoadedCount } from "../presentation";
 import { discoveryCopy } from "../recommendation-analysis";
 import { DiscoveryControls } from "./DiscoveryControls";
 import { FeaturedCarousel } from "./FeaturedCarousel";
@@ -29,6 +30,10 @@ type Props = Pick<
   | "clearMapScope"
   | "mapScope"
   | "dataMonthLabel"
+  | "total"
+  | "hasMore"
+  | "moreStatus"
+  | "loadMore"
   | "areaName"
 > &
   React.ComponentProps<typeof DiscoveryControls> & { mapScopeActive?: boolean };
@@ -38,8 +43,15 @@ export function DiscoverScreen(props: Props) {
   return (
     <div key="places" className="local-content local-places" ref={scroll}>
       <DiscoveryControls {...props} />
-      {props.dataMonthLabel && status === "success" && (
-        <p className="local-data-month">{props.dataMonthLabel}</p>
+      {status === "success" && !props.mapScopeActive && visible.length > 0 && (
+        <p className="local-data-month" aria-live="polite">
+          {[
+            formatLoadedCount(visible.length, props.total, language),
+            props.dataMonthLabel,
+          ]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
       )}
       {props.mapScopeActive && (
         <div className="local-scope-row">
@@ -85,6 +97,31 @@ export function DiscoverScreen(props: Props) {
             <div className="local-place-list">
               {visible.slice(1).map((p) => renderPlaceRow(props, p))}
             </div>
+            {props.hasMore && (
+              <div className="local-load-more">
+                {props.moreStatus === "error" && (
+                  <p role="alert">
+                    {t(
+                      "Could not load more places",
+                      "다음 장소를 불러오지 못했어요",
+                    )}
+                  </p>
+                )}
+                <button
+                  type="button"
+                  className="local-secondary"
+                  onClick={props.loadMore}
+                  disabled={props.moreStatus === "loading"}
+                  aria-busy={props.moreStatus === "loading"}
+                >
+                  {props.moreStatus === "loading"
+                    ? t("Loading more places…", "장소를 더 불러오는 중…")
+                    : props.moreStatus === "error"
+                      ? t("Try again", "다시 시도")
+                      : t("Show more places", "장소 더 보기")}
+                </button>
+              </div>
+            )}
           </>
         )
       ) : (

@@ -24,8 +24,13 @@ export type DiscoveryQuery = {
   language?: DiscoveryLanguage;
 };
 export type DiscoveryQueryResult = {
+  /** Places loaded so far, without duplicate IDs. */
   items: LocalPlace[];
+  /** Server match count before paging; equals items.length for one-shot sources. */
   total: number;
+  /** Area browsing only: the last loaded 0-based page and whether more exist. */
+  page?: number;
+  hasNext?: boolean;
   analyses?: Record<string, RecommendationAnalysis>;
 };
 /** Recommendation evidence belongs to the response that selected the place. */
@@ -80,6 +85,15 @@ export interface DiscoveryDataSource {
     id: string,
     options?: DiscoveryRequestOptions,
   ): Promise<DiscoveryPlaceDetail | null>;
+  /**
+   * Load the page after `previous` for the same input and return the merged
+   * result. Only sources whose results report `hasNext` implement it.
+   */
+  queryNext?(
+    input: DiscoveryQuery,
+    previous: DiscoveryQueryResult,
+    options?: DiscoveryRequestOptions,
+  ): Promise<DiscoveryQueryResult>;
   snapshot?: DiscoverySnapshot;
 }
 export type DiscoveryLoadStatus = "idle" | "loading" | "success" | "error";

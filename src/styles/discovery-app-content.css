@@ -87,3 +87,22 @@
 .local-visit-pattern .local-data-month {
   margin: 8px 0 0;
 }
+
+/* Next page of the area list (#78). */
+.local-load-more {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  margin: 16px 12px 24px;
+  text-align: center;
+}
+
+.local-load-more p {
+  margin: 0;
+  color: var(--refresh-muted, #6b7280);
+  font-size: 13px;
+}
+
+.local-load-more .local-secondary {
+  min-width: 160px;
+}
