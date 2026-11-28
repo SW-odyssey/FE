@@ -84,6 +84,10 @@
   line-height: 1.4;
 }
 
+.local-time-notice {
+  color: var(--refresh-text, #1f2937);
+}
+
 .local-visit-pattern .local-data-month {
   margin: 8px 0 0;
 }

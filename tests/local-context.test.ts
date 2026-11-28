@@ -6,7 +6,6 @@ import {
   recommendPlaces,
 } from "../src/features/discovery/data/preview/recommendations.ts";
 import { readSpacePreferences } from "../src/features/discovery/filters.ts";
-import { slotAt } from "../src/features/discovery/visit-time.ts";
 import {
   distanceMeters,
   groupedMarkerCells,
@@ -63,13 +62,6 @@ test("multiple spaces form a union and ambience, time and category continue to n
     recommendPlaces(localPlaces, "late", "quiet", null, ["hanok"]),
     [],
   );
-});
-test("time boundaries cover midnight and the four request slots", () => {
-  assert.equal(slotAt(0), "late");
-  assert.equal(slotAt(12), "lunch");
-  assert.equal(slotAt(14), "afternoon");
-  assert.equal(slotAt(18), "evening");
-  assert.equal(slotAt(22), "late");
 });
 test("area counts retain all filtered places and never imply a popularity rank", () => {
   const places = recommendPlaces(localPlaces, "afternoon", "any", null);

@@ -13,8 +13,7 @@ import type {
   VisitSlot,
 } from "../model.ts";
 import type { Modal, VisitTimeChoice } from "../presentation.ts";
-import { seoulHour } from "../visit-date.ts";
-import { slotAt, visitSlots } from "../visit-time.ts";
+import { autoVisit, visitSlots } from "../visit-time.ts";
 import {
   readCourseLink,
   writeCourseLink,
@@ -144,7 +143,7 @@ export function readPreviewUrl(
     autoTime,
     slot,
     day,
-    draftTime: { autoTime, day, slot: slot ?? slotAt(seoulHour(now)) },
+    draftTime: { autoTime, day, slot: slot ?? autoVisit(now).slot },
     activity:
       linkedActivity === "quiet" || linkedActivity === "lively"
         ? linkedActivity

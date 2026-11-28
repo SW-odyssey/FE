@@ -24,6 +24,7 @@ type Props = Pick<
   | "contextAreaLabel"
   | "courseDate"
   | "courseDataMonthLabel"
+  | "closedTimeNotice"
   | "courseLocation"
   | "courseOptions"
   | "courseStartSlot"
@@ -47,6 +48,7 @@ export function CourseScreen({
   contextAreaLabel,
   courseDate,
   courseDataMonthLabel,
+  closedTimeNotice,
   courseLocation,
   courseOptions,
   courseStartSlot,
@@ -188,6 +190,11 @@ export function CourseScreen({
               {t("Using the selected area", "선택한 지역을 기준으로 추천해요")}
             </p>
           )}
+        {closedTimeNotice && !autoCourse.link?.startSlot && (
+          <p className="local-data-month local-time-notice" role="status">
+            {closedTimeNotice}
+          </p>
+        )}
         {courseDataMonthLabel && !loading && (
           <p className="local-data-month">{courseDataMonthLabel}</p>
         )}

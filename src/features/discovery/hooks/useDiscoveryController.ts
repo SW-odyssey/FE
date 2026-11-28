@@ -27,6 +27,7 @@ import {
 import {
   areaLabel,
   fallbackAreaIds,
+  formatClosedTime,
   formatReferenceMonth,
   LANGUAGE_KEY,
   slotLabels,
@@ -35,8 +36,8 @@ import {
 } from "../presentation";
 import type { CourseLink } from "../state/course-url";
 import { readPreviewUrl, serializePreviewUrl } from "../state/preview-url";
-import { seoulHour, visitDate } from "../visit-date";
-import { slotAt } from "../visit-time";
+import { seoulMinutes, visitDate } from "../visit-date";
+import { autoVisit, defaultSlotWindows, slotHoursFrom } from "../visit-time";
 import { useCourseRecommendations } from "./useCourseRecommendations";
 import { useDialogLifecycle } from "./useDialogLifecycle";
 import { useDiscoveryData } from "./useDiscoveryData";
@@ -146,10 +147,15 @@ export function useDiscoveryController(
   const searchTerm = typedSearch ? settledSearch : "";
   const ko = language === "ko";
   const t = (en: string, kr: string) => localText(language, en, kr);
-  const currentSlot = autoTime ? slotAt(seoulHour(clock)) : slot;
-  const draftCurrentSlot = draftTime.autoTime
-    ? slotAt(seoulHour(clock))
-    : draftTime.slot;
+  // Automatic time follows the server slot windows; between them there is
+  // no data, so "now" becomes the next window instead of a guessed slot.
+  const slotWindows = meta?.slotWindows.length
+    ? meta.slotWindows
+    : defaultSlotWindows;
+  const now = autoVisit(clock, slotWindows);
+  const slotHours = slotHoursFrom(slotWindows);
+  const currentSlot = autoTime ? now.slot : slot;
+  const draftCurrentSlot = draftTime.autoTime ? now.slot : draftTime.slot;
   const name = (p: Pick<LocalPlace, "name" | "koreanName">) =>
     ko ? p.koreanName : p.name;
   const kind = (p: Pick<LocalPlace, "category" | "courseKind">) =>
@@ -314,9 +320,11 @@ export function useDiscoveryController(
     setPlaceOnMap(null);
   }, [area, category, searchTerm, activity, spaces, currentSlot]);
 
-  const selectedVisitDate = visitDate(clock, autoTime ? 0 : day);
-  const courseAfterHours = autoTime && currentSlot === "late";
-  const courseDay = courseAfterHours && seoulHour(clock) >= 22 ? 1 : 0;
+  const selectedVisitDate = autoTime ? now.visitDate : visitDate(clock, day);
+  // A late-night start has no following slots, so the automatic course
+  // starts at the next lunch instead (tomorrow before midnight).
+  const courseAfterHours = autoTime && now.open && now.slot === "late";
+  const courseDay = courseAfterHours && seoulMinutes(clock) >= 12 * 60 ? 1 : 0;
   const courseFallbackTime: VisitTimeChoice = {
     autoTime: false,
     day: courseDay,
@@ -432,7 +440,9 @@ export function useDiscoveryController(
           slot: draftCurrentSlot,
           activity: draftActivity,
           spaces: draftSpaces,
-          visitDate: visitDate(clock, draftTime.autoTime ? 0 : draftTime.day),
+          visitDate: draftTime.autoTime
+            ? now.visitDate
+            : visitDate(clock, draftTime.day),
         },
     selectedId,
     getPlace:
@@ -523,7 +533,9 @@ export function useDiscoveryController(
   });
   function visitTimeLabel(choice: VisitTimeChoice) {
     if (choice.autoTime)
-      return `${t("Now", "지금")} · ${slotLabels[language][slotAt(seoulHour(clock))]}`;
+      return now.open
+        ? `${t("Now", "지금")} · ${slotLabels[language][now.slot]}`
+        : `${t("Next", "다음")} · ${slotLabels[language][now.slot]} ${now.from}`;
     const date = new Date(`${visitDate(clock, choice.day)}T00:00:00+09:00`);
     const label =
       choice.day === 0
@@ -648,7 +660,7 @@ export function useDiscoveryController(
           ? courseFallbackTime
           : { autoTime, day, slot };
     setDraftDay(choice.autoTime ? 0 : choice.day);
-    setDraftSlot(choice.autoTime ? slotAt(seoulHour(clock)) : choice.slot);
+    setDraftSlot(choice.autoTime ? now.slot : choice.slot);
     setTimeReturn(from);
     setModal("time");
   }
@@ -735,7 +747,7 @@ export function useDiscoveryController(
   function resetDraftFilters() {
     setDraftActivity("any");
     setDraftSpaces([]);
-    setDraftTime({ autoTime: true, day: 0, slot: slotAt(seoulHour(clock)) });
+    setDraftTime({ autoTime: true, day: 0, slot: now.slot });
   }
   function applyFilters() {
     setCourseLink(undefined);
@@ -900,6 +912,12 @@ export function useDiscoveryController(
     courseStartSlot,
     showCourseOnMap,
     autoCourse: course,
+    autoSlot: now.slot,
+    slotHours,
+    closedTimeNotice:
+      autoTime && !now.open
+        ? formatClosedTime(clock, now, slotLabels[language][now.slot], language)
+        : "",
     searchSuggestions:
       liveRecommendations &&
       searchTerm &&

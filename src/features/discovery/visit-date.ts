@@ -12,6 +12,35 @@ const seoulTime = new Intl.DateTimeFormat("en-GB", {
   hour: "2-digit",
   hourCycle: "h23",
 });
+const seoulClock = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Asia/Seoul",
+  numberingSystem: "latn",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
+
+/**
+ * @param clock Instant used by the screen, left unchanged
+ * @returns Minutes since midnight in Seoul (0..1439) on every device timezone
+ */
+export function seoulMinutes(clock: Date): number {
+  const parts = seoulClock.formatToParts(clock);
+  const value = (type: Intl.DateTimeFormatPartTypes) =>
+    Number(parts.find((part) => part.type === type)!.value);
+  return value("hour") * 60 + value("minute");
+}
+
+/**
+ * @param date YYYY-MM-DD
+ * @param days Calendar days to add, negative for earlier days
+ * @returns The shifted YYYY-MM-DD across month and year boundaries
+ */
+export function shiftDate(date: string, days: number): string {
+  const value = new Date(`${date}T00:00:00.000Z`);
+  value.setUTCDate(value.getUTCDate() + days);
+  return value.toISOString().slice(0, 10);
+}
 
 /**
  * @param clock Instant used by the screen, left unchanged
