@@ -10,7 +10,7 @@
 | ----------------------------- | --------------------------------------------------------- | --------------------------------------------------------- | -------------- |
 | 서비스 메타(배치·지역·시간대) | `GET /api/v2/meta` 1회 공유                               | `data/service-meta.ts`, `hooks/useServiceMeta.ts`         | #90            |
 | 지역 전체 탐색                | `GET /api/v2/area-recommendations` (페이지)               | `data/live-recommendations.ts`                            | #91            |
-| 목록 카드 추천 이유           | `GET /api/v2/cells/reasons` (페이지당 1회)                | `data/live-recommendations.ts`, `cell-reasons.ts`         | 이번 PR        |
+| 목록 카드 추천 이유           | `GET /api/v2/cells/reasons` (페이지당 1회)                | `data/live-recommendations.ts`, `cell-reasons.ts`         | #103           |
 | 지도 중심·내 위치 주변 추천   | `GET /api/v2/recommendations` (반경 300m, 최대 30곳)      | `data/live-recommendations.ts`                            | #91, #93       |
 | 상호 검색·자동완성            | `GET /api/v2/place-search`                                | `data/place-search.ts`                                    | #92            |
 | 장소 상세                     | `GET /api/v2/places/{id}?lang`                            | `data/course-api.ts` `getCoursePlaceDetail`               | #97            |
