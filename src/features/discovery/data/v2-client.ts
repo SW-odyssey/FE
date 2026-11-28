@@ -1,9 +1,15 @@
 import type { VisitSlot } from "../model.ts";
 import type { ApiSlot } from "./api-mapping.ts";
-import { odysseyApiOrigin } from "./odyssey-api-origin.ts";
+import { odysseyApiOrigin, parseApiOrigin } from "./odyssey-api-origin.ts";
 
-const base =
-  process.env.NEXT_PUBLIC_ODYSSEY_API_BASE_URL?.trim() || odysseyApiOrigin;
+const configuredBase = process.env.NEXT_PUBLIC_ODYSSEY_API_BASE_URL;
+/**
+ * Browser API origin, fixed at build time. Unset uses production; a set but
+ * invalid value fails every request instead of silently using production.
+ */
+const base = configuredBase?.trim()
+  ? (parseApiOrigin(configuredBase) ?? "invalid:")
+  : odysseyApiOrigin;
 
 const apiSlots: Record<VisitSlot, ApiSlot> = {
   lunch: "lunch",

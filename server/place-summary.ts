@@ -2,6 +2,8 @@ import type { PlaceSummary } from "../src/features/discovery/data/place-summary.
 import { limitPlaceRequest, type RateLimitBinding } from "./place-quota.ts";
 import {
   isLocalPlaceRequest,
+  readPlaceConfig,
+  type PlaceServerEnv,
   isOdysseyPlaceId,
   lookupPlaceRow,
   placeLanguage,
@@ -106,9 +108,12 @@ export async function handlePlaceSummary(
   request: Request,
   key: string | undefined,
   limiter?: RateLimitBinding,
+  env?: PlaceServerEnv,
 ): Promise<Response> {
   const url = new URL(request.url);
-  if (!key || !isLocalPlaceRequest(request, url))
+  const config = readPlaceConfig(env);
+  if (!config) return new Response(null, { status: 500, headers: noStore });
+  if (!key || !isLocalPlaceRequest(request, url, config.allowedHosts))
     return new Response(null, { status: 404, headers: noStore });
   if (request.method !== "POST")
     return new Response(null, {
@@ -127,7 +132,7 @@ export async function handlePlaceSummary(
   let stage: "place" | "gemini" = "place";
   try {
     const lookupStarted = performance.now();
-    const place = await lookupPlaceRow(id, signal);
+    const place = await lookupPlaceRow(id, signal, config.apiOrigin);
     const lookupMs = Math.round(performance.now() - lookupStarted);
     if (!place) return new Response(null, { status: 404, headers: noStore });
     const { name, googlePlaceId, lat, lng } = place;
